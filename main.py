@@ -1,16 +1,11 @@
-# This is a sample Python script.
+from fastapi import FastAPI
+from control_console.holidays import router as holidays_router
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+app = FastAPI()
 
+# Include your holidays router
+app.include_router(holidays_router)
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
-
-
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+@app.get("/")
+def read_root():
+    return {"message": "Welcome to ChartFly Backend!"}
