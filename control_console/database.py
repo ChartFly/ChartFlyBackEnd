@@ -1,36 +1,7 @@
-import sqlite3
+from sqlalchemy import create_engine, text
 
-def get_non_secure_connection():
-    return sqlite3.connect("chartflynonsecure.db")
+# ✅ PostgreSQL Connection String
+DATABASE_URL = "postgresql://chartflydatabase_owner:npg_34luwxEYStRO@ep-young-morning-a40vm2cq-pooler.us-east-1.aws.neon.tech/chartflydatabase?sslmode=require"
 
-def insert_holiday(name, date):
-    connection = get_non_secure_connection()
-    cursor = connection.cursor()
-    cursor.execute("INSERT INTO holidays (name, date) VALUES (?, ?)", (name, date))
-    connection.commit()
-    holiday_id = cursor.lastrowid
-    connection.close()
-    return holiday_id
-
-
-def get_holidays():
-    connection = get_non_secure_connection()
-    cursor = connection.cursor()
-    cursor.execute("SELECT name, date FROM holidays")
-    holidays = cursor.fetchall()
-    connection.close()
-    return holidays
-
-def update_holiday(id, new_name, new_date):
-    connection = get_non_secure_connection()
-    cursor = connection.cursor()
-    cursor.execute("UPDATE holidays SET name = ?, date = ? WHERE id = ?", (new_name, new_date, id))
-    connection.commit()
-    connection.close()
-
-def delete_holiday(id):
-    connection = get_non_secure_connection()
-    cursor = connection.cursor()
-    cursor.execute("DELETE FROM holidays WHERE id = ?", (id,))
-    connection.commit()
-    connection.close()
+# ✅ Create Engine
+engine = create_engine(DATABASE_URL)
