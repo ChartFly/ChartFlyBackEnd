@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const holidaySection = document.getElementById("market-holidays-section");
 
     // Hide the section initially
-   // holidaySection.style.display = "none";
+    holidaySection.style.display = "none";
 
     holidayTab.addEventListener("click", function () {
         // Toggle visibility
@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 async function fetchMarketHolidays() {
     try {
-        const response = await fetch('https://chartflybackend.onrender.com/api/holidays/2025');
+        const response = await fetch('/api/holidays/year/2025');
         if (!response.ok) throw new Error("Network response was not ok");
         const holidays = await response.json();
         let tableBody = document.getElementById("holidays-table");
