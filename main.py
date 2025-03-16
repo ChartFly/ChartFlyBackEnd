@@ -7,4 +7,5 @@ app = FastAPI()
 def read_root():
     return {"message": "Welcome to ChartFly Backend!"}
 
-app.include_router(holidays_router, prefix="/api/holidays")
+# ❌ Remove extra prefix
+app.include_router(holidays_router)  # No prefix here!
