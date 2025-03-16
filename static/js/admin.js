@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const holidaySection = document.getElementById("market-holidays-section");
 
     // Hide the section initially
-    holidaySection.style.display = "none";
+   // holidaySection.style.display = "none";
 
     holidayTab.addEventListener("click", function () {
         // Toggle visibility
