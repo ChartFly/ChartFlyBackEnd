@@ -11,8 +11,8 @@ class Holiday(BaseModel):
     date: str  # Format: YYYY-MM-DD
     year: int
 
-# ✅ GET Holidays by Year (FIXED)
-@router.get("/api/holidays/year/{year}", response_model=list, tags=["holidays"])
+# ✅ GET Holidays by Year (Fixed Route)
+@router.get("/year/{year}", response_model=list, tags=["holidays"])
 def get_holidays_by_year(year: int):
     with engine.connect() as connection:
         result = connection.execute(
@@ -27,7 +27,7 @@ def get_holidays_by_year(year: int):
     return holidays
 
 # ✅ GET All Holidays
-@router.get("/api/holidays/", response_model=list, tags=["holidays"])
+@router.get("/", response_model=list, tags=["holidays"])
 def get_holidays():
     with engine.connect() as connection:
         result = connection.execute(text("SELECT id, name, date, year FROM market_holidays ORDER BY date"))
@@ -35,7 +35,7 @@ def get_holidays():
     return holidays
 
 # ✅ ADD New Holiday
-@router.post("/api/holidays/", tags=["holidays"])
+@router.post("/", tags=["holidays"])
 def add_holiday(holiday: Holiday):
     with engine.connect() as connection:
         connection.execute(
@@ -46,7 +46,7 @@ def add_holiday(holiday: Holiday):
     return {"message": "Holiday added successfully"}
 
 # ✅ DELETE Holiday
-@router.delete("/api/holidays/{holiday_id}", tags=["holidays"])
+@router.delete("/{holiday_id}", tags=["holidays"])
 def delete_holiday(holiday_id: int):
     with engine.connect() as connection:
         result = connection.execute(text("DELETE FROM market_holidays WHERE id = :id"), {"id": holiday_id})
