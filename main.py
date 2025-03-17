@@ -4,7 +4,6 @@ from fastapi.templating import Jinja2Templates
 from fastapi.middleware.cors import CORSMiddleware
 from control_console.holidays import router as holidays_router  # ✅ Ensure this file exists!
 
-# ✅ Initialize FastAPI app
 app = FastAPI(
     title="ChartFly API",
     description="Backend for ChartFly Trading Tools",
@@ -13,23 +12,23 @@ app = FastAPI(
     redoc_url="/redoc",  # ✅ Enable ReDoc documentation
 )
 
+# ✅ CORS Middleware for Frontend Requests
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Change this to ["https://chartfly-web-site.onrender.com"] for security
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 # ✅ Serve Static Files (CSS, JS, Images)
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # ✅ Setup Jinja2 for HTML Rendering
 templates = Jinja2Templates(directory="templates")
 
-# ✅ CORS Middleware (Allows frontend to access backend APIs)
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],  # Change to ["https://chartfly-web-site.onrender.com"] for security
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-# ✅ Route for Admin UI
-@app.get("/admin")
+# ✅ Route for Backend UI (Admin Panel) at `/`
+@app.get("/")
 async def admin_ui(request: Request):
     return templates.TemplateResponse("admin.html", {"request": request})
 
@@ -43,8 +42,3 @@ async def get_halted_stocks():
         "status": "disabled",
         "message": "The halted stocks API is temporarily unavailable while we find a new data source."
     }
-
-# ✅ Root route to confirm backend is running
-@app.get("/")
-async def root():
-    return {"message": "ChartFly Backend is running! Access /docs for API documentation."}
