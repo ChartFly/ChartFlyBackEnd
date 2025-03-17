@@ -5,14 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="eb1da553-8e5b-4ae5-a8c1-d95ef0c30040" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/initialize_db.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/ChartFlyBackEnd.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/ChartFlyBackEnd.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/control_console/database.py" beforeDir="false" afterPath="$PROJECT_DIR$/control_console/database.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/control_console/holidays.py" beforeDir="false" afterPath="$PROJECT_DIR$/control_console/holidays.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -22,6 +16,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;ChartFly&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/ChartFly/ChartFlyBackEnd.git&quot;,
+    &quot;accountId&quot;: &quot;c840d8f2-777d-4651-8cdf-7ca06d8c7432&quot;
+  }
+}</component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/control_console/holidays.py" root0="FORCE_HIGHLIGHTING" />
   </component>
