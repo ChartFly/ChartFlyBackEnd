@@ -11,38 +11,34 @@ body {
 .header {
     width: 100%;
     background: #007a8a; /* Dark Turquoise */
-    padding: 15px 0 35px; /* Extra space for scrolling holiday text */
+    padding: 15px 20px; /* Adjusted padding */
     display: flex;
-    flex-direction: column;
     align-items: center;
+    justify-content: space-between; /* Ensures logo is left, status is right */
     position: relative;
 }
 
-/* ✅ Fix Header Alignment */
-.header-container {
-    width: 100%;
-    max-width: 1200px;
+/* ✅ Logo Container */
+.logo-container {
     display: flex;
     align-items: center;
-    justify-content: center; /* Keeps text centered */
-    position: relative;
-    padding: 0 20px;
 }
 
-/* ✅ Market Status Box */
+/* ✅ Market Status Container */
+.market-status-container {
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+}
+
+/* ✅ Market Status Colors */
 .market-status-text {
     font-size: 14px;
     font-weight: bold;
     padding: 5px 10px;
     border-radius: 5px;
-    color: white;
-    position: absolute;
-    right: 20px;
-    top: 50%;
-    transform: translateY(-50%);
 }
 
-/* ✅ Market Status Colors */
 .market-open {
     background-color: green;
 }
@@ -58,10 +54,9 @@ body {
 
 /* ✅ Logo */
 .logo {
-    width: 1.44px;
+    width: 150px; /* Adjusted size */
     height: auto;
     object-fit: contain;
-    left: 20px;
 }
 
 /* ✅ Header Text */
@@ -80,17 +75,6 @@ body {
     color: #ddd;
 }
 
-/* ✅ Holiday Section */
-.holiday-container {
-    text-align: center;
-    margin-top: 10px;
-}
-
-.holiday-title {
-    font-weight: bold;
-    font-size: 16px;
-}
-
 /* ✅ Table & Container Styling */
 .container {
     max-width: 1200px;
@@ -98,7 +82,7 @@ body {
     background: white;
     padding: 20px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    width: 95%; /* Ensures full width */
+    width: 95%;
 }
 
 /* ✅ Standard Table Styling */
