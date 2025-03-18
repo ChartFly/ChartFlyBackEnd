@@ -6,8 +6,12 @@ from dotenv import load_dotenv
 # ✅ Load environment variables from .env file (if used)
 load_dotenv()
 
-# ✅ Secure PostgreSQL Connection (Uses environment variable)
+# ✅ Retrieve the database URL
 DATABASE_URL = os.getenv("DATABASE_URL")
+
+# 🚨 Ensure the database URL is set before proceeding
+if not DATABASE_URL:
+    raise ValueError("❌ DATABASE_URL is not set. Check your .env file or environment variables in Render.")
 
 # ✅ Create Async Engine (Better for FastAPI)
 engine = create_async_engine(DATABASE_URL, pool_pre_ping=True, pool_size=5, max_overflow=10)
@@ -22,7 +26,7 @@ async def test_db_connection():
             result = await connection.execute(text("SELECT 1"))
             return True if result.fetchone() else False
     except Exception as e:
-        print(f"Database connection failed: {e}")
+        print(f"❌ Database connection failed: {e}")
         return False
 
 # ✅ Run test (Only if executed directly)
