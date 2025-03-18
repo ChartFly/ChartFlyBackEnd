@@ -11,6 +11,15 @@
     {% block styles %}{% endblock %}
 </head>
 <body>
+    <header class="header">
+        <div class="logo-container">
+            <img src="https://raw.githubusercontent.com/ChartFly/ChartFly-Halted-Stocks/main/Chartfly-logo.png" alt="ChartFly Logo" class="logo">
+        </div>
+        <div class="market-status-container">
+            <p>Market Status: <span id="market-status-text">Loading...</span></p>  <!-- ✅ Market Status -->
+        </div>
+    </header>
+
     <div class="content-wrapper">
         {% block content %}{% endblock %}
     </div>
