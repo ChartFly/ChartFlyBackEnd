@@ -1,25 +1,35 @@
-from sqlalchemy import create_engine, text
+import os
+from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
+from sqlalchemy import text
+from dotenv import load_dotenv
 
-# ✅ PostgreSQL Connection String
-DATABASE_URL = "postgresql://chartflydatabase_owner:npg_34luwxEYStRO@ep-young-morning-a40vm2cq-pooler.us-east-1.aws.neon.tech/chartflydatabase?sslmode=require"
+# ✅ Load environment variables from .env file (if used)
+load_dotenv()
 
-# ✅ Create Engine
-engine = create_engine(DATABASE_URL, pool_pre_ping=True)
+# ✅ Secure PostgreSQL Connection (Uses environment variable)
+DATABASE_URL = os.getenv("DATABASE_URL")
 
-# ✅ Test the database connection
-def test_db_connection():
+# ✅ Create Async Engine (Better for FastAPI)
+engine = create_async_engine(DATABASE_URL, pool_pre_ping=True, pool_size=5, max_overflow=10)
+
+# ✅ Async Session Maker
+AsyncSessionLocal = async_sessionmaker(engine, expire_on_commit=False)
+
+# ✅ Test the database connection (Async)
+async def test_db_connection():
     try:
-        with engine.connect() as connection:
-            result = connection.execute(text("SELECT 1"))
+        async with engine.connect() as connection:
+            result = await connection.execute(text("SELECT 1"))
             return True if result.fetchone() else False
     except Exception as e:
         print(f"Database connection failed: {e}")
         return False
 
-# ✅ Run test
+# ✅ Run test (Only if executed directly)
 if __name__ == "__main__":
+    import asyncio
     print("Testing database connection...")
-    if test_db_connection():
+    if asyncio.run(test_db_connection()):
         print("✅ Database connection successful!")
     else:
         print("❌ Database connection failed. Check credentials.")
