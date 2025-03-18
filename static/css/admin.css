@@ -1,65 +1,85 @@
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            text-align: center;
-        }
-        .header {
-            width: 100%;
-            background: #007a8a; /* Dark Turquoise */
-            padding: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .logo {
-            width: 1.5in;
-            height: auto;
-            object-fit: contain;
-            margin-left: 20px;
-        }
-        .header h1 {
-            color: white;
-            font-size: 28px;
-            margin: 0 auto;
-        }
-        .tabs {
-            margin-top: 20px;
-            display: flex;
-            justify-content: center;
-        }
-        .tab-button {
-            background: #005662;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            margin: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        .tab-button.active {
-            background: #0097A7;
-        }
-        .container {
-            margin-top: 20px;
-            padding: 20px;
-            background: white;
-            width: 80%;
-            margin-left: auto;
-            margin-right: auto;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            display: none; /* Hide sections by default */
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-        }
-        th, td {
-            padding: 10px;
-            border: 1px solid #ddd;
-            text-align: center;
-        }
-        th {
-            background-color: #0097A7;
-            color: white;
-        }
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    text-align: center;
+}
+
+.header {
+    width: 100%;
+    background: #007a8a; /* Dark Turquoise */
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.logo {
+    max-height: 60px;  /* ✅ Ensures proper scaling */
+    height: auto;
+    object-fit: contain;
+    position: absolute;
+    left: 20px;
+}
+
+.header h1 {
+    color: white;
+    font-size: 28px;
+    margin: 0 auto;
+    flex-grow: 1;
+    text-align: center;
+}
+
+.tabs {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.tab-button {
+    background: #005662;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.2s ease-in-out; /* ✅ Smooth color transition */
+}
+
+.tab-button:hover {
+    background: #007a8a; /* ✅ Slightly lighter on hover */
+}
+
+.tab-button.active {
+    background: #0097A7;
+}
+
+.container {
+    margin-top: 20px;
+    padding: 20px;
+    background: white;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    display: none;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+th, td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: center;
+    word-break: break-word;  /* ✅ Prevents text from overflowing */
+}
+
+th {
+    background-color: #0097A7;
+    color: white;
+}

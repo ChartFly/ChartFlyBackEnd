@@ -34,23 +34,29 @@ def get_holidays():
         holidays = [dict(row) for row in result.mappings()]
     return holidays
 
-# ✅ ADD New Holiday
+# ✅ ADD New Holiday (Fixed Transaction Handling)
 @router.post("/", tags=["holidays"])
 def add_holiday(holiday: Holiday):
-    with engine.connect() as connection:
-        connection.execute(
-            text("INSERT INTO market_holidays (name, date, year) VALUES (:name, :date, :year)"),
+    with engine.begin() as connection:  # ✅ Ensures auto-commit on success
+        result = connection.execute(
+            text("INSERT INTO market_holidays (name, date, year) VALUES (:name, :date, :year) RETURNING id"),
             {"name": holiday.name, "date": holiday.date, "year": holiday.year}
         )
-        connection.commit()
-    return {"message": "Holiday added successfully"}
+        new_holiday_id = result.scalar()
 
-# ✅ DELETE Holiday
+    return {"message": "Holiday added successfully", "holiday_id": new_holiday_id}
+
+# ✅ DELETE Holiday (Fixed Return Handling)
 @router.delete("/{holiday_id}", tags=["holidays"])
 def delete_holiday(holiday_id: int):
-    with engine.connect() as connection:
-        result = connection.execute(text("DELETE FROM market_holidays WHERE id = :id"), {"id": holiday_id})
-        connection.commit()
-    if result.rowcount == 0:
+    with engine.begin() as connection:  # ✅ Ensures auto-commit on success
+        result = connection.execute(
+            text("DELETE FROM market_holidays WHERE id = :id RETURNING id"),
+            {"id": holiday_id}
+        )
+        deleted_id = result.scalar()
+
+    if not deleted_id:
         raise HTTPException(status_code=404, detail="Holiday not found")
+
     return {"message": "Holiday deleted successfully"}

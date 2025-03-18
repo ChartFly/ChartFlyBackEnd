@@ -12,10 +12,14 @@
         <h1>ChartFly Admin Panel</h1>
     </header>
 
+    <!-- ✅ Tab Navigation -->
     <div class="tabs">
-        <button class="tab-button" id="market-holidays-tab">Market Holidays</button>
+        <button class="tab-button active" id="market-holidays-tab">Market Holidays</button>
+        <button class="tab-button" id="api-keys-tab">API Keys</button>
+        <button class="tab-button" id="user-management-tab">User Management</button>
     </div>
 
+    <!-- ✅ Market Holidays Section -->
     <div class="container" id="market-holidays-section">
         <h2>Manage Market Holidays</h2>
         <table>
@@ -32,8 +36,46 @@
             </tbody>
         </table>
     </div>
+
+    <!-- ✅ API Keys Section (Hidden by Default) -->
+    <div class="container" id="api-keys-section" style="display: none;">
+        <h2>Manage API Keys</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>API Name</th>
+                    <th>Provider</th>
+                    <th>Priority</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="api-keys-table">
+                <tr><td colspan="5">Loading API keys...</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ✅ User Management Section (Hidden by Default) -->
+    <div class="container" id="user-management-section" style="display: none;">
+        <h2>Manage Users</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Role</th>
+                    <th>Created At</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="user-table">
+                <tr><td colspan="4">Loading users...</td></tr>
+            </tbody>
+        </table>
+    </div>
+
 {% endblock %}
 
 {% block scripts %}
-    <script src="/static/js/admin.js"></script>
+    <script src="/static/js/main.js"></script>
 {% endblock %}

@@ -1,0 +1,145 @@
+/* ✅ Global Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+/* ✅ Header Section */
+.header {
+    width: 100%;
+    background: #007a8a; /* Dark Turquoise */
+    padding: 15px 0 35px; /* Extra space for scrolling holiday text */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+/* ✅ Header Container */
+.header-container {
+    width: 100%;
+    max-width: 1200px;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Centers text properly */
+    position: relative;
+    padding: 0 20px;
+}
+
+/* ✅ Market Status Box */
+.market-status-text {
+    font-size: 14px;
+    font-weight: bold;
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: white;
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/* ✅ Market Status Colors */
+.market-open {
+    background-color: green;
+}
+
+.market-closed {
+    background-color: red;
+}
+
+.market-prepost {
+    background-color: gold;
+    color: black;
+}
+
+/* ✅ Logo */
+.logo {
+    width: 1.5in;
+    height: auto;
+    object-fit: contain;
+    margin-left: 20px;
+}
+
+/* ✅ Header Text */
+.header-text {
+    text-align: center;
+}
+
+.header-text h1 {
+    margin: 0;
+    font-size: 38px;
+}
+
+.header-text p {
+    margin: 0;
+    font-size: 24px;
+    color: #ddd;
+}
+
+/* ✅ Holiday Section */
+.holiday-container {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.holiday-title {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+/* ✅ Table & Container Styling */
+.container {
+    max-width: 1200px;
+    margin: 20px auto;
+    background: white;
+    padding: 20px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    width: 95%; /* Ensures full width */
+}
+
+/* ✅ Standard Table Styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+th, td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+th {
+    background-color: #005662; /* Market Closed Blue-Gray */
+    color: White;
+}
+
+/* ✅ Watchlist Styling */
+#watchlistTable th {
+    background-color: #0097A7; /* Market Pre/Post Turquoise */
+    color: black;
+}
+
+.deleteTicker {
+    font-size: 12px;
+    padding: 4px 6px;
+    min-width: 80px;
+    text-align: center;
+}
+
+/* ✅ Stock Metrics Section */
+#stock-metrics th {
+    background-color: #80CBC4; /* Medium Turquoise */
+    color: black;
+}
+
+/* ✅ News Section */
+#newsTable th {
+    background-color: #E0F2F1; /* Soft Blue Tint */
+    color: black;
+}
