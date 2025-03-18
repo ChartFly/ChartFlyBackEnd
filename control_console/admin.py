@@ -96,4 +96,4 @@ async def login_admin(username: str, password: str, db: AsyncSession = Depends(g
     if not user or not verify_password(password, user.password_hash):
         raise HTTPException(status_code=401, detail="Invalid username or password")
 
-    return {"message": "Login successful", "user_id": user.id, "role": user.role"}
+    return {"message": "Login successful", "user_id": user.id, "role": user.role}
