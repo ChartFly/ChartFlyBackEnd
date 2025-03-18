@@ -18,13 +18,13 @@ body {
     position: relative;
 }
 
-/* ✅ Header Container */
+/* ✅ Fix Header Alignment */
 .header-container {
     width: 100%;
     max-width: 1200px;
     display: flex;
     align-items: center;
-    justify-content: center; /* Centers text properly */
+    justify-content: center; /* Keeps text centered */
     position: relative;
     padding: 0 20px;
 }
@@ -58,10 +58,10 @@ body {
 
 /* ✅ Logo */
 .logo {
-    width: 1.5in;
+    width: 1.44px;
     height: auto;
     object-fit: contain;
-    margin-left: 20px;
+    left: 20px;
 }
 
 /* ✅ Header Text */
