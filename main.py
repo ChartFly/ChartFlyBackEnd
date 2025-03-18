@@ -14,14 +14,14 @@ app = FastAPI(
     title="ChartFly API",
     description="Backend for ChartFly Trading Tools",
     version="1.0.0",
-    docs_url="/docs",  # ✅ Enable Swagger UI
-    redoc_url="/redoc",  # ✅ Enable ReDoc documentation
+    docs_url="/docs",
+    redoc_url="/redoc",
 )
 
-# ✅ CORS Middleware (Security: Restrict this to frontend URL later)
+# ✅ Apply CORS Middleware Properly
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://chartfly-web-site.onrender.com"]
+    allow_origins=["https://chartfly-web-site.onrender.com"],  # 🔹 Set to frontend URL
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
