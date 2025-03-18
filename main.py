@@ -21,7 +21,7 @@ app = FastAPI(
 # ✅ CORS Middleware (Security: Restrict this to frontend URL later)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # 🔹 Later change to ["https://chartfly-web-site.onrender.com"]
+    allow_origins=["https://chartfly-web-site.onrender.com"]
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -44,10 +44,7 @@ app.include_router(admin_router, prefix="/api/admin")
 app.include_router(api_keys_router, prefix="/api/api-keys")
 app.include_router(users_router, prefix="/api/users")
 
-# 🚨 **Temporarily Disable Nasdaq API Call for Halted Stocks**
+# ✅ Return an empty list instead of a status message
 @app.get("/api/haltdetails")
 async def get_halted_stocks():
-    return {
-        "status": "disabled",
-        "message": "The halted stocks API is temporarily unavailable while we find a new data source."
-    }
+    return []
