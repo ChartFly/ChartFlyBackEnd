@@ -18,7 +18,9 @@ body {
     color: white;
     font-family: Arial, sans-serif;
     min-height: 160px;  /* ✅ Ensures header expands to fit the 144px logo */
-}
+    overflow: hidden;
+    position: relative;  /* ✅ Needed for absolute positioning of title */
+    }
 
 /* ✅ ChartFly Logo */
 .logo {
@@ -29,11 +31,13 @@ body {
 
 /* ✅ Center "ChartFly Admin Panel" */
 .admin-title {
-    flex-grow: 1;
-    text-align: center;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);  /* ✅ True centering */
     color: white;
     font-size: 28px;
     margin: 0;
+    white-space: nowrap;
 }
 
 .market-status-container {
@@ -43,7 +47,10 @@ body {
     white-space: nowrap;  /* ✅ Prevents text from wrapping */
     overflow: hidden;  /* ✅ Ensures no overflow outside header */
     max-width: 25%;  /* ✅ Restricts the width to stay inside the header */
-    padding-right: 40px;  /* ✅ Adds spacing from the right edge */
+    padding-right: 200px;  /* ✅ Adds spacing from the right edge */
+     flex-shrink: 1;
+    position: absolute;
+    right: 20px;
 }
 
 /* ✅ Market Status Colors */
@@ -69,7 +76,7 @@ body {
 
 /* ✅ Logo */
 .logo {
-    width: 150px; /* Adjusted size */
+    width: 144px; /* Adjusted size */
     height: auto;
     object-fit: contain;
 }
