@@ -15,7 +15,7 @@ body {
 }
 
 .logo {
-    height: 144px !important;  /* ✅ Match frontend logo size */
+    height: 160px !important;  /* ✅ Match frontend logo size */
     width: auto;
     object-fit: contain;
     position: absolute;

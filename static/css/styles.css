@@ -76,7 +76,7 @@ body {
 
 /* ✅ Logo */
 .logo {
-    width: 144px; /* Adjusted size */
+    width: 160px; /* Adjusted size */
     height: auto;
     object-fit: contain;
 }
