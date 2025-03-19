@@ -13,8 +13,15 @@ DATABASE_URL = os.getenv("DATABASE_URL")
 if not DATABASE_URL:
     raise ValueError("❌ DATABASE_URL is not set. Check your .env file or environment variables in Render.")
 
-# ✅ Correct (asyncpg is an async driver)
-engine = create_async_engine(DATABASE_URL, pool_pre_ping=True, pool_size=5, max_overflow=10, echo=True, future=True, connect_args={"server_settings": {"jit": "off"}})
+# ✅ Fix: Ensure proper connection without `connect_args`
+engine = create_async_engine(
+    DATABASE_URL,
+    pool_pre_ping=True,
+    pool_size=5,
+    max_overflow=10,
+    echo=True,
+    future=True
+)
 
 # ✅ Async Session Maker
 AsyncSessionLocal = async_sessionmaker(engine, expire_on_commit=False)
