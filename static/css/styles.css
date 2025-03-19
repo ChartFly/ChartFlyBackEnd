@@ -13,16 +13,17 @@ body {
     background: #007a8a;
     padding: 20px;
     display: flex;
-    align-items: center;
+    align-items: center;  /* ✅ Ensures vertical centering */
     justify-content: space-between;
     color: white;
     font-family: Arial, sans-serif;
+    min-height: 160px;  /* ✅ Ensures header expands to fit the 144px logo */
 }
 
-/* ✅ Logo: Make it match the header height */
+/* ✅ ChartFly Logo */
 .logo {
     height: 144px;
-    width: auto;  /* Maintains aspect ratio */
+    width: auto;  /* Keeps aspect ratio */
     margin-left: 20px;
 }
 
@@ -37,12 +38,12 @@ body {
 
 .market-status-container {
     display: flex;
-    align-items: center;  /* ✅ Keeps "Market Status" text and box aligned */
+    align-items: center;  /* ✅ Keeps text and colored box aligned */
     justify-content: flex-end;  /* ✅ Ensures right alignment */
     white-space: nowrap;  /* ✅ Prevents text from wrapping */
-    overflow: hidden;  /* ✅ Ensures it doesn’t push off the page */
-    max-width: 30%;  /* ✅ Limits width so it stays inside the header */
-    padding-right: 10px;  /* ✅ Adds spacing from the right edge */
+    overflow: hidden;  /* ✅ Ensures no overflow outside header */
+    max-width: 25%;  /* ✅ Restricts the width to stay inside the header */
+    padding-right: 20px;  /* ✅ Adds spacing from the right edge */
 }
 
 /* ✅ Market Status Colors */
