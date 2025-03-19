@@ -33,14 +33,15 @@ body {
     margin: 0;
 }
 
-/* ✅ Market Status (Right-Aligned) */
 .market-status-container {
-    font-size: 16px;
-    font-weight: bold;
-    color: white;
-    text-align: right;
+    display: flex;
+    align-items: center;  /* ✅ Keeps "Market Status" text and box aligned */
+    justify-content: flex-end;  /* ✅ Ensures right alignment */
+    white-space: nowrap;  /* ✅ Prevents text from wrapping */
+    overflow: hidden;  /* ✅ Ensures it doesn’t push off the page */
+    max-width: 30%;  /* ✅ Limits width so it stays inside the header */
+    padding-right: 10px;  /* ✅ Adds spacing from the right edge */
 }
-
 
 /* ✅ Market Status Colors */
 .market-status-text {
