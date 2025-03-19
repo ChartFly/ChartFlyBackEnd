@@ -10,26 +10,37 @@ body {
 /* ✅ Header Section */
 .header {
     width: 100%;
-    background: #007a8a; /* Dark Turquoise */
-    padding: 15px 20px; /* Adjusted padding */
+    background: #007a8a;
+    padding: 15px;
     display: flex;
     align-items: center;
-    justify-content: space-between; /* Ensures logo is left, status is right */
+    justify-content: space-between;
     position: relative;
 }
 
-/* ✅ Logo Container */
-.logo-container {
-    display: flex;
-    align-items: center;
+/* ✅ Logo: Make it match the header height */
+.logo {
+    height: 1.5in;  /* Matches header height */
+    object-fit: contain;
 }
 
-/* ✅ Market Status Container */
+/* ✅ Center "ChartFly Admin Panel" */
+.admin-title {
+    flex-grow: 1;
+    text-align: center;
+    color: white;
+    font-size: 28px;
+    margin: 0;
+}
+
+/* ✅ Market Status (Right-Aligned) */
 .market-status-container {
     font-size: 16px;
     font-weight: bold;
     color: white;
+    text-align: right;
 }
+
 
 /* ✅ Market Status Colors */
 .market-status-text {
