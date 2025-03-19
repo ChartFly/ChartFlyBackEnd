@@ -1,11 +1,6 @@
-/* ✅ Global Styles */
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
-    padding: 0;
-    text-align: center;
-}
+/* ============================== */
+/* ✅ BACKEND GLOBAL STYLES (styles.css) */
+/* ============================== */
 
 /* ✅ Restore Blue Header */
 .header {
@@ -13,44 +8,47 @@ body {
     background: #007a8a;
     padding: 20px;
     display: flex;
-    align-items: center;  /* ✅ Ensures vertical centering */
-    justify-content: space-between;
+    align-items: center;
+    justify-content: center;
     color: white;
     font-family: Arial, sans-serif;
-    min-height: 160px;  /* ✅ Ensures header expands to fit the 144px logo */
-    overflow: hidden;
-    position: relative;  /* ✅ Needed for absolute positioning of title */
-    }
+    min-height: 160px; /* ✅ Ensures header expands for logo */
+    position: relative;
+}
+
+/* ✅ Left-aligned ChartFly logo */
+.logo-container {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+}
 
 /* ✅ ChartFly Logo */
 .logo {
-    height: 144px;
-    width: auto;  /* Keeps aspect ratio */
+    height: 144px !important;
+    width: auto;
     object-fit: contain;
-    margin-left: 20px;
 }
 
 /* ✅ Center "ChartFly Admin Panel" */
 .admin-title {
     position: absolute;
     left: 50%;
-    transform: translateX(-50%);  /* ✅ True centering */
+    transform: translateX(-50%);
     color: white;
     font-size: 28px;
     margin: 0;
     white-space: nowrap;
 }
 
+/* ✅ Market Status Positioning */
 .market-status-container {
-    display: flex;
-    align-items: center;  /* ✅ Keeps text and colored box aligned */
-    justify-content: flex-end;  /* ✅ Ensures right alignment */
-    white-space: nowrap;  /* ✅ Prevents text from wrapping */
-    overflow: hidden;  /* ✅ Ensures no overflow outside header */
-    max-width: 25%;  /* ✅ Restricts the width to stay inside the header */
-    padding-right: 20px;  /* ✅ Adds spacing from the right edge */
     position: absolute;
     right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    white-space: nowrap;
 }
 
 /* ✅ Market Status Colors */
@@ -71,82 +69,5 @@ body {
 
 .market-prepost {
     background-color: gold;
-    color: black;
-}
-
-/* ✅ Logo */
-.logo {
-    height: 144px;
-    width: auto;  /* Keeps aspect ratio */
-    margin-left: 20px;
-    object-fit: contain;
-}
-
-/* ✅ Header Text */
-.header-text {
-    text-align: center;
-}
-
-.header-text h1 {
-    margin: 0;
-    font-size: 38px;
-}
-
-.header-text p {
-    margin: 0;
-    font-size: 24px;
-    color: #ddd;
-}
-
-/* ✅ Table & Container Styling */
-.container {
-    max-width: 1200px;
-    margin: 20px auto;
-    background: white;
-    padding: 20px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    width: 95%;
-}
-
-/* ✅ Standard Table Styling */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-}
-
-th, td {
-    padding: 10px;
-    border: 1px solid #ddd;
-    text-align: center;
-}
-
-th {
-    background-color: #005662; /* Market Closed Blue-Gray */
-    color: White;
-}
-
-/* ✅ Watchlist Styling */
-#watchlistTable th {
-    background-color: #0097A7; /* Market Pre/Post Turquoise */
-    color: black;
-}
-
-.deleteTicker {
-    font-size: 12px;
-    padding: 4px 6px;
-    min-width: 80px;
-    text-align: center;
-}
-
-/* ✅ Stock Metrics Section */
-#stock-metrics th {
-    background-color: #80CBC4; /* Medium Turquoise */
-    color: black;
-}
-
-/* ✅ News Section */
-#newsTable th {
-    background-color: #E0F2F1; /* Soft Blue Tint */
     color: black;
 }
