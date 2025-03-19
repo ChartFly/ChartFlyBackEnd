@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException, Depends, Path
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import text
 from control_console.database import AsyncSessionLocal  # ✅ Ensure correct import
@@ -11,9 +11,18 @@ router = APIRouter()
 logging.basicConfig(level=logging.INFO)
 
 
+# ✅ Dependency for getting a database session
+async def get_db_session() -> AsyncSession:
+    async with AsyncSessionLocal() as session:
+        yield session
+
+
 # ✅ GET Holidays by Year with Debugging
 @router.get("/year/{year}", response_model=list, tags=["holidays"])
-async def get_holidays_by_year(year: int, db: AsyncSession = Depends(AsyncSessionLocal)):
+async def get_holidays_by_year(
+        year: int = Path(..., title="Year", description="The year to fetch holidays for."),
+        db: AsyncSession = Depends(get_db_session)
+):
     try:
         logging.info(f"🔍 Fetching holidays for {year}")  # ✅ Debug log
 
