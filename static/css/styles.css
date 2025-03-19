@@ -20,8 +20,9 @@ body {
 
 /* ✅ Logo: Make it match the header height */
 .logo {
-    height: 1.5in;  /* Matches header height */
-    object-fit: contain;
+    height: 144px;
+    width: auto;  /* Maintains aspect ratio */
+    margin-left: 20px;
 }
 
 /* ✅ Center "ChartFly Admin Panel" */
