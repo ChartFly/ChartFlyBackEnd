@@ -7,15 +7,16 @@ body {
     text-align: center;
 }
 
-/* ✅ Header Section */
+/* ✅ Restore Blue Header */
 .header {
     width: 100%;
     background: #007a8a;
-    padding: 15px;
+    padding: 20px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    position: relative;
+    color: white;
+    font-family: Arial, sans-serif;
 }
 
 /* ✅ Logo: Make it match the header height */
