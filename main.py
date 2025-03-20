@@ -1,3 +1,5 @@
+import os
+import uvicorn
 from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -48,3 +50,7 @@ app.include_router(users_router, prefix="/api/users")
 @app.get("/api/haltdetails")
 async def get_halted_stocks():
     return []
+
+# ✅ Explicitly bind to the correct port for Render deployment
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=int(os.getenv("PORT", 8000)))
