@@ -1,6 +1,7 @@
 import os
 import uvicorn
 from fastapi import FastAPI, Request
+from fastapi.responses import Response
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.middleware.cors import CORSMiddleware
@@ -37,8 +38,16 @@ templates = Jinja2Templates(directory="templates")
 
 # ✅ Admin Panel UI Route (Backend Dashboard)
 @app.get("/")
+@app.head("/")
 async def admin_ui(request: Request):
+    if request.method == "HEAD":
+        return Response(status_code=200)
     return templates.TemplateResponse("admin.html", {"request": request})
+
+# ✅ Handle HEAD requests for API endpoints
+@app.head("/api/haltdetails")
+async def head_halted_stocks():
+    return Response(status_code=200)
 
 # ✅ Include API Routes
 app.include_router(holidays_router, prefix="/api/holidays")
