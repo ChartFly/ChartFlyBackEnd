@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, Depends, Path
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import text
+from sqlalchemy.future import select
 from control_console.database import AsyncSessionLocal  # ✅ Ensure correct import
 import logging
 import traceback  # ✅ Captures full error stack trace
@@ -17,20 +17,24 @@ async def get_db_session() -> AsyncSession:
         yield session
 
 
-# ✅ GET Holidays by Year with Debugging
+# ✅ GET Holidays by Year with Async Support
 @router.get("/year/{year}", response_model=list, tags=["holidays"])
 async def get_holidays_by_year(
-        year: int = Path(..., title="Year", description="The year to fetch holidays for."),
-        db: AsyncSession = Depends(get_db_session)
+    year: int = Path(..., title="Year", description="The year to fetch holidays for."),
+    db: AsyncSession = Depends(get_db_session)
 ):
     try:
         logging.info(f"🔍 Fetching holidays for {year}")  # ✅ Debug log
 
         result = await db.execute(
-            text("SELECT id, name, date, year FROM market_holidays WHERE year = :year ORDER BY date"),
-            {"year": year}
+            select(
+                MarketHoliday.id,
+                MarketHoliday.name,
+                MarketHoliday.date,
+                MarketHoliday.year
+            ).where(MarketHoliday.year == year).order_by(MarketHoliday.date)
         )
-        holidays = result.mappings().all()
+        holidays = [dict(row._mapping) for row in result.fetchall()]  # ✅ Convert RowMapping to dict
 
         if not holidays:
             logging.warning(f"⚠ No holidays found for {year}")
