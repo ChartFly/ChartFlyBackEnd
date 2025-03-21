@@ -2,65 +2,60 @@
 /* ✅ GLOBAL + ADMIN STYLES (Merged styles.css) */
 /* ============================== */
 
-/* ✅ Turquoise Header */
+/* ✅ Turquoise Header Layout (Flex-Based) */
 .header {
     width: 100%;
     background: #007a8a;
-    padding: 20px;
+    padding: 20px 50px;
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    justify-content: center;
     color: white;
     font-family: Arial, sans-serif;
-    min-height: 160px; /* Ensures header expands for logo */
-    position: relative;
+    min-height: 160px;
+    box-sizing: border-box;
 }
 
-/* ✅ Left-aligned Logo */
-.logo-container {
-    position: absolute;
-    left: 20px;
-    top: 50%;
-    transform: translateY(-50%);
+/* ✅ Header Subsections */
+.header-left,
+.header-center,
+.header-right {
+    display: flex;
+    align-items: center;
 }
 
 /* ✅ ChartFly Logo */
+.logo-container {
+    margin-right: 20px;
+}
 .logo {
     height: 144px !important;
     width: auto;
     object-fit: contain;
 }
 
-/* ✅ Centered Title */
+/* ✅ Centered Admin Panel Title */
 .admin-title {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    color: white;
     font-size: 36px;
     margin: 0;
     white-space: nowrap;
 }
 
+/* ✅ Market Status Container */
 .market-status-container {
-    position: absolute;
-    right: 50px;
-    top: 50%;
-    transform: translateY(-50%);
     white-space: nowrap;
-    max-width: 250px;
-    padding-right: 10px;
-    display: flex;              /* ✅ align label + pill side-by-side */
+    display: flex;
     align-items: center;
-    gap: 6px;                   /* ✅ extra spacing between elements */
+    gap: 8px;
 }
 
+/* ✅ Market Status Label */
 .market-status-label {
     font-size: 14px;
     font-weight: bold;
-    margin-right: 8px;   /* space between label and colored box */
 }
-/* ✅ Market Status Colors */
+
+/* ✅ Market Status Pill Styling */
 .market-status-text {
     font-size: 14px;
     font-weight: bold;
@@ -68,6 +63,7 @@
     border-radius: 5px;
 }
 
+/* ✅ Market Status Colors */
 .market-open {
     background-color: green;
 }
