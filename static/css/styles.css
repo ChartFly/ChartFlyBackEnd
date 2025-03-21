@@ -28,6 +28,7 @@
 .logo-container {
     margin-right: 20px;
 }
+
 .logo {
     height: 144px !important;
     width: auto;
@@ -41,12 +42,12 @@
     white-space: nowrap;
 }
 
-/* ✅ Market Status Container */
+/* ✅ Market Status Container (Header Right) */
 .market-status-container {
-    white-space: nowrap;
     display: flex;
     align-items: center;
-    gap: 8px;
+    padding-right: 0;
+    gap: 10px;
 }
 
 /* ✅ Market Status Label */
@@ -61,6 +62,7 @@
     font-weight: bold;
     padding: 5px 10px;
     border-radius: 5px;
+    margin-left: 0;
 }
 
 /* ✅ Market Status Colors */
