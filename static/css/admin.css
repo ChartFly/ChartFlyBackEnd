@@ -50,3 +50,11 @@
     transform: translateY(-50%);
     white-space: nowrap;
 }
+
+/* ✅ Fix Market Status Positioning (Right-Aligned with Padding) */
+.header-right {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end; /* 🔹 Align to right */
+    padding-right: 50px; /* 🔹 Ensure 50px spacing from right */
+}
