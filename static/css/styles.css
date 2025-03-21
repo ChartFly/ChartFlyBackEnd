@@ -42,10 +42,9 @@
     white-space: nowrap;
 }
 
-/* ✅ Market Status Container */
 .market-status-container {
     position: absolute;
-    right: 20px;
+    right: 50px;  /* ⬅️ Increased from 20px to 50px */
     top: 50%;
     transform: translateY(-50%);
     white-space: nowrap;
