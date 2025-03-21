@@ -44,10 +44,12 @@
 
 .market-status-container {
     position: absolute;
-    right: 50px;  /* ⬅️ Increased from 20px to 50px */
+    right: 50px;
     top: 50%;
     transform: translateY(-50%);
     white-space: nowrap;
+    max-width: 250px;       /* ✅ Prevents it from stretching too wide */
+    padding-right: 10px;    /* ✅ Adds extra buffer just in case */
 }
 
 /* ✅ Market Status Colors */
