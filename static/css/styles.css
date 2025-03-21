@@ -1,8 +1,8 @@
 /* ============================== */
-/* ✅ BACKEND GLOBAL STYLES (styles.css) */
+/* ✅ GLOBAL + ADMIN STYLES (Merged styles.css) */
 /* ============================== */
 
-/* ✅ Restore turquoise color Header */
+/* ✅ Turquoise Header */
 .header {
     width: 100%;
     background: #007a8a;
@@ -12,11 +12,11 @@
     justify-content: center;
     color: white;
     font-family: Arial, sans-serif;
-    min-height: 160px; /* ✅ Ensures header expands for logo */
+    min-height: 160px; /* Ensures header expands for logo */
     position: relative;
 }
 
-/* ✅ Left-aligned ChartFly logo */
+/* ✅ Left-aligned Logo */
 .logo-container {
     position: absolute;
     left: 20px;
@@ -31,18 +31,18 @@
     object-fit: contain;
 }
 
-/* ✅ Center "ChartFly Admin Panel" */
+/* ✅ Centered Title */
 .admin-title {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
     color: white;
-    font-size: 28px;
+    font-size: 36px;
     margin: 0;
     white-space: nowrap;
 }
 
-/* ✅ Market Status Positioning */
+/* ✅ Market Status Container */
 .market-status-container {
     position: absolute;
     right: 20px;
