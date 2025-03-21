@@ -48,10 +48,18 @@
     top: 50%;
     transform: translateY(-50%);
     white-space: nowrap;
-    max-width: 250px;       /* ✅ Prevents it from stretching too wide */
-    padding-right: 10px;    /* ✅ Adds extra buffer just in case */
+    max-width: 250px;
+    padding-right: 10px;
+    display: flex;              /* ✅ align label + pill side-by-side */
+    align-items: center;
+    gap: 6px;                   /* ✅ extra spacing between elements */
 }
 
+.market-status-label {
+    font-size: 14px;
+    font-weight: bold;
+    margin-right: 8px;   /* space between label and colored box */
+}
 /* ✅ Market Status Colors */
 .market-status-text {
     font-size: 14px;
