@@ -67,12 +67,12 @@ async def admin_ui(request: Request):
         return templates.TemplateResponse("login.html", {"request": request, "error": "Database connection failed."})
 
     if user_count == 0:
-        return RedirectResponse(url="/register", status_code=HTTP_302_FOUND)
+        return RedirectResponse(url="/auth/register", status_code=HTTP_302_FOUND)
 
     if request.session.get("user_id"):
         return templates.TemplateResponse("admin.html", {"request": request})
 
-    return RedirectResponse(url="/login", status_code=HTTP_302_FOUND)
+    return RedirectResponse(url="/auth/login", status_code=HTTP_302_FOUND)
 
 # ✅ HEAD support for halt endpoint
 @app.head("/api/haltdetails")
@@ -89,7 +89,7 @@ app.include_router(holidays_router, prefix="/api/holidays")
 app.include_router(admin_router, prefix="/api/admin")
 app.include_router(api_keys_router, prefix="/api/api-keys")
 app.include_router(users_router, prefix="/api/users")
-app.include_router(auth_router)
+app.include_router(auth_router, prefix="/auth")  # ✅ ADDED PREFIX HERE
 app.include_router(dev_reset_router)
 
 # ✅ Run server
