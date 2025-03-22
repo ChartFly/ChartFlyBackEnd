@@ -1,17 +1,39 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>Login to ChartFly</title>
     <link rel="stylesheet" href="/static/css/auth.css">
 </head>
 <body>
 <div class="auth-container">
-    <h2>Login to ChartFly</h2>
+    <h2>🚀 Login to ChartFly</h2>
+
     <form method="post" action="/auth/login">
         <input type="text" name="username" placeholder="Username" required><br>
         <input type="password" name="password" placeholder="Password" required><br>
+
+        <label style="font-size: 0.9em;">
+            <input type="checkbox" name="enable_2fa">
+            Enable 2-Factor Authentication (Optional)
+        </label><br><br>
+
         <button type="submit">Login</button>
     </form>
+
+    <div class="form-notes">
+        <p style="font-size: 0.85em; margin-top: 20px;">
+            🔐 <strong>Password Requirements:</strong><br>
+            - At least 6 characters<br>
+            - Must include a letter, number, and symbol
+        </p>
+        <p style="font-size: 0.85em; color: #888;">
+            💾 Save your username and password in a secure place.
+        </p>
+        <p style="margin-top: 10px;">
+            <a href="/auth/forgot-password" style="color: #0066cc; font-size: 0.9em;">Forgot your password?</a>
+        </p>
+    </div>
 </div>
 </body>
 </html>
