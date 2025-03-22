@@ -55,23 +55,23 @@ async def admin_ui(request: Request):
     if request.method == "HEAD":
         return Response(status_code=200)
 
-    # 🔍 Check if any users exist
-    conn = get_db_connection()
-    cur = conn.cursor()
-    cur.execute("SELECT COUNT(*) FROM admin_users;")
-    user_count = cur.fetchone()[0]
-    cur.close()
-    conn.close()
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute("SELECT COUNT(*) FROM admin_users;")
+        user_count = cur.fetchone()[0]
+        cur.close()
+        conn.close()
+    except Exception as e:
+        print("🚨 Database error in admin_ui route:", e)
+        return templates.TemplateResponse("login.html", {"request": request, "error": "Database connection failed."})
 
-    # 🟢 No users? Redirect to register
     if user_count == 0:
         return RedirectResponse(url="/register", status_code=HTTP_302_FOUND)
 
-    # 🔒 If logged in, show admin panel
     if request.session.get("user_id"):
         return templates.TemplateResponse("admin.html", {"request": request})
 
-    # 🔁 Otherwise redirect to login
     return RedirectResponse(url="/login", status_code=HTTP_302_FOUND)
 
 # ✅ HEAD support for halt endpoint
