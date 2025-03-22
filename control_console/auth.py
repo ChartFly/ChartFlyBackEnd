@@ -144,23 +144,34 @@ async def dev_reset(token: str):
 
 # ✅ Forgot Password Page
 @router.get("/forgot-password", response_class=HTMLResponse)
-async def forgot_password_form(request: Request):
-    return templates.TemplateResponse("forgot-password.html", {"request": request})
+async def forgot_password_form(req: Request):
+    return templates.TemplateResponse("forgot-password.html", {"request": req})
+
+    # ✅ This should be at the top level, not inside another function
+
+
+@router.get("/forgot-password", response_class=HTMLResponse)
+async def forgot_password_form(req: Request):
+    return templates.TemplateResponse("forgot-password.html", {"request": req})
+
 
 @router.post("/forgot-password")
 async def forgot_password_submit(
-    request: Request,
-    email: str = Form(...),
-    phone_number: str = Form(...),
-    method: str = Form(...)
+        request: Request,
+        email: str = Form(...),
+        phone_number: str = Form(...),
+        method: str = Form(...)
 ):
+    print("🔔 Forgot Password triggered")
+    print(f"📨 Email: {email}, 📞 Phone: {phone_number}, 📤 Method: {method}")
+
     conn = get_db_connection()
     cur = conn.cursor()
 
     cur.execute("""
-        SELECT id FROM admin_users
-        WHERE email = %s AND phone_number = %s
-    """, (email.strip(), phone_number.strip()))
+           SELECT id FROM admin_users
+           WHERE email = %s AND phone_number = %s
+       """, (email.strip(), phone_number.strip()))
     user = cur.fetchone()
 
     if not user:
@@ -171,28 +182,34 @@ async def forgot_password_submit(
             "error": "No matching user found with that email and phone number."
         })
 
+    print("✅ User found. Generating token...")
     token = str(uuid4())
     expires = datetime.now(UTC) + timedelta(minutes=15)
+    print(f"🔐 Token: {token}, Expires: {expires}")
 
     cur.execute("""
-        UPDATE admin_users
-        SET reset_token = %s, reset_token_expires = %s
-        WHERE id = %s
-    """, (token, expires, user[0]))
+           UPDATE admin_users
+           SET reset_token = %s, reset_token_expires = %s
+           WHERE id = %s
+       """, (token, expires, user[0]))
 
     conn.commit()
     cur.close()
     conn.close()
 
     if method == "email":
+        print("📤 Sending email...")
         success = send_reset_email(email, token)
         if not success:
+            print("❌ Email failed to send.")
             return templates.TemplateResponse("forgot-password.html", {
                 "request": request,
                 "error": "Failed to send email. Please try again later."
             })
 
+    print("✅ Email sent successfully.")
     return RedirectResponse(url="/auth/login", status_code=HTTP_302_FOUND)
+
 
 # ✅ Reset Password Page (GET)
 @router.get("/reset-password", response_class=HTMLResponse)
