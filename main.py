@@ -8,6 +8,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
+from starlette.middleware import Middleware
 from starlette.status import HTTP_302_FOUND
 
 # ✅ Import Routers
@@ -22,25 +23,23 @@ from control_console.auth_password_reset import router as password_reset_router
 # ✅ DB Connection Function
 from db import get_db_connection
 
-# ✅ Initialize FastAPI
+# ✅ Initialize FastAPI with Middleware
 app = FastAPI(
     title="ChartFly API",
     description="Backend for ChartFly Trading Tools",
     version="1.0.0",
     docs_url="/docs",
     redoc_url="/redoc",
-)
-
-# ✅ Add Session Middleware
-app.add_middleware(SessionMiddleware, secret_key=os.getenv("SESSION_SECRET", "super-secret"))
-
-# ✅ Add CORS Middleware
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["https://chartfly-web-site.onrender.com"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    middleware=[
+        Middleware(SessionMiddleware, secret_key=os.getenv("SESSION_SECRET", "super-secret")),
+        Middleware(
+            CORSMiddleware,
+            allow_origins=["https://chartfly-web-site.onrender.com"],
+            allow_credentials=True,
+            allow_methods=["*"],
+            allow_headers=["*"],
+        ),
+    ],
 )
 
 # ✅ Mount Static Files
@@ -86,16 +85,15 @@ async def head_halted_stocks():
 async def get_halted_stocks():
     return []
 
-# ✅ Include All Routers
+# ✅ Include All Routers (password reset ABOVE login/register)
+app.include_router(password_reset_router, prefix="/auth")
+app.include_router(login_register_router, prefix="/auth")
 app.include_router(holidays_router, prefix="/api/holidays")
 app.include_router(admin_router, prefix="/api/admin")
 app.include_router(api_keys_router, prefix="/api/api-keys")
 app.include_router(users_router, prefix="/api/users")
-app.include_router(login_register_router, prefix="/auth")
-app.include_router(password_reset_router, prefix="/auth")
 app.include_router(dev_reset_router)
 
 # ✅ Run server
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=int(os.getenv("PORT", 8000)))
-    # force deploy
