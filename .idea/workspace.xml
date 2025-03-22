@@ -8,25 +8,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="eb1da553-8e5b-4ae5-a8c1-d95ef0c30040" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/control_console/auth.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/control_console/dev_reset.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/db.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/css/apikeys.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/css/auth.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/css/marketholidays.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/css/users" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/js/apikeys.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/js/marketholidays.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/js/users.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/apikeys.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/login.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/marketholidays.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/register.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/users.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
