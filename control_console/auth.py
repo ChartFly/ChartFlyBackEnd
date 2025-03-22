@@ -7,6 +7,7 @@ from starlette.responses import Response
 from starlette.middleware.sessions import SessionMiddleware
 from starlette.requests import Request
 from db import get_db_connection
+from fastapi.responses import JSONResponse
 
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
@@ -70,17 +71,17 @@ async def register(
     cur.close()
     conn.close()
 
-    return RedirectResponse(url="/login", status_code=HTTP_302_FOUND)
+    # ✅ FIXED redirect to /auth/login
+    return RedirectResponse(url="/auth/login", status_code=HTTP_302_FOUND)
 
 # ✅ Logout
 @router.get("/logout")
 async def logout(request: Request):
     request.session.clear()
-    return RedirectResponse(url="/login", status_code=HTTP_302_FOUND)
+    # ✅ FIXED redirect to /auth/login
+    return RedirectResponse(url="/auth/login", status_code=HTTP_302_FOUND)
 
-from fastapi.responses import JSONResponse
-
-# ✅ Developer Reset Endpoint (for emergencies or first-time setup)
+# ✅ Developer Reset Endpoint
 @router.get("/dev-reset")
 async def dev_reset(token: str):
     if token != "chartfly_mega_secret_token_8932":
