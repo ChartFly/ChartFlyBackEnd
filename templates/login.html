@@ -6,34 +6,45 @@
     <link rel="stylesheet" href="/static/css/auth.css">
 </head>
 <body>
-<div class="auth-container">
-    <h2>🚀 Login to ChartFly</h2>
+    <div class="auth-container">
+        <img src="/static/images/Chartfly-logo.png" alt="ChartFly Logo" class="auth-logo">
+        <h1>ChartFly Trading Tools</h1>
+        <h2>🚀 Login</h2>
 
-    <form method="post" action="/auth/login">
-        <input type="text" name="username" placeholder="Username" required><br>
-        <input type="password" name="password" placeholder="Password" required><br>
+        <form method="post" action="/auth/login">
+            <div class="input-group">
+                <input type="text" name="username" placeholder="Username" required>
+            </div>
 
-        <label style="font-size: 0.9em;">
-            <input type="checkbox" name="enable_2fa">
-            Enable 2-Factor Authentication (Optional)
-        </label><br><br>
+            <div class="input-group">
+                <input type="password" name="password" placeholder="Password" id="password" required>
+                <span class="toggle-password" onclick="togglePassword('password')">👁️</span>
+            </div>
 
-        <button type="submit">Login</button>
-    </form>
+            <button type="submit" class="auth-button">Login</button>
+        </form>
 
-    <div class="form-notes">
-        <p style="font-size: 0.85em; margin-top: 20px;">
-            🔐 <strong>Password Requirements:</strong><br>
-            - At least 6 characters<br>
-            - Must include a letter, number, and symbol
-        </p>
-        <p style="font-size: 0.85em; color: #888;">
-            💾 Save your username and password in a secure place.
-        </p>
-        <p style="margin-top: 10px;">
-            <a href="/auth/forgot-password" style="color: #0066cc; font-size: 0.9em;">Forgot your password?</a>
-        </p>
+        <div class="form-notes">
+            <p class="note-header">🔐 <strong>Password Requirements:</strong></p>
+            <ul class="requirements">
+                <li>At least 6 characters</li>
+                <li>Must include a letter, number, and symbol</li>
+                <li>Allowed symbols: ! @ # $ % ^ & * ( ) _ - + =</li>
+            </ul>
+            <p class="save-tip">💾 Save your username and password in a secure place.</p>
+            <p><a href="/auth/forgot-password" class="forgot-link">Forgot your password?</a></p>
+        </div>
+
+        <footer class="auth-footer">
+            <p>ChartFly Trading Tools. All Rights Reserved</p>
+        </footer>
     </div>
-</div>
+
+    <script>
+        function togglePassword(id) {
+            const input = document.getElementById(id);
+            input.type = input.type === "password" ? "text" : "password";
+        }
+    </script>
 </body>
 </html>

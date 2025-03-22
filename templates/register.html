@@ -1,9 +1,15 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Register Super Admin</title>
+    <meta charset="UTF-8">
+    <title>ChartFly Admin Setup</title>
     <link rel="stylesheet" href="/static/css/auth.css">
     <script>
+        function togglePassword(id) {
+            const input = document.getElementById(id);
+            input.type = input.type === "password" ? "text" : "password";
+        }
+
         function validateForm(event) {
             const pw1 = document.getElementById("password").value;
             const pw2 = document.getElementById("confirm_password").value;
@@ -27,28 +33,43 @@
 </head>
 <body>
 <div class="auth-container">
-    <h2>First-Time Setup</h2>
+    <img src="/static/images/Chartfly-logo.png" alt="ChartFly Logo" class="auth-logo">
+    <h1>ChartFly</h1>
+    <h2>🚀 First-Time Setup</h2>
+
     <form method="post" action="/auth/register" onsubmit="return validateForm(event)">
         <input type="text" name="first_name" placeholder="First Name" required><br>
         <input type="text" name="last_name" placeholder="Last Name" required><br>
         <input type="text" name="phone_number" placeholder="Phone Number" required><br>
         <input type="email" name="email" placeholder="Email Address" required><br>
         <input type="text" name="username" placeholder="Username" required><br>
-        <input type="password" id="password" name="password" placeholder="Password" required><br>
-        <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm Password" required><br>
-        <input type="text" name="access_code" placeholder="Create Admin Access Code" required><br>
 
-        <label>
-            <input type="checkbox" name="enable_2fa" value="yes"> Enable Two-Factor Authentication (Optional)
-        </label><br><br>
+        <div class="input-group">
+            <input type="password" id="password" name="password" placeholder="Password" required>
+            <span class="toggle-password" onclick="togglePassword('password')">👁️</span>
+        </div>
+
+        <div class="input-group">
+            <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm Password" required>
+            <span class="toggle-password" onclick="togglePassword('confirm_password')">👁️</span>
+        </div>
+
+        <input type="text" name="access_code" placeholder="Create Admin Access Code" required><br>
 
         <button type="submit">Register</button>
 
-        <p style="margin-top: 10px; font-size: 12px; color: #888;">
-            🔒 Your password must be at least 6 characters long and include a mix of letters, numbers, and symbols.<br>
-            💾 Save your login information in a secure place.
-        </p>
+        <div class="form-notes">
+            <div class="note-header">🔐 <strong>Password Requirements:</strong></div>
+            <ul class="requirements">
+                <li>At least 6 characters</li>
+                <li>Include letters, numbers, and a symbol</li>
+                <li>Allowed symbols: ! @ # $ % ^ & * _ +</li>
+            </ul>
+            <p class="save-tip">💾 Save your login information in a secure place.</p>
+        </div>
     </form>
+
+    <div class="auth-footer">ChartFly Trading Tools. All Rights Reserved</div>
 </div>
 </body>
 </html>

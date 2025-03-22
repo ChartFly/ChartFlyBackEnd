@@ -5,6 +5,7 @@ from starlette.status import HTTP_302_FOUND
 from passlib.hash import bcrypt
 import re
 from db import get_db_connection
+from control_console.rate_limiter import is_rate_limited, record_attempt  # ✅ NEW IMPORT
 
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
@@ -17,6 +18,14 @@ async def login_page(request: Request):
 # ✅ Handle Login Submission
 @router.post("/login")
 async def login(request: Request, username: str = Form(...), password: str = Form(...)):
+    client_ip = request.client.host  # ✅ Get IP address
+    blocked, wait_time = is_rate_limited(client_ip)  # ✅ Check if IP is rate limited
+    if blocked:
+        return templates.TemplateResponse("login.html", {
+            "request": request,
+            "error": f"⛔ Too many login attempts. Try again in {wait_time // 60} min."
+        })
+
     conn = get_db_connection()
     cur = conn.cursor()
 
@@ -30,6 +39,7 @@ async def login(request: Request, username: str = Form(...), password: str = For
         request.session["username"] = username
         return RedirectResponse(url="/", status_code=HTTP_302_FOUND)
     else:
+        record_attempt(client_ip)  # ✅ Record failed attempt
         return templates.TemplateResponse("login.html", {"request": request, "error": "Invalid username or password"})
 
 # ✅ Render Registration Page
