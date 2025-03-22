@@ -148,3 +148,4 @@ async def dev_reset(token: str):
     conn.close()
 
     return JSONResponse(status_code=201, content={"message": "Default admin account created. Username: admin, Password: admin123"})
+# force deploy
