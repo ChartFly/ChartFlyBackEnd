@@ -1,76 +1,76 @@
-from fastapi import APIRouter, Request, Form
-from fastapi.responses import RedirectResponse, HTMLResponse
-from fastapi.templating import Jinja2Templates
-from starlette.status import HTTP_302_FOUND
-from passlib.hash import bcrypt
-from db import get_db_connection  # ✅ Make sure this exists
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
 
-router = APIRouter()
-templates = Jinja2Templates(directory="templates")
+.auth-container {
+    background-color: #1e1e2f;
+    padding: 30px 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+}
 
-# ✅ Render Login Page
-@router.get("/login", response_class=HTMLResponse)
-async def login_page(request: Request):
-    return templates.TemplateResponse("login.html", {"request": request})
+.auth-container h2 {
+    margin-bottom: 25px;
+    font-size: 24px;
+    color: #00d4ff;
+}
 
-# ✅ Handle Login Submission
-@router.post("/login")
-async def login(request: Request, username: str = Form(...), password: str = Form(...)):
-    conn = get_db_connection()
-    cur = conn.cursor()
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="tel"] {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0 12px 0;
+    border: none;
+    border-radius: 5px;
+    background-color: #333;
+    color: #fff;
+    font-size: 14px;
+}
 
-    cur.execute("SELECT id, password_hash FROM admin_users WHERE username = %s", (username,))
-    result = cur.fetchone()
-    cur.close()
-    conn.close()
+input::placeholder {
+    color: #aaa;
+}
 
-    if result and bcrypt.verify(password, result[1]):
-        request.session["user_id"] = result[0]
-        request.session["username"] = username
-        return RedirectResponse(url="/", status_code=HTTP_302_FOUND)
-    else:
-        return templates.TemplateResponse("login.html", {"request": request, "error": "Invalid username or password"})
+button {
+    width: 100%;
+    padding: 12px;
+    background-color: #00d4ff;
+    border: none;
+    border-radius: 5px;
+    color: #000;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
 
-# ✅ Render Registration Page
-@router.get("/register", response_class=HTMLResponse)
-async def register_page(request: Request):
-    return templates.TemplateResponse("register.html", {"request": request})
+button:hover {
+    background-color: #00b5e2;
+}
 
-# ✅ Handle Registration Submission
-@router.post("/register")
-async def register(
-    request: Request,
-    first_name: str = Form(...),
-    last_name: str = Form(...),
-    phone_number: str = Form(...),
-    username: str = Form(...),
-    password: str = Form(...),
-    access_code: str = Form(...)
-):
-    conn = get_db_connection()
-    cur = conn.cursor()
+.form-notes {
+    text-align: left;
+    margin-top: 20px;
+    font-size: 0.85em;
+}
 
-    cur.execute("SELECT id FROM admin_users WHERE username = %s", (username,))
-    existing_user = cur.fetchone()
+a {
+    color: #00d4ff;
+    text-decoration: none;
+}
 
-    if existing_user:
-        cur.close()
-        conn.close()
-        return templates.TemplateResponse("register.html", {"request": request, "error": "Username already exists."})
-
-    hashed_pw = bcrypt.hash(password)
-    cur.execute("""
-        INSERT INTO admin_users (first_name, last_name, phone_number, username, password_hash, access_code)
-        VALUES (%s, %s, %s, %s, %s, %s)
-    """, (first_name, last_name, phone_number, username, hashed_pw, access_code))
-    conn.commit()
-    cur.close()
-    conn.close()
-
-    return RedirectResponse(url="/login", status_code=HTTP_302_FOUND)
-
-# ✅ Logout
-@router.get("/logout")
-async def logout(request: Request):
-    request.session.clear()
-    return RedirectResponse(url="/login", status_code=HTTP_302_FOUND)
+a:hover {
+    text-decoration: underline;
+}

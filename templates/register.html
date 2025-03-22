@@ -3,18 +3,51 @@
 <head>
     <title>Register Super Admin</title>
     <link rel="stylesheet" href="/static/css/auth.css">
+    <script>
+        function validateForm(event) {
+            const pw1 = document.getElementById("password").value;
+            const pw2 = document.getElementById("confirm_password").value;
+            const regex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[\W_]).{6,}$/;
+
+            if (pw1 !== pw2) {
+                alert("❗ Passwords do not match.");
+                event.preventDefault();
+                return false;
+            }
+
+            if (!regex.test(pw1)) {
+                alert("❗ Password must be at least 6 characters and include letters, numbers, and a special character.");
+                event.preventDefault();
+                return false;
+            }
+
+            return true;
+        }
+    </script>
 </head>
 <body>
 <div class="auth-container">
     <h2>First-Time Setup</h2>
-    <form method="post" action="/auth/register">  <!-- ✅ Updated here -->
+    <form method="post" action="/auth/register" onsubmit="return validateForm(event)">
         <input type="text" name="first_name" placeholder="First Name" required><br>
         <input type="text" name="last_name" placeholder="Last Name" required><br>
         <input type="text" name="phone_number" placeholder="Phone Number" required><br>
+        <input type="email" name="email" placeholder="Email Address" required><br>
         <input type="text" name="username" placeholder="Username" required><br>
-        <input type="password" name="password" placeholder="Password" required><br>
+        <input type="password" id="password" name="password" placeholder="Password" required><br>
+        <input type="password" id="confirm_password" placeholder="Confirm Password" required><br>
         <input type="text" name="access_code" placeholder="Create Admin Access Code" required><br>
+
+        <label>
+            <input type="checkbox" name="enable_2fa" value="yes"> Enable Two-Factor Authentication (Optional)
+        </label><br><br>
+
         <button type="submit">Register</button>
+
+        <p style="margin-top: 10px; font-size: 12px; color: #888;">
+            🔒 Your password must be at least 6 characters long and include a mix of letters, numbers, and symbols.<br>
+            💾 Save your login information in a secure place.
+        </p>
     </form>
 </div>
 </body>
