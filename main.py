@@ -51,11 +51,7 @@ templates = Jinja2Templates(directory="templates")
 
 # ✅ Admin UI Landing Route with First-Time Setup Check
 @app.get("/")
-@app.head("/")
 async def admin_ui(request: Request):
-    if request.method == "HEAD":
-        return Response(status_code=200)
-
     try:
         conn = get_db_connection()
         cur = conn.cursor()
@@ -74,6 +70,11 @@ async def admin_ui(request: Request):
         return templates.TemplateResponse("admin.html", {"request": request})
 
     return RedirectResponse(url="/auth/login", status_code=HTTP_302_FOUND)
+
+# ✅ Separate HEAD handler to satisfy Render's health check
+@app.head("/")
+async def root_head():
+    return Response(status_code=200)
 
 # ✅ HEAD support for halt endpoint
 @app.head("/api/haltdetails")
