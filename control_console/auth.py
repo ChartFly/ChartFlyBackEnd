@@ -4,8 +4,10 @@ from fastapi.templating import Jinja2Templates
 from starlette.status import HTTP_302_FOUND
 from passlib.hash import bcrypt
 import re
-import datetime
 from db import get_db_connection
+from uuid import uuid4
+from datetime import datetime, timedelta, UTC
+from control_console.utils.email_sender import send_reset_email
 
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
@@ -145,6 +147,53 @@ async def dev_reset(token: str):
 async def forgot_password_form(request: Request):
     return templates.TemplateResponse("forgot-password.html", {"request": request})
 
+@router.post("/forgot-password")
+async def forgot_password_submit(
+    request: Request,
+    email: str = Form(...),
+    phone_number: str = Form(...),
+    method: str = Form(...)
+):
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    cur.execute("""
+        SELECT id FROM admin_users
+        WHERE email = %s AND phone_number = %s
+    """, (email.strip(), phone_number.strip()))
+    user = cur.fetchone()
+
+    if not user:
+        cur.close()
+        conn.close()
+        return templates.TemplateResponse("forgot-password.html", {
+            "request": request,
+            "error": "No matching user found with that email and phone number."
+        })
+
+    token = str(uuid4())
+    expires = datetime.now(UTC) + timedelta(minutes=15)
+
+    cur.execute("""
+        UPDATE admin_users
+        SET reset_token = %s, reset_token_expires = %s
+        WHERE id = %s
+    """, (token, expires, user[0]))
+
+    conn.commit()
+    cur.close()
+    conn.close()
+
+    if method == "email":
+        success = send_reset_email(email, token)
+        if not success:
+            return templates.TemplateResponse("forgot-password.html", {
+                "request": request,
+                "error": "Failed to send email. Please try again later."
+            })
+
+    return RedirectResponse(url="/auth/login", status_code=HTTP_302_FOUND)
+
 # ✅ Reset Password Page (GET)
 @router.get("/reset-password", response_class=HTMLResponse)
 async def reset_password_form(request: Request, token: str):
@@ -193,7 +242,7 @@ async def reset_password(
         })
 
     user_id, expires = user
-    if expires and expires < datetime.datetime.utcnow():
+    if expires and expires < datetime.now(UTC):
         cur.close()
         conn.close()
         return templates.TemplateResponse("reset-password.html", {
