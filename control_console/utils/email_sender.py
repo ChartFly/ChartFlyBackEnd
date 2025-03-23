@@ -10,32 +10,25 @@ SMTP_PASSWORD = os.getenv("SMTP_PASSWORD")
 EMAIL_FROM = os.getenv("EMAIL_FROM")
 
 
-def send_reset_email(to_email: str, reset_token: str):
-    subject = "🔐 ChartFly Password Reset Instructions"
-    reset_link = f"https://chartflybackend.onrender.com/auth/reset-password?token={reset_token}"
-
+def send_reset_email(to_email: str, temp_password: str):
+    subject = "🔐 ChartFly Temporary Password Reset"
     body = f"""
-Hello,
+We received a request to reset your ChartFly account password.  
+If you did not make this request, you can safely ignore this message.  
+If you receive this request again and you do have a ChartFly account, we recommend resetting your username and password.
 
-We received a request to reset the password for your ChartFly account.
+🕒 Temporary Reset Code: {temp_password}  
+(Expires in 15 minutes)
 
-🔗 To reset your password, click the secure link below:
-{reset_link}
+Follow these simple steps to reset your password:
 
-📌 This link contains a unique token tied to your account:
-Token: {reset_token}
+1. Go to the ChartFly login page.
+2. Enter your **username** and this **temporary code** as your password.
+3. You’ll be redirected to a secure screen to create a **new permanent password**.
+4. Once saved, you’ll return to the normal login page.
+5. Enter your **username** and **new password** to access ChartFly.
 
-✅ Please note:
-- This link will expire in 15 minutes for your security.
-- If you did not request this reset, no action is needed — your account remains safe.
-
-⚠️ Do not share this email or token with anyone.
-
-If you need assistance, please reply to this email or contact support.
-
-—
-ChartFly Trading Tools  
-All Rights Reserved
+ChartFly Trading Tools. All Rights Reserved.
 """
 
     msg = MIMEMultipart()

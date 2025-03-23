@@ -17,7 +17,7 @@
             </div>
 
             <div class="input-group">
-                <input type="password" name="password" placeholder="Password" id="password" required>
+                <input type="password" name="password" placeholder="Password or Temporary Code" id="password" required>
                 <span class="toggle-password" onclick="togglePassword('password')">👁️</span>
             </div>
 
@@ -25,13 +25,22 @@
         </form>
 
         <div class="form-notes">
-            <p class="note-header">🔐 <strong>Password Requirements:</strong></p>
+            <p class="note-header">🛠️ <strong>Login Instructions:</strong></p>
+            <ul class="instructions">
+                <li>Enter your <strong>username</strong> and <strong>password</strong> to log in.</li>
+                <li>If you're using a <strong>temporary reset code</strong>, enter it in the password field.</li>
+                <li>You’ll be asked to create a new permanent password after logging in with a reset code.</li>
+            </ul>
+
+            <p class="note-header">🔐 <strong>Password Requirements (when resetting):</strong></p>
             <ul class="requirements">
                 <li>At least 6 characters</li>
-                <li>Must include a letter, number, and symbol</li>
-                <li>Allowed symbols: ! @ # $ % ^ & * ( ) _ - + =</li>
+                <li>Includes a letter (A–Z)</li>
+                <li>Includes a number (0–9)</li>
+                <li>Includes a symbol: <strong>! @ # $ % ^ & * ( ) _ - + =</strong></li>
             </ul>
-            <p class="save-tip">💾 Save your username and password in a secure place.</p>
+
+            <p class="save-tip">💾 Save your credentials in a secure place to avoid future reset delays.</p>
             <p><a href="/auth/forgot-password" class="forgot-link">Forgot your password?</a></p>
         </div>
 
