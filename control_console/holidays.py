@@ -10,8 +10,8 @@ logging.basicConfig(level=logging.INFO)
 # ✅ GET Holidays by Year using asyncpg
 @router.get("/year/{year}", response_model=list, tags=["holidays"])
 async def get_holidays_by_year(
-    year: int = Path(..., title="Year", description="The year to fetch holidays for."),
-    request: Request
+    request: Request,
+    year: int = Path(..., title="Year", description="The year to fetch holidays for.")
 ):
     try:
         logging.info(f"🔍 Fetching holidays for {year}")
