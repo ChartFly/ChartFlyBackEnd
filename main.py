@@ -1,9 +1,10 @@
 import os
+import logging
 from dotenv import load_dotenv
 load_dotenv()
 
 import uvicorn
-import asyncpg  # ✅ NEW
+import asyncpg
 
 from fastapi import FastAPI, Request
 from fastapi.responses import Response, RedirectResponse
@@ -14,6 +15,9 @@ from starlette.middleware.sessions import SessionMiddleware
 from starlette.middleware import Middleware
 from starlette.status import HTTP_302_FOUND
 
+# ✅ Configure logging
+logging.basicConfig(level=logging.INFO)
+
 # ✅ Import Routers
 from control_console.dev_reset import router as dev_reset_router
 from control_console.holidays import router as holidays_router
@@ -22,9 +26,8 @@ from control_console.api_keys import router as api_keys_router
 from control_console.admin_users import router as users_router
 from control_console.auth_login_register import router as login_register_router
 from control_console.auth_password_reset import router as password_reset_router
-from control_console.admin_users import router as user_router
 
-# ✅ DB Connection Function (for legacy sync code)
+# ✅ Legacy DB connection for sync call in admin_ui
 from db import get_db_connection
 
 # ✅ Load DB URL from environment
@@ -59,6 +62,7 @@ templates = Jinja2Templates(directory="templates")
 @app.on_event("startup")
 async def startup():
     app.state.db_pool = await asyncpg.create_pool(DATABASE_URL)
+    logging.info("✅ Database connection pool created successfully")
 
 # ✅ Middleware: inject request.state.db for all routes
 @app.middleware("http")
@@ -79,7 +83,7 @@ async def admin_ui(request: Request):
         cur.close()
         conn.close()
     except Exception as e:
-        print("🚨 Database error in admin_ui route:", e)
+        logging.error(f"🚨 Database error in admin_ui route: {e}")
         return templates.TemplateResponse("login.html", {"request": request, "error": "Database connection failed."})
 
     if user_count == 0:
@@ -90,22 +94,20 @@ async def admin_ui(request: Request):
 
     return RedirectResponse(url="/auth/login", status_code=HTTP_302_FOUND)
 
-# ✅ Separate HEAD handler to satisfy Render's health check
+# ✅ Health Check (HEAD)
 @app.head("/")
 async def root_head():
     return Response(status_code=200)
 
-# ✅ HEAD support for halt endpoint
 @app.head("/api/haltdetails")
 async def head_halted_stocks():
     return Response(status_code=200)
 
-# ✅ Placeholder data for halted stocks
 @app.get("/api/haltdetails")
 async def get_halted_stocks():
     return []
 
-# ✅ Include All Routers (password reset ABOVE login/register)
+# ✅ Register Routers
 app.include_router(password_reset_router, prefix="/auth")
 app.include_router(login_register_router, prefix="/auth")
 app.include_router(holidays_router, prefix="/api/holidays")
@@ -113,8 +115,7 @@ app.include_router(admin_router, prefix="/api/admin")
 app.include_router(api_keys_router, prefix="/api/api-keys")
 app.include_router(users_router, prefix="/api/users")
 app.include_router(dev_reset_router)
-app.include_router(user_router)
 
-# ✅ Run server (for local dev)
+# ✅ Run server
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=int(os.getenv("PORT", 8000)))
