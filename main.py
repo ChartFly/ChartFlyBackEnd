@@ -23,13 +23,9 @@ from control_console.dev_reset import router as dev_reset_router
 from control_console.holidays import router as holidays_router
 from control_console.admin import router as admin_router
 from control_console.api_keys import router as api_keys_router
-from control_console.admin_users.routes import router as admin_users_full_router
-from control_console.admin_users.routes import router as users_router
+from control_console.admin_users.routes import router as admin_users_router
 from control_console.auth_login_register import router as login_register_router
 from control_console.auth_password_reset import router as password_reset_router
-
-# ✅ Legacy DB connection for sync call in admin_ui
-from db import get_db_connection
 
 # ✅ Load DB URL from environment
 DATABASE_URL = os.getenv("DATABASE_URL")
@@ -77,12 +73,8 @@ async def db_middleware(request: Request, call_next):
 @app.get("/")
 async def admin_ui(request: Request):
     try:
-        conn = get_db_connection()
-        cur = conn.cursor()
-        cur.execute("SELECT COUNT(*) FROM admin_users;")
-        user_count = cur.fetchone()[0]
-        cur.close()
-        conn.close()
+        user_count = await request.state.db.fetchval("SELECT COUNT(*) FROM admin_users;")
+        user_count = user_count if user_count is not None else 0
     except Exception as e:
         logging.error(f"🚨 Database error in admin_ui route: {e}")
         return templates.TemplateResponse("login.html", {"request": request, "error": "Database connection failed."})
@@ -114,8 +106,7 @@ app.include_router(login_register_router, prefix="/auth")
 app.include_router(holidays_router, prefix="/api/holidays")
 app.include_router(admin_router, prefix="/api/admin")
 app.include_router(api_keys_router, prefix="/api/api-keys")
-app.include_router(users_router, prefix="/api/users")
-app.include_router(admin_users_full_router, prefix="/api/admin-users")  # ✅ Moved here
+app.include_router(admin_users_router, prefix="/api/admin-users")
 app.include_router(dev_reset_router)
 
 # ✅ Run server
