@@ -24,7 +24,7 @@ from control_console.holidays import router as holidays_router
 from control_console.admin import router as admin_router
 from control_console.api_keys import router as api_keys_router
 from control_console.admin_users.routes import router as admin_users_full_router
-from control_console.admin_users import router as users_router
+from control_console.admin_users.routes import router as users_router
 from control_console.auth_login_register import router as login_register_router
 from control_console.auth_password_reset import router as password_reset_router
 
