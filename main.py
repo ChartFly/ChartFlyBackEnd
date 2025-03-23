@@ -106,7 +106,7 @@ app.include_router(login_register_router, prefix="/auth")
 app.include_router(holidays_router, prefix="/api/holidays")
 app.include_router(admin_router, prefix="/api/admin")
 app.include_router(api_keys_router, prefix="/api/api-keys")
-app.include_router(admin_users_router, prefix="/api/admin-users")
+app.include_router(admin_users_router)
 app.include_router(dev_reset_router)
 
 # ✅ Run server

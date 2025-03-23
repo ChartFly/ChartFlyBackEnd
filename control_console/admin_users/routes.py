@@ -6,7 +6,7 @@ from uuid import uuid4
 from typing import List
 import asyncpg
 
-router = APIRouter()
+router = APIRouter(prefix="/api/admin-users")
 
 # 🧱 GET all admin users
 @router.get("/admin/users")

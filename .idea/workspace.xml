@@ -9,9 +9,7 @@
   <component name="ChangeListManager">
     <list default="true" id="eb1da553-8e5b-4ae5-a8c1-d95ef0c30040" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/js/apikeys.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/apikeys.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/js/marketholidays.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/marketholidays.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/js/users.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/users.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/control_console/admin_users/routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/control_console/admin_users/routes.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
