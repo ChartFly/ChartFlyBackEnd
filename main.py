@@ -10,6 +10,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 from starlette.middleware import Middleware
 from starlette.status import HTTP_302_FOUND
+from control_console.admin_users import router as user_router
 
 # ✅ Import Routers
 from control_console.dev_reset import router as dev_reset_router
@@ -93,6 +94,9 @@ app.include_router(admin_router, prefix="/api/admin")
 app.include_router(api_keys_router, prefix="/api/api-keys")
 app.include_router(users_router, prefix="/api/users")
 app.include_router(dev_reset_router)
+app.include_router(user_router)
+
+
 
 # ✅ Run server
 if __name__ == "__main__":
