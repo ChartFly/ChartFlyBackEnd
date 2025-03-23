@@ -14,8 +14,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 from starlette.middleware import Middleware
 from starlette.status import HTTP_302_FOUND
-from control_console.admin_users.routes import router as admin_users_full_router
-app.include_router(admin_users_full_router)
 
 # ✅ Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -25,6 +23,7 @@ from control_console.dev_reset import router as dev_reset_router
 from control_console.holidays import router as holidays_router
 from control_console.admin import router as admin_router
 from control_console.api_keys import router as api_keys_router
+from control_console.admin_users.routes import router as admin_users_full_router
 from control_console.admin_users import router as users_router
 from control_console.auth_login_register import router as login_register_router
 from control_console.auth_password_reset import router as password_reset_router
@@ -116,6 +115,7 @@ app.include_router(holidays_router, prefix="/api/holidays")
 app.include_router(admin_router, prefix="/api/admin")
 app.include_router(api_keys_router, prefix="/api/api-keys")
 app.include_router(users_router, prefix="/api/users")
+app.include_router(admin_users_full_router, prefix="/api/admin-users")  # ✅ Moved here
 app.include_router(dev_reset_router)
 
 # ✅ Run server
