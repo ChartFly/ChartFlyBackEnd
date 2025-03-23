@@ -7,22 +7,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="eb1da553-8e5b-4ae5-a8c1-d95ef0c30040" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/control_console/admin_users/routes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/control_console/_init_.py" beforeDir="false" afterPath="$PROJECT_DIR$/control_console/_init_.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/control_console/admin_users.py" beforeDir="false" afterPath="$PROJECT_DIR$/control_console/admin_users.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/control_console/admin_users/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/control_console/auth_login_register.py" beforeDir="false" afterPath="$PROJECT_DIR$/control_console/auth_login_register.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/control_console/auth_password_reset.py" beforeDir="false" afterPath="$PROJECT_DIR$/control_console/auth_password_reset.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/control_console/database.py" beforeDir="false" afterPath="$PROJECT_DIR$/control_console/database.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/control_console/dev_reset.py" beforeDir="false" afterPath="$PROJECT_DIR$/control_console/dev_reset.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/control_console/models.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/control_console/rate_limiter.py" beforeDir="false" afterPath="$PROJECT_DIR$/control_console/rate_limiter.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/control_console/utils/email_sender.py" beforeDir="false" afterPath="$PROJECT_DIR$/control_console/utils/email_sender.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-    </list>
+    <list default="true" id="eb1da553-8e5b-4ae5-a8c1-d95ef0c30040" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
