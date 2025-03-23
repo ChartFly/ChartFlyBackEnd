@@ -67,4 +67,14 @@ async def forgot_password_submit(
                 "error": "Failed to send email. Please try again later."
             })
 
+    @router.post("/forgot-password")
+    async def forgot_password_submit(
+            request: Request,
+            email: str = Form(...),
+            phone_number: str = Form(...),
+            method: str = Form(...)
+    ):
+        print("📨 Forgot password POST route triggered")  # ✅ This line is safe here
+        ...
+
     return RedirectResponse(url="/auth/login", status_code=HTTP_302_FOUND)
