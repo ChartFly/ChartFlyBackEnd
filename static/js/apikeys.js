@@ -10,10 +10,10 @@ async function loadApiKeys() {
         apiKeys.forEach(key => {
             const row = `
                 <tr>
-                    <td>${key.api_name}</td>
-                    <td>${key.provider}</td>
-                    <td>${key.priority}</td>
-                    <td>${key.status}</td>
+                    <td>${key.label || "N/A"}</td>
+                    <td>${key.provider || "N/A"}</td>
+                    <td>${key.priority || "-"}</td>
+                    <td>${key.status || "Unknown"}</td>
                     <td>
                         <button>Edit</button>
                         <button>Delete</button>
@@ -25,8 +25,6 @@ async function loadApiKeys() {
     } catch (error) {
         console.error("Failed to load API keys:", error);
         const table = document.getElementById("api-keys-table");
-        if (table) {
-            table.innerHTML = `<tr><td colspan="5">Error loading API keys</td></tr>`;
-        }
+        table.innerHTML = `<tr><td colspan="5">Error loading API keys</td></tr>`;
     }
 }

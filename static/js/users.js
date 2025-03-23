@@ -1,6 +1,6 @@
 async function loadUsers() {
     try {
-        const response = await fetch("https://chartflybackend.onrender.com/api/admin-users");
+        const response = await fetch("https://chartflybackend.onrender.com/api/users");
         if (!response.ok) throw new Error("Failed to fetch users");
 
         const users = await response.json();
@@ -24,8 +24,6 @@ async function loadUsers() {
     } catch (error) {
         console.error("Failed to load users:", error);
         const table = document.getElementById("user-table");
-        if (table) {
-            table.innerHTML = `<tr><td colspan="4">Error loading users</td></tr>`;
-        }
+        table.innerHTML = `<tr><td colspan="4">Error loading users</td></tr>`;
     }
 }

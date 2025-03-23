@@ -1,6 +1,6 @@
 async function loadMarketHolidays() {
     try {
-        const response = await fetch("https://chartflybackend.onrender.com/api/holidays/all");
+        const response = await fetch("https://chartflybackend.onrender.com/api/holidays/year/2025");
         if (!response.ok) throw new Error("Failed to fetch market holidays");
 
         const holidays = await response.json();
@@ -24,8 +24,6 @@ async function loadMarketHolidays() {
     } catch (error) {
         console.error("Failed to load holidays:", error);
         const table = document.getElementById("holidays-table");
-        if (table) {
-            table.innerHTML = `<tr><td colspan="4">Error loading holidays</td></tr>`;
-        }
+        table.innerHTML = `<tr><td colspan="4">Error loading holidays</td></tr>`;
     }
 }
