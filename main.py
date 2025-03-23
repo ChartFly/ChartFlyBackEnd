@@ -10,6 +10,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 from starlette.middleware import Middleware
 from starlette.status import HTTP_302_FOUND
+
+import asyncpg  # ✅ NEW
 from control_console.admin_users import router as user_router
 
 # ✅ Import Routers
@@ -23,6 +25,9 @@ from control_console.auth_password_reset import router as password_reset_router
 
 # ✅ DB Connection Function
 from db import get_db_connection
+
+# ✅ Load DB URL from environment or fallback
+DATABASE_URL = os.getenv("DATABASE_URL")
 
 # ✅ Initialize FastAPI with Middleware
 app = FastAPI(
@@ -48,6 +53,23 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # ✅ Setup Jinja2 Templates
 templates = Jinja2Templates(directory="templates")
+
+# ✅ Global DB Pool (asyncpg)
+db_pool = None
+
+# ✅ Startup: connect to DB
+@app.on_event("startup")
+async def startup():
+    global db_pool
+    db_pool = await asyncpg.create_pool(DATABASE_URL)
+
+# ✅ Inject db into request.state
+@app.middleware("http")
+async def db_middleware(request: Request, call_next):
+    async with db_pool.acquire() as connection:
+        request.state.db = connection
+        response = await call_next(request)
+        return response
 
 # ✅ Admin UI Landing Route with First-Time Setup Check
 @app.get("/")
@@ -95,8 +117,6 @@ app.include_router(api_keys_router, prefix="/api/api-keys")
 app.include_router(users_router, prefix="/api/users")
 app.include_router(dev_reset_router)
 app.include_router(user_router)
-
-
 
 # ✅ Run server
 if __name__ == "__main__":
