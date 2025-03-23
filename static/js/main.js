@@ -201,3 +201,26 @@ function updateMetrics(ticker, data) {
     </tr>`;
     tableBody.innerHTML += row;
 }
+
+// ✅ Tab switching logic
+document.querySelectorAll(".tab-button").forEach(button => {
+    button.addEventListener("click", () => {
+        document.querySelectorAll(".tab-button").forEach(btn => btn.classList.remove("active"));
+        button.classList.add("active");
+
+        document.getElementById("market-holidays-section").style.display = "none";
+        document.getElementById("api-keys-section").style.display = "none";
+        document.getElementById("user-management-section").style.display = "none";
+
+        if (button.id === "market-holidays-tab") {
+            document.getElementById("market-holidays-section").style.display = "block";
+            if (typeof loadMarketHolidays === "function") loadMarketHolidays();
+        } else if (button.id === "api-keys-tab") {
+            document.getElementById("api-keys-section").style.display = "block";
+            if (typeof loadApiKeys === "function") loadApiKeys();
+        } else if (button.id === "user-management-tab") {
+            document.getElementById("user-management-section").style.display = "block";
+            if (typeof loadUsers === "function") loadUsers();
+        }
+    });
+});
