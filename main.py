@@ -1,7 +1,10 @@
 import os
 from dotenv import load_dotenv
 load_dotenv()
+
 import uvicorn
+import asyncpg  # ✅ NEW
+
 from fastapi import FastAPI, Request
 from fastapi.responses import Response, RedirectResponse
 from fastapi.staticfiles import StaticFiles
@@ -11,9 +14,6 @@ from starlette.middleware.sessions import SessionMiddleware
 from starlette.middleware import Middleware
 from starlette.status import HTTP_302_FOUND
 
-import asyncpg  # ✅ NEW
-from control_console.admin_users import router as user_router
-
 # ✅ Import Routers
 from control_console.dev_reset import router as dev_reset_router
 from control_console.holidays import router as holidays_router
@@ -22,11 +22,12 @@ from control_console.api_keys import router as api_keys_router
 from control_console.admin_users import router as users_router
 from control_console.auth_login_register import router as login_register_router
 from control_console.auth_password_reset import router as password_reset_router
+from control_console.admin_users import router as user_router
 
-# ✅ DB Connection Function
+# ✅ DB Connection Function (for legacy sync code)
 from db import get_db_connection
 
-# ✅ Load DB URL from environment or fallback
+# ✅ Load DB URL from environment
 DATABASE_URL = os.getenv("DATABASE_URL")
 
 # ✅ Initialize FastAPI with Middleware
@@ -54,19 +55,15 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 # ✅ Setup Jinja2 Templates
 templates = Jinja2Templates(directory="templates")
 
-# ✅ Global DB Pool (asyncpg)
-db_pool = None
-
-# ✅ Startup: connect to DB
+# ✅ Startup: create asyncpg pool and store in app state
 @app.on_event("startup")
 async def startup():
-    global db_pool
-    db_pool = await asyncpg.create_pool(DATABASE_URL)
+    app.state.db_pool = await asyncpg.create_pool(DATABASE_URL)
 
-# ✅ Inject db into request.state
+# ✅ Middleware: inject request.state.db for all routes
 @app.middleware("http")
 async def db_middleware(request: Request, call_next):
-    async with db_pool.acquire() as connection:
+    async with app.state.db_pool.acquire() as connection:
         request.state.db = connection
         response = await call_next(request)
         return response
@@ -118,6 +115,6 @@ app.include_router(users_router, prefix="/api/users")
 app.include_router(dev_reset_router)
 app.include_router(user_router)
 
-# ✅ Run server
+# ✅ Run server (for local dev)
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=int(os.getenv("PORT", 8000)))

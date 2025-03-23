@@ -1,46 +1,41 @@
-from fastapi import APIRouter, HTTPException, Depends, Path
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.future import select  # ✅ Required for async queries
-from control_console.database import AsyncSessionLocal  # ✅ Ensure correct import
-from control_console.models import MarketHoliday  # ✅ Ensure correct import
+from fastapi import APIRouter, HTTPException, Path, Request
 import logging
-import traceback  # ✅ Captures full error stack trace
+import traceback
 
 router = APIRouter()
 
 # ✅ Configure logging
 logging.basicConfig(level=logging.INFO)
 
-# ✅ Dependency for getting a database session
-async def get_db_session() -> AsyncSession:
-    async with AsyncSessionLocal() as session:
-        yield session
-
-# ✅ GET Holidays by Year with Debugging
+# ✅ GET Holidays by Year using asyncpg
 @router.get("/year/{year}", response_model=list, tags=["holidays"])
 async def get_holidays_by_year(
     year: int = Path(..., title="Year", description="The year to fetch holidays for."),
-    db: AsyncSession = Depends(get_db_session)
+    request: Request
 ):
     try:
-        logging.info(f"🔍 Fetching holidays for {year}")  # ✅ Debug log
+        logging.info(f"🔍 Fetching holidays for {year}")
 
-        # ✅ Corrected query using SQLAlchemy async ORM
-        result = await db.execute(
-            select(MarketHoliday).where(MarketHoliday.year == year).order_by(MarketHoliday.date)
-        )
-        holidays = result.scalars().all()  # ✅ Use .scalars() to get ORM objects
+        db = request.state.db
 
-        if not holidays:
+        query = """
+            SELECT id, name, date, year
+            FROM market_holidays
+            WHERE year = $1
+            ORDER BY date;
+        """
+        rows = await db.fetch(query, year)
+
+        if not rows:
             logging.warning(f"⚠ No holidays found for {year}")
             raise HTTPException(status_code=404, detail=f"No holidays found for {year}")
 
-        logging.info(f"✅ Found {len(holidays)} holidays for {year}")
+        holidays = [dict(row) for row in rows]
 
-        # ✅ Convert ORM objects to dictionaries before returning
-        return [{"id": h.id, "name": h.name, "date": str(h.date), "year": h.year} for h in holidays]
+        logging.info(f"✅ Found {len(holidays)} holidays for {year}")
+        return holidays
 
     except Exception as e:
         logging.error(f"❌ Database error: {e}")
-        logging.error(traceback.format_exc())  # ✅ Log full stack trace
+        logging.error(traceback.format_exc())
         raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
