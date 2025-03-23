@@ -1,36 +1,55 @@
 # control_console/rate_limiter.py
 
-import time
-from collections import defaultdict
+from datetime import datetime, timedelta, UTC
 from typing import Tuple
-
-# Track attempts per IP: { ip_address: [timestamp1, timestamp2, ...] }
-attempt_log = defaultdict(list)
+from db import get_db_connection
 
 # Configuration
 MAX_ATTEMPTS = 6
-WINDOW_SECONDS = 30 * 60  # 30 minutes
+WINDOW_MINUTES = 30
+
 
 def is_rate_limited(ip_address: str) -> Tuple[bool, int]:
     """
+    Checks if an IP address has exceeded the allowed number of login attempts.
+
     Returns:
         (True, seconds_remaining) if rate-limited
-        (False, 0) if not rate-limited
+        (False, 0) if not
     """
-    now = time.time()
-    attempts = attempt_log[ip_address]
+    conn = get_db_connection()
+    cur = conn.cursor()
 
-    # Remove expired timestamps
-    attempt_log[ip_address] = [ts for ts in attempts if now - ts < WINDOW_SECONDS]
-    attempts = attempt_log[ip_address]
+    cutoff_time = datetime.now(UTC) - timedelta(minutes=WINDOW_MINUTES)
+
+    cur.execute("""
+        SELECT attempt_time FROM login_attempts
+        WHERE ip_address = %s AND attempt_time > %s
+        ORDER BY attempt_time ASC
+    """, (ip_address, cutoff_time))
+
+    attempts = cur.fetchall()
+    cur.close()
+    conn.close()
 
     if len(attempts) >= MAX_ATTEMPTS:
-        seconds_remaining = int(WINDOW_SECONDS - (now - attempts[0]))
-        return True, seconds_remaining
+        oldest_attempt = attempts[0][0]
+        seconds_remaining = int((cutoff_time + timedelta(minutes=WINDOW_MINUTES) - oldest_attempt).total_seconds())
+        return True, max(0, seconds_remaining)
 
     return False, 0
 
+
 def record_attempt(ip_address: str):
-    """Record a new failed attempt for the IP address."""
-    now = time.time()
-    attempt_log[ip_address].append(now)
+    """Records a failed login attempt in the database."""
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    cur.execute("""
+        INSERT INTO login_attempts (ip_address, attempt_time)
+        VALUES (%s, %s)
+    """, (ip_address, datetime.now(UTC)))
+
+    conn.commit()
+    cur.close()
+    conn.close()

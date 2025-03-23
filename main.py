@@ -94,10 +94,6 @@ app.include_router(api_keys_router, prefix="/api/api-keys")
 app.include_router(users_router, prefix="/api/users")
 app.include_router(dev_reset_router)
 
-@app.get("/debug")
-async def debug():
-    return {"status": "Main.py routes working"}
-
 # ✅ Run server
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=int(os.getenv("PORT", 8000)))

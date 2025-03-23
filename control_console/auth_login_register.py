@@ -18,8 +18,8 @@ async def login_page(request: Request):
 # ✅ Handle Login Submission
 @router.post("/login")
 async def login(request: Request, username: str = Form(...), password: str = Form(...)):
-    client_ip = request.client.host  # ✅ Get IP address
-    blocked, wait_time = is_rate_limited(client_ip)  # ✅ Check if IP is rate limited
+    client_ip = request.client.host
+    blocked, wait_time = is_rate_limited(client_ip)
     if blocked:
         return templates.TemplateResponse("login.html", {
             "request": request,
@@ -28,8 +28,7 @@ async def login(request: Request, username: str = Form(...), password: str = For
 
     conn = get_db_connection()
     cur = conn.cursor()
-
-    cur.execute("SELECT id, password_hash FROM admin_users WHERE username = %s", (username.strip(),))
+    cur.execute("SELECT id, password_hash, must_reset FROM admin_users WHERE username = %s", (username.strip(),))
     result = cur.fetchone()
     cur.close()
     conn.close()
@@ -37,10 +36,61 @@ async def login(request: Request, username: str = Form(...), password: str = For
     if result and bcrypt.verify(password, result[1]):
         request.session["user_id"] = result[0]
         request.session["username"] = username
+
+        if result[2]:  # must_reset is True
+            return RedirectResponse(url="/auth/force-reset-password", status_code=HTTP_302_FOUND)
+
         return RedirectResponse(url="/", status_code=HTTP_302_FOUND)
-    else:
-        record_attempt(client_ip)  # ✅ Record failed attempt
-        return templates.TemplateResponse("login.html", {"request": request, "error": "Invalid username or password"})
+
+    record_attempt(client_ip)
+    return templates.TemplateResponse("login.html", {"request": request, "error": "Invalid username or password"})
+
+# ✅ Render Force Reset Page
+@router.get("/force-reset-password", response_class=HTMLResponse)
+async def force_reset_page(request: Request):
+    if not request.session.get("user_id"):
+        return RedirectResponse(url="/auth/login", status_code=HTTP_302_FOUND)
+    return templates.TemplateResponse("force-reset.html", {"request": request})
+
+# ✅ Handle Force Reset Submission
+@router.post("/force-reset-password")
+async def force_reset_submit(request: Request, new_password: str = Form(...), confirm_password: str = Form(...)):
+    if not request.session.get("user_id"):
+        return RedirectResponse(url="/auth/login", status_code=HTTP_302_FOUND)
+
+    if new_password != confirm_password:
+        return templates.TemplateResponse("force-reset.html", {
+            "request": request,
+            "error": "Passwords do not match."
+        })
+
+    if (
+        len(new_password) < 6 or
+        not re.search(r"[A-Za-z]", new_password) or
+        not re.search(r"\d", new_password) or
+        not re.search(r"[^A-Za-z0-9]", new_password)
+    ):
+        return templates.TemplateResponse("force-reset.html", {
+            "request": request,
+            "error": "Password must be at least 6 characters and include a letter, number, and symbol."
+        })
+
+    user_id = request.session["user_id"]
+    hashed_pw = bcrypt.hash(new_password)
+
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("""
+        UPDATE admin_users
+        SET password_hash = %s, must_reset = false
+        WHERE id = %s
+    """, (hashed_pw, user_id))
+    conn.commit()
+    cur.close()
+    conn.close()
+
+    request.session.clear()
+    return RedirectResponse(url="/auth/login", status_code=HTTP_302_FOUND)
 
 # ✅ Render Registration Page
 @router.get("/register", response_class=HTMLResponse)
@@ -148,4 +198,3 @@ async def dev_reset(token: str):
     conn.close()
 
     return JSONResponse(status_code=201, content={"message": "Default admin account created. Username: admin, Password: admin123"})
-# force deploy

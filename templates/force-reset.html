@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Reset Your Password - ChartFly</title>
+    <link rel="stylesheet" href="/static/css/auth.css">
+</head>
+<body>
+<div class="auth-container">
+    <img src="/static/images/Chartfly-logo.png" alt="ChartFly Logo" class="auth-logo">
+    <h1>ChartFly</h1>
+    <h2>🔒 Reset Your Password</h2>
+
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+
+    <form method="post" action="/auth/force-reset-password">
+        <input type="password" name="new_password" placeholder="New Password" required><br>
+        <input type="password" name="confirm_password" placeholder="Confirm New Password" required><br>
+        <button type="submit">Update Password</button>
+
+        <div class="form-notes">
+            <p>🔐 Your new password must be at least <strong>6 characters</strong> long and include:</p>
+            <ul style="font-size: 0.9em; padding-left: 20px; text-align: left;">
+                <li>At least one letter (A–Z)</li>
+                <li>At least one number (0–9)</li>
+                <li>At least one special character (e.g. ! @ # $ % ^ & *)</li>
+            </ul>
+            <p>⚠️ This is required before you can continue.</p>
+        </div>
+    </form>
+
+    <p style="margin-top: 20px; font-size: 0.85em;">
+        <a href="/auth/logout" style="color: #00d4ff;">🔓 Cancel and Log Out</a>
+    </p>
+
+    <div class="auth-footer">ChartFly Trading Tools. All Rights Reserved</div>
+</div>
+</body>
+</html>
