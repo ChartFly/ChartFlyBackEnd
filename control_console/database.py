@@ -1,18 +1,16 @@
 # control_console/database.py
 
-import os
-import psycopg2
-from dotenv import load_dotenv
+# Legacy sync connections are now deprecated.
+# All database access is handled via asyncpg connection pool set in app.state.db_pool
+# and injected via request.state.db middleware.
 
-load_dotenv()
+# This file remains as a placeholder in case you later define:
+# - utility functions for migrations
+# - health checks
+# - future fallback options
 
-# For sync fallback (used in login, etc.)
-def get_db_connection():
-    return psycopg2.connect(
-        dbname=os.getenv("DB_NAME"),
-        user=os.getenv("DB_USER"),
-        password=os.getenv("DB_PASSWORD"),
-        host=os.getenv("DB_HOST"),
-        port=os.getenv("DB_PORT"),
-        sslmode="require"
-    )
+# If needed later, you can define:
+# def get_db_connection(): ...
+# for psycopg2 or other tools
+
+# For now, this file can be safely empty or contain logging/debug helpers if needed.

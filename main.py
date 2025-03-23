@@ -14,6 +14,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 from starlette.middleware import Middleware
 from starlette.status import HTTP_302_FOUND
+from control_console.admin_users.routes import router as admin_users_full_router
+app.include_router(admin_users_full_router)
 
 # ✅ Configure logging
 logging.basicConfig(level=logging.INFO)

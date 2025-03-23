@@ -7,7 +7,6 @@ from datetime import datetime
 import random
 import string
 
-from db import get_db_connection
 from control_console.utils.email_sender import send_reset_email
 
 router = APIRouter()
@@ -26,18 +25,15 @@ async def forgot_password_submit(
     phone_number: str = Form(...),
     method: str = Form(...)
 ):
-    conn = get_db_connection()
-    cur = conn.cursor()
+    db = request.state.db
 
-    cur.execute("""
+    # ✅ Lookup user by email and phone number
+    user = await db.fetchrow("""
         SELECT id FROM admin_users
-        WHERE email = %s AND phone_number = %s
-    """, (email.strip(), phone_number.strip()))
-    user = cur.fetchone()
+        WHERE email = $1 AND phone_number = $2
+    """, email.strip(), phone_number.strip())
 
     if not user:
-        cur.close()
-        conn.close()
         return templates.TemplateResponse("forgot-password.html", {
             "request": request,
             "error": "No matching user found with that email and phone number."
@@ -47,18 +43,14 @@ async def forgot_password_submit(
     temp_password = ''.join(random.choices(string.ascii_letters + string.digits, k=6))
     hashed_temp = bcrypt.hash(temp_password)
 
-    # ✅ Update user record with temp password and must_reset flag
-    cur.execute("""
+    # ✅ Update password and must_reset flag
+    await db.execute("""
         UPDATE admin_users
-        SET password_hash = %s, must_reset = TRUE
-        WHERE id = %s
-    """, (hashed_temp, user[0]))
+        SET password_hash = $1, must_reset = TRUE
+        WHERE id = $2
+    """, hashed_temp, user[0])
 
-    conn.commit()
-    cur.close()
-    conn.close()
-
-    # ✅ Send email with temporary password
+    # ✅ Send reset email
     if method == "email":
         success = send_reset_email(email, temp_password)
         if not success:
@@ -66,15 +58,5 @@ async def forgot_password_submit(
                 "request": request,
                 "error": "Failed to send email. Please try again later."
             })
-
-    @router.post("/forgot-password")
-    async def forgot_password_submit(
-            request: Request,
-            email: str = Form(...),
-            phone_number: str = Form(...),
-            method: str = Form(...)
-    ):
-        print("📨 Forgot password POST route triggered")  # ✅ This line is safe here
-        ...
 
     return RedirectResponse(url="/auth/login", status_code=HTTP_302_FOUND)

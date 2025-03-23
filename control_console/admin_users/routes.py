@@ -1,4 +1,4 @@
-# control_console/admin_users/__init__.py
+# control_console/admin_users/routes.py
 
 from fastapi import APIRouter, HTTPException, Request
 from passlib.hash import bcrypt
@@ -52,7 +52,6 @@ async def create_user(request: Request):
     db: asyncpg.Connection = request.state.db
     data = await request.json()
 
-    # Validate password match
     if data["password"] != data["confirmPassword"]:
         raise HTTPException(status_code=400, detail="Passwords do not match")
 
@@ -78,11 +77,15 @@ async def update_user(user_id: str, request: Request):
             raise HTTPException(status_code=400, detail="Passwords do not match")
         hashed = bcrypt.hash(data["password"])
         await db.execute("""
-            UPDATE admin_users SET name=$1, email=$2, phone=$3, address=$4, username=$5, password=$6 WHERE id=$7
+            UPDATE admin_users
+            SET name=$1, email=$2, phone=$3, address=$4, username=$5, password=$6
+            WHERE id=$7
         """, data["name"], data["email"], data["phone"], data["address"], data["username"], hashed, user_id)
     else:
         await db.execute("""
-            UPDATE admin_users SET name=$1, email=$2, phone=$3, address=$4, username=$5 WHERE id=$6
+            UPDATE admin_users
+            SET name=$1, email=$2, phone=$3, address=$4, username=$5
+            WHERE id=$6
         """, data["name"], data["email"], data["phone"], data["address"], data["username"], user_id)
 
     await set_user_permissions(db, user_id, data["access"])
@@ -114,7 +117,4 @@ async def get_user_access(db, user_id):
 async def set_user_permissions(db, user_id, tabs: List[str]):
     await db.execute("DELETE FROM admin_permissions WHERE user_id = $1", user_id)
     for tab in tabs:
-        await db.execute(
-            "INSERT INTO admin_permissions (user_id, tab_name) VALUES ($1, $2)",
-            user_id, tab
-        )
+        await db.execute("INSERT INTO admin_permissions (user_id, tab_name) VALUES ($1, $2)", user_id, tab)

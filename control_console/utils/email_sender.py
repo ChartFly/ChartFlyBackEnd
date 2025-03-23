@@ -2,13 +2,22 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import os
+import logging
 
+# Load SMTP config from environment
 SMTP_HOST = os.getenv("SMTP_HOST")
 SMTP_PORT = int(os.getenv("SMTP_PORT", 587))
 SMTP_USER = os.getenv("SMTP_USER")
 SMTP_PASSWORD = os.getenv("SMTP_PASSWORD")
 EMAIL_FROM = os.getenv("EMAIL_FROM")
 
+# Setup logging
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
+
+# Validate config
+if not all([SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASSWORD, EMAIL_FROM]):
+    raise EnvironmentError("❌ Missing one or more required SMTP environment variables.")
 
 def send_reset_email(to_email: str, temp_password: str):
     subject = "🔐 ChartFly Temporary Password Reset"
@@ -31,18 +40,27 @@ Follow these simple steps to reset your password:
 ChartFly Trading Tools. All Rights Reserved.
 """
 
+    # Compose email
     msg = MIMEMultipart()
     msg["From"] = EMAIL_FROM
     msg["To"] = to_email
     msg["Subject"] = subject
-    msg.attach(MIMEText(body, "plain"))
+    msg.attach(MIMEText(body.strip(), "plain"))
 
     try:
-        with smtplib.SMTP(SMTP_HOST, SMTP_PORT) as server:
-            server.starttls()
-            server.login(SMTP_USER, SMTP_PASSWORD)
-            server.send_message(msg)
+        if SMTP_PORT == 465:
+            with smtplib.SMTP_SSL(SMTP_HOST, SMTP_PORT) as server:
+                server.login(SMTP_USER, SMTP_PASSWORD)
+                server.send_message(msg)
+        else:
+            with smtplib.SMTP(SMTP_HOST, SMTP_PORT) as server:
+                server.starttls()
+                server.login(SMTP_USER, SMTP_PASSWORD)
+                server.send_message(msg)
+
+        logger.info(f"📧 Password reset email sent to {to_email}")
         return True
+
     except Exception as e:
-        print("❌ Failed to send email:", e)
+        logger.error(f"❌ Failed to send email to {to_email}: {e}")
         return False
