@@ -15,15 +15,6 @@ SMTP_USERNAME = os.getenv("SMTP_USERNAME")
 SMTP_PASSWORD = os.getenv("SMTP_PASSWORD")
 EMAIL_FROM = os.getenv("EMAIL_FROM", SMTP_USERNAME)
 
-<<<<<<< HEAD
-=======
-print("SMTP_HOST:", SMTP_HOST)
-print("SMTP_PORT:", SMTP_PORT)
-print("SMTP_USERNAME:", SMTP_USERNAME)
-print("SMTP_PASSWORD:", SMTP_PASSWORD)
-print("EMAIL_FROM:", EMAIL_FROM)
-
->>>>>>> 4594f975c0baf8a30646a3d905b7d47891bc63bf
 # Validate config
 if not all([SMTP_HOST, SMTP_PORT, SMTP_USERNAME, SMTP_PASSWORD, EMAIL_FROM]):
     raise EnvironmentError("❌ Missing one or more required SMTP environment variables.")

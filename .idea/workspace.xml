@@ -7,7 +7,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="eb1da553-8e5b-4ae5-a8c1-d95ef0c30040" name="Changes" comment="" />
+    <list default="true" id="eb1da553-8e5b-4ae5-a8c1-d95ef0c30040" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/control_console/utils/email_sender.py" beforeDir="false" afterPath="$PROJECT_DIR$/control_console/utils/email_sender.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
