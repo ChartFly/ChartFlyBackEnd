@@ -4,8 +4,6 @@ from dotenv import load_dotenv
 load_dotenv()
 
 import uvicorn
-import asyncpg
-
 from fastapi import FastAPI, Request
 from fastapi.responses import Response, RedirectResponse
 from fastapi.staticfiles import StaticFiles
@@ -27,15 +25,11 @@ from control_console.admin_users.routes import router as admin_users_router
 from control_console.auth_login_register import router as login_register_router
 from control_console.auth_password_reset import router as password_reset_router
 
-# ✅ Load DB URL and session secret from environment
-DATABASE_URL = os.getenv("DATABASE_URL")
-SESSION_SECRET = os.getenv("SESSION_SECRET")
+# ✅ Import DB pool logic
+from control_console.database import create_db_pool
 
-if not DATABASE_URL:
-    raise EnvironmentError("❌ DATABASE_URL environment variable is not set.")
-
-if not SESSION_SECRET:
-    raise EnvironmentError("❌ SESSION_SECRET environment variable is not set.")
+# ✅ Load session secret
+from control_console.config import SESSION_SECRET
 
 # ✅ Initialize FastAPI with Middleware
 app = FastAPI(
@@ -65,8 +59,7 @@ templates = Jinja2Templates(directory="templates")
 # ✅ Startup: create asyncpg pool and store in app state
 @app.on_event("startup")
 async def startup():
-    app.state.db_pool = await asyncpg.create_pool(DATABASE_URL)
-    logging.info("✅ Database connection pool created successfully")
+    app.state.db_pool = await create_db_pool()
 
 # ✅ Middleware: inject request.state.db for all routes
 @app.middleware("http")

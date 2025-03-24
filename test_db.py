@@ -10,7 +10,7 @@ if not DATABASE_URL:
 
 # ✅ Fix DSN and Remove sslmode
 DATABASE_URL = DATABASE_URL.replace("postgresql+asyncpg://", "postgresql://")  # ✅ Fix DSN
-DATABASE_URL = DATABASE_URL.replace("?sslmode=require", "")  # ✅ Remove sslmode
+#DATABASE_URL = DATABASE_URL.replace("?sslmode=require", "")  # ✅ Remove sslmode
 
 # ✅ Set up logging
 logging.basicConfig(level=logging.INFO)

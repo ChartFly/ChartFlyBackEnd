@@ -1,16 +1,31 @@
-# control_console/database.py
+import os
+import asyncpg
+import logging
 
-# Legacy sync connections are now deprecated.
-# All database access is handled via asyncpg connection pool set in app.state.db_pool
-# and injected via request.state.db middleware.
+# Build DATABASE_URL from individual parts (for local dev)
+def build_database_url():
+    user = os.getenv("DB_USER")
+    password = os.getenv("DB_PASS")
+    host = os.getenv("DB_HOST")
+    port = os.getenv("DB_PORT", "5432")
+    dbname = os.getenv("DB_NAME")
+    sslmode = os.getenv("DB_SSL", "require")
 
-# This file remains as a placeholder in case you later define:
-# - utility functions for migrations
-# - health checks
-# - future fallback options
+    if not all([user, password, host, dbname]):
+        raise EnvironmentError("❌ Missing one or more DB env vars for fallback database URL.")
 
-# If needed later, you can define:
-# def get_db_connection(): ...
-# for psycopg2 or other tools
+    return f"postgresql://{user}:{password}@{host}:{port}/{dbname}?sslmode={sslmode}"
 
-# For now, this file can be safely empty or contain logging/debug helpers if needed.
+# Resolve database URL from environment or fallback
+DATABASE_URL = os.getenv("DATABASE_URL") or build_database_url()
+
+# Create and return an asyncpg connection pool
+async def create_db_pool():
+    try:
+        logging.info("📡 Connecting to PostgreSQL...")
+        pool = await asyncpg.create_pool(DATABASE_URL)
+        logging.info("✅ Database connection pool created successfully")
+        return pool
+    except Exception as e:
+        logging.error(f"❌ Failed to create DB pool: {e}")
+        raise
