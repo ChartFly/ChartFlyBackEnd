@@ -4,7 +4,7 @@ import logging
 import bcrypt
 import os
 
-router = APIRouter()
+router = APIRouter(prefix="/api/users")
 
 # ✅ Configure logging
 logging.basicConfig(level=logging.INFO)
