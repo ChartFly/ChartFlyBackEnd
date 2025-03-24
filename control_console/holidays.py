@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException, Path, Request
 import logging
 import traceback
+from datetime import datetime
 
 router = APIRouter()
 
@@ -30,7 +31,20 @@ async def get_holidays_by_year(
             logging.warning(f"⚠ No holidays found for {year}")
             raise HTTPException(status_code=404, detail=f"No holidays found for {year}")
 
-        holidays = [dict(row) for row in rows]
+        today = datetime.utcnow().date()
+
+        holidays = []
+        for row in rows:
+            holiday = dict(row)
+            holiday_date = holiday["date"]
+            if holiday_date == today:
+                status = "Closed Today"
+            elif holiday_date > today:
+                status = "Upcoming"
+            else:
+                status = "Passed"
+            holiday["status"] = status
+            holidays.append(holiday)
 
         logging.info(f"✅ Found {len(holidays)} holidays for {year}")
         return holidays
