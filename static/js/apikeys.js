@@ -7,23 +7,43 @@ async function loadApiKeys() {
         const table = document.getElementById("api-keys-table");
         table.innerHTML = "";
 
-        // Helper function to sanitize data for XSS prevention
+        // Add table headers with new usage limits
+        const headers = `
+            <tr>
+                <th>Label</th>
+                <th>Provider</th>
+                <th>Priority</th>
+                <th>Status</th>
+                <th>Sec</th>
+                <th>Min</th>
+                <th>5 Min</th>
+                <th>10 Min</th>
+                <th>15 Min</th>
+                <th>Hour</th>
+                <th>Day</th>
+                <th>Actions</th>
+            </tr>
+        `;
+        table.innerHTML += headers;
+
         const sanitizeInput = (input) => {
-            return input.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            return input?.toString().replace(/</g, "&lt;").replace(/>/g, "&gt;") || "N/A";
         };
 
         apiKeys.forEach(key => {
-            const label = sanitizeInput(key.label || "N/A");
-            const provider = sanitizeInput(key.provider || "N/A");
-            const priority = sanitizeInput(key.priority || "-");
-            const status = sanitizeInput(key.status || "Unknown");
-
             const row = `
                 <tr>
-                    <td>${label}</td>
-                    <td>${provider}</td>
-                    <td>${priority}</td>
-                    <td>${status}</td>
+                    <td>${sanitizeInput(key.key_label)}</td>
+                    <td>${sanitizeInput(key.provider)}</td>
+                    <td>${sanitizeInput(key.priority)}</td>
+                    <td>${sanitizeInput(key.status)}</td>
+                    <td>${sanitizeInput(key.usage_limit_sec)}</td>
+                    <td>${sanitizeInput(key.usage_limit_min)}</td>
+                    <td>${sanitizeInput(key.usage_limit_5min)}</td>
+                    <td>${sanitizeInput(key.usage_limit_10min)}</td>
+                    <td>${sanitizeInput(key.usage_limit_15min)}</td>
+                    <td>${sanitizeInput(key.usage_limit_hour)}</td>
+                    <td>${sanitizeInput(key.usage_limit_day)}</td>
                     <td>
                         <button onclick="editApiKey('${key.id}')">Edit</button>
                         <button onclick="deleteApiKey('${key.id}')">Delete</button>
@@ -35,17 +55,16 @@ async function loadApiKeys() {
     } catch (error) {
         console.error("Failed to load API keys:", error);
         const table = document.getElementById("api-keys-table");
-        table.innerHTML = `<tr><td colspan="5">Failed to load data. Please try again later.</td></tr>`;
+        table.innerHTML = `<tr><td colspan="12">Failed to load data. Please try again later.</td></tr>`;
     }
 }
 
-// Example placeholders for Edit and Delete actions
 function editApiKey(id) {
     console.log(`Edit API Key with ID: ${id}`);
-    // Implement the edit functionality here, including authorization
+    // Implement the edit functionality here
 }
 
 function deleteApiKey(id) {
     console.log(`Delete API Key with ID: ${id}`);
-    // Implement the delete functionality here, ensuring authorization checks
+    // Implement the delete functionality here
 }

@@ -15,6 +15,10 @@ class APIKey(BaseModel):
     cost_per_year: float
     usage_limit_sec: int
     usage_limit_min: int
+    usage_limit_5min: int
+    usage_limit_10min: int
+    usage_limit_15min: int
+    usage_limit_hour: int
     usage_limit_day: int
     priority: int
 
@@ -23,13 +27,20 @@ class APIKey(BaseModel):
 async def get_all_api_keys(request: Request):
     db = request.state.db
     try:
-        rows = await db.fetch("SELECT id, key_label, key_type, billing_interval, cost_per_month, cost_per_year, usage_limit_sec, usage_limit_min, usage_limit_day, priority FROM api_keys_table")
+        rows = await db.fetch("""
+            SELECT id, key_label, key_type, billing_interval,
+                   cost_per_month, cost_per_year,
+                   usage_limit_sec, usage_limit_min, usage_limit_5min,
+                   usage_limit_10min, usage_limit_15min, usage_limit_hour,
+                   usage_limit_day, priority
+            FROM api_keys_table
+        """)
         return [dict(row) for row in rows]
     except Exception as e:
         logging.error(f"❌ Failed to fetch API keys: {e}")
         raise HTTPException(status_code=500, detail="Error retrieving API keys")
 
-# ✅ ADD API Key (safe)
+# ✅ ADD API Key
 @router.post("/", tags=["api_keys"])
 async def add_api_key(api_key: APIKey, request: Request):
     db = request.state.db
@@ -38,11 +49,20 @@ async def add_api_key(api_key: APIKey, request: Request):
             INSERT INTO api_keys_table (
                 key_label, api_secret, key_type, billing_interval,
                 cost_per_month, cost_per_year,
-                usage_limit_sec, usage_limit_min, usage_limit_day, priority
-            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+                usage_limit_sec, usage_limit_min, usage_limit_5min,
+                usage_limit_10min, usage_limit_15min, usage_limit_hour,
+                usage_limit_day, priority
+            ) VALUES (
+                $1, $2, $3, $4,
+                $5, $6, $7, $8,
+                $9, $10, $11, $12,
+                $13, $14
+            )
         """, api_key.key_label, api_key.api_secret, api_key.key_type, api_key.billing_interval,
              api_key.cost_per_month, api_key.cost_per_year,
-             api_key.usage_limit_sec, api_key.usage_limit_min, api_key.usage_limit_day, api_key.priority)
+             api_key.usage_limit_sec, api_key.usage_limit_min, api_key.usage_limit_5min,
+             api_key.usage_limit_10min, api_key.usage_limit_15min, api_key.usage_limit_hour,
+             api_key.usage_limit_day, api_key.priority)
 
         logging.info(f"✅ Added API key label: {api_key.key_label} (secret not logged)")
         return {"message": "API key added successfully"}
@@ -79,13 +99,18 @@ async def update_api_key(key_id: int, api_key: APIKey, request: Request):
                 cost_per_year = $6,
                 usage_limit_sec = $7,
                 usage_limit_min = $8,
-                usage_limit_day = $9,
-                priority = $10
-            WHERE id = $11
+                usage_limit_5min = $9,
+                usage_limit_10min = $10,
+                usage_limit_15min = $11,
+                usage_limit_hour = $12,
+                usage_limit_day = $13,
+                priority = $14
+            WHERE id = $15
         """, api_key.key_label, api_key.api_secret, api_key.key_type, api_key.billing_interval,
              api_key.cost_per_month, api_key.cost_per_year,
-             api_key.usage_limit_sec, api_key.usage_limit_min, api_key.usage_limit_day,
-             api_key.priority, key_id)
+             api_key.usage_limit_sec, api_key.usage_limit_min, api_key.usage_limit_5min,
+             api_key.usage_limit_10min, api_key.usage_limit_15min, api_key.usage_limit_hour,
+             api_key.usage_limit_day, api_key.priority, key_id)
 
         if result == "UPDATE 0":
             raise HTTPException(status_code=404, detail="API key not found")
