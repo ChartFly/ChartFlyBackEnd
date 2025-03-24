@@ -27,8 +27,15 @@ from control_console.admin_users.routes import router as admin_users_router
 from control_console.auth_login_register import router as login_register_router
 from control_console.auth_password_reset import router as password_reset_router
 
-# ✅ Load DB URL from environment
+# ✅ Load DB URL and session secret from environment
 DATABASE_URL = os.getenv("DATABASE_URL")
+SESSION_SECRET = os.getenv("SESSION_SECRET")
+
+if not DATABASE_URL:
+    raise EnvironmentError("❌ DATABASE_URL environment variable is not set.")
+
+if not SESSION_SECRET:
+    raise EnvironmentError("❌ SESSION_SECRET environment variable is not set.")
 
 # ✅ Initialize FastAPI with Middleware
 app = FastAPI(
@@ -38,7 +45,7 @@ app = FastAPI(
     docs_url="/docs",
     redoc_url="/redoc",
     middleware=[
-        Middleware(SessionMiddleware, secret_key=os.getenv("SESSION_SECRET", "super-secret")),
+        Middleware(SessionMiddleware, secret_key=SESSION_SECRET),
         Middleware(
             CORSMiddleware,
             allow_origins=["https://chartfly-web-site.onrender.com"],
@@ -76,7 +83,7 @@ async def admin_ui(request: Request):
         user_count = await request.state.db.fetchval("SELECT COUNT(*) FROM admin_users;")
         user_count = user_count if user_count is not None else 0
     except Exception as e:
-        logging.error(f"🚨 Database error in admin_ui route: {e}")
+        logging.error(f"\U0001f6a8 Database error in admin_ui route: {e}")
         return templates.TemplateResponse("login.html", {"request": request, "error": "Database connection failed."})
 
     if user_count == 0:

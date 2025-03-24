@@ -2,11 +2,15 @@ from fastapi import APIRouter, Request, HTTPException
 from pydantic import BaseModel
 import logging
 import bcrypt
+import os
 
 router = APIRouter()
 
 # ✅ Configure logging
 logging.basicConfig(level=logging.INFO)
+
+# ✅ Load default password from environment
+DEFAULT_ADMIN_PASS = os.getenv("DEFAULT_ADMIN_PASS", "changeme123!")
 
 # ✅ Admin User Schema
 class AdminUser(BaseModel):
@@ -17,11 +21,9 @@ class AdminUser(BaseModel):
     username: str
     role: str
 
-
 # ✅ Utility: Hash Password
 def hash_password(password: str) -> str:
     return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
-
 
 # ✅ GET All Admin Users
 @router.get("/", tags=["admin_users"])
@@ -35,13 +37,12 @@ async def get_all_admin_users(request: Request):
         logging.error(f"❌ Error fetching users: {e}")
         raise HTTPException(status_code=500, detail="Error fetching users")
 
-
 # ✅ ADD New Admin User
 @router.post("/", tags=["admin_users"])
 async def add_admin_user(user: AdminUser, request: Request):
     try:
         db = request.state.db
-        default_password = hash_password("changeme123!")
+        default_password = hash_password(DEFAULT_ADMIN_PASS)
         await db.execute("""
             INSERT INTO admin_users (first_name, last_name, phone_number, email, username, role, password_hash)
             VALUES ($1, $2, $3, $4, $5, $6, $7)
@@ -51,7 +52,6 @@ async def add_admin_user(user: AdminUser, request: Request):
     except Exception as e:
         logging.error(f"❌ Error adding user {user.username}: {e}")
         raise HTTPException(status_code=500, detail="Error adding user")
-
 
 # ✅ UPDATE Admin User
 @router.put("/{user_id}", tags=["admin_users"])
@@ -70,7 +70,6 @@ async def update_admin_user(user_id: int, user: AdminUser, request: Request):
     except Exception as e:
         logging.error(f"❌ Error updating user {user_id}: {e}")
         raise HTTPException(status_code=500, detail="Error updating user")
-
 
 # ✅ DELETE Admin User
 @router.delete("/{user_id}", tags=["admin_users"])

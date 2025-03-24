@@ -7,6 +7,8 @@ from datetime import datetime
 import random
 import string
 import re
+import os
+
 from control_console.rate_limiter import is_rate_limited, record_attempt
 from control_console.utils.email_sender import send_reset_email
 
@@ -150,30 +152,34 @@ async def logout(request: Request):
     request.session.clear()
     return RedirectResponse(url="/auth/login", status_code=HTTP_302_FOUND)
 
-# ✅ Developer Reset Endpoint
+# ✅ Developer Reset Endpoint (Secure with Environment Variable)
 @router.get("/dev-reset")
 async def dev_reset(request: Request, token: str):
-    if token != "chartfly_mega_secret_token_8932":
+    expected_token = os.getenv("DEV_RESET_TOKEN", "")
+    default_email = os.getenv("DEFAULT_ADMIN_EMAIL", "admin@example.com")
+    default_user = os.getenv("DEFAULT_ADMIN_USER", "admin")
+    default_pass = os.getenv("DEFAULT_ADMIN_PASS", "admin123")
+    default_code = os.getenv("DEFAULT_ADMIN_CODE", "reset-code-123")
+
+    if token != expected_token:
         return JSONResponse(status_code=403, content={"error": "Unauthorized"})
 
     db = request.state.db
-
-    existing = await db.fetchrow("SELECT id FROM admin_users WHERE username = 'admin'")
+    existing = await db.fetchrow("SELECT id FROM admin_users WHERE username = $1", default_user)
     if existing:
         return JSONResponse(status_code=200, content={"message": "Admin user already exists."})
 
-    hashed_pw = bcrypt.hash("admin123")
+    hashed_pw = bcrypt.hash(default_pass)
     await db.execute("""
         INSERT INTO admin_users 
         (first_name, last_name, phone_number, email, username, password_hash, access_code, role, is_2fa_enabled)
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
     """,
-        "Default", "Admin", "000-000-0000", "admin@example.com", "admin",
-        hashed_pw, "reset-code-123", "SuperAdmin", False
+        "Default", "Admin", "000-000-0000", default_email, default_user,
+        hashed_pw, default_code, "SuperAdmin", False
     )
 
-    return JSONResponse(status_code=201, content={"message": "Default admin account created. Username: admin, Password: admin123"})
-
+    return JSONResponse(status_code=201, content={"message": f"Default admin created. Username: {default_user}"})
 
 # ✅ Forgot Password Page (GET)
 @router.get("/forgot-password", response_class=HTMLResponse)

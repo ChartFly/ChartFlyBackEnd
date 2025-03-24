@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel
 import bcrypt
 import logging
+import re
 
 router = APIRouter()
 
@@ -25,6 +26,14 @@ def hash_password(password: str) -> str:
 def verify_password(password: str, hashed_password: str) -> bool:
     return bcrypt.checkpw(password.encode('utf-8'), hashed_password.encode('utf-8'))
 
+# ✅ Utility: Validate Username
+def validate_username(username: str) -> bool:
+    return bool(re.match(r"^[a-zA-Z0-9_]+$", username))  # Only alphanumeric and underscore allowed
+
+# ✅ Utility: Validate Phone Number
+def validate_phone_number(phone_number: str) -> bool:
+    return phone_number.isdigit() and len(phone_number) >= 10  # Only digits and at least 10 characters long
+
 # ✅ GET All Admin Users
 @router.get("/", tags=["admin"])
 async def get_admin_users(request: Request):
@@ -42,6 +51,12 @@ async def get_admin_users(request: Request):
 # ✅ ADD New Admin User
 @router.post("/", tags=["admin"])
 async def add_admin_user(user: AdminUser, request: Request):
+    # Validate username and phone number
+    if not validate_username(user.username):
+        raise HTTPException(status_code=400, detail="Invalid username format")
+    if not validate_phone_number(user.phone_number):
+        raise HTTPException(status_code=400, detail="Invalid phone number format")
+
     db = request.state.db
     hashed_password = hash_password(user.password)
     query = """

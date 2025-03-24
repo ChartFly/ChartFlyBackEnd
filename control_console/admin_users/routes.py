@@ -1,5 +1,3 @@
-# control_console/admin_users/routes.py
-
 from fastapi import APIRouter, HTTPException, Request
 from passlib.hash import bcrypt
 from uuid import uuid4
@@ -13,10 +11,8 @@ router = APIRouter(prefix="/api/admin-users")
 async def get_all_users(request: Request):
     db: asyncpg.Connection = request.state.db
     rows = await db.fetch("SELECT * FROM admin_users ORDER BY name ASC")
-
-    users = []
-    for row in rows:
-        users.append({
+    return [
+        {
             "id": row["id"],
             "name": row["name"],
             "email": row["email"],
@@ -24,9 +20,9 @@ async def get_all_users(request: Request):
             "address": row["address"],
             "username": row["username"],
             "access": await get_user_access(db, row["id"])
-        })
-
-    return users
+        }
+        for row in rows
+    ]
 
 # 🧱 GET single user by ID
 @router.get("/admin/users/{user_id}")
@@ -72,7 +68,7 @@ async def update_user(user_id: str, request: Request):
     db: asyncpg.Connection = request.state.db
     data = await request.json()
 
-    if data["password"]:
+    if data.get("password"):
         if data["password"] != data["confirmPassword"]:
             raise HTTPException(status_code=400, detail="Passwords do not match")
         hashed = bcrypt.hash(data["password"])
@@ -102,11 +98,7 @@ async def delete_user(user_id: str, request: Request):
 # 🧾 GET available tab names (for checkboxes)
 @router.get("/admin/tabs")
 async def get_tabs():
-    return [
-        "Market Holidays",
-        "API Keys",
-        "User Management"
-    ]
+    return ["Market Holidays", "API Keys", "User Management"]
 
 # 🔐 Helper: get access tabs for user
 async def get_user_access(db, user_id):

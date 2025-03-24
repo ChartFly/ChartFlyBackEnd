@@ -14,7 +14,7 @@ async function fetchMarketHolidays() {
         const holidaySection = document.getElementById("market-holidays");
 
         if (holidaySection) {
-            holidaySection.innerText = holidays.map(h => `${h.date}: ${h.name}`).join(" | ");
+            holidaySection.innerText = holidays.map(h => `${sanitizeInput(h.date)}: ${sanitizeInput(h.name)}`).join(" | ");
         } else {
             console.error("Market Holidays section missing in HTML");
         }
@@ -36,16 +36,16 @@ async function fetchHaltedStocks() {
             tableBody.innerHTML = "";
             data.forEach(stock => {
                 let row = `<tr>
-                    <td>${stock.haltDate || ""}</td>
-                    <td>${stock.haltTime || ""}</td>
-                    <td>${stock.symbol || ""}</td>
-                    <td>${stock.issueName || ""}</td>
-                    <td>${stock.market || ""}</td>
-                    <td>${stock.reasonCode || ""}</td>
-                    <td>${stock.definition || ""}</td>
-                    <td>${stock.haltPrice || "N/A"}</td>
-                    <td>${stock.resDate || "N/A"}</td>
-                    <td>${stock.resTime || "N/A"}</td>
+                    <td>${sanitizeInput(stock.haltDate) || ""}</td>
+                    <td>${sanitizeInput(stock.haltTime) || ""}</td>
+                    <td>${sanitizeInput(stock.symbol) || ""}</td>
+                    <td>${sanitizeInput(stock.issueName) || ""}</td>
+                    <td>${sanitizeInput(stock.market) || ""}</td>
+                    <td>${sanitizeInput(stock.reasonCode) || ""}</td>
+                    <td>${sanitizeInput(stock.definition) || ""}</td>
+                    <td>${sanitizeInput(stock.haltPrice) || "N/A"}</td>
+                    <td>${sanitizeInput(stock.resDate) || "N/A"}</td>
+                    <td>${sanitizeInput(stock.resTime) || "N/A"}</td>
                 </tr>`;
                 tableBody.innerHTML += row;
             });
@@ -192,7 +192,7 @@ function updateMetrics(ticker, data) {
     }
 
     const row = `<tr>
-        <td>${ticker}</td>
+        <td>${sanitizeInput(ticker)}</td>
         <td>${data.c ? `$${data.c.toFixed(2)}` : "N/A"}</td>
         <td>${data.o ? `$${data.o.toFixed(2)}` : "N/A"}</td>
         <td>${data.h ? `$${data.h.toFixed(2)}` : "N/A"}</td>
@@ -200,6 +200,11 @@ function updateMetrics(ticker, data) {
         <td>${data.pc ? `$${data.pc.toFixed(2)}` : "N/A"}</td>
     </tr>`;
     tableBody.innerHTML += row;
+}
+
+// ✅ Sanitize Input to Prevent XSS
+function sanitizeInput(input) {
+    return input.replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
 // ✅ Tab switching logic

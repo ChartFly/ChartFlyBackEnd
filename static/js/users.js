@@ -7,15 +7,24 @@ async function loadUsers() {
         const table = document.getElementById("user-table");
         table.innerHTML = "";
 
+        // Helper function to sanitize user input for XSS prevention
+        const sanitizeInput = (input) => {
+            return input.replace(/</g, "&lt;").replace(/>/g, "&gt;"); // Escape < and >
+        };
+
         users.forEach(user => {
+            const username = sanitizeInput(user.username);
+            const role = sanitizeInput(user.role || "Admin");
+            const createdAt = new Date(user.created_at).toLocaleDateString();
+
             const row = `
                 <tr>
-                    <td>${user.username}</td>
-                    <td>${user.role || "Admin"}</td>
-                    <td>${new Date(user.created_at).toLocaleDateString()}</td>
+                    <td>${username}</td>
+                    <td>${role}</td>
+                    <td>${createdAt}</td>
                     <td>
-                        <button>Edit</button>
-                        <button>Delete</button>
+                        <button onclick="editUser('${user.id}')">Edit</button>
+                        <button onclick="deleteUser('${user.id}')">Delete</button>
                     </td>
                 </tr>
             `;
@@ -24,6 +33,17 @@ async function loadUsers() {
     } catch (error) {
         console.error("Failed to load users:", error);
         const table = document.getElementById("user-table");
-        table.innerHTML = `<tr><td colspan="4">Error loading users</td></tr>`;
+        table.innerHTML = `<tr><td colspan="4">Unable to load users at the moment. Please try again later.</td></tr>`;
     }
+}
+
+// Example function placeholders for Edit and Delete
+function editUser(userId) {
+    console.log(`Edit user with ID: ${userId}`);
+    // Implement edit functionality here
+}
+
+function deleteUser(userId) {
+    console.log(`Delete user with ID: ${userId}`);
+    // Implement delete functionality here
 }
