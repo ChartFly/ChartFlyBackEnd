@@ -24,7 +24,7 @@ async def login_page(request: Request):
 @router.post("/login")
 async def login(request: Request, username: str = Form(...), password: str = Form(...)):
     client_ip = request.client.host
-    blocked, wait_time = is_rate_limited(client_ip)
+    blocked, wait_time = await is_rate_limited(request.state.db, client_ip)
     if blocked:
         return templates.TemplateResponse("login.html", {
             "request": request,
