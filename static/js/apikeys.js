@@ -35,7 +35,7 @@ async function loadApiKeys() {
                 <tr>
                     <td>${sanitizeInput(key.key_label)}</td>
                     <td>${sanitizeInput(key.provider)}</td>
-                    <td>${sanitizeInput(key.priority)}</td>
+                    <td>${sanitizeInput(key.priority_order)}</td>
                     <td>${sanitizeInput(key.status)}</td>
                     <td>${sanitizeInput(key.usage_limit_sec)}</td>
                     <td>${sanitizeInput(key.usage_limit_min)}</td>
