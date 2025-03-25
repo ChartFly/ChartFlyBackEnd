@@ -1,106 +1,107 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ChartFly Admin Panel</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ChartFly Admin Panel</title>
 
-    <!-- ✅ Global Styles -->
-    <link rel="stylesheet" href="/static/css/styles.css">
+  <!-- ✅ Global Styles -->
+  <link rel="stylesheet" href="/static/css/styles.css">
 </head>
 <body>
 
-    <!-- ✅ Header -->
-    <header class="header">
-        <div class="header-left">
-            <div class="logo-container">
-                <img src="https://raw.githubusercontent.com/ChartFly/ChartFly-Halted-Stocks/main/Chartfly-logo.png"
-                     alt="ChartFly Logo" class="logo" width="144" height="144">
-            </div>
-        </div>
+  <!-- ✅ Header -->
+  <header class="header">
+    <div class="header-left">
+      <div class="logo-container">
+        <img src="https://raw.githubusercontent.com/ChartFly/ChartFly-Halted-Stocks/main/Chartfly-logo.png"
+             alt="ChartFly Logo" class="logo" width="144" height="144">
+      </div>
+    </div>
 
-        <div class="header-center">
-            <h1 class="admin-title">ChartFly Admin Panel</h1>
-        </div>
+    <div class="header-center">
+      <h1 class="admin-title">ChartFly Admin Panel</h1>
+    </div>
 
-        <div class="header-right market-status-container">
-            <span class="market-status-label">Market Status:</span>
-            <span id="market-status-text" class="market-status-text">Loading...</span>
-        </div>
-    </header>
+    <div class="header-right market-status-container">
+      <span class="market-status-label">Market Status:</span>
+      <span id="market-status-text" class="market-status-text">Loading...</span>
+    </div>
+  </header>
 
-    <!-- ✅ Main Admin Content -->
-    <div class="content-wrapper">
+  <!-- ✅ Main Admin Content -->
+  <div class="content-wrapper">
 
-        <!-- ✅ Tab Navigation -->
-        <div class="tabs">
-            <button class="tab-button active" id="market-holidays-tab">Market Holidays</button>
-            <button class="tab-button" id="api-keys-tab">API Keys</button>
-            <button class="tab-button" id="user-management-tab">User Management</button>
-        </div>
+    <!-- ✅ Tab Navigation -->
+    <div class="tabs">
+      <button class="tab-button active" id="market-holidays-tab">Market Holidays</button>
+      <button class="tab-button" id="api-keys-tab">API Keys</button>
+      <button class="tab-button" id="user-management-tab">User Management</button>
+    </div>
 
-        <!-- ✅ Market Holidays Section -->
-        <div class="container" id="market-holidays-section">
-            <h2>Manage Market Holidays</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Holiday Name</th>
-                        <th>Date</th>
-                        <th>Market Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="holidays-table">
-                    <tr><td colspan="4">Loading holidays...</td></tr>
-                </tbody>
-            </table>
-        </div>
+    <!-- ✅ Market Holidays Section -->
+    <div class="container" id="market-holidays-section">
+      <h2>Manage Market Holidays</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Holiday Name</th>
+            <th>Date</th>
+            <th>Market Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="holidays-table">
+          <tr><td colspan="4">Loading holidays...</td></tr>
+        </tbody>
+      </table>
+    </div>
 
-        <!-- ✅ API Keys Section (Hidden by Default) -->
-        <div class="container" id="api-keys-section" style="display: none;">
-            <h2>Manage API Keys</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>API Name</th>
-                        <th>Provider</th>
-                        <th>Priority</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="api-keys-table">
-                    <tr><td colspan="5">Loading API keys...</td></tr>
-                </tbody>
-            </table>
-        </div>
+    <!-- ✅ API Keys Section (Hidden by Default) -->
+    <div class="container" id="api-keys-section" style="display: none;">
+      <h2>Manage API Keys</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>API Name</th>
+            <th>Provider</th>
+            <th>Priority</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="api-keys-table">
+          <tr><td colspan="5">Loading API keys...</td></tr>
+        </tbody>
+      </table>
+    </div>
 
-        <!-- ✅ User Management Section (Hidden by Default) -->
-        <div class="container" id="user-management-section" style="display: none;">
-            <h2>Manage Users</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Full Name</th>
-                        <th>Username</th>
-                        <th>Access Tabs</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="user-table">
-                    <tr><td colspan="4">Loading users...</td></tr>
-                </tbody>
-            </table>
-        </div>
+    <!-- ✅ User Management Section (Hidden by Default) -->
+    <div class="container" id="user-management-section" style="display: none;">
+      <h2>Manage Users</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Full Name</th>
+            <th>Email</th>
+            <th>Username</th>
+            <th>Access Tabs</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="user-table">
+          <tr><td colspan="5">Loading users...</td></tr>
+        </tbody>
+      </table>
+    </div>
 
-    </div> <!-- /content-wrapper -->
+  </div> <!-- /content-wrapper -->
 
-    <!-- ✅ Scripts -->
-    <script src="/static/js/main.js"></script>
-    <script src="/static/js/marketholidays.js"></script>
-    <script src="/static/js/apikeys.js"></script>
-    <script src="/static/js/users.js"></script>
+  <!-- ✅ Scripts -->
+  <script src="/static/js/main.js"></script>
+  <script src="/static/js/marketholidays.js"></script>
+  <script src="/static/js/apikeys.js"></script>
+  <script src="/static/js/users.js"></script>
 
 </body>
 </html>
