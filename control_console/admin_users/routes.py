@@ -10,7 +10,7 @@ router = APIRouter()  # Mounts in main.py at: prefix="/api/users"
 @router.get("/")
 async def get_all_users(request: Request):
     db: asyncpg.Connection = request.state.db
-    rows = await db.fetch("SELECT * FROM admin_users ORDER BY name ASC")
+    rows = await db.fetch("SELECT * FROM admin_users ORDER BY last_name ASC")
     return [
         {
             "id": row["id"],
