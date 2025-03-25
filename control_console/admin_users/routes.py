@@ -16,7 +16,7 @@ async def get_all_users(request: Request):
             "id": row["id"],
             "name": f"{row['first_name']} {row['last_name']}".strip(),
             "email": row["email"],
-            "phone": row["phone"],
+            "phone": row["phone_number"],
             "address": row["address"],
             "username": row["username"],
             "access": await get_user_access(db, row["id"])
@@ -34,9 +34,9 @@ async def get_user(user_id: str, request: Request):
 
     return {
         "id": user["id"],
-        "name": user["name"],
+        "name": f"{user['first_name']} {user['last_name']}".strip(),
         "email": user["email"],
-        "phone": user["phone"],
+        "phone": user["phone_number"],
         "address": user["address"],
         "username": user["username"],
         "access": await get_user_access(db, user["id"])
@@ -55,9 +55,9 @@ async def create_user(request: Request):
     user_id = str(uuid4())
 
     await db.execute("""
-        INSERT INTO admin_users (id, name, email, phone, address, username, password)
-        VALUES ($1, $2, $3, $4, $5, $6, $7)
-    """, user_id, data["name"], data["email"], data["phone"], data["address"], data["username"], hashed)
+        INSERT INTO admin_users (id, first_name, last_name, email, phone_number, address, username, password_hash)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+    """, user_id, data["first_name"], data["last_name"], data["email"], data["phone"], data["address"], data["username"], hashed)
 
     await set_user_permissions(db, user_id, data["access"])
     return {"message": "User created"}
@@ -74,15 +74,15 @@ async def update_user(user_id: str, request: Request):
         hashed = bcrypt.hash(data["password"])
         await db.execute("""
             UPDATE admin_users
-            SET name=$1, email=$2, phone=$3, address=$4, username=$5, password=$6
-            WHERE id=$7
-        """, data["name"], data["email"], data["phone"], data["address"], data["username"], hashed, user_id)
+            SET first_name=$1, last_name=$2, email=$3, phone_number=$4, address=$5, username=$6, password_hash=$7
+            WHERE id=$8
+        """, data["first_name"], data["last_name"], data["email"], data["phone"], data["address"], data["username"], hashed, user_id)
     else:
         await db.execute("""
             UPDATE admin_users
-            SET name=$1, email=$2, phone=$3, address=$4, username=$5
-            WHERE id=$6
-        """, data["name"], data["email"], data["phone"], data["address"], data["username"], user_id)
+            SET first_name=$1, last_name=$2, email=$3, phone_number=$4, address=$5, username=$6
+            WHERE id=$7
+        """, data["first_name"], data["last_name"], data["email"], data["phone"], data["address"], data["username"], user_id)
 
     await set_user_permissions(db, user_id, data["access"])
     return {"message": "User updated"}

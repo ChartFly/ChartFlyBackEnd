@@ -9,19 +9,19 @@ async function loadUsers() {
 
         // Helper function to sanitize user input for XSS prevention
         const sanitizeInput = (input) => {
-            return input.replace(/</g, "&lt;").replace(/>/g, "&gt;"); // Escape < and >
+            return (input || "").toString().replace(/</g, "&lt;").replace(/>/g, "&gt;");
         };
 
         users.forEach(user => {
+            const name = sanitizeInput(user.name);
             const username = sanitizeInput(user.username);
-            const role = sanitizeInput(user.role || "Admin");
-            const createdAt = new Date(user.created_at).toLocaleDateString();
+            const access = sanitizeInput(user.access.join(", "));
 
             const row = `
                 <tr>
+                    <td>${name}</td>
                     <td>${username}</td>
-                    <td>${role}</td>
-                    <td>${createdAt}</td>
+                    <td>${access}</td>
                     <td>
                         <button onclick="editUser('${user.id}')">Edit</button>
                         <button onclick="deleteUser('${user.id}')">Delete</button>
@@ -37,13 +37,12 @@ async function loadUsers() {
     }
 }
 
-// Example function placeholders for Edit and Delete
 function editUser(userId) {
     console.log(`Edit user with ID: ${userId}`);
-    // Implement edit functionality here
+    // TODO: Implement edit modal or form
 }
 
 function deleteUser(userId) {
     console.log(`Delete user with ID: ${userId}`);
-    // Implement delete functionality here
+    // TODO: Confirm then call delete endpoint
 }
