@@ -207,25 +207,42 @@ function sanitizeInput(input) {
     return input.replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
-// ✅ Tab switching logic
+// ✅ Improved Tab Toggle Logic
+let currentlyVisibleSection = null;
+
 document.querySelectorAll(".tab-button").forEach(button => {
     button.addEventListener("click", () => {
+        const sectionMap = {
+            "market-holidays-tab": "market-holidays-section",
+            "api-keys-tab": "api-keys-section",
+            "user-management-tab": "user-management-section"
+        };
+
+        const sectionId = sectionMap[button.id];
+        const sectionEl = document.getElementById(sectionId);
+
+        const isAlreadyVisible = currentlyVisibleSection === sectionId;
+
+        // Reset all tab states and hide all sections
         document.querySelectorAll(".tab-button").forEach(btn => btn.classList.remove("active"));
-        button.classList.add("active");
+        Object.values(sectionMap).forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.style.display = "none";
+        });
 
-        document.getElementById("market-holidays-section").style.display = "none";
-        document.getElementById("api-keys-section").style.display = "none";
-        document.getElementById("user-management-section").style.display = "none";
+        if (isAlreadyVisible) {
+            // Toggle OFF
+            currentlyVisibleSection = null;
+        } else {
+            // Toggle ON
+            button.classList.add("active");
+            sectionEl.style.display = "block";
+            currentlyVisibleSection = sectionId;
 
-        if (button.id === "market-holidays-tab") {
-            document.getElementById("market-holidays-section").style.display = "block";
-            if (typeof loadMarketHolidays === "function") loadMarketHolidays();
-        } else if (button.id === "api-keys-tab") {
-            document.getElementById("api-keys-section").style.display = "block";
-            if (typeof loadApiKeys === "function") loadApiKeys();
-        } else if (button.id === "user-management-tab") {
-            document.getElementById("user-management-section").style.display = "block";
-            if (typeof loadUsers === "function") loadUsers();
+            // Optional: reload data on first click
+            if (sectionId === "market-holidays-section" && typeof loadMarketHolidays === "function") loadMarketHolidays();
+            if (sectionId === "api-keys-section" && typeof loadApiKeys === "function") loadApiKeys();
+            if (sectionId === "user-management-section" && typeof loadUsers === "function") loadUsers();
         }
     });
 });
