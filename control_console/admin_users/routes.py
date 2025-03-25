@@ -14,7 +14,7 @@ async def get_all_users(request: Request):
     return [
         {
             "id": row["id"],
-            "name": row["name"],
+            "name": f"{row['first_name']} {row['last_name']}".strip(),
             "email": row["email"],
             "phone": row["phone"],
             "address": row["address"],
