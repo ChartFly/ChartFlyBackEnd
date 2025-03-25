@@ -89,7 +89,7 @@ function updateMarketStatus() {
     statusElement.innerText = status;
 }
 
-/* ✅ Watchlist Functions */
+/* ✅ Watchlist Setup */
 const watchlist = [];
 const maxTickers = 10;
 
@@ -131,7 +131,6 @@ function updateWatchlistDisplay() {
     }
 }
 
-/* ✅ Delete Ticker from Watchlist, Stock Metrics, and News */
 function deleteTicker(slot) {
     if (slot < watchlist.length) {
         const ticker = watchlist[slot];
@@ -158,7 +157,7 @@ function clearWatchlist() {
     if (newsTable) newsTable.innerHTML = "";
 }
 
-/* ✅ Fetch Stock Metrics & News */
+/* ✅ Stock Data API */
 async function fetchStockData(ticker) {
     try {
         const apiKey = await getApiKey();
@@ -170,7 +169,6 @@ async function fetchStockData(ticker) {
     }
 }
 
-/* ✅ Retrieve API Key from Backend */
 async function getApiKey() {
     try {
         const response = await fetch("https://chartflybackend.onrender.com/api/api_keys");
@@ -183,7 +181,6 @@ async function getApiKey() {
     }
 }
 
-/* ✅ Update Metrics Table */
 function updateMetrics(ticker, data) {
     const tableBody = document.querySelector("#stock-metrics tbody");
     if (!tableBody) {
@@ -202,12 +199,13 @@ function updateMetrics(ticker, data) {
     tableBody.innerHTML += row;
 }
 
-// ✅ Sanitize Input to Prevent XSS
 function sanitizeInput(input) {
-    return input.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    return typeof input === "string"
+        ? input.replace(/</g, "&lt;").replace(/>/g, "&gt;")
+        : input;
 }
 
-// ✅ Improved Tab Toggle Logic
+/* ✅ Tab Logic */
 let currentlyVisibleSection = null;
 
 document.querySelectorAll(".tab-button").forEach(button => {
@@ -223,26 +221,22 @@ document.querySelectorAll(".tab-button").forEach(button => {
 
         const isAlreadyVisible = currentlyVisibleSection === sectionId;
 
-        // Reset all tab states and hide all sections
         document.querySelectorAll(".tab-button").forEach(btn => btn.classList.remove("active"));
         Object.values(sectionMap).forEach(id => {
             const el = document.getElementById(id);
             if (el) el.style.display = "none";
         });
 
-        if (isAlreadyVisible) {
-            // Toggle OFF
-            currentlyVisibleSection = null;
-        } else {
-            // Toggle ON
+        if (!isAlreadyVisible) {
             button.classList.add("active");
             sectionEl.style.display = "block";
             currentlyVisibleSection = sectionId;
 
-            // Optional: reload data on first click
             if (sectionId === "market-holidays-section" && typeof loadMarketHolidays === "function") loadMarketHolidays();
             if (sectionId === "api-keys-section" && typeof loadApiKeys === "function") loadApiKeys();
             if (sectionId === "user-management-section" && typeof loadUsers === "function") loadUsers();
+        } else {
+            currentlyVisibleSection = null;
         }
     });
 });
