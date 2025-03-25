@@ -7,21 +7,26 @@ async function loadUsers() {
         const table = document.getElementById("user-table");
         table.innerHTML = "";
 
-        // Helper function to sanitize user input for XSS prevention
+        // Sanitize helper
         const sanitizeInput = (input) => {
-            return (input || "").toString().replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            if (typeof input !== "string") return input;
+            return input.replace(/</g, "&lt;").replace(/>/g, "&gt;");
         };
 
         users.forEach(user => {
-            const name = sanitizeInput(user.name);
-            const username = sanitizeInput(user.username);
-            const access = sanitizeInput(user.access.join(", "));
+            const fullName = sanitizeInput(user.name);
+            const email = sanitizeInput(user.email || "—");
+            const username = sanitizeInput(user.username || "—");
+            const accessTabs = Array.isArray(user.access)
+                ? user.access.map(sanitizeInput).join(", ")
+                : "None";
 
             const row = `
                 <tr>
-                    <td>${name}</td>
+                    <td>${fullName}</td>
+                    <td>${email}</td>
                     <td>${username}</td>
-                    <td>${access}</td>
+                    <td>${accessTabs}</td>
                     <td>
                         <button onclick="editUser('${user.id}')">Edit</button>
                         <button onclick="deleteUser('${user.id}')">Delete</button>
@@ -30,19 +35,6 @@ async function loadUsers() {
             `;
             table.innerHTML += row;
         });
+
     } catch (error) {
-        console.error("Failed to load users:", error);
-        const table = document.getElementById("user-table");
-        table.innerHTML = `<tr><td colspan="4">Unable to load users at the moment. Please try again later.</td></tr>`;
-    }
-}
-
-function editUser(userId) {
-    console.log(`Edit user with ID: ${userId}`);
-    // TODO: Implement edit modal or form
-}
-
-function deleteUser(userId) {
-    console.log(`Delete user with ID: ${userId}`);
-    // TODO: Confirm then call delete endpoint
-}
+        console.error("Failed to load users
