@@ -8,9 +8,9 @@ logging.basicConfig(level=logging.INFO)
 # ✅ API Key Schema
 class APIKey(BaseModel):
     key_label: str
-    api_secret: str  # 🔒 Sensitive: Never expose or log
-    key_type: str  # Free, Paid, etc.
-    billing_interval: str  # Monthly, Annual, etc.
+    api_secret: str
+    key_type: str
+    billing_interval: str
     cost_per_month: float
     cost_per_year: float
     usage_limit_sec: int
@@ -20,9 +20,9 @@ class APIKey(BaseModel):
     usage_limit_15min: int
     usage_limit_hour: int
     usage_limit_day: int
-    priority: int
+    priority_order: int
 
-# ✅ GET all API keys (safe version)
+# ✅ GET all API keys
 @router.get("/", tags=["api_keys"])
 async def get_all_api_keys(request: Request):
     db = request.state.db
@@ -32,7 +32,7 @@ async def get_all_api_keys(request: Request):
                    cost_per_month, cost_per_year,
                    usage_limit_sec, usage_limit_min, usage_limit_5min,
                    usage_limit_10min, usage_limit_15min, usage_limit_hour,
-                   usage_limit_day, priority
+                   usage_limit_day, priority_order
             FROM api_keys_table
         """)
         return [dict(row) for row in rows]
@@ -51,7 +51,7 @@ async def add_api_key(api_key: APIKey, request: Request):
                 cost_per_month, cost_per_year,
                 usage_limit_sec, usage_limit_min, usage_limit_5min,
                 usage_limit_10min, usage_limit_15min, usage_limit_hour,
-                usage_limit_day, priority
+                usage_limit_day, priority_order
             ) VALUES (
                 $1, $2, $3, $4,
                 $5, $6, $7, $8,
@@ -62,9 +62,9 @@ async def add_api_key(api_key: APIKey, request: Request):
              api_key.cost_per_month, api_key.cost_per_year,
              api_key.usage_limit_sec, api_key.usage_limit_min, api_key.usage_limit_5min,
              api_key.usage_limit_10min, api_key.usage_limit_15min, api_key.usage_limit_hour,
-             api_key.usage_limit_day, api_key.priority)
+             api_key.usage_limit_day, api_key.priority_order)
 
-        logging.info(f"✅ Added API key label: {api_key.key_label} (secret not logged)")
+        logging.info(f"✅ Added API key label: {api_key.key_label}")
         return {"message": "API key added successfully"}
     except Exception as e:
         logging.error(f"❌ Failed to add API key {api_key.key_label}: {e}")
@@ -104,13 +104,13 @@ async def update_api_key(key_id: int, api_key: APIKey, request: Request):
                 usage_limit_15min = $11,
                 usage_limit_hour = $12,
                 usage_limit_day = $13,
-                priority = $14
+                priority_order = $14
             WHERE id = $15
         """, api_key.key_label, api_key.api_secret, api_key.key_type, api_key.billing_interval,
              api_key.cost_per_month, api_key.cost_per_year,
              api_key.usage_limit_sec, api_key.usage_limit_min, api_key.usage_limit_5min,
              api_key.usage_limit_10min, api_key.usage_limit_15min, api_key.usage_limit_hour,
-             api_key.usage_limit_day, api_key.priority, key_id)
+             api_key.usage_limit_day, api_key.priority_order, key_id)
 
         if result == "UPDATE 0":
             raise HTTPException(status_code=404, detail="API key not found")
