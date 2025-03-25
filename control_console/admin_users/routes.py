@@ -19,7 +19,7 @@ async def get_all_users(request: Request):
             "phone": row["phone_number"],
             "address": row["address"],
             "username": row["username"],
-            "access": await get_user_access(db, str(row["id"]))  # ✅ Fix
+            "access": await get_user_access(db, row["id"])
         }
         for row in rows
     ]
