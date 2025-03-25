@@ -4,10 +4,10 @@ from uuid import uuid4
 from typing import List
 import asyncpg
 
-router = APIRouter(prefix="/api/admin-users")
+router = APIRouter()  # Mounts in main.py at: prefix="/api/users"
 
 # 🧱 GET all admin users
-@router.get("/admin/users")
+@router.get("/")
 async def get_all_users(request: Request):
     db: asyncpg.Connection = request.state.db
     rows = await db.fetch("SELECT * FROM admin_users ORDER BY name ASC")
@@ -25,7 +25,7 @@ async def get_all_users(request: Request):
     ]
 
 # 🧱 GET single user by ID
-@router.get("/admin/users/{user_id}")
+@router.get("/{user_id}")
 async def get_user(user_id: str, request: Request):
     db: asyncpg.Connection = request.state.db
     user = await db.fetchrow("SELECT * FROM admin_users WHERE id = $1", user_id)
@@ -43,7 +43,7 @@ async def get_user(user_id: str, request: Request):
     }
 
 # ➕ CREATE user
-@router.post("/admin/users")
+@router.post("/")
 async def create_user(request: Request):
     db: asyncpg.Connection = request.state.db
     data = await request.json()
@@ -63,7 +63,7 @@ async def create_user(request: Request):
     return {"message": "User created"}
 
 # ✏️ UPDATE user
-@router.put("/admin/users/{user_id}")
+@router.put("/{user_id}")
 async def update_user(user_id: str, request: Request):
     db: asyncpg.Connection = request.state.db
     data = await request.json()
@@ -88,7 +88,7 @@ async def update_user(user_id: str, request: Request):
     return {"message": "User updated"}
 
 # 🗑️ DELETE user
-@router.delete("/admin/users/{user_id}")
+@router.delete("/{user_id}")
 async def delete_user(user_id: str, request: Request):
     db: asyncpg.Connection = request.state.db
     await db.execute("DELETE FROM admin_permissions WHERE user_id = $1", user_id)
@@ -96,7 +96,7 @@ async def delete_user(user_id: str, request: Request):
     return {"message": "User deleted"}
 
 # 🧾 GET available tab names (for checkboxes)
-@router.get("/admin/tabs")
+@router.get("/tabs")
 async def get_tabs():
     return ["Market Holidays", "API Keys", "User Management"]
 
