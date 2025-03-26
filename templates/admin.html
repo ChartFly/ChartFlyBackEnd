@@ -39,16 +39,16 @@
       <button class="tab-button" id="user-management-tab">User Management</button>
     </div>
 
-    <!-- ✅ Market Holidays Section (Hidden by Default) -->
+    <!-- ✅ Market Holidays Section -->
     <div class="container" id="market-holidays-section" style="display: none;">
       <h2>Manage Market Holidays</h2>
-      <table>
+      <table class="admin-table">
         <thead>
           <tr>
-            <th>Holiday Name</th>
-            <th>Date</th>
-            <th>Market Status</th>
-            <th>Actions</th>
+            <th class="col-actions">Actions</th>
+            <th class="col-wide">Holiday Name</th>
+            <th class="col-medium">Date</th>
+            <th class="col-short">Market Status</th>
           </tr>
         </thead>
         <tbody id="holidays-table">
@@ -57,17 +57,17 @@
       </table>
     </div>
 
-    <!-- ✅ API Keys Section (Hidden by Default) -->
+    <!-- ✅ API Keys Section -->
     <div class="container" id="api-keys-section" style="display: none;">
       <h2>Manage API Keys</h2>
-      <table>
+      <table class="admin-table">
         <thead>
           <tr>
-            <th>API Name</th>
-            <th>Provider</th>
-            <th>Priority</th>
-            <th>Status</th>
-            <th>Actions</th>
+            <th class="col-actions">Actions</th>
+            <th class="col-medium">API Name</th>
+            <th class="col-medium">Provider</th>
+            <th class="col-short">Priority</th>
+            <th class="col-short">Status</th>
           </tr>
         </thead>
         <tbody id="api-keys-table">
@@ -76,17 +76,17 @@
       </table>
     </div>
 
-    <!-- ✅ User Management Section (Hidden by Default) -->
+    <!-- ✅ User Management Section -->
     <div class="container" id="user-management-section" style="display: none;">
       <h2>Manage Users</h2>
-      <table>
+      <table class="admin-table">
         <thead>
           <tr>
-            <th>Full Name</th>
-            <th>Email</th>
-            <th>Username</th>
-            <th>Access Tabs</th>
-            <th>Actions</th>
+            <th class="col-actions">Actions</th>
+            <th class="col-medium">Full Name</th>
+            <th class="col-wide">Email</th>
+            <th class="col-medium">Username</th>
+            <th class="col-wide">Access Tabs</th>
           </tr>
         </thead>
         <tbody id="user-table">

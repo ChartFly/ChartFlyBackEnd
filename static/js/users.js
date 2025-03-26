@@ -7,13 +7,11 @@ async function loadUsers() {
         const table = document.getElementById("user-table");
         table.innerHTML = "";
 
-        // ✅ Sanitize helper
         const sanitizeInput = (input) => {
             if (typeof input !== "string") return input;
             return input.replace(/</g, "&lt;").replace(/>/g, "&gt;");
         };
 
-        // ✅ Populate table
         users.forEach(user => {
             console.log("🔍 User record:", user);
 
@@ -26,14 +24,16 @@ async function loadUsers() {
 
             const row = `
                 <tr>
-                    <td>${fullName}</td>
-                    <td>${email}</td>
-                    <td>${username}</td>
-                    <td>${accessTabs}</td>
-                    <td>
-                        <button onclick="editUser('${user.id}')">Edit</button>
-                        <button onclick="deleteUser('${user.id}')">Delete</button>
+                    <td class="col-actions">
+                        <div class="action-buttons">
+                            <button onclick="editUser('${user.id}')">Edit</button>
+                            <button onclick="deleteUser('${user.id}')">Delete</button>
+                        </div>
                     </td>
+                    <td class="col-medium">${fullName}</td>
+                    <td class="col-wide">${email}</td>
+                    <td class="col-medium">${username}</td>
+                    <td class="col-wide">${accessTabs}</td>
                 </tr>
             `;
             table.innerHTML += row;

@@ -7,10 +7,10 @@ async function loadMarketHolidays() {
         const table = document.getElementById("holidays-table");
         table.innerHTML = "";
 
-        // Helper function to sanitize data for XSS prevention
-        const sanitizeInput = (input) => {
-            return input.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-        };
+        const sanitizeInput = (input) =>
+            typeof input === "string"
+                ? input.replace(/</g, "&lt;").replace(/>/g, "&gt;")
+                : input;
 
         holidays.forEach(holiday => {
             const name = sanitizeInput(holiday.name || "N/A");
@@ -19,13 +19,15 @@ async function loadMarketHolidays() {
 
             const row = `
                 <tr>
-                    <td>${name}</td>
-                    <td>${date}</td>
-                    <td>${status}</td>
-                    <td>
-                        <button onclick="editHoliday('${holiday.id}')">Edit</button>
-                        <button onclick="deleteHoliday('${holiday.id}')">Delete</button>
+                    <td class="col-actions">
+                        <div class="action-buttons">
+                            <button onclick="editHoliday('${holiday.id}')">Edit</button>
+                            <button onclick="deleteHoliday('${holiday.id}')">Delete</button>
+                        </div>
                     </td>
+                    <td class="col-wide">${name}</td>
+                    <td class="col-medium">${date}</td>
+                    <td class="col-short">${status}</td>
                 </tr>
             `;
             table.innerHTML += row;
@@ -37,13 +39,11 @@ async function loadMarketHolidays() {
     }
 }
 
-// Example function placeholders for Edit and Delete
+// 🔧 Placeholder action functions
 function editHoliday(id) {
     console.log(`Edit holiday with ID: ${id}`);
-    // Implement the edit functionality here, including authorization
 }
 
 function deleteHoliday(id) {
     console.log(`Delete holiday with ID: ${id}`);
-    // Implement the delete functionality here, ensuring authorization checks
 }
