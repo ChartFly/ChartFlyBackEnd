@@ -11,6 +11,16 @@
         <h1>ChartFly Trading Tools</h1>
         <h2>🚀 Login</h2>
 
+        {% if error %}
+        <div class="auth-error">
+            <p>❌ {{ error }}</p>
+            <p class="redirect-options">
+                <a href="/auth/forgot-password" class="forgot-link">Reset your password</a> or
+                <a href="/auth/login" class="forgot-link">Try again</a>
+            </p>
+        </div>
+        {% endif %}
+
         <form method="post" action="/auth/login">
             <div class="input-group">
                 <input type="text" name="username" placeholder="Username" required>

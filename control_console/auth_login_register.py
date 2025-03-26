@@ -111,7 +111,10 @@ async def register(
     enable_2fa: str = Form(None)
 ):
     if password != confirm_password:
-        return templates.TemplateResponse("register.html", {"request": request, "error": "Passwords do not match."})
+        return templates.TemplateResponse("register.html", {
+            "request": request,
+            "error": "Passwords do not match."
+        })
 
     if (
         len(password) < 6 or
@@ -125,14 +128,29 @@ async def register(
         })
 
     if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
-        return templates.TemplateResponse("register.html", {"request": request, "error": "Invalid email address."})
+        return templates.TemplateResponse("register.html", {
+            "request": request,
+            "error": "Invalid email address."
+        })
 
     db = request.state.db
-    existing_user = await db.fetchrow("SELECT id FROM admin_users WHERE username = $1", username.strip())
 
+    # 🔐 Check if user table already has entries
+    existing_user = await db.fetchrow("SELECT * FROM admin_users LIMIT 1")
     if existing_user:
-        return templates.TemplateResponse("register.html", {"request": request, "error": "Username already exists."})
+        # Check if submitted username and password match the existing user
+        if username.strip() == existing_user["username"] and bcrypt.verify(password, existing_user["password_hash"]):
+            return templates.TemplateResponse("register.html", {
+                "request": request,
+                "info": "You are already registered. Click below to log in."
+            })
+        else:
+            return templates.TemplateResponse("register.html", {
+                "request": request,
+                "error": "No such user or password. This application has already been registered. Access Denied."
+            })
 
+    # ✅ No users exist yet — proceed with registration
     hashed_pw = bcrypt.hash(password)
 
     await db.execute("""
@@ -145,6 +163,7 @@ async def register(
     )
 
     return RedirectResponse(url="/auth/login", status_code=HTTP_302_FOUND)
+
 
 # ✅ Logout
 @router.get("/logout")

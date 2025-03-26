@@ -37,6 +37,23 @@
     <h1>ChartFly</h1>
     <h2>🚀 First-Time Setup</h2>
 
+    {% if error %}
+    <div class="auth-error">
+        <p>❌ {{ error }}</p>
+        <p class="redirect-options">
+            <a href="/auth/login">Go to Login</a> |
+            <a href="/auth/forgot-password">Reset Password</a>
+        </p>
+    </div>
+    {% elif info %}
+    <div class="auth-success">
+        <p>✅ {{ info }}</p>
+        <p class="redirect-options">
+            <a href="/auth/login">Click here to log in</a>
+        </p>
+    </div>
+    {% endif %}
+
     <form method="post" action="/auth/register" onsubmit="return validateForm(event)">
         <input type="text" name="first_name" placeholder="First Name" required><br>
         <input type="text" name="last_name" placeholder="Last Name" required><br>

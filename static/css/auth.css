@@ -132,3 +132,45 @@ button:active {
     font-size: 0.75em;
     color: #888;
 }
+
+.auth-error {
+    background-color: #ffe5e5;
+    color: #a80000;
+    padding: 10px 15px;
+    margin-bottom: 20px;
+    border: 1px solid #ffcccc;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+.auth-error .redirect-options {
+    font-weight: normal;
+    font-size: 0.95em;
+    margin-top: 5px;
+}
+
+.auth-error {
+    background-color: #ffe5e5;
+    color: #a80000;
+    padding: 10px 15px;
+    margin-bottom: 20px;
+    border: 1px solid #ffcccc;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+.auth-success {
+    background-color: #e6ffe6;
+    color: #006600;
+    padding: 10px 15px;
+    margin-bottom: 20px;
+    border: 1px solid #b3ffb3;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+.redirect-options {
+    font-weight: normal;
+    font-size: 0.95em;
+    margin-top: 8px;
+}
