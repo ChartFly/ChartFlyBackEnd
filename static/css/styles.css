@@ -150,3 +150,19 @@
 .tab-section {
     margin-top: 20px;
 }
+
+/* 🔧 Smart dynamic column sizing with wrapping & max width */
+table {
+  table-layout: auto;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  max-width: 40ch;           /* Limit to ~40 characters per column */
+  word-wrap: break-word;     /* Wrap long words to avoid overflow */
+  white-space: normal;       /* Allow multi-line wrapping */
+  padding: 8px;
+  border: 1px solid #ccc;
+  vertical-align: top;
+}
