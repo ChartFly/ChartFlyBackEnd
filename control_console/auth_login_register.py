@@ -38,7 +38,7 @@ async def login(request: Request, username: str = Form(...), password: str = For
     )
 
     if user and bcrypt.verify(password, user["password_hash"]):
-        request.session["user_id"] = user["id"]
+        request.session["user_id"] = str(user["id"])
         request.session["username"] = username
 
         if user["must_reset"]:
