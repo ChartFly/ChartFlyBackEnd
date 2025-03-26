@@ -144,7 +144,7 @@
     border-collapse: collapse;
     margin-top: 10px;
     font-size: 0.95rem;
-    table-layout: auto;
+    table-layout: fixed; /* 🔧 force columns to obey widths */
 }
 
 .admin-table th,
