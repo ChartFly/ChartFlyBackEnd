@@ -4,8 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ChartFly Admin Panel</title>
-
-  <!-- ✅ Global Styles -->
   <link rel="stylesheet" href="/static/css/styles.css">
 </head>
 <body>
@@ -18,18 +16,15 @@
              alt="ChartFly Logo" class="logo" width="144" height="144">
       </div>
     </div>
-
     <div class="header-center">
       <h1 class="admin-title">ChartFly Admin Panel</h1>
     </div>
-
     <div class="header-right market-status-container">
       <span class="market-status-label">Market Status:</span>
       <span id="market-status-text" class="market-status-text">Loading...</span>
     </div>
   </header>
 
-  <!-- ✅ Main Admin Content -->
   <div class="content-wrapper">
 
     <!-- ✅ Tab Navigation -->
@@ -42,13 +37,22 @@
     <!-- ✅ Market Holidays Section -->
     <div class="container" id="market-holidays-section" style="display: none;">
       <h2>Manage Market Holidays</h2>
+      <div class="action-toolbar" id="holiday-actions">
+        <button class="action-btn" id="holiday-edit-btn">Edit</button>
+        <button class="action-btn" id="holiday-copy-btn">Copy</button>
+        <button class="action-btn" id="holiday-paste-btn">Paste</button>
+        <button class="action-btn" id="holiday-add-btn">Add</button>
+        <button class="action-btn" id="holiday-delete-btn">Delete</button>
+        <button class="action-btn" id="holiday-save-btn">Save</button>
+      </div>
+      <div class="action-confirm" id="holiday-confirm"></div>
       <table class="admin-table">
         <thead>
           <tr>
-            <th class="col-actions">Actions</th>
-            <th class="col-wide">Holiday Name</th>
-            <th class="col-medium">Date</th>
-            <th class="col-short">Market Status</th>
+            <th>Select</th>
+            <th>Holiday Name</th>
+            <th>Date</th>
+            <th>Market Status</th>
           </tr>
         </thead>
         <tbody id="holidays-table">
@@ -60,18 +64,34 @@
     <!-- ✅ API Keys Section -->
     <div class="container" id="api-keys-section" style="display: none;">
       <h2>Manage API Keys</h2>
+      <div class="action-toolbar" id="api-actions">
+        <button class="action-btn" id="api-edit-btn">Edit</button>
+        <button class="action-btn" id="api-copy-btn">Copy</button>
+        <button class="action-btn" id="api-paste-btn">Paste</button>
+        <button class="action-btn" id="api-add-btn">Add</button>
+        <button class="action-btn" id="api-delete-btn">Delete</button>
+        <button class="action-btn" id="api-save-btn">Save</button>
+      </div>
+      <div class="action-confirm" id="api-confirm"></div>
       <table class="admin-table">
         <thead>
           <tr>
-            <th class="col-actions">Actions</th>
-            <th class="col-medium">API Name</th>
-            <th class="col-medium">Provider</th>
-            <th class="col-short">Priority</th>
-            <th class="col-short">Status</th>
+            <th>Select</th>
+            <th>Label</th>
+            <th>Provider</th>
+            <th>Priority</th>
+            <th>Status</th>
+            <th>Sec</th>
+            <th>Min</th>
+            <th>5 Min</th>
+            <th>10 Min</th>
+            <th>15 Min</th>
+            <th>Hour</th>
+            <th>Day</th>
           </tr>
         </thead>
         <tbody id="api-keys-table">
-          <tr><td colspan="5">Loading API keys...</td></tr>
+          <tr><td colspan="12">Loading API keys...</td></tr>
         </tbody>
       </table>
     </div>
@@ -79,14 +99,23 @@
     <!-- ✅ User Management Section -->
     <div class="container" id="user-management-section" style="display: none;">
       <h2>Manage Users</h2>
+      <div class="action-toolbar" id="user-actions">
+        <button class="action-btn" id="user-edit-btn">Edit</button>
+        <button class="action-btn" id="user-copy-btn">Copy</button>
+        <button class="action-btn" id="user-paste-btn">Paste</button>
+        <button class="action-btn" id="user-add-btn">Add</button>
+        <button class="action-btn" id="user-delete-btn">Delete</button>
+        <button class="action-btn" id="user-save-btn">Save</button>
+      </div>
+      <div class="action-confirm" id="user-confirm"></div>
       <table class="admin-table">
         <thead>
           <tr>
-            <th class="col-actions">Actions</th>
-            <th class="col-medium">Full Name</th>
-            <th class="col-wide">Email</th>
-            <th class="col-medium">Username</th>
-            <th class="col-wide">Access Tabs</th>
+            <th>Select</th>
+            <th>Full Name</th>
+            <th>Email</th>
+            <th>Username</th>
+            <th>Access Tabs</th>
           </tr>
         </thead>
         <tbody id="user-table">

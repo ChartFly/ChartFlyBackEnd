@@ -25,12 +25,12 @@ async function fetchMarketHolidays() {
     }
 }
 
-/* ✅ Fetch Halted Stocks from Backend */
+/* ✅ Fetch Halted Stocks */
 async function fetchHaltedStocks() {
     try {
         const response = await fetch("https://chartflybackend.onrender.com/api/haltdetails");
         const data = await response.json();
-        let tableBody = document.getElementById("halted-stocks");
+        const tableBody = document.getElementById("halted-stocks");
 
         if (tableBody) {
             tableBody.innerHTML = "";
@@ -54,17 +54,17 @@ async function fetchHaltedStocks() {
         }
     } catch (error) {
         console.error("Error fetching halted stocks:", error);
-        let tableBody = document.getElementById("halted-stocks");
+        const tableBody = document.getElementById("halted-stocks");
         if (tableBody) tableBody.innerHTML = "<tr><td colspan='10'>Failed to load data.</td></tr>";
     }
 }
 
-/* ✅ Market Status Update */
+/* ✅ Market Status Logic */
 function updateMarketStatus() {
     const now = new Date();
     const hours = now.getHours();
     const dayOfWeek = now.getDay();
-    let statusElement = document.getElementById("market-status-text");
+    const statusElement = document.getElementById("market-status-text");
 
     if (!statusElement) {
         console.error("Market status element missing in HTML");
@@ -89,44 +89,44 @@ function updateMarketStatus() {
     statusElement.innerText = status;
 }
 
-/* ✅ Watchlist Setup */
+/* ✅ Watchlist */
 const watchlist = [];
 const maxTickers = 10;
 
 function setupWatchlistControls() {
-    const addToWatchlistBtn = document.getElementById("addToWatchlist");
-    const clearWatchlistBtn = document.getElementById("clearWatchlist");
-    const tickerInput = document.getElementById("tickerInput");
+    const addBtn = document.getElementById("addToWatchlist");
+    const clearBtn = document.getElementById("clearWatchlist");
+    const input = document.getElementById("tickerInput");
 
-    if (addToWatchlistBtn) addToWatchlistBtn.addEventListener("click", addTicker);
-    if (clearWatchlistBtn) clearWatchlistBtn.addEventListener("click", clearWatchlist);
-    if (tickerInput) {
-        tickerInput.addEventListener("keypress", function (event) {
+    if (addBtn) addBtn.addEventListener("click", addTicker);
+    if (clearBtn) clearBtn.addEventListener("click", clearWatchlist);
+    if (input) {
+        input.addEventListener("keypress", function (event) {
             if (event.key === "Enter") addTicker();
         });
     }
 
-    document.querySelectorAll(".deleteTicker").forEach((button, index) => {
-        button.addEventListener("click", () => deleteTicker(index));
+    document.querySelectorAll(".deleteTicker").forEach((btn, i) => {
+        btn.addEventListener("click", () => deleteTicker(i));
     });
 }
 
 function addTicker() {
-    const tickerInput = document.getElementById("tickerInput");
-    if (!tickerInput) return;
+    const input = document.getElementById("tickerInput");
+    if (!input) return;
 
-    const ticker = tickerInput.value.trim().toUpperCase();
+    const ticker = input.value.trim().toUpperCase();
     if (ticker && !watchlist.includes(ticker) && watchlist.length < maxTickers) {
         watchlist.push(ticker);
         updateWatchlistDisplay();
         fetchStockData(ticker);
-        tickerInput.value = "";
+        input.value = "";
     }
 }
 
 function updateWatchlistDisplay() {
     for (let i = 0; i < maxTickers; i++) {
-        let slot = document.getElementById(`slot${i + 1}`);
+        const slot = document.getElementById(`slot${i + 1}`);
         if (slot) slot.innerText = watchlist[i] || "";
     }
 }
@@ -150,14 +150,11 @@ function deleteTicker(slot) {
 function clearWatchlist() {
     watchlist.length = 0;
     updateWatchlistDisplay();
-    const stockMetricsTable = document.querySelector("#stock-metrics tbody");
-    const newsTable = document.querySelector("#newsTable tbody");
-
-    if (stockMetricsTable) stockMetricsTable.innerHTML = "";
-    if (newsTable) newsTable.innerHTML = "";
+    document.querySelector("#stock-metrics tbody").innerHTML = "";
+    document.querySelector("#newsTable tbody").innerHTML = "";
 }
 
-/* ✅ Stock Data API */
+/* ✅ API Key Fetching */
 async function fetchStockData(ticker) {
     try {
         const apiKey = await getApiKey();
@@ -183,10 +180,7 @@ async function getApiKey() {
 
 function updateMetrics(ticker, data) {
     const tableBody = document.querySelector("#stock-metrics tbody");
-    if (!tableBody) {
-        console.error("Stock metrics table missing in HTML");
-        return;
-    }
+    if (!tableBody) return;
 
     const row = `<tr>
         <td>${sanitizeInput(ticker)}</td>
@@ -199,13 +193,14 @@ function updateMetrics(ticker, data) {
     tableBody.innerHTML += row;
 }
 
+/* ✅ Sanitize Input */
 function sanitizeInput(input) {
     return typeof input === "string"
         ? input.replace(/</g, "&lt;").replace(/>/g, "&gt;")
         : input;
 }
 
-/* ✅ Tab Logic */
+/* ✅ Tab Behavior */
 let currentlyVisibleSection = null;
 
 document.querySelectorAll(".tab-button").forEach(button => {
@@ -218,9 +213,9 @@ document.querySelectorAll(".tab-button").forEach(button => {
 
         const sectionId = sectionMap[button.id];
         const sectionEl = document.getElementById(sectionId);
-
         const isAlreadyVisible = currentlyVisibleSection === sectionId;
 
+        // Reset all tabs and hide all sections
         document.querySelectorAll(".tab-button").forEach(btn => btn.classList.remove("active"));
         Object.values(sectionMap).forEach(id => {
             const el = document.getElementById(id);
