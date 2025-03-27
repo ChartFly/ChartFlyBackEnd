@@ -234,3 +234,11 @@
     padding: 5px 10px;
   }
 }
+
+/* ============================== */
+/* ✅ Normalize checkbox sizing and centering */
+.admin-table input[type="checkbox"] {
+  margin: 0 auto;
+  display: block;
+  transform: scale(1.1);
+}
