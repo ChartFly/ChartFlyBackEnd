@@ -258,3 +258,16 @@
   font-weight: bold;
   font-size: 14px;
 }
+
+/* ✅ Hard override to prevent column expansion */
+.admin-table th.col-select,
+.admin-table td.col-select {
+  width: 60px !important;
+  min-width: 60px !important;
+  max-width: 60px !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  text-align: center !important;
+  white-space: nowrap !important;
+  font-size: 13px !important;
+}
