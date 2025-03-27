@@ -158,12 +158,12 @@
   overflow-wrap: break-word;
 }
 
-/* ============================== */
-/* ✅ Unified Column Width Classes */
-/* ============================== */
+/* ✅ Standardized Select Column Width (Matches User Management) */
 .admin-table th.col-select,
 .admin-table td.col-select {
-  width: 40px;
+  width: 50px;
+  min-width: 50px;
+  max-width: 50px;
   text-align: center;
 }
 
@@ -195,12 +195,6 @@
   white-space: nowrap;
 }
 
-/* ✅ First Column Fallback (e.g. checkboxes) */
-.admin-table th:first-child,
-.admin-table td:first-child {
-  width: 40px;
-  text-align: center;
-}
 
 /* ============================== */
 /* ✅ Action Buttons Inside Cell */
