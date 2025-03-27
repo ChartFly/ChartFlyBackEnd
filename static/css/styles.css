@@ -144,7 +144,7 @@
     border-collapse: collapse;
     margin-top: 10px;
     font-size: 0.95rem;
-    table-layout: fixed; /* 🔧 force columns to obey widths */
+    table-layout: fixed; /* 🔧 Enforce column widths */
 }
 
 .admin-table th,
@@ -153,19 +153,53 @@
     padding: 8px 12px;
     text-align: left;
     vertical-align: top;
+    white-space: normal;
     word-break: break-word;
     overflow-wrap: break-word;
-    white-space: normal;
 }
 
-/* Table Headers */
+/* ✅ Table Column Widths */
+.admin-table th.col-select,
+.admin-table td.col-select {
+    width: 60px;
+    text-align: center;
+}
+
+.admin-table th.col-short,
+.admin-table td.col-short {
+    width: 100px;
+}
+
+.admin-table th.col-medium,
+.admin-table td.col-medium {
+    width: 160px;
+}
+
+.admin-table th.col-wide,
+.admin-table td.col-wide {
+    width: 240px;
+}
+
+.admin-table th.col-key,
+.admin-table td.col-key {
+    width: 300px;
+    word-break: break-all;
+}
+
+.admin-table th.col-actions,
+.admin-table td.col-actions {
+    width: 100px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+/* ✅ Table Headers */
 .admin-table th {
     background-color: #f0f0f0;
     font-weight: bold;
-    text-align: left;
 }
 
-/* Alternating Row Backgrounds */
+/* ✅ Alternating Row Backgrounds */
 .admin-table tbody tr:nth-child(even) { background-color: #f9f9f9; }
 .admin-table tbody tr:nth-child(odd)  { background-color: #ffffff; }
 
@@ -191,12 +225,12 @@
 }
 
 /* ✅ Refined Widths for Better Fit */
-.col-select  { min-width: 30px; max-width: 80px; text-align: center; }
-.col-short   { min-width: 30px; max-width: 100px; }
-.col-medium  { min-width: 40px; max-width: 200px; width: auto; }
-.col-wide    { min-width: 80px; max-width: 280px; width: auto; }
-.col-key     { min-width: 100px; max-width: 360px; word-break: break-all; width: auto; }
-.col-actions { min-width: 40px; max-width: 120px; white-space: nowrap; text-align: center; }
+.col-select  { width: 60px; text-align: center; }
+.col-short   { width: 100px; }
+.col-medium  { width: 160px; }
+.col-wide    { width: 240px; }
+.col-key     { width: 300px; word-break: break-all; }
+.col-actions { width: 100px; white-space: nowrap; text-align: center; }
 
 /* ✅ Default Checkbox Column (Overrides if col-select not used) */
 .admin-table th:first-child,
