@@ -144,7 +144,7 @@
   border-collapse: collapse;
   margin-top: 10px;
   font-size: 0.95rem;
-  table-layout: fixed; /* Enforce strict column sizing */
+  table-layout: fixed;
 }
 
 .admin-table th,
@@ -158,43 +158,55 @@
   overflow-wrap: break-word;
 }
 
-/* ✅ Standardized Select Column Width (Matches User Management) */
+/* ============================== */
+/* ✅ Standardized Column Widths */
+/* ============================== */
 .admin-table th.col-select,
 .admin-table td.col-select {
-  width: 50px;
-  min-width: 50px;
-  max-width: 50px;
+  width: 60px;
+  min-width: 60px;
+  max-width: 60px;
   text-align: center;
+  white-space: nowrap;
 }
 
 .admin-table th.col-short,
 .admin-table td.col-short {
-  width: 80px;
+  width: 100px;
+  min-width: 100px;
+  max-width: 100px;
 }
 
 .admin-table th.col-medium,
 .admin-table td.col-medium {
-  width: 120px;
+  width: 140px;
+  min-width: 140px;
+  max-width: 140px;
 }
 
 .admin-table th.col-wide,
 .admin-table td.col-wide {
-  width: 200px;
+  width: 220px;
+  min-width: 220px;
+  max-width: 220px;
 }
 
 .admin-table th.col-key,
 .admin-table td.col-key {
-  width: 240px;
+  width: 260px;
+  min-width: 260px;
+  max-width: 260px;
   word-break: break-all;
 }
 
 .admin-table th.col-actions,
 .admin-table td.col-actions {
-  width: 100px;
+  width: 120px;
+  min-width: 120px;
+  max-width: 120px;
   text-align: center;
   white-space: nowrap;
 }
-
 
 /* ============================== */
 /* ✅ Action Buttons Inside Cell */
