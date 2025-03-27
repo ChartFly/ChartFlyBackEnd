@@ -9,18 +9,7 @@
   <component name="ChangeListManager">
     <list default="true" id="eb1da553-8e5b-4ae5-a8c1-d95ef0c30040" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/admin/user-management/UserManagement.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/admin/user-management/UserManagement.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/css/apikeys.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/css/marketholidays.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/css/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/css/styles.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/js/apikeys.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/js/main.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/js/marketholidays.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/js/users.js" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/admin.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/admin.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/apikeys.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/marketholidays.html" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
