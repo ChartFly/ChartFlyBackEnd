@@ -242,3 +242,19 @@
   display: block;
   transform: scale(1.1);
 }
+
+/* ✅ Enforce consistent Select column across all tables */
+.admin-table th.col-select,
+.admin-table td.col-select {
+  width: 60px !important;
+  min-width: 60px !important;
+  max-width: 60px !important;
+  padding: 0 !important;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.admin-table th.col-select {
+  font-weight: bold;
+  font-size: 14px;
+}
