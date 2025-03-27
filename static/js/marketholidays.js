@@ -18,7 +18,7 @@ async function loadMarketHolidays() {
         holidays.forEach((holiday, index) => {
             const row = `
                 <tr data-id="${holiday.id}" data-index="${index + 1}">
-                    <td><input type="checkbox" class="holiday-select-checkbox" data-id="${holiday.id}"></td>
+                    <td class="col-select"><input type="checkbox" class="holiday-select-checkbox" data-id="${holiday.id}"></td>
                     <td>${sanitizeInput(holiday.name || "N/A")}</td>
                     <td>${sanitizeInput(holiday.date || "N/A")}</td>
                     <td>${sanitizeInput(holiday.status || "Unknown")}</td>

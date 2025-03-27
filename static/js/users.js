@@ -25,7 +25,7 @@ async function loadUsers() {
 
             const row = `
                 <tr data-id="${user.id}" data-index="${index + 1}">
-                    <td><input type="checkbox" class="user-select-checkbox" data-id="${user.id}"></td>
+                    <td class="col-select"><input type="checkbox" class="user-select-checkbox" data-id="${user.id}"></td>
                     <td>${fullName}</td>
                     <td>${email}</td>
                     <td>${username}</td>

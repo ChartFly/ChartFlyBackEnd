@@ -20,8 +20,8 @@ async function loadApiKeys() {
 
         apiKeys.forEach((key, index) => {
             const row = `
-                <tr data-id="${key.id}" data-index="${index + 1}">
-                    <td><input type="checkbox" class="api-select-checkbox" data-id="${key.id}"></td>
+    <tr data-id="${key.id}" data-index="${index + 1}">
+        <td class="col-select"><input type="checkbox" class="api-select-checkbox" data-id="${key.id}"></td>
                     <td>${sanitizeInput(key.key_label)}</td>
                     <td>${sanitizeInput(key.provider)}</td>
                     <td>${sanitizeInput(key.priority_order)}</td>
