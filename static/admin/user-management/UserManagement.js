@@ -1,8 +1,8 @@
-// static/admin/user-management/UserManagement.js
+// static/admin/user-management/UserManagement.js (Merged)
 
-// 🌐 API Endpoints (customize as needed)
+// 🌐 API Endpoints
 const USERS_API = '/admin/users';
-const PERMISSIONS_API = '/admin/tabs'; // e.g., returns ["Market Holidays", "API Keys", "User Management"]
+const PERMISSIONS_API = '/admin/tabs';
 
 // 🛠️ DOM Elements
 const userTableBody = document.querySelector('#userTable tbody');
@@ -13,59 +13,66 @@ const cancelBtn = document.getElementById('cancelBtn');
 const userForm = document.getElementById('userForm');
 const modalTitle = document.getElementById('modalTitle');
 const accessCheckboxes = document.getElementById('accessCheckboxes');
+const commitBar = document.getElementById('user-commit-bar');
+const commitBtn = document.getElementById('user-commit-btn');
+const confirmBox = document.getElementById('user-confirm');
 
 // 🔄 State
 let editMode = false;
 let editingUserId = null;
+let selectedUserRows = new Set();
+let activeUserAction = null;
 
-// 🚀 Initialize
+// 🚀 Init
 window.addEventListener('DOMContentLoaded', () => {
   loadUsers();
   loadTabAccess();
 });
 
-// 📥 Load Users into Table
+// 📥 Load Users
 async function loadUsers() {
   try {
-    const response = await fetch(USERS_API);
-    const users = await response.json();
-
+    const res = await fetch(USERS_API);
+    const users = await res.json();
     userTableBody.innerHTML = '';
 
-    users.forEach(user => {
+    users.forEach((user, index) => {
       const row = document.createElement('tr');
+      row.dataset.id = user.id;
+      row.dataset.index = index + 1;
 
       row.innerHTML = `
+        <td class="col-select">
+          <input type="checkbox" class="user-select-checkbox" data-id="${user.id}" />
+        </td>
         <td>${user.name}</td>
         <td>${user.email}</td>
         <td>${user.username}</td>
         <td>${user.phone || ''}</td>
         <td>${(user.access || []).join(', ')}</td>
-        <td>
-          <button onclick="editUser('${user.id}')">Edit</button>
-          <button onclick="deleteUser('${user.id}')">Delete</button>
-        </td>
       `;
 
       userTableBody.appendChild(row);
     });
+
+    setupUserToolbar();
   } catch (err) {
     console.error('Error loading users:', err);
+    userTableBody.innerHTML = `<tr><td colspan="6">Unable to load users.</td></tr>`;
   }
 }
 
-// 📦 Load Access Tab Options
+// 📦 Load Tab Access
 async function loadTabAccess() {
   try {
-    const response = await fetch(PERMISSIONS_API);
-    const tabs = await response.json();
-
+    const res = await fetch(PERMISSIONS_API);
+    const tabs = await res.json();
     accessCheckboxes.innerHTML = '';
+
     tabs.forEach(tab => {
       const label = document.createElement('label');
       label.innerHTML = `
-        <input type="checkbox" value="${tab}" name="access" />
-        ${tab}
+        <input type="checkbox" value="${tab}" name="access" /> ${tab}
       `;
       accessCheckboxes.appendChild(label);
     });
@@ -74,91 +81,77 @@ async function loadTabAccess() {
   }
 }
 
-// ➕ Add New User
-addUserBtn.addEventListener('click', () => {
-  openModal('create');
-});
+// ✅ Row Selection Handling
+function setupUserToolbar() {
+  document.querySelectorAll('.user-select-checkbox').forEach(box => {
+    box.addEventListener('change', () => {
+      const row = box.closest('tr');
+      const id = box.dataset.id;
 
-// ❌ Cancel or Close Modal
-cancelBtn.addEventListener('click', closeModal);
-closeModalBtn.addEventListener('click', closeModal);
+      if (box.checked) {
+        selectedUserRows.add(id);
+        row.classList.add('selected-row');
+      } else {
+        selectedUserRows.delete(id);
+        row.classList.remove('selected-row');
+      }
 
-function closeModal() {
-  modal.classList.add('hidden');
-  userForm.reset();
-  editingUserId = null;
-  editMode = false;
-  modalTitle.textContent = 'Create New User';
-}
+      updateUserCommitBar();
+    });
+  });
 
-// ✏️ Edit User
-function editUser(userId) {
-  fetch(`${USERS_API}/${userId}`)
-    .then(res => res.json())
-    .then(user => {
-      editingUserId = userId;
-      editMode = true;
-      modalTitle.textContent = 'Edit User';
+  const actions = ['edit', 'copy', 'paste', 'add', 'delete', 'save'];
+  actions.forEach(action => {
+    const btn = document.getElementById(`user-${action}-btn`);
+    if (!btn) return;
 
-      // Populate form
-      userForm.name.value = user.name;
-      userForm.email.value = user.email;
-      userForm.phone.value = user.phone || '';
-      userForm.address.value = user.address || '';
-      userForm.username.value = user.username;
+    btn.addEventListener('click', () => {
+      activeUserAction = action;
 
-      // Clear password fields for editing
-      userForm.password.value = '';
-      userForm.confirmPassword.value = '';
-
-      // Set access checkboxes
-      document.querySelectorAll('#accessCheckboxes input').forEach(input => {
-        input.checked = user.access.includes(input.value);
+      actions.forEach(a => {
+        const other = document.getElementById(`user-${a}-btn`);
+        if (other) other.classList.remove('active');
       });
 
-      modal.classList.remove('hidden');
-    })
-    .catch(err => console.error('Failed to load user for editing:', err));
+      btn.classList.add('active');
+      updateUserCommitBar();
+    });
+  });
 }
 
-// 🗑️ Delete User
-function deleteUser(userId) {
-  if (!confirm('Are you sure you want to delete this user?')) return;
+// 🔁 Update Commit Bar
+function updateUserCommitBar() {
+  const indexes = Array.from(document.querySelectorAll('tr.selected-row')).map(row => row.dataset.index);
 
-  fetch(`${USERS_API}/${userId}`, {
-    method: 'DELETE'
-  })
-    .then(() => loadUsers())
-    .catch(err => console.error('Failed to delete user:', err));
+  if (activeUserAction && indexes.length > 0) {
+    commitBar.style.display = 'flex';
+    commitBtn.textContent = `Commit ${activeUserAction.toUpperCase()} for Rows: ${indexes.join(', ')}`;
+    commitBtn.classList.add('turquoise');
+  } else {
+    commitBar.style.display = 'none';
+    commitBtn.classList.remove('turquoise');
+    commitBtn.textContent = 'Commit';
+  }
 }
 
-// 💾 Save/Create User
-userForm.addEventListener('submit', event => {
-  event.preventDefault();
+// ✅ Commit Button Action
+commitBtn.addEventListener('click', () => {
+  if (!activeUserAction || selectedUserRows.size === 0) return;
 
-  const data = {
-    name: userForm.name.value.trim(),
-    email: userForm.email.value.trim(),
-    phone: userForm.phone.value.trim(),
-    address: userForm.address.value.trim(),
-    username: userForm.username.value.trim(),
-    password: userForm.password.value.trim(),
-    confirmPassword: userForm.confirmPassword.value.trim(),
-    access: Array.from(document.querySelectorAll('#accessCheckboxes input:checked')).map(cb => cb.value)
-  };
+  if (!confirm(`Are you sure you want to ${activeUserAction.toUpperCase()} selected rows?`)) return;
 
-  const method = editMode ? 'PUT' : 'POST';
-  const url = editMode ? `${USERS_API}/${editingUserId}` : USERS_API;
+  console.log(`✅ Confirmed [${activeUserAction}] for:`, Array.from(selectedUserRows));
+  confirmBox.innerHTML = `<div class="confirm-box success">✅ ${capitalize(activeUserAction)} Confirmed!</div>`;
 
-  fetch(url, {
-    method,
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data)
-  })
-    .then(res => {
-      if (!res.ok) throw new Error('Failed to save user');
-      closeModal();
-      loadUsers();
-    })
-    .catch(err => console.error('Error saving user:', err));
+  // Reset all
+  activeUserAction = null;
+  selectedUserRows.clear();
+  document.querySelectorAll('.user-select-checkbox').forEach(box => (box.checked = false));
+  document.querySelectorAll('tr.selected-row').forEach(row => row.classList.remove('selected-row'));
+  document.querySelectorAll('.action-btn').forEach(btn => btn.classList.remove('active'));
+  updateUserCommitBar();
 });
+
+function capitalize(word) {
+  return word.charAt(0).toUpperCase() + word.slice(1);
+}

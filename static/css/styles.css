@@ -1,5 +1,5 @@
 /* ============================== */
-/* ✅ GLOBAL + ADMIN STYLES (Cleaned + Unified) */
+/* ✅ GLOBAL BACKEND STYLES (Header + Tabs Only) */
 /* ============================== */
 
 /* ✅ Header Layout */
@@ -58,7 +58,7 @@
 .market-prepost { background-color: gold; color: black; }
 
 /* ============================== */
-/* ✅ Tabs + Toolbar */
+/* ✅ Tabs + Action Toolbar */
 /* ============================== */
 .tabs { margin-top: 20px; }
 
@@ -89,98 +89,18 @@
 }
 
 /* ============================== */
-/* ✅ Confirm Message */
-/* ============================== */
-.action-confirm {
-  font-size: 14px;
-  font-weight: bold;
-  margin-bottom: 10px;
-  padding: 8px 12px;
-  background-color: #dff0ff;
-  border-left: 4px solid #007a8a;
-  display: none;
-}
-
-.action-confirm.success {
-  background-color: #d4edda;
-  border-left-color: #28a745;
-  color: #155724;
-}
-
-/* ============================== */
-/* ✅ Admin Tables (Unified) */
-/* ============================== */
-.admin-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 10px;
-  font-size: 0.95rem;
-  table-layout: fixed;
-  overflow: auto;
-  display: block;
-  max-height: 500px;
-}
-
-.admin-table thead th {
-  position: sticky;
-  top: 0;
-  background: #f0f0f0;
-  font-weight: bold;
-  z-index: 2;
-}
-
-.admin-table th,
-.admin-table td {
-  border: 1px solid #ccc;
+/* ✅ Compact Toggle Button */
+.compact-toggle {
+  margin-bottom: 12px;
   padding: 6px 10px;
-  text-align: left;
-  vertical-align: top;
-  min-width: 6ch;
-  max-width: 48ch;
-  white-space: normal;
-  word-break: break-word;
-  overflow-wrap: break-word;
+  background-color: #ccc;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
 }
 
-.admin-table th.col-select,
-.admin-table td.col-select {
-  width: 60px;
-  min-width: 60px;
-  max-width: 60px;
-  text-align: center;
-  white-space: nowrap;
-}
-
-/* ✅ Zebra Striping */
-.admin-table tbody tr:nth-child(even) { background-color: #f9f9f9; }
-.admin-table tbody tr:nth-child(odd)  { background-color: #ffffff; }
-
-/* ✅ Row Selection Highlight */
-.admin-table tr.selected-row {
-  background-color: #d0f0ff !important;
-}
-
-/* ✅ Compact Mode (Optional Toggle Class) */
-.admin-table.compact th,
-.admin-table.compact td {
-  padding: 4px 6px;
-  font-size: 0.85rem;
-}
-
-/* ============================== */
-/* ✅ Action Buttons in Cell */
-/* ============================== */
-.action-buttons {
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-/* ============================== */
-/* ✅ Responsive */
-@media (max-width: 768px) {
-  .admin-table { font-size: 0.85rem; }
-  .tab-button { font-size: 13px; }
-  .action-btn { font-size: 12px; padding: 5px 10px; }
+.compact-toggle.active {
+  background-color: #007a8a;
+  color: white;
 }

@@ -1,0 +1,121 @@
+/* static/admin/market-holidays/MarketHolidays.css */
+
+/* 📦 Section Container */
+#market-holidays-section {
+  margin-top: 2rem;
+}
+
+/* 🔧 Toolbar */
+#holiday-actions {
+  margin-bottom: 1rem;
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+/* ✅ Commit Bar */
+#holiday-confirm {
+  margin-bottom: 1rem;
+}
+
+/* 📋 Table Wrapper */
+.table-wrapper {
+  overflow-x: auto;
+  overflow-y: auto;
+  max-height: 500px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+/* 📊 Market Holidays Table */
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-size: 0.95rem;
+  overflow: auto;
+}
+
+.admin-table th,
+.admin-table td {
+  border: 1px solid #ccc;
+  padding: 6px 10px;
+  text-align: left;
+  vertical-align: top;
+  min-width: 6ch;
+  max-width: 48ch;
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.admin-table th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.admin-table th.col-select,
+.admin-table td.col-select {
+  width: 60px;
+  min-width: 60px;
+  max-width: 60px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* 🦓 Zebra Striping */
+.admin-table tbody tr:nth-child(even) { background-color: #f9f9f9; }
+.admin-table tbody tr:nth-child(odd)  { background-color: #ffffff; }
+
+/* ✨ Selected Row Highlight */
+.admin-table tr.selected-row {
+  background-color: #d0f0ff !important;
+}
+
+/* 📏 Compact Mode */
+body.compact-mode .admin-table th,
+body.compact-mode .admin-table td {
+  padding: 4px 6px;
+  font-size: 0.85rem;
+}
+
+/* 📱 Responsive Table Text */
+@media (max-width: 768px) {
+  .admin-table th,
+  .admin-table td {
+    font-size: 0.85rem;
+  }
+}
+
+/* ✅ Confirm Box Styles */
+.confirm-box {
+  padding: 8px;
+  border-radius: 4px;
+  font-weight: bold;
+}
+.confirm-box.info {
+  background-color: #e7f3ff;
+  color: #0077cc;
+}
+.confirm-box.warn {
+  background-color: #fff4e5;
+  color: #cc7700;
+}
+.confirm-box.success {
+  background-color: #e6f9ed;
+  color: #00aa55;
+}
+
+/* ✅ Confirm Button */
+.confirm-btn.turquoise {
+  background-color: #1abc9c;
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  margin-top: 5px;
+  cursor: pointer;
+  border-radius: 4px;
+}

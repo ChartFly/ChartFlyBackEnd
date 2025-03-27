@@ -1,0 +1,35 @@
+<!-- static/admin/market-holidays/MarketHolidays.html -->
+
+<section id="market-holidays-section" class="admin-tab-section" style="display: none;">
+  <h2>Manage Market Holidays</h2>
+
+  <!-- 🔧 Action Toolbar -->
+  <div class="action-toolbar">
+    <button class="action-btn" id="holiday-edit-btn">Edit</button>
+    <button class="action-btn" id="holiday-copy-btn">Copy</button>
+    <button class="action-btn" id="holiday-paste-btn">Paste</button>
+    <button class="action-btn" id="holiday-add-btn">Add</button>
+    <button class="action-btn" id="holiday-delete-btn">Delete</button>
+    <button class="action-btn" id="holiday-save-btn">Save</button>
+  </div>
+
+  <!-- ✅ Commit Bar -->
+  <div class="commit-bar" id="holiday-confirm"></div>
+
+  <!-- 📋 Market Holidays Table -->
+  <div class="table-wrapper">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th class="col-select">Select</th>
+          <th>Holiday Name</th>
+          <th>Date</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="holidays-table">
+        <tr><td colspan="4">Loading holidays...</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
