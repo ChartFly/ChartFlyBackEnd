@@ -137,130 +137,94 @@
 }
 
 /* ============================== */
-/* ✅ Admin Tables */
+/* ✅ Admin Tables: Core Layout */
 /* ============================== */
 .admin-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-    font-size: 0.95rem;
-    table-layout: fixed; /* 🔧 Enforce column widths */
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  font-size: 0.95rem;
+  table-layout: fixed; /* Enforce strict column sizing */
 }
 
 .admin-table th,
 .admin-table td {
-    border: 1px solid #ccc;
-    padding: 8px 12px;
-    text-align: left;
-    vertical-align: top;
-    white-space: normal;
-    word-break: break-word;
-    overflow-wrap: break-word;
+  border: 1px solid #ccc;
+  padding: 8px 12px;
+  text-align: left;
+  vertical-align: top;
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
-/* ✅ Table Column Widths */
+/* ============================== */
+/* ✅ Unified Column Width Classes */
+/* ============================== */
 .admin-table th.col-select,
 .admin-table td.col-select {
-    width: 60px;
-    text-align: center;
+  width: 40px;
+  text-align: center;
 }
 
 .admin-table th.col-short,
 .admin-table td.col-short {
-    width: 100px;
+  width: 80px;
 }
 
 .admin-table th.col-medium,
 .admin-table td.col-medium {
-    width: 160px;
+  width: 120px;
 }
 
 .admin-table th.col-wide,
 .admin-table td.col-wide {
-    width: 240px;
+  width: 200px;
 }
 
 .admin-table th.col-key,
 .admin-table td.col-key {
-    width: 300px;
-    word-break: break-all;
+  width: 240px;
+  word-break: break-all;
 }
 
 .admin-table th.col-actions,
 .admin-table td.col-actions {
-    width: 100px;
-    text-align: center;
-    white-space: nowrap;
+  width: 100px;
+  text-align: center;
+  white-space: nowrap;
 }
 
-/* ✅ Table Headers */
-.admin-table th {
-    background-color: #f0f0f0;
-    font-weight: bold;
-}
-
-/* ✅ Alternating Row Backgrounds */
-.admin-table tbody tr:nth-child(even) { background-color: #f9f9f9; }
-.admin-table tbody tr:nth-child(odd)  { background-color: #ffffff; }
-
-.admin-table tbody tr:hover {
-    background-color: #eaf6ff;
-}
-
-/* ============================== */
-/* ✅ Table Column Widths */
-/* ============================== */
-.col-select,
-.col-short,
-.col-medium,
-.col-wide,
-.col-key,
-.col-actions {
-  display: table-cell;
-  max-width: 100%;
-  white-space: normal;
-  word-break: break-word;
-  overflow-wrap: break-word;
-  width: auto; /* Allow natural shrinking */
-}
-
-/* ✅ Refined Widths for Better Fit */
-.col-select  { width: 30px; text-align: center; }
-.col-short   { width: 30px; }
-.col-medium  { width: 100px; }
-.col-wide    { width: 240px; }
-.col-key     { width: 300px; word-break: break-all; }
-.col-actions { width: 100px; white-space: nowrap; text-align: center; }
-
-/* ✅ Default Checkbox Column (Overrides if col-select not used) */
+/* ✅ First Column Fallback (e.g. checkboxes) */
 .admin-table th:first-child,
 .admin-table td:first-child {
-    width: 60px;
-    text-align: center;
+  width: 40px;
+  text-align: center;
 }
 
 /* ============================== */
-/* ✅ Action Buttons Inside Cell (Legacy fallback if needed) */
+/* ✅ Action Buttons Inside Cell */
+/* ============================== */
 .action-buttons {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-    justify-content: center;
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 /* ============================== */
 /* ✅ Responsive Wrapping */
 @media (max-width: 768px) {
-    .admin-table {
-        font-size: 0.85rem;
-    }
+  .admin-table {
+    font-size: 0.85rem;
+  }
 
-    .tab-button {
-        font-size: 13px;
-    }
+  .tab-button {
+    font-size: 13px;
+  }
 
-    .action-btn {
-        font-size: 12px;
-        padding: 5px 10px;
-    }
+  .action-btn {
+    font-size: 12px;
+    padding: 5px 10px;
+  }
 }
