@@ -1,143 +1,114 @@
 /* ============================== */
-/* ✅ GLOBAL + ADMIN STYLES (Merged styles.css) */
+/* ✅ GLOBAL + ADMIN STYLES (Cleaned + Unified) */
 /* ============================== */
 
-/* ✅ Turquoise Header Layout (Flex-Based) */
+/* ✅ Header Layout */
 .header {
-    width: 100%;
-    background: #007a8a;
-    padding: 20px 50px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: white;
-    font-family: Arial, sans-serif;
-    min-height: 160px;
-    box-sizing: border-box;
+  width: 100%;
+  background: #007a8a;
+  padding: 20px 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+  font-family: Arial, sans-serif;
+  min-height: 160px;
+  box-sizing: border-box;
 }
 
-/* ✅ Header Subsections */
 .header-left,
 .header-center,
 .header-right {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
-/* ✅ ChartFly Logo */
-.logo-container {
-    margin-right: 20px;
-}
-
+.logo-container { margin-right: 20px; }
 .logo {
-    height: 144px !important;
-    width: auto;
-    object-fit: contain;
+  height: 144px !important;
+  width: auto;
+  object-fit: contain;
 }
 
-/* ✅ Centered Admin Panel Title */
 .admin-title {
-    font-size: 36px;
-    margin: 0;
-    white-space: nowrap;
+  font-size: 36px;
+  margin: 0;
+  white-space: nowrap;
 }
 
-/* ✅ Market Status Container */
 .market-status-container {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.market-status-label {
-    font-size: 14px;
-    font-weight: bold;
+.market-status-label,
+.market-status-text {
+  font-size: 14px;
+  font-weight: bold;
 }
 
 .market-status-text {
-    font-size: 14px;
-    font-weight: bold;
-    padding: 5px 10px;
-    border-radius: 5px;
+  padding: 5px 10px;
+  border-radius: 5px;
 }
 
-/* ✅ Market Status Colors */
 .market-open { background-color: green; }
 .market-closed { background-color: red; }
 .market-prepost { background-color: gold; color: black; }
 
 /* ============================== */
-/* ✅ Tab Navigation */
+/* ✅ Tabs + Toolbar */
 /* ============================== */
-.tabs {
-    margin-top: 20px;
-}
+.tabs { margin-top: 20px; }
 
-.tab-button {
-    padding: 8px 14px;
-    border: none;
-    background-color: #e0e0e0;
-    color: #333;
-    cursor: pointer;
-    margin-right: 6px;
-    border-radius: 5px;
-    font-weight: bold;
-}
-
-.tab-button.active {
-    background-color: #007a8a;
-    color: #000;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-}
-
-/* ============================== */
-/* ✅ Action Toolbar */
-/* ============================== */
-.action-toolbar {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin: 15px 0;
-}
-
+.tab-button,
 .action-btn {
-    padding: 6px 14px;
-    font-size: 14px;
-    font-weight: bold;
-    border: none;
-    border-radius: 5px;
-    background-color: #e0e0e0;
-    color: #333;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
+  padding: 8px 14px;
+  border: none;
+  background-color: #e0e0e0;
+  color: #333;
+  cursor: pointer;
+  margin-right: 6px;
+  border-radius: 5px;
+  font-weight: bold;
+  transition: background-color 0.2s ease;
 }
 
+.tab-button.active,
 .action-btn.active {
-    background-color: #007a8a;
-    color: white;
+  background-color: #007a8a;
+  color: white;
+}
+
+.action-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 15px 0;
 }
 
 /* ============================== */
-/* ✅ Confirm Action Message */
+/* ✅ Confirm Message */
 /* ============================== */
 .action-confirm {
-    font-size: 14px;
-    font-weight: bold;
-    margin-bottom: 10px;
-    padding: 8px 12px;
-    background-color: #dff0ff;
-    border-left: 4px solid #007a8a;
-    display: none;
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  padding: 8px 12px;
+  background-color: #dff0ff;
+  border-left: 4px solid #007a8a;
+  display: none;
 }
 
 .action-confirm.success {
-    background-color: #d4edda;
-    border-left-color: #28a745;
-    color: #155724;
+  background-color: #d4edda;
+  border-left-color: #28a745;
+  color: #155724;
 }
 
 /* ============================== */
-/* ✅ Admin Tables: Core Layout */
+/* ✅ Admin Tables (Unified) */
 /* ============================== */
 .admin-table {
   width: 100%;
@@ -145,22 +116,32 @@
   margin-top: 10px;
   font-size: 0.95rem;
   table-layout: fixed;
+  overflow: auto;
+  display: block;
+  max-height: 500px;
+}
+
+.admin-table thead th {
+  position: sticky;
+  top: 0;
+  background: #f0f0f0;
+  font-weight: bold;
+  z-index: 2;
 }
 
 .admin-table th,
 .admin-table td {
   border: 1px solid #ccc;
-  padding: 8px 12px;
+  padding: 6px 10px;
   text-align: left;
   vertical-align: top;
+  min-width: 6ch;
+  max-width: 48ch;
   white-space: normal;
   word-break: break-word;
   overflow-wrap: break-word;
 }
 
-/* ============================== */
-/* ✅ Standardized Column Widths */
-/* ============================== */
 .admin-table th.col-select,
 .admin-table td.col-select {
   width: 60px;
@@ -170,46 +151,24 @@
   white-space: nowrap;
 }
 
-.admin-table th.col-short,
-.admin-table td.col-short {
-  width: 100px;
-  min-width: 100px;
-  max-width: 100px;
+/* ✅ Zebra Striping */
+.admin-table tbody tr:nth-child(even) { background-color: #f9f9f9; }
+.admin-table tbody tr:nth-child(odd)  { background-color: #ffffff; }
+
+/* ✅ Row Selection Highlight */
+.admin-table tr.selected-row {
+  background-color: #d0f0ff !important;
 }
 
-.admin-table th.col-medium,
-.admin-table td.col-medium {
-  width: 140px;
-  min-width: 140px;
-  max-width: 140px;
-}
-
-.admin-table th.col-wide,
-.admin-table td.col-wide {
-  width: 220px;
-  min-width: 220px;
-  max-width: 220px;
-}
-
-.admin-table th.col-key,
-.admin-table td.col-key {
-  width: 260px;
-  min-width: 260px;
-  max-width: 260px;
-  word-break: break-all;
-}
-
-.admin-table th.col-actions,
-.admin-table td.col-actions {
-  width: 120px;
-  min-width: 120px;
-  max-width: 120px;
-  text-align: center;
-  white-space: nowrap;
+/* ✅ Compact Mode (Optional Toggle Class) */
+.admin-table.compact th,
+.admin-table.compact td {
+  padding: 4px 6px;
+  font-size: 0.85rem;
 }
 
 /* ============================== */
-/* ✅ Action Buttons Inside Cell */
+/* ✅ Action Buttons in Cell */
 /* ============================== */
 .action-buttons {
   display: flex;
@@ -219,55 +178,9 @@
 }
 
 /* ============================== */
-/* ✅ Responsive Wrapping */
+/* ✅ Responsive */
 @media (max-width: 768px) {
-  .admin-table {
-    font-size: 0.85rem;
-  }
-
-  .tab-button {
-    font-size: 13px;
-  }
-
-  .action-btn {
-    font-size: 12px;
-    padding: 5px 10px;
-  }
-}
-
-/* ============================== */
-/* ✅ Normalize checkbox sizing and centering */
-.admin-table input[type="checkbox"] {
-  margin: 0 auto;
-  display: block;
-  transform: scale(1.1);
-}
-
-/* ✅ Enforce consistent Select column across all tables */
-.admin-table th.col-select,
-.admin-table td.col-select {
-  width: 60px !important;
-  min-width: 60px !important;
-  max-width: 60px !important;
-  padding: 0 !important;
-  text-align: center;
-  white-space: nowrap;
-}
-
-.admin-table th.col-select {
-  font-weight: bold;
-  font-size: 14px;
-}
-
-/* ✅ Hard override to prevent column expansion */
-.admin-table th.col-select,
-.admin-table td.col-select {
-  width: 60px !important;
-  min-width: 60px !important;
-  max-width: 60px !important;
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-  text-align: center !important;
-  white-space: nowrap !important;
-  font-size: 13px !important;
+  .admin-table { font-size: 0.85rem; }
+  .tab-button { font-size: 13px; }
+  .action-btn { font-size: 12px; padding: 5px 10px; }
 }
