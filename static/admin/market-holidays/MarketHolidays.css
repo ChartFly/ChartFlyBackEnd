@@ -44,6 +44,19 @@
 }
 
 /* -------------------------------------------------------------
+  📐 SECTION: Column Resizing Rules
+  - Applies to all columns EXCEPT .col-select for flexible layout
+------------------------------------------------------------- */
+#market-holidays-section .admin-table th:not(.col-select),
+#market-holidays-section .admin-table td:not(.col-select) {
+  min-width: 8ch;
+  max-width: 44ch;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* -------------------------------------------------------------
   🔠 SECTION: Table Headers <th>
   - Sticky header, non-wrapping, ChartFly Blue background
 ------------------------------------------------------------- */
@@ -53,8 +66,8 @@
   text-align: left;
   vertical-align: top;
   white-space: nowrap;
-  min-width: 6ch;              /* ✅ Fallback min size */
-  max-width: 44ch;             /* ✅ Wrap after 44ch */
+  min-width: 6ch;
+  max-width: 44ch;
   background-color: #007a8a;
   color: white;
   font-weight: bold;
@@ -107,7 +120,7 @@
 }
 
 #market-holidays-section .admin-table td.col-select {
-  background-color: #007a8a; /* ChartFly Turquoise */
+  background-color: #007a8a;
   color: white;
 }
 
@@ -210,16 +223,4 @@ body.compact-mode #market-holidays-section .admin-table td {
 ------------------------------------------------------------- */
 #market-holidays-section .admin-table td.col-select input[type="checkbox"]:checked {
   accent-color: #00aa55;
-}
-
-/* 🚨 TEMP DEBUG: Force table and cells to behave */
-#market-holidays-section .admin-table,
-#market-holidays-section .admin-table th,
-#market-holidays-section .admin-table td {
-  table-layout: fixed !important;
-  min-width: 0 !important;
-  max-width: 44ch !important;
-  white-space: normal !important;
-  word-wrap: break-word !important;
-  overflow-wrap: break-word !important;
 }
