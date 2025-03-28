@@ -31,11 +31,27 @@
 .admin-table {
   width: 100%;
   border-collapse: collapse;
-  table-layout: auto; /* Allow columns to resize naturally */
+  table-layout: auto;
   font-size: 0.95rem;
 }
 
-.admin-table th,
+/* 🧠 Header Cells Set Column Minimums */
+.admin-table th {
+  border: 1px solid #ccc;
+  padding: 6px 10px;
+  text-align: left;
+  vertical-align: top;
+  white-space: nowrap;
+  min-width: max-content;
+  background-color: #0077cc;  /* 🔵 ChartFly Blue */
+  color: white;
+  font-weight: bold;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+/* 📋 Data Cells Wrap After 44ch */
 .admin-table td {
   border: 1px solid #ccc;
   padding: 6px 10px;
@@ -44,14 +60,13 @@
   white-space: normal;
   word-wrap: break-word;
   overflow-wrap: anywhere;
-  min-width: 8ch;
-  max-width: 40ch;
+  min-width: inherit;
+  max-width: 44ch;
 }
 
 /* ✅ Tight Select Column */
 .admin-table th.col-select,
 .admin-table td.col-select {
-  background-color: red !important;
   width: 4ch;
   min-width: 4ch;
   max-width: 6ch;
@@ -59,7 +74,16 @@
   white-space: nowrap;
 }
 
+/* 🔵 Select Column Always Blue */
+.admin-table td.col-select {
+  background-color: #0077cc;
+  color: white;
+}
 
+/* 🔷 Select Column Light Blue When Row Selected */
+.admin-table tr.selected-row td.col-select {
+  background-color: #d0f0ff;
+  color: black;
 }
 
 /* 🦓 Zebra Striping */
