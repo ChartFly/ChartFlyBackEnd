@@ -84,7 +84,7 @@ function setupHolidayToolbar() {
         <div class="confirm-box info">
           <strong>Action:</strong> ${action.toUpperCase()}<br>
           <strong>Selected Rows:</strong> ${selectedIndexes.join(", ")}<br>
-          <button class="confirm-btn turquoise" onclick="confirmHolidayAction()">Confirm ${action}</button>
+          <button class="confirm-btn yellow" onclick="confirmHolidayAction()">Confirm ${action}</button>
         </div>
       `;
     });

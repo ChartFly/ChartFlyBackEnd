@@ -75,8 +75,8 @@
   white-space: normal;
   word-wrap: break-word;
   overflow-wrap: anywhere;
-  min-width: max-content;  /* ✅ Cell shrinks to content */
-  max-width: 44ch;          /* ✅ ...but no wider than 44ch */
+  min-width: 0;             /* ✅ Shrink allowed */
+  max-width: 44ch;
 }
 
 /* -------------------------------------------------------------
@@ -155,7 +155,7 @@ body.compact-mode #market-holidays-section .admin-table td {
 
 #market-holidays-section .confirm-box.warn {
   background-color: #fff4e5;
-  color: ##fffacd ;
+  color: #cc7700;
 }
 
 #market-holidays-section .confirm-box.success {
@@ -164,13 +164,26 @@ body.compact-mode #market-holidays-section .admin-table td {
 }
 
 /* -------------------------------------------------------------
-  ✅ SECTION: Confirm Button
-  - Styling for the "Confirm [Action]" button
+  ✅ SECTION: Confirm Button – Green (Default Success)
 ------------------------------------------------------------- */
 #market-holidays-section .confirm-btn.green {
-  background-color: ##00aa55;
+  background-color: #00aa55;
   border: none;
   color: black;
+  padding: 5px 10px;
+  margin-top: 5px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+/* -------------------------------------------------------------
+  ⚠️ SECTION: Confirm Button – Yellow (Are you sure?)
+------------------------------------------------------------- */
+#market-holidays-section .confirm-btn.yellow {
+  background-color: #ffff00;
+  color: black;
+  font-weight: bold;
+  border: none;
   padding: 5px 10px;
   margin-top: 5px;
   cursor: pointer;
