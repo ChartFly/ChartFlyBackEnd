@@ -43,12 +43,12 @@
   vertical-align: top;
   white-space: nowrap;
   min-width: max-content;
-  background-color: #0077cc;  /* 🔵 ChartFly Blue */
+  background-color: #0077cc;  /* ChartFly Blue */
   color: white;
   font-weight: bold;
   position: sticky;
   top: 0;
-  z-index: 1;
+  z-index: 10;                /* ⬆️ Raised above selected rows */
 }
 
 /* 📋 Data Cells Wrap After 44ch */
