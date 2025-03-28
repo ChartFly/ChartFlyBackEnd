@@ -42,6 +42,7 @@
   table-layout: fixed;
   font-size: 0.95rem;
 }
+
 /* -------------------------------------------------------------
   🔠 SECTION: Table Headers <th>
   - Sticky header, non-wrapping, ChartFly Blue background
@@ -52,8 +53,8 @@
   text-align: left;
   vertical-align: top;
   white-space: nowrap;
-  min-width: 6ch;  /* ✅ Small but readable fallback */
-  max-width: 44ch;          /* ✅ Column wraps after 44ch */
+  min-width: 6ch;              /* ✅ Fallback min size */
+  max-width: 44ch;             /* ✅ Wrap after 44ch */
   background-color: #007a8a;
   color: white;
   font-weight: bold;
@@ -70,8 +71,8 @@
 /* 🏷️ Holiday Name Column */
 #market-holidays-section .admin-table th.col-name,
 #market-holidays-section .admin-table td.col-name {
-  min-width: max-content;   /* 👑 Min width = header text */
-  max-width: 44ch;          /* ⛔ Max width before wrapping */
+  min-width: 0;
+  max-width: 44ch;
   white-space: normal;
   overflow-wrap: anywhere;
 }
@@ -79,7 +80,7 @@
 /* 📅 Date Column */
 #market-holidays-section .admin-table th.col-date,
 #market-holidays-section .admin-table td.col-date {
-  min-width: max-content;
+  min-width: 0;
   max-width: 20ch;
   white-space: nowrap;
 }
@@ -87,7 +88,7 @@
 /* 📊 Status Column */
 #market-holidays-section .admin-table th.col-status,
 #market-holidays-section .admin-table td.col-status {
-  min-width: max-content;
+  min-width: 0;
   max-width: 20ch;
   white-space: nowrap;
 }
