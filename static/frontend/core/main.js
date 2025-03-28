@@ -1,11 +1,21 @@
 // static/frontend/core/main.js
 
+// =============================================================
+// ✅ SECTION: Page Initialization
+// - Kicks off once DOM is ready
+// - Updates market status
+// - (NO default tab shown on load)
+// =============================================================
 document.addEventListener("DOMContentLoaded", function () {
   updateMarketStatus();
-  showTab("market-holidays"); // Default tab on load
+  // Removed default tab display – tab will load when user clicks
 });
 
-/* ✅ Market Status Display */
+// =============================================================
+// 📈 SECTION: Market Status Logic
+// - Determines open/closed state based on time and day
+// - Applies appropriate class for background color
+// =============================================================
 function updateMarketStatus() {
   const now = new Date();
   const hours = now.getHours();
@@ -35,14 +45,22 @@ function updateMarketStatus() {
   statusElement.innerText = status;
 }
 
-/* ✅ Basic Sanitizer */
+// =============================================================
+// 🧼 SECTION: Simple Sanitizer
+// - Escapes angle brackets in strings to prevent HTML injection
+// =============================================================
 function sanitizeInput(input) {
   return typeof input === "string"
     ? input.replace(/</g, "&lt;").replace(/>/g, "&gt;")
     : input;
 }
 
-/* ✅ Tab Switch Logic */
+// =============================================================
+// 🗂️ SECTION: Tab Display & Loading Logic
+// - Shows the clicked tab section, hides others
+// - Applies .active class to the correct button
+// - Calls tab-specific data loading function if it exists
+// =============================================================
 function showTab(tabName) {
   const tabs = ["market-holidays", "api-keys", "user-management"];
   tabs.forEach(name => {
@@ -53,7 +71,7 @@ function showTab(tabName) {
     if (button) button.classList.toggle("active", name === tabName);
   });
 
-  // Call load function if it exists
+  // 🧠 Trigger data loader for each tab (if defined)
   if (tabName === "market-holidays" && typeof loadMarketHolidays === "function") loadMarketHolidays();
   if (tabName === "api-keys" && typeof loadApiKeys === "function") loadApiKeys();
   if (tabName === "user-management" && typeof loadUsers === "function") loadUsers();
