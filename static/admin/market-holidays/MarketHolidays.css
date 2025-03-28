@@ -211,3 +211,15 @@ body.compact-mode #market-holidays-section .admin-table td {
 #market-holidays-section .admin-table td.col-select input[type="checkbox"]:checked {
   accent-color: #00aa55;
 }
+
+/* 🚨 TEMP DEBUG: Force table and cells to behave */
+#market-holidays-section .admin-table,
+#market-holidays-section .admin-table th,
+#market-holidays-section .admin-table td {
+  table-layout: fixed !important;
+  min-width: 0 !important;
+  max-width: 44ch !important;
+  white-space: normal !important;
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
+}
