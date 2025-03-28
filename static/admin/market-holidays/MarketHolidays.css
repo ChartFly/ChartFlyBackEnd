@@ -53,7 +53,8 @@
   text-align: left;
   vertical-align: top;
   white-space: nowrap;
-  min-width: max-content;
+  min-width: max-content;  /* ✅ Header text sets the minimum */
+  max-width: 44ch;          /* ✅ Column wraps after 44ch */
   background-color: #007a8a;
   color: white;
   font-weight: bold;
@@ -61,7 +62,6 @@
   top: 0;
   z-index: 10;
 }
-
 
 /* -------------------------------------------------------------
   🧾 SECTION: Table Body Cells <td>
@@ -75,8 +75,8 @@
   white-space: normal;
   word-wrap: break-word;
   overflow-wrap: anywhere;
-  min-width: inherit;
-  max-width: 44ch;
+  min-width: max-content;  /* ✅ Cell shrinks to content */
+  max-width: 44ch;          /* ✅ ...but no wider than 44ch */
 }
 
 /* -------------------------------------------------------------
