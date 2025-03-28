@@ -1,173 +1,199 @@
-/* static/admin/user-management/UserManagement.css */
+/* -------------------------------------------------------------
+  📁 FILE: UserManagement.css
+  📍 LOCATION: static/admin/user-management/UserManagement.css
+  🎯 SCOPE: Styles exclusive to #user-management-section
+  ❌ No global bleed — all selectors are scoped to this tab only
+------------------------------------------------------------- */
 
-/* 🔷 Header Styling */
-.admin-header {
-  background-color: #1f2937;
-  color: white;
-  padding: 1rem;
+/* -------------------------------------------------------------
+  🔷 SECTION: Layout Containers
+  - Top-level layout for the User Management tab section
+------------------------------------------------------------- */
+#user-management-section {
+  margin-top: 2rem;
+}
+
+#user-management-section #user-actions {
+  margin-bottom: 1rem;
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
 }
 
-.admin-header .logo {
-  font-size: 1.8rem;
-  font-weight: bold;
-}
-
-.admin-header .subtitle {
-  font-size: 1rem;
-  opacity: 0.8;
-}
-
-/* 📦 Main Container */
-.user-management-container {
-  padding: 2rem;
-  font-family: Arial, sans-serif;
-  background-color: #f9fafb;
-  min-height: 100vh;
-}
-
-/* 🧾 Section Header */
-.section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+#user-management-section #user-confirm {
   margin-bottom: 1rem;
 }
 
-.section-header h2 {
-  margin: 0;
-  font-size: 1.4rem;
-}
-
-.primary-btn {
-  background-color: #2563eb;
-  color: white;
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-.primary-btn:hover {
-  background-color: #1e40af;
-}
-
-.secondary-btn {
-  background-color: #e5e7eb;
-  color: #111827;
-  padding: 0.4rem 1rem;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-left: 0.5rem;
-}
-
-/* 📋 Table Styling */
-.user-table-section {
+#user-management-section .table-wrapper {
   overflow-x: auto;
-  background-color: white;
-  border-radius: 8px;
-  box-shadow: 0 0 4px rgba(0, 0, 0, 0.05);
+  overflow-y: auto;
+  max-height: 500px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
 }
 
-#userTable {
+/* -------------------------------------------------------------
+  📊 SECTION: Admin Table Styles
+  - Targeting the admin-table only inside this section
+------------------------------------------------------------- */
+#user-management-section .admin-table {
   width: 100%;
   border-collapse: collapse;
+  table-layout: fixed;
+  font-size: 0.95rem;
 }
 
-#userTable th,
-#userTable td {
-  padding: 0.75rem;
+/* -------------------------------------------------------------
+  🔠 SECTION: Table Headers <th>
+  - Sticky header, non-wrapping, ChartFly Blue background
+------------------------------------------------------------- */
+#user-management-section .admin-table th {
+  border: 1px solid #ccc;
+  padding: 6px 10px;
   text-align: left;
-  border-bottom: 1px solid #e5e7eb;
+  vertical-align: top;
+  white-space: nowrap;
+  min-width: max-content;
+  max-width: 44ch;
+  background-color: #007a8a;
+  color: white;
+  font-weight: bold;
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
-#userTable th {
-  background-color: #f3f4f6;
+/* -------------------------------------------------------------
+  🧾 SECTION: Table Body Cells <td>
+  - Wrapping behavior and width control
+------------------------------------------------------------- */
+#user-management-section .admin-table td {
+  border: 1px solid #ccc;
+  padding: 6px 10px;
+  text-align: left;
+  vertical-align: top;
+  white-space: normal;
+  word-wrap: break-word;
+  overflow-wrap: anywhere;
+  min-width: 0;
+  max-width: 44ch;
+}
+
+/* -------------------------------------------------------------
+  ✅ SECTION: Select Column Styling
+  - Checkbox column layout and visual logic
+------------------------------------------------------------- */
+#user-management-section .admin-table th.col-select,
+#user-management-section .admin-table td.col-select {
+  width: 4ch;
+  min-width: 4ch;
+  max-width: 6ch;
+  text-align: center;
+  white-space: nowrap;
+}
+
+#user-management-section .admin-table td.col-select {
+  background-color: #007a8a;
+  color: white;
+}
+
+#user-management-section .admin-table tr.selected-row td.col-select {
+  background-color: #d0f0ff;
+  color: black;
+}
+
+/* -------------------------------------------------------------
+  🦓 SECTION: Table Row Styling
+  - Zebra striping and row selection highlight
+------------------------------------------------------------- */
+#user-management-section .admin-table tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+#user-management-section .admin-table tbody tr:nth-child(odd) {
+  background-color: #ffffff;
+}
+
+#user-management-section .admin-table tr.selected-row {
+  background-color: #d0f0ff !important;
+}
+
+/* -------------------------------------------------------------
+  📏 SECTION: Compact Mode Overrides
+  - Smaller padding and font size when compact mode is active
+------------------------------------------------------------- */
+body.compact-mode #user-management-section .admin-table th,
+body.compact-mode #user-management-section .admin-table td {
+  padding: 4px 6px;
+  font-size: 0.85rem;
+}
+
+/* -------------------------------------------------------------
+  📱 SECTION: Responsive Font Sizes
+  - Slightly smaller fonts on tablets and phones
+------------------------------------------------------------- */
+@media (max-width: 768px) {
+  #user-management-section .admin-table th,
+  #user-management-section .admin-table td {
+    font-size: 0.85rem;
+  }
+}
+
+/* -------------------------------------------------------------
+  ✅ SECTION: Confirm Box Styles
+  - Visual feedback when confirming an action
+------------------------------------------------------------- */
+#user-management-section .confirm-box {
+  padding: 8px;
+  border-radius: 4px;
   font-weight: bold;
 }
 
-/* 🧾 Modal Styling */
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.4);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
+#user-management-section .confirm-box.info {
+  background-color: #007a8a;
+  color: white;
 }
 
-.modal.hidden {
-  display: none;
+#user-management-section .confirm-box.warn {
+  background-color: #fff4e5;
+  color: #cc7700;
 }
 
-.modal-content {
-  background-color: white;
-  padding: 2rem;
-  border-radius: 10px;
-  width: 90%;
-  max-width: 500px;
-  position: relative;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+#user-management-section .confirm-box.success {
+  background-color: #e6f9ed;
+  color: #00aa55;
 }
 
-.close-btn {
-  position: absolute;
-  top: 0.75rem;
-  right: 1rem;
-  font-size: 1.5rem;
-  color: #6b7280;
+/* -------------------------------------------------------------
+  ✅ SECTION: Confirm Button – Green (Default Success)
+------------------------------------------------------------- */
+#user-management-section .confirm-btn.green {
+  background-color: #00aa55;
+  border: none;
+  color: black;
+  padding: 5px 10px;
+  margin-top: 5px;
   cursor: pointer;
-}
-
-.modal-content h3 {
-  margin-top: 0;
-  margin-bottom: 1rem;
-  color: #111827;
-}
-
-/* 📝 Form Styles */
-#userForm {
-  display: flex;
-  flex-direction: column;
-}
-
-#userForm label {
-  margin-top: 0.75rem;
-  font-weight: 600;
-}
-
-#userForm input {
-  padding: 0.5rem;
-  margin-top: 0.25rem;
-  border: 1px solid #d1d5db;
   border-radius: 4px;
 }
 
-#accessCheckboxes {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: 0.5rem;
+/* -------------------------------------------------------------
+  ⚠️ SECTION: Confirm Button – Yellow (Are you sure?)
+------------------------------------------------------------- */
+#user-management-section .confirm-btn.yellow {
+  background-color: #ffff00;
+  color: black;
+  font-weight: bold;
+  border: none;
+  padding: 5px 10px;
+  margin-top: 5px;
+  cursor: pointer;
+  border-radius: 4px;
 }
 
-#accessCheckboxes label {
-  display: flex;
-  align-items: center;
-  gap: 0.3rem;
-  font-weight: normal;
-}
-
-/* ✅ Form Buttons */
-.form-actions {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 1.5rem;
+/* -------------------------------------------------------------
+  ✅ SECTION: Checkbox Styling
+  - Green color when checked
+------------------------------------------------------------- */
+#user-management-section .admin-table td.col-select input[type="checkbox"]:checked {
+  accent-color: #00aa55;
 }
