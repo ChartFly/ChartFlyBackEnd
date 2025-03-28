@@ -160,7 +160,7 @@ body.compact-mode #market-holidays-section .admin-table td {
 
 #market-holidays-section .confirm-box.success {
   background-color: #e6f9ed;
-  color: #0077cc;
+  color: #00aa55;
 }
 
 /* -------------------------------------------------------------
@@ -168,7 +168,7 @@ body.compact-mode #market-holidays-section .admin-table td {
   - Styling for the "Confirm [Action]" button
 ------------------------------------------------------------- */
 #market-holidays-section .confirm-btn.turquoise {
-  background-color: #1abc9c;
+  background-color: #ffff00;
   border: none;
   color: white;
   padding: 5px 10px;

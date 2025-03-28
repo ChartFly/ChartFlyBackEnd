@@ -73,7 +73,7 @@ function setupHolidayToolbar() {
       btn.classList.add("active");
 
       if (selectedHolidayRows.size === 0) {
-        confirmBox.innerHTML = `<div class="confirm-box warn">Please select at least one row first.</div>`;
+        confirmBox.innerHTML = `<div class="confirm-box warn">Please select one or more rows.  Then select an action button.</div>`;
         return;
       }
 
