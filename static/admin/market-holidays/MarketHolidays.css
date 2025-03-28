@@ -121,16 +121,21 @@ body.compact-mode .admin-table td {
   font-weight: bold;
 }
 .confirm-box.info {
-  background-color: #e7f3ff;
-  color: #0077cc;
+  background-color: #007a8a; /* ChartFly default Blue */
+  color: white;
+
+  /* ✅ Green Checkbox when Checked */
+.admin-table td.col-select input[type="checkbox"]:checked {
+  accent-color: #00aa55; /* Clean green tone */
 }
+
 .confirm-box.warn {
   background-color: #fff4e5;
   color: #cc7700;
 }
 .confirm-box.success {
   background-color: #e6f9ed;
-  color: #00aa55;
+  color: #0077cc;
 }
 
 /* ✅ Confirm Button */
