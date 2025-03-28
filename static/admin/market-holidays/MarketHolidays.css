@@ -128,11 +128,6 @@ body.compact-mode .admin-table td {
   background-color: #007a8a; /* ChartFly default Blue */
   color: white;
 
-.confirm-box.warn {
-  background-color: #fff4e5;
-  color: #007a5a;
-}
-
 /* ✅ Confirm Button */
 .confirm-btn.turquoise {
   background-color: #1abc9c;
