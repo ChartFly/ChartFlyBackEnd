@@ -42,7 +42,6 @@
   table-layout: fixed;
   font-size: 0.95rem;
 }
-
 /* -------------------------------------------------------------
   🔠 SECTION: Table Headers <th>
   - Sticky header, non-wrapping, ChartFly Blue background
@@ -53,7 +52,7 @@
   text-align: left;
   vertical-align: top;
   white-space: nowrap;
-  min-width: max-content;  /* ✅ Header text sets the minimum */
+  min-width: 6ch;  /* ✅ Small but readable fallback */
   max-width: 44ch;          /* ✅ Column wraps after 44ch */
   background-color: #007a8a;
   color: white;
@@ -66,10 +65,6 @@
 /* -------------------------------------------------------------
   🧾 SECTION: Table Body Cells <td>
   - Wrapping behavior and width control
-------------------------------------------------------------- */
-/* -------------------------------------------------------------
-  📐 SECTION: Column-Specific Width Rules
-  - Ensures each column shrinks appropriately using .col-* classes
 ------------------------------------------------------------- */
 
 /* 🏷️ Holiday Name Column */
@@ -214,19 +209,4 @@ body.compact-mode #market-holidays-section .admin-table td {
 ------------------------------------------------------------- */
 #market-holidays-section .admin-table td.col-select input[type="checkbox"]:checked {
   accent-color: #00aa55;
-}
-
-/* -------------------------------------------------------------
-  📐 SECTION: Explicit Column Overrides (Column Shrink Fix)
-  - Ensures data cells obey content-based shrink logic
-  - Prevents <th> from forcing excessive width
-------------------------------------------------------------- */
-#market-holidays-section .admin-table td.col-name,
-#market-holidays-section .admin-table td.col-date,
-#market-holidays-section .admin-table td.col-status {
-  min-width: 0;
-  max-width: 44ch;
-  white-space: normal;
-  overflow-wrap: anywhere;
-  word-break: break-word;
 }
