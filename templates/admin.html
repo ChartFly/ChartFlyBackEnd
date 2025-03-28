@@ -12,8 +12,7 @@
   <header class="header">
     <div class="header-left">
       <div class="logo-container">
-        <img src="https://raw.githubusercontent.com/ChartFly/ChartFly-Halted-Stocks/main/Chartfly-logo.png"
-             alt="ChartFly Logo" class="logo" width="144" height="144">
+        <img src="/static/images/Chartfly-logo.png" alt="ChartFly Logo" class="logo" width="144" height="144">
       </div>
     </div>
     <div class="header-center">
@@ -25,111 +24,22 @@
     </div>
   </header>
 
-  <div class="content-wrapper">
+  <!-- ✅ Tab Navigation -->
+  <div class="tabs">
+    <button class="tab-button" onclick="showTab('market-holidays')">Market Holidays</button>
+    <button class="tab-button" onclick="showTab('api-keys')">API Keys</button>
+    <button class="tab-button" onclick="showTab('user-management')">User Management</button>
+  </div>
 
-    <!-- ✅ Tab Navigation -->
-    <div class="tabs">
-      <button class="tab-button" id="market-holidays-tab">Market Holidays</button>
-      <button class="tab-button" id="api-keys-tab">API Keys</button>
-      <button class="tab-button" id="user-management-tab">User Management</button>
-    </div>
-
-    <!-- ✅ Market Holidays Section -->
-    <div class="container" id="market-holidays-section" style="display: none;">
-      <h2>Manage Market Holidays</h2>
-      <div class="action-toolbar" id="holiday-actions">
-        <button class="action-btn" id="holiday-edit-btn">Edit</button>
-        <button class="action-btn" id="holiday-copy-btn">Copy</button>
-        <button class="action-btn" id="holiday-paste-btn">Paste</button>
-        <button class="action-btn" id="holiday-add-btn">Add</button>
-        <button class="action-btn" id="holiday-delete-btn">Delete</button>
-        <button class="action-btn" id="holiday-save-btn">Save</button>
-      </div>
-      <div class="action-confirm" id="holiday-confirm"></div>
-      <table class="admin-table">
-        <thead>
-          <tr>
-            <th class="col-select">Select</th>
-            <th class="col-medium">Holiday Name</th>
-            <th class="col-short">Date</th>
-            <th class="col-short">Market Status</th>
-          </tr>
-        </thead>
-        <tbody id="holidays-table">
-          <tr><td colspan="4">Loading holidays...</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- ✅ API Keys Section -->
-    <div class="container" id="api-keys-section" style="display: none;">
-      <h2>Manage API Keys</h2>
-      <div class="action-toolbar" id="api-actions">
-        <button class="action-btn" id="api-edit-btn">Edit</button>
-        <button class="action-btn" id="api-copy-btn">Copy</button>
-        <button class="action-btn" id="api-paste-btn">Paste</button>
-        <button class="action-btn" id="api-add-btn">Add</button>
-        <button class="action-btn" id="api-delete-btn">Delete</button>
-        <button class="action-btn" id="api-save-btn">Save</button>
-      </div>
-      <div class="action-confirm" id="api-confirm"></div>
-      <table class="admin-table">
-        <thead>
-          <tr>
-            <th class="col-select">Select</th>
-            <th class="col-medium">Label</th>
-            <th class="col-short">Provider</th>
-            <th class="col-short">Priority</th>
-            <th class="col-short">Status</th>
-            <th class="col-short">Sec</th>
-            <th class="col-short">Min</th>
-            <th class="col-short">5 Min</th>
-            <th class="col-short">10 Min</th>
-            <th class="col-short">15 Min</th>
-            <th class="col-short">Hour</th>
-            <th class="col-short">Day</th>
-          </tr>
-        </thead>
-        <tbody id="api-keys-table">
-          <tr><td colspan="12">Loading API keys...</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- ✅ User Management Section -->
-    <div class="container" id="user-management-section" style="display: none;">
-      <h2>Manage Users</h2>
-      <div class="action-toolbar" id="user-actions">
-        <button class="action-btn" id="user-edit-btn">Edit</button>
-        <button class="action-btn" id="user-copy-btn">Copy</button>
-        <button class="action-btn" id="user-paste-btn">Paste</button>
-        <button class="action-btn" id="user-add-btn">Add</button>
-        <button class="action-btn" id="user-delete-btn">Delete</button>
-        <button class="action-btn" id="user-save-btn">Save</button>
-      </div>
-      <div class="action-confirm" id="user-confirm"></div>
-      <table class="admin-table">
-        <thead>
-          <tr>
-            <th class="col-select">Select</th>
-            <th class="col-medium">Full Name</th>
-            <th class="col-wide">Email</th>
-            <th class="col-medium">Username</th>
-            <th class="col-wide">Access Tabs</th>
-          </tr>
-        </thead>
-        <tbody id="user-table">
-          <tr><td colspan="5">Loading users...</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-  </div> <!-- /content-wrapper -->
+  <!-- ✅ Sections -->
+  {% include "admin/market-holidays/MarketHolidays.html" %}
+  {% include "admin/api-keys/ApiKeys.html" %}
+  {% include "admin/user-management/UserManagement.html" %}
 
   <!-- ✅ Scripts -->
   <script src="/static/frontend/core/main.js"></script>
-    <script src="/static/js/marketholidays.js"></script>
-  <script src="/static/js/apikeys.js"></script>
+  <script src="/static/admin/market-holidays/MarketHolidays.js"></script>
+  <script src="/static/admin/api-keys/ApiKeys.js"></script>
   <script src="/static/admin/user-management/UserManagement.js"></script>
 
 </body>
