@@ -235,3 +235,13 @@ document.querySelectorAll(".tab-button").forEach(button => {
         }
     });
 });
+
+function showTab(tabName) {
+    const tabs = ['market-holidays', 'api-keys', 'user-management'];
+    tabs.forEach(name => {
+        const section = document.getElementById(`${name}-section`);
+        const button = document.querySelector(`button[onclick="showTab('${name}')"]`);
+        if (section) section.style.display = (name === tabName) ? 'block' : 'none';
+        if (button) button.classList.toggle('active', name === tabName);
+    });
+}
