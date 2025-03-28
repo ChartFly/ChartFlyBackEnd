@@ -197,3 +197,18 @@ body.compact-mode #market-holidays-section .admin-table td {
 #market-holidays-section .admin-table td.col-select input[type="checkbox"]:checked {
   accent-color: #00aa55;
 }
+
+/* -------------------------------------------------------------
+  📐 SECTION: Explicit Column Overrides (Column Shrink Fix)
+  - Ensures data cells obey content-based shrink logic
+  - Prevents <th> from forcing excessive width
+------------------------------------------------------------- */
+#market-holidays-section .admin-table td.col-name,
+#market-holidays-section .admin-table td.col-date,
+#market-holidays-section .admin-table td.col-status {
+  min-width: 0;
+  max-width: 44ch;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
