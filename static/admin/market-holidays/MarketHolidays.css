@@ -1,25 +1,30 @@
-/* static/admin/market-holidays/MarketHolidays.css */
+/* -------------------------------------------------------------
+  📁 FILE: MarketHolidays.css
+  📍 LOCATION: static/admin/market-holidays/MarketHolidays.css
+  🎯 SCOPE: Styles exclusive to #market-holidays-section
+  ❌ No global bleed — all selectors are scoped to this tab only
+------------------------------------------------------------- */
 
-/* 📦 Section Container */
+/* -------------------------------------------------------------
+  🔷 SECTION: Layout Containers
+  - Top-level layout for the Market Holidays tab section
+------------------------------------------------------------- */
 #market-holidays-section {
   margin-top: 2rem;
 }
 
-/* 🔧 Toolbar */
-#holiday-actions {
+#market-holidays-section #holiday-actions {
   margin-bottom: 1rem;
   display: flex;
   gap: 0.5rem;
   flex-wrap: wrap;
 }
 
-/* ✅ Commit Bar */
-#holiday-confirm {
+#market-holidays-section #holiday-confirm {
   margin-bottom: 1rem;
 }
 
-/* 📋 Table Wrapper */
-.table-wrapper {
+#market-holidays-section .table-wrapper {
   overflow-x: auto;
   overflow-y: auto;
   max-height: 500px;
@@ -27,32 +32,42 @@
   border-radius: 6px;
 }
 
-/* 📊 Market Holidays Table */
-.admin-table {
+/* -------------------------------------------------------------
+  📊 SECTION: Admin Table Styles
+  - Targeting the admin-table only inside this section
+------------------------------------------------------------- */
+#market-holidays-section .admin-table {
   width: 100%;
   border-collapse: collapse;
   table-layout: auto;
   font-size: 0.95rem;
 }
 
-/* 🧠 Header Cells Set Column Minimums */
-.admin-table th {
+/* -------------------------------------------------------------
+  🔠 SECTION: Table Headers <th>
+  - Sticky header, non-wrapping, ChartFly Blue background
+------------------------------------------------------------- */
+#market-holidays-section .admin-table th {
   border: 1px solid #ccc;
   padding: 6px 10px;
   text-align: left;
   vertical-align: top;
   white-space: nowrap;
   min-width: max-content;
-  background-color: #0077cc;  /* ChartFly Blue */
+  background-color: #0077cc;
   color: white;
   font-weight: bold;
   position: sticky;
   top: 0;
-  z-index: 10;                /* ⬆️ Raised above selected rows */
+  z-index: 10;
 }
 
-/* 📋 Data Cells Wrap After 44ch */
-.admin-table td {
+
+/* -------------------------------------------------------------
+  🧾 SECTION: Table Body Cells <td>
+  - Wrapping behavior and width control
+------------------------------------------------------------- */
+#market-holidays-section .admin-table td {
   border: 1px solid #ccc;
   padding: 6px 10px;
   text-align: left;
@@ -64,9 +79,12 @@
   max-width: 44ch;
 }
 
-/* ✅ Tight Select Column */
-.admin-table th.col-select,
-.admin-table td.col-select {
+/* -------------------------------------------------------------
+  ✅ SECTION: Select Column Styling
+  - Checkbox column layout and visual logic
+------------------------------------------------------------- */
+#market-holidays-section .admin-table th.col-select,
+#market-holidays-section .admin-table td.col-select {
   width: 4ch;
   min-width: 4ch;
   max-width: 6ch;
@@ -74,62 +92,82 @@
   white-space: nowrap;
 }
 
-/* 🔵 Select Column Always Blue */
-.admin-table td.col-select {
-  background-color: #007a8a;
+#market-holidays-section .admin-table td.col-select {
+  background-color: #007a8a; /* ChartFly Turquoise */
   color: white;
 }
 
-/* 🔷 Select Column Light Blue When Row Selected */
-.admin-table tr.selected-row td.col-select {
+#market-holidays-section .admin-table tr.selected-row td.col-select {
   background-color: #d0f0ff;
   color: black;
 }
 
-/* 🦓 Zebra Striping */
-.admin-table tbody tr:nth-child(even) {
+/* -------------------------------------------------------------
+  🦓 SECTION: Table Row Styling
+  - Zebra striping and row selection highlight
+------------------------------------------------------------- */
+#market-holidays-section .admin-table tbody tr:nth-child(even) {
   background-color: #f9f9f9;
 }
-.admin-table tbody tr:nth-child(odd) {
+#market-holidays-section .admin-table tbody tr:nth-child(odd) {
   background-color: #ffffff;
 }
 
-/* ✨ Selected Row Highlight */
-.admin-table tr.selected-row {
+#market-holidays-section .admin-table tr.selected-row {
   background-color: #d0f0ff !important;
 }
 
-/* 📏 Compact Mode */
-body.compact-mode .admin-table th,
-body.compact-mode .admin-table td {
+/* -------------------------------------------------------------
+  📏 SECTION: Compact Mode Overrides
+  - Smaller padding and font size when compact mode is active
+------------------------------------------------------------- */
+body.compact-mode #market-holidays-section .admin-table th,
+body.compact-mode #market-holidays-section .admin-table td {
   padding: 4px 6px;
   font-size: 0.85rem;
 }
 
-/* 📱 Responsive Table Text */
+/* -------------------------------------------------------------
+  📱 SECTION: Responsive Font Sizes
+  - Slightly smaller fonts on tablets and phones
+------------------------------------------------------------- */
 @media (max-width: 768px) {
-  .admin-table th,
-  .admin-table td {
+  #market-holidays-section .admin-table th,
+  #market-holidays-section .admin-table td {
     font-size: 0.85rem;
   }
 }
 
-/* ✅ Confirm Box Styles */
-.confirm-box {
+/* -------------------------------------------------------------
+  ✅ SECTION: Confirm Box Styles
+  - Visual feedback when confirming an action
+------------------------------------------------------------- */
+#market-holidays-section .confirm-box {
   padding: 8px;
   border-radius: 4px;
   font-weight: bold;
 }
-.confirm-box.info {
-  background-color: #007a8a; /* ChartFly default Blue */
-  color: white;
 
-.confirm-box.info {
-  background-color: #007a8a; /* ChartFly default Blue */
+#market-holidays-section .confirm-box.info {
+  background-color: #007a8a;
   color: white;
+}
 
-/* ✅ Confirm Button */
-.confirm-btn.turquoise {
+#market-holidays-section .confirm-box.warn {
+  background-color: #fff4e5;
+  color: #007a5a;
+}
+
+#market-holidays-section .confirm-box.success {
+  background-color: #e6f9ed;
+  color: #0077cc;
+}
+
+/* -------------------------------------------------------------
+  ✅ SECTION: Confirm Button
+  - Styling for the "Confirm [Action]" button
+------------------------------------------------------------- */
+#market-holidays-section .confirm-btn.turquoise {
   background-color: #1abc9c;
   border: none;
   color: white;
@@ -139,7 +177,10 @@ body.compact-mode .admin-table td {
   border-radius: 4px;
 }
 
-  /* ✅ Green Checkbox when Checked */
-.admin-table td.col-select input[type="checkbox"]:checked {
-  accent-color: #00aa55; /* Clean green tone */
+/* -------------------------------------------------------------
+  ✅ SECTION: Checkbox Styling
+  - Green color when checked
+------------------------------------------------------------- */
+#market-holidays-section .admin-table td.col-select input[type="checkbox"]:checked {
+  accent-color: #00aa55;
 }
