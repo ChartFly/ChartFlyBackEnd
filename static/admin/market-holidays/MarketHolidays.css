@@ -67,16 +67,34 @@
   🧾 SECTION: Table Body Cells <td>
   - Wrapping behavior and width control
 ------------------------------------------------------------- */
-#market-holidays-section .admin-table td {
-  border: 1px solid #ccc;
-  padding: 6px 10px;
-  text-align: left;
-  vertical-align: top;
+/* -------------------------------------------------------------
+  📐 SECTION: Column-Specific Width Rules
+  - Ensures each column shrinks appropriately using .col-* classes
+------------------------------------------------------------- */
+
+/* 🏷️ Holiday Name Column */
+#market-holidays-section .admin-table th.col-name,
+#market-holidays-section .admin-table td.col-name {
+  min-width: max-content;   /* 👑 Min width = header text */
+  max-width: 44ch;          /* ⛔ Max width before wrapping */
   white-space: normal;
-  word-wrap: break-word;
   overflow-wrap: anywhere;
-  min-width: 0;             /* ✅ Shrink allowed */
-  max-width: 44ch;
+}
+
+/* 📅 Date Column */
+#market-holidays-section .admin-table th.col-date,
+#market-holidays-section .admin-table td.col-date {
+  min-width: max-content;
+  max-width: 20ch;
+  white-space: nowrap;
+}
+
+/* 📊 Status Column */
+#market-holidays-section .admin-table th.col-status,
+#market-holidays-section .admin-table td.col-status {
+  min-width: max-content;
+  max-width: 20ch;
+  white-space: nowrap;
 }
 
 /* -------------------------------------------------------------
