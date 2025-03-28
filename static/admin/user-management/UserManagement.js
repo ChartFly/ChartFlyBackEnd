@@ -1,8 +1,8 @@
 // static/admin/user-management/UserManagement.js (Merged)
 
 // 🌐 API Endpoints
-const USERS_API = '/admin/users';
-const PERMISSIONS_API = '/admin/tabs';
+const USERS_API = '/api/users';
+const PERMISSIONS_API = '/api/users/tabs';
 
 // 🛠️ DOM Elements
 const userTableBody = document.querySelector('#userTable tbody');
