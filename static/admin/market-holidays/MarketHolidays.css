@@ -2,7 +2,7 @@
   📁 FILE: MarketHolidays.css
   📍 LOCATION: static/admin/market-holidays/MarketHolidays.css
   🎯 SCOPE: Styles exclusive to #market-holidays-section
-  ❌ Zero global bleed — all selectors are scoped
+  ❌ No global bleed — all selectors are scoped to this tab only
 ------------------------------------------------------------- */
 
 /* 🔷 Layout Containers */
@@ -22,22 +22,23 @@
 }
 
 #market-holidays-section .table-wrapper {
-  overflow-x: auto;
-  overflow-y: auto;
+  overflow-x: auto;        /* Horizontal scroll */
+  overflow-y: auto;        /* Vertical scroll */
   max-height: 500px;
+  max-width: 100%;         /* Prevents overflow */
   border: 1px solid #ccc;
   border-radius: 6px;
 }
 
 /* 📊 Admin Table Styles */
 #market-holidays-section .admin-table {
-  width: 100%;
+  width: 100%;             /* Full width inside wrapper */
   border-collapse: collapse;
-  table-layout: fixed;
+  table-layout: auto;      /* Let browser size based on content */
   font-size: 0.95rem;
 }
 
-/* 🔠 Table Header Styles */
+/* 🔠 Table Headers */
 #market-holidays-section .admin-table th {
   border: 1px solid #ccc;
   padding: 6px 10px;
@@ -49,43 +50,25 @@
   position: sticky;
   top: 0;
   z-index: 10;
+  max-width: 44ch;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-/* 🧾 Table Body Cell Styles */
+/* 🧾 Table Body Cells */
 #market-holidays-section .admin-table td {
   border: 1px solid #ccc;
   padding: 6px 10px;
   text-align: left;
   vertical-align: top;
-  overflow-wrap: anywhere;
-  word-break: break-word;
-}
-
-/* 📐 Column Widths */
-
-/* 🏷️ Holiday Name */
-#market-holidays-section .admin-table th.col-name,
-#market-holidays-section .admin-table td.col-name {
-  min-width: 12ch;
   max-width: 44ch;
   white-space: normal;
+  word-wrap: break-word;
+  overflow-wrap: anywhere;
 }
 
-/* 📅 Date */
-#market-holidays-section .admin-table th.col-date,
-#market-holidays-section .admin-table td.col-date {
-  width: 16ch;
-  white-space: nowrap;
-}
-
-/* 📊 Status */
-#market-holidays-section .admin-table th.col-status,
-#market-holidays-section .admin-table td.col-status {
-  width: 20ch;
-  white-space: nowrap;
-}
-
-/* ✅ Select Column (tight checkbox cell) */
+/* ✅ Select Column */
 #market-holidays-section .admin-table th.col-select,
 #market-holidays-section .admin-table td.col-select {
   width: 4ch;
@@ -105,13 +88,14 @@
   color: black;
 }
 
-/* 🦓 Zebra Striping + Selection Highlight */
+/* 🦓 Zebra Stripes + Row Highlighting */
 #market-holidays-section .admin-table tbody tr:nth-child(even) {
   background-color: #f9f9f9;
 }
 #market-holidays-section .admin-table tbody tr:nth-child(odd) {
   background-color: #ffffff;
 }
+
 #market-holidays-section .admin-table tr.selected-row {
   background-color: #d0f0ff !important;
 }
@@ -123,7 +107,7 @@ body.compact-mode #market-holidays-section .admin-table td {
   font-size: 0.85rem;
 }
 
-/* 📱 Responsive Font on Small Screens */
+/* 📱 Responsive Font Sizes */
 @media (max-width: 768px) {
   #market-holidays-section .admin-table th,
   #market-holidays-section .admin-table td {
@@ -137,14 +121,17 @@ body.compact-mode #market-holidays-section .admin-table td {
   border-radius: 4px;
   font-weight: bold;
 }
+
 #market-holidays-section .confirm-box.info {
   background-color: #007a8a;
   color: white;
 }
+
 #market-holidays-section .confirm-box.warn {
   background-color: #fff4e5;
   color: #cc7700;
 }
+
 #market-holidays-section .confirm-box.success {
   background-color: #e6f9ed;
   color: #00aa55;
@@ -160,6 +147,7 @@ body.compact-mode #market-holidays-section .admin-table td {
   cursor: pointer;
   border-radius: 4px;
 }
+
 #market-holidays-section .confirm-btn.yellow {
   background-color: #ffff00;
   color: black;
