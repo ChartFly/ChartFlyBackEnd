@@ -1,25 +1,18 @@
-// static/admin/user-management/UserManagement.js (Merged)
+// static/admin/user-management/UserManagement.js (Final Merge)
 
-// 🌐 API Endpoints
 const USERS_API = '/api/users';
 const PERMISSIONS_API = '/api/users/tabs';
 
 // 🛠️ DOM Elements
 const userTableBody = document.querySelector('#userTable tbody');
-const addUserBtn = document.getElementById('addUserBtn');
-const modal = document.getElementById('userModal');
-const closeModalBtn = document.getElementById('closeModal');
-const cancelBtn = document.getElementById('cancelBtn');
 const userForm = document.getElementById('userForm');
-const modalTitle = document.getElementById('modalTitle');
 const accessCheckboxes = document.getElementById('accessCheckboxes');
-const commitBar = document.getElementById('user-commit-bar');
-const commitBtn = document.getElementById('user-commit-btn');
 const confirmBox = document.getElementById('user-confirm');
 
+const commitBar = document.getElementById('user-commit-bar'); // optional
+const commitBtn = document.getElementById('user-commit-btn'); // optional
+
 // 🔄 State
-let editMode = false;
-let editingUserId = null;
 let selectedUserRows = new Set();
 let activeUserAction = null;
 
@@ -71,9 +64,7 @@ async function loadTabAccess() {
 
     tabs.forEach(tab => {
       const label = document.createElement('label');
-      label.innerHTML = `
-        <input type="checkbox" value="${tab}" name="access" /> ${tab}
-      `;
+      label.innerHTML = `<input type="checkbox" value="${tab}" name="access" /> ${tab}`;
       accessCheckboxes.appendChild(label);
     });
   } catch (err) {
@@ -81,7 +72,7 @@ async function loadTabAccess() {
   }
 }
 
-// ✅ Row Selection Handling
+// ✅ Row + Action Logic
 function setupUserToolbar() {
   document.querySelectorAll('.user-select-checkbox').forEach(box => {
     box.addEventListener('change', () => {
@@ -96,7 +87,7 @@ function setupUserToolbar() {
         row.classList.remove('selected-row');
       }
 
-      updateUserCommitBar();
+      updateUserConfirmBox();
     });
   });
 
@@ -114,43 +105,54 @@ function setupUserToolbar() {
       });
 
       btn.classList.add('active');
-      updateUserCommitBar();
+
+      if (selectedUserRows.size === 0) {
+        confirmBox.innerHTML = `<div class="confirm-box warn">Please select one or more rows. Then select an action button.</div>`;
+        return;
+      }
+
+      const selectedIndexes = Array.from(document.querySelectorAll('tr.selected-row')).map(row => row.dataset.index);
+      confirmBox.innerHTML = `
+        <div class="confirm-box info">
+          <strong>Action:</strong> ${action.toUpperCase()}<br>
+          <strong>Selected Rows:</strong> ${selectedIndexes.join(', ')}<br>
+          <button class="confirm-btn yellow" onclick="confirmUserAction()">Confirm ${action}</button>
+        </div>
+      `;
     });
   });
 }
 
-// 🔁 Update Commit Bar
-function updateUserCommitBar() {
-  const indexes = Array.from(document.querySelectorAll('tr.selected-row')).map(row => row.dataset.index);
-
-  if (activeUserAction && indexes.length > 0) {
-    commitBar.style.display = 'flex';
-    commitBtn.textContent = `Commit ${activeUserAction.toUpperCase()} for Rows: ${indexes.join(', ')}`;
-    commitBtn.classList.add('turquoise');
-  } else {
-    commitBar.style.display = 'none';
-    commitBtn.classList.remove('turquoise');
-    commitBtn.textContent = 'Commit';
+// 🔘 Confirm Action Handler
+function confirmUserAction() {
+  if (!activeUserAction || selectedUserRows.size === 0) {
+    confirmBox.innerHTML = `<div class="confirm-box warn">No action or rows selected.</div>`;
+    return;
   }
-}
-
-// ✅ Commit Button Action
-commitBtn.addEventListener('click', () => {
-  if (!activeUserAction || selectedUserRows.size === 0) return;
-
-  if (!confirm(`Are you sure you want to ${activeUserAction.toUpperCase()} selected rows?`)) return;
 
   console.log(`✅ Confirmed [${activeUserAction}] for:`, Array.from(selectedUserRows));
-  confirmBox.innerHTML = `<div class="confirm-box success">✅ ${capitalize(activeUserAction)} Confirmed!</div>`;
 
-  // Reset all
+  confirmBox.innerHTML = `
+    <div class="confirm-box success">✅ ${capitalize(activeUserAction)} Confirmed!</div>
+  `;
+
   activeUserAction = null;
   selectedUserRows.clear();
   document.querySelectorAll('.user-select-checkbox').forEach(box => (box.checked = false));
   document.querySelectorAll('tr.selected-row').forEach(row => row.classList.remove('selected-row'));
   document.querySelectorAll('.action-btn').forEach(btn => btn.classList.remove('active'));
-  updateUserCommitBar();
-});
+  updateUserConfirmBox();
+}
+
+// 🔁 Confirm Text Feedback
+function updateUserConfirmBox() {
+  if (selectedUserRows.size === 0) {
+    confirmBox.innerHTML = '';
+    return;
+  }
+
+  confirmBox.innerHTML = `<div class="confirm-box info">${selectedUserRows.size} row(s) selected.</div>`;
+}
 
 function capitalize(word) {
   return word.charAt(0).toUpperCase() + word.slice(1);

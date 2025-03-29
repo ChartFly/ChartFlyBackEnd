@@ -92,7 +92,7 @@ function setupApiToolbar() {
         <div class="confirm-box info">
           <strong>Action:</strong> ${action.toUpperCase()}<br>
           <strong>Selected Rows:</strong> ${selectedIndexes.join(", ")}<br>
-          <button class="confirm-btn turquoise" onclick="confirmApiAction()">Confirm ${action}</button>
+          <button class="confirm-btn yellow" onclick="confirmApiAction()">Confirm ${action}</button>
         </div>
       `;
     });
