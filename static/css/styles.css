@@ -45,14 +45,14 @@
 
 .market-status-label,
 .market-status-text {
-  font-size: 16px;
+  font-size: 20px;
   font-weight: bold;
 }
 
 .market-status-text {
   padding: 5px 10px;
   border-radius: 5px;
-  font-size: 16px
+  font-size: 18px
 }
 
 .market-open { background-color: green; }
