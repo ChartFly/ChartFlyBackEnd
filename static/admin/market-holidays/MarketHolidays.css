@@ -5,7 +5,9 @@
   ❌ No global bleed — all selectors are scoped to this tab only
 ------------------------------------------------------------- */
 
-/* 🔷 Layout Containers */
+/* -------------------------------------------------------------
+  🔷 SECTION: Layout Containers
+------------------------------------------------------------- */
 #market-holidays-section {
   margin-top: 2rem;
 }
@@ -23,7 +25,6 @@
 
 #market-holidays-section .table-wrapper {
   display: block;
-  max-width: 100%;
   overflow-x: auto;
   overflow-y: auto;
   max-height: 500px;
@@ -31,15 +32,22 @@
   border-radius: 6px;
 }
 
-/* 📊 Admin Table Base */
+/* -------------------------------------------------------------
+  📊 SECTION: Admin Table Styles
+------------------------------------------------------------- */
 #market-holidays-section .admin-table {
-  width: 100%;
+  width: auto;                /* ✨ Don't stretch to fill */
+  min-width: 100%;            /* ✨ Still responsive */
+  max-width: max-content;     /* ✨ Grows only as needed */
   border-collapse: collapse;
   table-layout: fixed;
   font-size: 0.95rem;
 }
 
-/* 📐 All Columns (Except Select) */
+/* -------------------------------------------------------------
+  📐 SECTION: Column Width Defaults
+  - Applied to all except .col-select for flexible sizing
+------------------------------------------------------------- */
 #market-holidays-section .admin-table th:not(.col-select),
 #market-holidays-section .admin-table td:not(.col-select) {
   min-width: 8ch;
@@ -49,7 +57,9 @@
   word-break: break-word;
 }
 
-/* 🔠 Table Headers */
+/* -------------------------------------------------------------
+  🔠 SECTION: Table Headers <th>
+------------------------------------------------------------- */
 #market-holidays-section .admin-table th {
   border: 1px solid #ccc;
   padding: 6px 10px;
@@ -63,16 +73,9 @@
   z-index: 10;
 }
 
-/* 🧾 Column-Specific Styling (Optional Tweaks) */
-#market-holidays-section .admin-table th.col-date,
-#market-holidays-section .admin-table td.col-date,
-#market-holidays-section .admin-table th.col-status,
-#market-holidays-section .admin-table td.col-status {
-  max-width: 20ch;
-  white-space: nowrap;
-}
-
-/* ✅ Select Column */
+/* -------------------------------------------------------------
+  ✅ SECTION: Select Column Styling
+------------------------------------------------------------- */
 #market-holidays-section .admin-table th.col-select,
 #market-holidays-section .admin-table td.col-select {
   width: 4ch;
@@ -92,7 +95,9 @@
   color: black;
 }
 
-/* 🦓 Row Striping */
+/* -------------------------------------------------------------
+  🦓 SECTION: Table Row Styling
+------------------------------------------------------------- */
 #market-holidays-section .admin-table tbody tr:nth-child(even) {
   background-color: #f9f9f9;
 }
@@ -104,14 +109,18 @@
   background-color: #d0f0ff !important;
 }
 
-/* 📏 Compact Mode */
+/* -------------------------------------------------------------
+  📏 SECTION: Compact Mode
+------------------------------------------------------------- */
 body.compact-mode #market-holidays-section .admin-table th,
 body.compact-mode #market-holidays-section .admin-table td {
   padding: 4px 6px;
   font-size: 0.85rem;
 }
 
-/* 📱 Responsive Fonts */
+/* -------------------------------------------------------------
+  📱 SECTION: Responsive Font Sizes
+------------------------------------------------------------- */
 @media (max-width: 768px) {
   #market-holidays-section .admin-table th,
   #market-holidays-section .admin-table td {
@@ -119,7 +128,9 @@ body.compact-mode #market-holidays-section .admin-table td {
   }
 }
 
-/* ✅ Confirm Box Styles */
+/* -------------------------------------------------------------
+  ✅ SECTION: Confirm Box Styles
+------------------------------------------------------------- */
 #market-holidays-section .confirm-box {
   padding: 8px;
   border-radius: 4px;
@@ -141,7 +152,9 @@ body.compact-mode #market-holidays-section .admin-table td {
   color: #00aa55;
 }
 
-/* ✅ Confirm Buttons */
+/* -------------------------------------------------------------
+  ✅ SECTION: Confirm Buttons
+------------------------------------------------------------- */
 #market-holidays-section .confirm-btn.green {
   background-color: #00aa55;
   border: none;
@@ -163,7 +176,9 @@ body.compact-mode #market-holidays-section .admin-table td {
   border-radius: 4px;
 }
 
-/* ✅ Checkbox Styling */
+/* -------------------------------------------------------------
+  ✅ SECTION: Checkbox Styling
+------------------------------------------------------------- */
 #market-holidays-section .admin-table td.col-select input[type="checkbox"]:checked {
   accent-color: #00aa55;
 }
