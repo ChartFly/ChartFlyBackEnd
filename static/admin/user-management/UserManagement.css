@@ -1,15 +1,11 @@
-/* =============================================================
- 📁 FILE: UserManagement.css
- 📍 LOCATION: static/admin/user-management/UserManagement.css
- 🎯 SCOPE: Styles exclusive to #user-management-section
- 🚫 No global bleed — all selectors are scoped to this tab only
-============================================================= */
+/* -------------------------------------------------------------
+  📁 FILE: UserManagement.css
+  📍 LOCATION: static/admin/user-management/UserManagement.css
+  🎯 SCOPE: Styles exclusive to #user-management-section
+  ❌ No global bleed — all selectors are scoped to this tab only
+------------------------------------------------------------- */
 
-
-/* =============================================================
- 🔷 SECTION: Layout & Containers
- 🧩 Handles spacing, flex layout, and visual wrapping
-============================================================= */
+/* 🔷 Layout Containers */
 #user-management-section {
   margin-top: 2rem;
 }
@@ -33,11 +29,7 @@
   border-radius: 6px;
 }
 
-
-/* =============================================================
- 📊 SECTION: Admin Table Root
- 📐 Table-wide defaults: layout, font, collapse
-============================================================= */
+/* 📊 Admin Table Core */
 #user-management-section .admin-table {
   width: 100%;
   border-collapse: collapse;
@@ -45,19 +37,22 @@
   font-size: 0.95rem;
 }
 
+/* 📐 Smart Column Resizing (Excluding .col-select) */
+#user-management-section .admin-table th:not(.col-select),
+#user-management-section .admin-table td:not(.col-select) {
+  min-width: 8ch;
+  max-width: 44ch;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
 
-/* =============================================================
- 🔠 SECTION: Table Headers <th>
- 📌 Sticky, bold, non-wrapping header cells
-============================================================= */
+/* 🔠 Table Headers */
 #user-management-section .admin-table th {
   border: 1px solid #ccc;
   padding: 6px 10px;
   text-align: left;
   vertical-align: top;
-  white-space: nowrap;
-  min-width: max-content;
-  max-width: 44ch;
   background-color: #007a8a;
   color: white;
   font-weight: bold;
@@ -66,39 +61,15 @@
   z-index: 10;
 }
 
-
-/* =============================================================
- 🧾 SECTION: Table Body Cells <td>
- 📏 Standardized wrapping, overflow, width behavior
-============================================================= */
+/* 🧾 Table Body Cells */
 #user-management-section .admin-table td {
   border: 1px solid #ccc;
   padding: 6px 10px;
   text-align: left;
   vertical-align: top;
-  white-space: normal;
-  word-wrap: break-word;
-  overflow-wrap: anywhere;
-  min-width: 0;
-  max-width: 44ch;
 }
 
-
-/* =============================================================
- 📏 SECTION: Column Width Logic
- 📊 Controls shrink/grow/wrap per specific column
-============================================================= */
-#user-management-section .admin-table .col-name     { min-width: max-content; max-width: 30ch; }
-#user-management-section .admin-table .col-email    { min-width: max-content; max-width: 36ch; }
-#user-management-section .admin-table .col-username { min-width: max-content; max-width: 24ch; }
-#user-management-section .admin-table .col-phone    { min-width: max-content; max-width: 18ch; }
-#user-management-section .admin-table .col-access   { min-width: max-content; max-width: 30ch; }
-
-
-/* =============================================================
- ✅ SECTION: Select Column Styling
- ☑️ Checkbox column colors and layout
-============================================================= */
+/* ✅ Select Column Styling */
 #user-management-section .admin-table th.col-select,
 #user-management-section .admin-table td.col-select {
   width: 4ch;
@@ -118,11 +89,7 @@
   color: black;
 }
 
-
-/* =============================================================
- 🦓 SECTION: Row Styling
- 🎨 Zebra striping + selected-row highlight
-============================================================= */
+/* 🦓 Row Striping + Selection */
 #user-management-section .admin-table tbody tr:nth-child(even) {
   background-color: #f9f9f9;
 }
@@ -134,22 +101,14 @@
   background-color: #d0f0ff !important;
 }
 
-
-/* =============================================================
- 🔧 SECTION: Compact Mode Overrides
- 📦 Smaller spacing and font for tight layouts
-============================================================= */
+/* 📏 Compact Mode */
 body.compact-mode #user-management-section .admin-table th,
 body.compact-mode #user-management-section .admin-table td {
   padding: 4px 6px;
   font-size: 0.85rem;
 }
 
-
-/* =============================================================
- 📱 SECTION: Mobile Responsiveness
- 📉 Slightly smaller text on small screens
-============================================================= */
+/* 📱 Responsive Sizing */
 @media (max-width: 768px) {
   #user-management-section .admin-table th,
   #user-management-section .admin-table td {
@@ -157,11 +116,7 @@ body.compact-mode #user-management-section .admin-table td {
   }
 }
 
-
-/* =============================================================
- 🧾 SECTION: Confirm Box Styles
- 💬 Warning, success, and info messaging
-============================================================= */
+/* ✅ Confirm Box Styles */
 #user-management-section .confirm-box {
   padding: 8px;
   border-radius: 4px;
@@ -183,10 +138,7 @@ body.compact-mode #user-management-section .admin-table td {
   color: #00aa55;
 }
 
-
-/* =============================================================
- ✅ SECTION: Confirm Buttons (Green = Success)
-============================================================= */
+/* ✅ Confirm Buttons */
 #user-management-section .confirm-btn.green {
   background-color: #00aa55;
   border: none;
@@ -197,10 +149,6 @@ body.compact-mode #user-management-section .admin-table td {
   border-radius: 4px;
 }
 
-
-/* =============================================================
- ⚠️ SECTION: Confirm Buttons (Yellow = Caution)
-============================================================= */
 #user-management-section .confirm-btn.yellow {
   background-color: #ffff00;
   color: black;
@@ -212,11 +160,7 @@ body.compact-mode #user-management-section .admin-table td {
   border-radius: 4px;
 }
 
-
-/* =============================================================
- ☑️ SECTION: Checkbox Styling
- 🎯 Checked state uses green accent
-============================================================= */
+/* ✅ Checkbox Accent */
 #user-management-section .admin-table td.col-select input[type="checkbox"]:checked {
   accent-color: #00aa55;
 }

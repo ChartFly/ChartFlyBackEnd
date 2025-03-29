@@ -5,10 +5,7 @@
   ❌ No global bleed — all selectors are scoped to this tab only
 ------------------------------------------------------------- */
 
-/* -------------------------------------------------------------
-  🔷 SECTION: Layout Containers
-  - Top-level layout for the API Keys tab section
-------------------------------------------------------------- */
+/* 🔷 Layout Containers */
 #api-keys-section {
   margin-top: 2rem;
 }
@@ -32,10 +29,7 @@
   border-radius: 6px;
 }
 
-/* -------------------------------------------------------------
-  📊 SECTION: Admin Table Styles
-  - Targeting the admin-table only inside this section
-------------------------------------------------------------- */
+/* 📊 Admin Table Core */
 #api-keys-section .admin-table {
   width: 100%;
   border-collapse: collapse;
@@ -43,18 +37,22 @@
   font-size: 0.95rem;
 }
 
-/* -------------------------------------------------------------
-  🔠 SECTION: Table Headers <th>
-  - Sticky header, non-wrapping, ChartFly Blue background
-------------------------------------------------------------- */
+/* 📐 Smart Column Resizing (Excluding .col-select) */
+#api-keys-section .admin-table th:not(.col-select),
+#api-keys-section .admin-table td:not(.col-select) {
+  min-width: 8ch;
+  max-width: 44ch;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* 🔠 Table Headers */
 #api-keys-section .admin-table th {
   border: 1px solid #ccc;
   padding: 6px 10px;
   text-align: left;
   vertical-align: top;
-  white-space: nowrap;
-  min-width: max-content;
-  max-width: 44ch;
   background-color: #007a8a;
   color: white;
   font-weight: bold;
@@ -63,26 +61,15 @@
   z-index: 10;
 }
 
-/* -------------------------------------------------------------
-  🧾 SECTION: Table Body Cells <td>
-  - Wrapping behavior and width control
-------------------------------------------------------------- */
+/* 🧾 Table Body Cells */
 #api-keys-section .admin-table td {
   border: 1px solid #ccc;
   padding: 6px 10px;
   text-align: left;
   vertical-align: top;
-  white-space: normal;
-  word-wrap: break-word;
-  overflow-wrap: anywhere;
-  min-width: 0;
-  max-width: 44ch;
 }
 
-/* -------------------------------------------------------------
-  ✅ SECTION: Select Column Styling
-  - Checkbox column layout and visual logic
-------------------------------------------------------------- */
+/* ✅ Select Column Styling */
 #api-keys-section .admin-table th.col-select,
 #api-keys-section .admin-table td.col-select {
   width: 4ch;
@@ -102,10 +89,7 @@
   color: black;
 }
 
-/* -------------------------------------------------------------
-  🦓 SECTION: Table Row Styling
-  - Zebra striping and row selection highlight
-------------------------------------------------------------- */
+/* 🦓 Row Striping + Selection */
 #api-keys-section .admin-table tbody tr:nth-child(even) {
   background-color: #f9f9f9;
 }
@@ -117,20 +101,14 @@
   background-color: #d0f0ff !important;
 }
 
-/* -------------------------------------------------------------
-  📏 SECTION: Compact Mode Overrides
-  - Smaller padding and font size when compact mode is active
-------------------------------------------------------------- */
+/* 📏 Compact Mode */
 body.compact-mode #api-keys-section .admin-table th,
 body.compact-mode #api-keys-section .admin-table td {
   padding: 4px 6px;
   font-size: 0.85rem;
 }
 
-/* -------------------------------------------------------------
-  📱 SECTION: Responsive Font Sizes
-  - Slightly smaller fonts on tablets and phones
-------------------------------------------------------------- */
+/* 📱 Responsive Sizing */
 @media (max-width: 768px) {
   #api-keys-section .admin-table th,
   #api-keys-section .admin-table td {
@@ -138,10 +116,7 @@ body.compact-mode #api-keys-section .admin-table td {
   }
 }
 
-/* -------------------------------------------------------------
-  ✅ SECTION: Confirm Box Styles
-  - Visual feedback when confirming an action
-------------------------------------------------------------- */
+/* ✅ Confirm Box Styles */
 #api-keys-section .confirm-box {
   padding: 8px;
   border-radius: 4px;
@@ -163,9 +138,7 @@ body.compact-mode #api-keys-section .admin-table td {
   color: #00aa55;
 }
 
-/* -------------------------------------------------------------
-  ✅ SECTION: Confirm Button – Green (Default Success)
-------------------------------------------------------------- */
+/* ✅ Confirm Buttons */
 #api-keys-section .confirm-btn.green {
   background-color: #00aa55;
   border: none;
@@ -176,9 +149,6 @@ body.compact-mode #api-keys-section .admin-table td {
   border-radius: 4px;
 }
 
-/* -------------------------------------------------------------
-  ⚠️ SECTION: Confirm Button – Yellow (Are you sure?)
-------------------------------------------------------------- */
 #api-keys-section .confirm-btn.yellow {
   background-color: #ffff00;
   color: black;
@@ -190,10 +160,7 @@ body.compact-mode #api-keys-section .admin-table td {
   border-radius: 4px;
 }
 
-/* -------------------------------------------------------------
-  ✅ SECTION: Checkbox Styling
-  - Green color when checked
-------------------------------------------------------------- */
+/* ✅ Checkbox Accent */
 #api-keys-section .admin-table td.col-select input[type="checkbox"]:checked {
   accent-color: #00aa55;
 }
