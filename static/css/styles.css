@@ -38,7 +38,7 @@
 
 .market-status-container {
   display: flex;
-  align-items: center;
+  align-items: column;
   gap: 10px;
 }
 
