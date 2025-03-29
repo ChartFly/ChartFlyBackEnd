@@ -1,7 +1,7 @@
 /* -------------------------------------------------------------
   📁 FILE: UserManagement.css
   📍 LOCATION: static/admin/user-management/UserManagement.css
-  🎯 SCOPE: Styles exclusive to #user-management-section
+  🌟 SCOPE: Styles exclusive to #user-management-section
   ❌ No global bleed — all selectors are scoped to this tab only
 ------------------------------------------------------------- */
 
@@ -22,22 +22,24 @@
 }
 
 #user-management-section .table-wrapper {
+  display: block;
   overflow-x: auto;
   overflow-y: auto;
   max-height: 500px;
+  max-width: 100%;
   border: 1px solid #ccc;
   border-radius: 6px;
 }
 
-/* 📊 Admin Table Core */
+/* 📊 Admin Table Styles */
 #user-management-section .admin-table {
-  width: 100%;
+  width: max-content;
   border-collapse: collapse;
   table-layout: fixed;
   font-size: 0.95rem;
 }
 
-/* 📐 Smart Column Resizing (Excluding .col-select) */
+/* 📀 Column Resizing Defaults (except .col-select) */
 #user-management-section .admin-table th:not(.col-select),
 #user-management-section .admin-table td:not(.col-select) {
   min-width: 8ch;
@@ -47,7 +49,7 @@
   word-break: break-word;
 }
 
-/* 🔠 Table Headers */
+/* 🔠 Header Styling */
 #user-management-section .admin-table th {
   border: 1px solid #ccc;
   padding: 6px 10px;
@@ -61,7 +63,7 @@
   z-index: 10;
 }
 
-/* 🧾 Table Body Cells */
+/* 📞 Body Cell Base Styling */
 #user-management-section .admin-table td {
   border: 1px solid #ccc;
   padding: 6px 10px;
@@ -69,7 +71,7 @@
   vertical-align: top;
 }
 
-/* ✅ Select Column Styling */
+/* ✅ Select Column */
 #user-management-section .admin-table th.col-select,
 #user-management-section .admin-table td.col-select {
   width: 4ch;
@@ -89,14 +91,13 @@
   color: black;
 }
 
-/* 🦓 Row Striping + Selection */
+/* 🦓 Zebra Striping + Row Highlight */
 #user-management-section .admin-table tbody tr:nth-child(even) {
   background-color: #f9f9f9;
 }
 #user-management-section .admin-table tbody tr:nth-child(odd) {
   background-color: #ffffff;
 }
-
 #user-management-section .admin-table tr.selected-row {
   background-color: #d0f0ff !important;
 }
@@ -108,7 +109,7 @@ body.compact-mode #user-management-section .admin-table td {
   font-size: 0.85rem;
 }
 
-/* 📱 Responsive Sizing */
+/* 📱 Responsive Font Tweaks */
 @media (max-width: 768px) {
   #user-management-section .admin-table th,
   #user-management-section .admin-table td {
@@ -122,17 +123,14 @@ body.compact-mode #user-management-section .admin-table td {
   border-radius: 4px;
   font-weight: bold;
 }
-
 #user-management-section .confirm-box.info {
   background-color: #007a8a;
   color: white;
 }
-
 #user-management-section .confirm-box.warn {
   background-color: #fff4e5;
   color: #cc7700;
 }
-
 #user-management-section .confirm-box.success {
   background-color: #e6f9ed;
   color: #00aa55;
@@ -148,7 +146,6 @@ body.compact-mode #user-management-section .admin-table td {
   cursor: pointer;
   border-radius: 4px;
 }
-
 #user-management-section .confirm-btn.yellow {
   background-color: #ffff00;
   color: black;
