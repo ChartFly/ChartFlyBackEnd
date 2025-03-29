@@ -119,6 +119,7 @@ body.compact-mode #user-management-section .admin-table td {
 
 /* ✅ Confirm Box Styles */
 #user-management-section .confirm-box {
+  display: block;
   padding: 8px;
   border-radius: 4px;
   font-weight: bold;

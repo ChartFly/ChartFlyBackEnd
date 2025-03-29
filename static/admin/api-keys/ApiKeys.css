@@ -1,7 +1,7 @@
 /* -------------------------------------------------------------
   📁 FILE: ApiKeys.css
   📍 LOCATION: static/admin/api-keys/ApiKeys.css
-  🎯 SCOPE: Styles exclusive to #api-keys-section
+  🌟 SCOPE: Styles exclusive to #api-keys-section
   ❌ No global bleed — all selectors are scoped to this tab only
 ------------------------------------------------------------- */
 
@@ -63,7 +63,7 @@
   z-index: 10;
 }
 
-/* 📒 Body Cell Base Styling */
+/* 📅 Body Cell Base Styling */
 #api-keys-section .admin-table td {
   border: 1px solid #ccc;
   padding: 6px 10px;
@@ -91,7 +91,7 @@
   color: black;
 }
 
-/* 🦓 Zebra Striping + Row Highlight */
+/* 📓 Zebra Striping + Row Highlight */
 #api-keys-section .admin-table tbody tr:nth-child(even) {
   background-color: #f9f9f9;
 }
@@ -119,6 +119,7 @@ body.compact-mode #api-keys-section .admin-table td {
 
 /* ✅ Confirm Box Styles */
 #api-keys-section .confirm-box {
+  display: block;
   padding: 8px;
   border-radius: 4px;
   font-weight: bold;
