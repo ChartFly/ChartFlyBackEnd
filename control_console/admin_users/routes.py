@@ -6,6 +6,24 @@ import asyncpg
 
 router = APIRouter()  # Mounts in main.py at: prefix="/api/users"
 
+# 🧱 GET all admin users
+@router.get("/")
+async def get_all_users(request: Request):
+    db: asyncpg.Connection = request.state.db
+    rows = await db.fetch("SELECT * FROM admin_users ORDER BY last_name ASC")
+    return [
+        {
+            "id": row["id"],
+            "name": f"{row['first_name']} {row['last_name']}".strip(),
+            "email": row["email"],
+            "phone": row["phone_number"],
+            "address": row["address"],
+            "username": row["username"],
+            "access": await get_user_access(db, row["id"])
+        }
+        for row in rows
+    ]
+
 # 🧾 GET available tab names (for checkboxes)
 @router.get("/tabs")
 async def get_tabs():
@@ -26,7 +44,7 @@ async def get_user(user_id: str, request: Request):
         "phone": user["phone_number"],
         "address": user["address"],
         "username": user["username"],
-        "access": await get_user_access(db, str(user["id"]))
+        "access": await get_user_access(db, user["id"])
     }
 
 # ➕ CREATE user
@@ -44,7 +62,8 @@ async def create_user(request: Request):
     await db.execute("""
         INSERT INTO admin_users (id, first_name, last_name, email, phone_number, address, username, password_hash)
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-    """, user_id, data["first_name"], data["last_name"], data["email"], data["phone"], data["address"], data["username"], hashed)
+    """, user_id, data["first_name"], data["last_name"], data["email"],
+         data["phone"], data["address"], data["username"], hashed)
 
     await set_user_permissions(db, user_id, data["access"])
     return {"message": "User created"}
@@ -63,13 +82,15 @@ async def update_user(user_id: str, request: Request):
             UPDATE admin_users
             SET first_name=$1, last_name=$2, email=$3, phone_number=$4, address=$5, username=$6, password_hash=$7
             WHERE id=$8
-        """, data["first_name"], data["last_name"], data["email"], data["phone"], data["address"], data["username"], hashed, user_id)
+        """, data["first_name"], data["last_name"], data["email"], data["phone"],
+             data["address"], data["username"], hashed, user_id)
     else:
         await db.execute("""
             UPDATE admin_users
             SET first_name=$1, last_name=$2, email=$3, phone_number=$4, address=$5, username=$6
             WHERE id=$7
-        """, data["first_name"], data["last_name"], data["email"], data["phone"], data["address"], data["username"], user_id)
+        """, data["first_name"], data["last_name"], data["email"], data["phone"],
+             data["address"], data["username"], user_id)
 
     await set_user_permissions(db, user_id, data["access"])
     return {"message": "User updated"}
@@ -91,4 +112,7 @@ async def get_user_access(db, user_id):
 async def set_user_permissions(db, user_id, tabs: List[str]):
     await db.execute("DELETE FROM admin_permissions WHERE user_id = $1", user_id)
     for tab in tabs:
-        await db.execute("INSERT INTO admin_permissions (user_id, tab_name) VALUES ($1, $2)", user_id, tab)
+        await db.execute(
+            "INSERT INTO admin_permissions (user_id, tab_name) VALUES ($1, $2)",
+            user_id, tab
+        )
