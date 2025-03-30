@@ -57,6 +57,7 @@ async function loadApiKeys() {
         <td class="col-select"><input type="checkbox" class="api-select-checkbox" data-id="${key.id}"></td>
         <td class="id-col" style="display: none;">${key.id}</td>
         <td>${sanitizeInput(key.key_label)}</td>
+        <td>${sanitizeInput(key.api_key_identifier)}</td>
         <td>${sanitizeInput(key.provider)}</td>
         <td>${sanitizeInput(key.priority_order)}</td>
         <td>${key.is_active ? 'Active' : 'Inactive'}</td>

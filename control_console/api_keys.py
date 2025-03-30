@@ -5,7 +5,11 @@ import logging
 router = APIRouter()
 logging.basicConfig(level=logging.INFO)
 
-# ✅ API Key Schema
+# ✅ Helper: Extract last 4 characters of API secret
+def extract_identifier(secret: str) -> str:
+    return secret[-4:] if secret and len(secret) >= 4 else "xxxx"
+
+# ✅ API Key Schema (no identifier exposed to frontend)
 class APIKey(BaseModel):
     key_label: str
     api_secret: str
@@ -29,7 +33,7 @@ async def get_all_api_keys(request: Request):
     try:
         rows = await db.fetch("""
             SELECT id, key_label, provider, is_active, key_type, billing_interval,
-                   cost_per_month, cost_per_year,
+                   cost_per_month, cost_per_year, api_key_identifier,
                    usage_limit_sec, usage_limit_min, usage_limit_5min,
                    usage_limit_10min, usage_limit_15min, usage_limit_hour,
                    usage_limit_day, priority_order
@@ -45,24 +49,25 @@ async def get_all_api_keys(request: Request):
 async def add_api_key(api_key: APIKey, request: Request):
     db = request.state.db
     try:
+        identifier = extract_identifier(api_key.api_secret)
         await db.execute("""
             INSERT INTO api_keys_table (
                 key_label, api_secret, key_type, billing_interval,
                 cost_per_month, cost_per_year,
                 usage_limit_sec, usage_limit_min, usage_limit_5min,
                 usage_limit_10min, usage_limit_15min, usage_limit_hour,
-                usage_limit_day, priority_order
+                usage_limit_day, priority_order, api_key_identifier
             ) VALUES (
                 $1, $2, $3, $4,
                 $5, $6, $7, $8,
                 $9, $10, $11, $12,
-                $13, $14
+                $13, $14, $15
             )
         """, api_key.key_label, api_key.api_secret, api_key.key_type, api_key.billing_interval,
              api_key.cost_per_month, api_key.cost_per_year,
              api_key.usage_limit_sec, api_key.usage_limit_min, api_key.usage_limit_5min,
              api_key.usage_limit_10min, api_key.usage_limit_15min, api_key.usage_limit_hour,
-             api_key.usage_limit_day, api_key.priority_order)
+             api_key.usage_limit_day, api_key.priority_order, identifier)
 
         logging.info(f"✅ Added API key label: {api_key.key_label}")
         return {"message": "API key added successfully"}
@@ -89,6 +94,7 @@ async def delete_api_key(key_id: int, request: Request):
 async def update_api_key(key_id: int, api_key: APIKey, request: Request):
     db = request.state.db
     try:
+        identifier = extract_identifier(api_key.api_secret)
         result = await db.execute("""
             UPDATE api_keys_table SET
                 key_label = $1,
@@ -104,13 +110,14 @@ async def update_api_key(key_id: int, api_key: APIKey, request: Request):
                 usage_limit_15min = $11,
                 usage_limit_hour = $12,
                 usage_limit_day = $13,
-                priority_order = $14
-            WHERE id = $15
+                priority_order = $14,
+                api_key_identifier = $15
+            WHERE id = $16
         """, api_key.key_label, api_key.api_secret, api_key.key_type, api_key.billing_interval,
              api_key.cost_per_month, api_key.cost_per_year,
              api_key.usage_limit_sec, api_key.usage_limit_min, api_key.usage_limit_5min,
              api_key.usage_limit_10min, api_key.usage_limit_15min, api_key.usage_limit_hour,
-             api_key.usage_limit_day, api_key.priority_order, key_id)
+             api_key.usage_limit_day, api_key.priority_order, identifier, key_id)
 
         if result == "UPDATE 0":
             raise HTTPException(status_code=404, detail="API key not found")
