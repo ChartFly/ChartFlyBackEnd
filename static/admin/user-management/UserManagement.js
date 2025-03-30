@@ -1,6 +1,6 @@
 // static/admin/user-management/UserManagement.js (Final Merge)
 
-const USERS_API = '/api/users';
+const USERS_API = '/api/users';              // ✅ no trailing slash
 const PERMISSIONS_API = '/api/users/tabs';
 
 // 🛠️ DOM Elements
@@ -9,8 +9,8 @@ const userForm = document.getElementById('userForm');
 const accessCheckboxes = document.getElementById('accessCheckboxes');
 const confirmBox = document.getElementById('user-confirm');
 
-const commitBar = document.getElementById('user-commit-bar'); // optional
-const commitBtn = document.getElementById('user-commit-btn'); // optional
+const commitBar = document.getElementById('user-commit-bar');
+const commitBtn = document.getElementById('user-commit-btn');
 
 // 🔄 State
 let selectedUserRows = new Set();
@@ -28,6 +28,12 @@ async function loadUsers() {
     const res = await fetch(USERS_API);
     const users = await res.json();
     userTableBody.innerHTML = '';
+
+    if (!Array.isArray(users)) {
+      console.error("Expected user array but got:", users);
+      userTableBody.innerHTML = `<tr><td colspan="6">Invalid user data received.</td></tr>`;
+      return;
+    }
 
     users.forEach((user, index) => {
       const row = document.createElement('tr');
@@ -60,6 +66,12 @@ async function loadTabAccess() {
   try {
     const res = await fetch(PERMISSIONS_API);
     const tabs = await res.json();
+
+    if (!accessCheckboxes) {
+      console.warn("accessCheckboxes element not found.");
+      return;
+    }
+
     accessCheckboxes.innerHTML = '';
 
     tabs.forEach(tab => {

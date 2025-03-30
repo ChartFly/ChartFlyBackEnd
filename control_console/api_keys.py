@@ -28,7 +28,7 @@ async def get_all_api_keys(request: Request):
     db = request.state.db
     try:
         rows = await db.fetch("""
-            SELECT id, key_label, key_type, billing_interval,
+            SELECT id, key_label, provider, is_active, key_type, billing_interval,
                    cost_per_month, cost_per_year,
                    usage_limit_sec, usage_limit_min, usage_limit_5min,
                    usage_limit_10min, usage_limit_15min, usage_limit_hour,
