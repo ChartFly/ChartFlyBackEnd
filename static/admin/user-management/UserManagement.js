@@ -1,6 +1,6 @@
 // static/admin/user-management/UserManagement.js (Final Merge)
 
-const USERS_API = '/api/users';              // ✅ no trailing slash
+const USERS_API = '/api/users/';
 const PERMISSIONS_API = '/api/users/tabs';
 
 // 🛠️ DOM Elements
