@@ -2,8 +2,42 @@
 
 let selectedApiRows = new Set();
 let activeApiAction = null;
+let apiKeysUndoBuffer = null;
 
-window.addEventListener("DOMContentLoaded", loadApiKeys);
+window.addEventListener("DOMContentLoaded", () => {
+  loadApiKeys();
+
+  // 🔘 Toggle show/hide ID column
+  document.getElementById("toggle-id-column").addEventListener("change", function (e) {
+    const show = e.target.checked;
+    document.querySelectorAll(".id-col").forEach(el => {
+      el.style.display = show ? "" : "none";
+    });
+  });
+
+  // 🔁 Undo Button
+  document.getElementById("apikeys-undo-btn").addEventListener("click", () => {
+    if (!apiKeysUndoBuffer) return;
+
+    const buffer = apiKeysUndoBuffer;
+    const tableBody = document.getElementById("api-keys-table");
+
+    if (buffer.action === 'delete') {
+      tableBody.appendChild(buffer.rowElement);
+    }
+
+    apiKeysUndoBuffer = null;
+    showConfirmBar("Last change undone.");
+  });
+
+  // 💾 Save Button
+  document.getElementById("apikeys-save-btn").addEventListener("click", () => {
+    // TODO: Implement backend save
+    apiKeysUndoBuffer = null;
+    hideConfirmBar();
+    console.log("✅ Changes saved!");
+  });
+});
 
 async function loadApiKeys() {
   try {
@@ -21,10 +55,11 @@ async function loadApiKeys() {
 
       row.innerHTML = `
         <td class="col-select"><input type="checkbox" class="api-select-checkbox" data-id="${key.id}"></td>
+        <td class="id-col" style="display: none;">${key.id}</td>
         <td>${sanitizeInput(key.key_label)}</td>
         <td>${sanitizeInput(key.provider)}</td>
         <td>${sanitizeInput(key.priority_order)}</td>
-        <td>${sanitizeInput(key.status)}</td>
+        <td>${key.is_active ? 'Active' : 'Inactive'}</td>
         <td>${sanitizeInput(key.usage_limit_sec)}</td>
         <td>${sanitizeInput(key.usage_limit_min)}</td>
         <td>${sanitizeInput(key.usage_limit_5min)}</td>
@@ -32,6 +67,9 @@ async function loadApiKeys() {
         <td>${sanitizeInput(key.usage_limit_15min)}</td>
         <td>${sanitizeInput(key.usage_limit_hour)}</td>
         <td>${sanitizeInput(key.usage_limit_day)}</td>
+        <td>$${parseFloat(key.cost_per_month || 0).toFixed(2)}</td>
+        <td>${sanitizeInput(key.billing_interval)}</td>
+        <td>${sanitizeInput(key.key_type)}</td>
       `;
 
       table.appendChild(row);
@@ -41,13 +79,12 @@ async function loadApiKeys() {
   } catch (error) {
     console.error("❌ Failed to load API keys:", error);
     const table = document.getElementById("api-keys-table");
-    table.innerHTML = `<tr><td colspan="12">Failed to load data. Please try again later.</td></tr>`;
+    table.innerHTML = `<tr><td colspan="16">Failed to load data. Please try again later.</td></tr>`;
   }
 }
 
 function setupApiToolbar() {
   const checkboxes = document.querySelectorAll(".api-select-checkbox");
-  const confirmBox = document.getElementById("api-confirm");
 
   checkboxes.forEach(box => {
     box.addEventListener("change", () => {
@@ -81,37 +118,46 @@ function setupApiToolbar() {
       btn.classList.add("active");
 
       if (selectedApiRows.size === 0) {
-        confirmBox.innerHTML = `<div class="confirm-box warn">Please select at least one row first.</div>`;
+        showConfirmBar("Please select at least one row first.");
         return;
       }
 
       const selectedIndexes = Array.from(document.querySelectorAll("tr.selected-row"))
         .map(row => row.dataset.index);
 
-      confirmBox.innerHTML = `
-        <div class="confirm-box info">
-          <strong>Action:</strong> ${action.toUpperCase()}<br>
-          <strong>Selected Rows:</strong> ${selectedIndexes.join(", ")}<br>
-          <button class="confirm-btn yellow" onclick="confirmApiAction()">Confirm ${action}</button>
-        </div>
-      `;
+      showConfirmBar(`Ready to ${action} row(s): ${selectedIndexes.join(", ")}`);
     });
   });
 }
 
 function confirmApiAction() {
-  const confirmBox = document.getElementById("api-confirm");
-
   if (!activeApiAction || selectedApiRows.size === 0) {
-    confirmBox.innerHTML = `<div class="confirm-box warn">No action or rows selected.</div>`;
+    showConfirmBar("No action or rows selected.");
     return;
   }
 
   console.log(`✅ Confirmed [${activeApiAction}] for:`, Array.from(selectedApiRows));
 
-  confirmBox.innerHTML = `
-    <div class="confirm-box success">✅ ${capitalize(activeApiAction)} Confirmed!</div>
-  `;
+  // 🔁 Example for Delete (only)
+  if (activeApiAction === "delete") {
+    const table = document.getElementById("api-keys-table");
+    const selectedRows = document.querySelectorAll("tr.selected-row");
+
+    selectedRows.forEach(row => {
+      const rowId = row.getAttribute("data-id");
+      const rowClone = row.cloneNode(true);
+
+      apiKeysUndoBuffer = {
+        action: 'delete',
+        rowId: rowId,
+        rowElement: rowClone
+      };
+
+      row.remove();
+    });
+
+    showConfirmBar("1 or more rows deleted.");
+  }
 
   activeApiAction = null;
   selectedApiRows.clear();
@@ -121,19 +167,35 @@ function confirmApiAction() {
 }
 
 function updateApiConfirmBox() {
-  const confirmBox = document.getElementById("api-confirm");
+  const bar = document.getElementById("apikeys-confirm-bar");
+  const msg = document.getElementById("apikeys-confirm-message");
+
   if (selectedApiRows.size === 0) {
-    confirmBox.innerHTML = "";
+    bar.style.display = "none";
+    msg.textContent = "";
     return;
   }
 
-  confirmBox.innerHTML = `<div class="confirm-box info">${selectedApiRows.size} row(s) selected.</div>`;
+  showConfirmBar(`${selectedApiRows.size} row(s) selected.`);
+}
+
+function showConfirmBar(message) {
+  const bar = document.getElementById("apikeys-confirm-bar");
+  const msg = document.getElementById("apikeys-confirm-message");
+
+  msg.textContent = message;
+  bar.style.display = "flex";
+}
+
+function hideConfirmBar() {
+  const bar = document.getElementById("apikeys-confirm-bar");
+  bar.style.display = "none";
 }
 
 function sanitizeInput(input) {
   return typeof input === "string"
     ? input.replace(/</g, "&lt;").replace(/>/g, "&gt;")
-    : input;
+    : input ?? "—";
 }
 
 function capitalize(word) {
