@@ -52,7 +52,11 @@
 .market-status-text {
   padding: 5px 10px;
   border-radius: 5px;
-  font-size: 18px
+  font-size: 18px;
+  font-weight: bold;
+  display: inline-block;
+  color: white;
+  background-color: gray; /* fallback in case no state class is set */
 }
 
 .market-open { background-color: green; }
