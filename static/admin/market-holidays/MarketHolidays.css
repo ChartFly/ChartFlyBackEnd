@@ -172,3 +172,28 @@ body.compact-mode #market-holidays-section .admin-table td {
 #market-holidays-section .admin-table td.col-select input[type="checkbox"]:checked {
   accent-color: #00aa55;
 }
+
+/* ✏️ Editable Cell Visuals */
+#market-holidays-section .editable {
+  background-color: #fff8dc; /* light yellow */
+  border: 1px dashed #ccc;
+  outline: none;
+}
+
+/* ✏️ Entire Row Being Edited */
+#market-holidays-section tr.editing {
+  box-shadow: inset 0 0 0 2px #007a8a;
+  background-color: #e9f7f9;
+}
+
+/* 🆕 Highlight New or Pasted Rows */
+#market-holidays-section tr[data-id^="paste-"],
+#market-holidays-section tr[data-id^="new-"] {
+  background-color: #f2fff4;
+}
+
+/* 🛑 Invalid Cell Highlighting */
+#market-holidays-section .invalid {
+  background-color: #ffe5e5;
+  border: 1px solid #ff4d4d;
+}

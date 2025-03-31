@@ -1,0 +1,47 @@
+/* ============================== */
+/* 🔁 Shared Commit Bar Styling   */
+/* ✅ Used in Market Holidays, API Keys, Users */
+/* ============================== */
+
+.commit-bar {
+  display: none;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f0f0f0;
+  border: 2px solid #007a8a;
+  padding: 10px 16px;
+  margin-bottom: 1rem;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 14px;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.commit-message {
+  flex-grow: 1;
+  color: #333;
+}
+
+.confirm-btn {
+  padding: 6px 12px;
+  font-weight: bold;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.confirm-btn.yellow {
+  background-color: #ffff00;
+  color: black;
+}
+
+.confirm-btn.green {
+  background-color: #00aa55;
+  color: white;
+}
+
+.confirm-btn:hover {
+  filter: brightness(1.1);
+}
