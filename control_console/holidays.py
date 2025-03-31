@@ -4,8 +4,6 @@ import traceback
 from datetime import datetime
 
 router = APIRouter()
-
-# ✅ Configure logging
 logging.basicConfig(level=logging.INFO)
 
 # ✅ GET Holidays by Year using asyncpg
@@ -16,11 +14,10 @@ async def get_holidays_by_year(
 ):
     try:
         logging.info(f"🔍 Fetching holidays for {year}")
-
         db = request.state.db
 
         query = """
-            SELECT id, name, date, year
+            SELECT id, name, date, year, close_time
             FROM market_holidays
             WHERE year = $1
             ORDER BY date;
@@ -32,17 +29,26 @@ async def get_holidays_by_year(
             raise HTTPException(status_code=404, detail=f"No holidays found for {year}")
 
         today = datetime.utcnow().date()
-
         holidays = []
+
         for row in rows:
             holiday = dict(row)
             holiday_date = holiday["date"]
+
+            # ⏰ Format close_time if present
+            if holiday.get("close_time"):
+                holiday["close_time"] = holiday["close_time"].strftime("%H:%M")
+            else:
+                holiday["close_time"] = None
+
+            # 📆 Status logic
             if holiday_date == today:
                 status = "Closed Today"
             elif holiday_date > today:
                 status = "Upcoming"
             else:
                 status = "Passed"
+
             holiday["status"] = status
             holidays.append(holiday)
 

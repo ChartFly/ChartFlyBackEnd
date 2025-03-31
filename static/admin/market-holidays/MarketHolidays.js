@@ -19,11 +19,17 @@ async function loadMarketHolidays() {
       row.setAttribute("data-id", holiday.id);
       row.setAttribute("data-index", index + 1);
 
+      const isEarlyClose = holiday.close_time !== null;
+      const readableTime = isEarlyClose ? formatTime(holiday.close_time) : null;
+
       row.innerHTML = `
         <td class="col-select"><input type="checkbox" class="holiday-select-checkbox" data-id="${holiday.id}"></td>
         <td>${sanitizeInput(holiday.name || "N/A")}</td>
         <td>${sanitizeInput(holiday.date || "N/A")}</td>
-        <td>${sanitizeInput(holiday.status || "Unknown")}</td>
+        <td>
+          ${sanitizeInput(holiday.status || "Unknown")}
+          ${isEarlyClose ? `<br><small>(Closes at ${readableTime})</small>` : ""}
+        </td>
       `;
 
       table.appendChild(row);
@@ -35,6 +41,14 @@ async function loadMarketHolidays() {
     const table = document.getElementById("holidays-table");
     table.innerHTML = `<tr><td colspan="4">Failed to load holidays. Please try again later.</td></tr>`;
   }
+}
+
+function formatTime(rawTime) {
+  const [hour, minute] = rawTime.split(":");
+  const h = parseInt(hour, 10);
+  const suffix = h >= 12 ? "PM" : "AM";
+  const hour12 = ((h + 11) % 12 + 1);
+  return `${hour12}:${minute} ${suffix}`;
 }
 
 function setupHolidayToolbar() {
@@ -125,7 +139,7 @@ function updateHolidayConfirmBox() {
 function sanitizeInput(input) {
   return typeof input === "string"
     ? input.replace(/</g, "&lt;").replace(/>/g, "&gt;")
-    : input;
+    : input ?? "—";
 }
 
 function capitalize(word) {
