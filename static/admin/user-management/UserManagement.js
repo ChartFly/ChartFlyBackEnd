@@ -74,11 +74,13 @@ async function loadTabAccess() {
 
     accessCheckboxes.innerHTML = '';
 
-    tabs.forEach(tab => {
-      const label = document.createElement('label');
-      label.innerHTML = `<input type="checkbox" value="${tab}" name="access" /> ${tab}`;
-      accessCheckboxes.appendChild(label);
-    });
+   tabs.forEach(tab => {
+     const span = document.createElement('span');
+     span.classList.add('access-tab-label');
+     span.textContent = tab;
+     accessCheckboxes.appendChild(span);
+});
+
   } catch (err) {
     console.error('Error loading tabs:', err);
   }
