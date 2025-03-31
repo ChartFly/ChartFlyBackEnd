@@ -83,8 +83,8 @@
 
 #market-holidays-section td:nth-child(4),
 #market-holidays-section th:nth-child(4) {
-  min-width: 22ch !important;
-  max-width: 36ch !important;
+  min-width: 36ch !important;
+  max-width: 40ch !important;
   white-space: normal !important;
   word-wrap: break-word !important;
   overflow-wrap: break-word !important;
