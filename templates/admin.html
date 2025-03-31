@@ -46,14 +46,17 @@
   {% include "admin/api-keys/ApiKeys.html" %}
   {% include "admin/user-management/UserManagement.html" %}
 
+  <!-- ✅ Shared Logic + Styles -->
   <link rel="stylesheet" href="/static/admin/shared/commitLogic.css" />
-
-  <!-- ✅ Scripts -->
   <script src="/static/admin/shared/commitLogic.js"></script>
 
+  <!-- ✅ Per-Tab Scripts -->
   <script src="/static/admin/market-holidays/MarketHolidays.js"></script>
   <script src="/static/admin/api-keys/ApiKeys.js"></script>
   <script src="/static/admin/user-management/UserManagement.js"></script>
+
+  <!-- ✅ Global Core Script (tab logic, market status, etc.) -->
+  <script src="/static/frontend/core/main.js"></script>
 
 </body>
 </html>
