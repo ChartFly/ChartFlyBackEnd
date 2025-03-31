@@ -7,7 +7,6 @@ let apiKeysUndoBuffer = null;
 window.addEventListener("DOMContentLoaded", () => {
   loadApiKeys();
 
-  // 🔘 Toggle show/hide ID column
   document.getElementById("toggle-id-column").addEventListener("change", function (e) {
     const show = e.target.checked;
     document.querySelectorAll(".id-col").forEach(el => {
@@ -15,7 +14,6 @@ window.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // 🔁 Undo Button
   document.getElementById("apikeys-undo-btn").addEventListener("click", () => {
     if (!apiKeysUndoBuffer) return;
 
@@ -30,9 +28,7 @@ window.addEventListener("DOMContentLoaded", () => {
     showConfirmBar("Last change undone.");
   });
 
-  // 💾 Save Button
   document.getElementById("apikeys-save-btn").addEventListener("click", () => {
-    // TODO: Implement backend save
     apiKeysUndoBuffer = null;
     hideConfirmBar();
     console.log("✅ Changes saved!");
@@ -55,22 +51,22 @@ async function loadApiKeys() {
 
       row.innerHTML = `
         <td class="col-select"><input type="checkbox" class="api-select-checkbox" data-id="${key.id}"></td>
-        <td class="id-col" style="display: none;">${key.id}</td>
-        <td>${sanitizeInput(key.key_label)}</td>
-        <td>${sanitizeInput(key.api_key_identifier)}</td>
-        <td>${sanitizeInput(key.provider)}</td>
-        <td>${sanitizeInput(key.priority_order)}</td>
+        <td class="id-col" style="display: none;">${formatCell(key.id)}</td>
+        <td>${sanitizeInput(formatCell(key.key_label))}</td>
+        <td>${sanitizeInput(formatCell(key.api_key_identifier))}</td>
+        <td>${sanitizeInput(formatCell(key.provider))}</td>
+        <td>${formatCell(key.priority_order)}</td>
         <td>${key.is_active ? 'Active' : 'Inactive'}</td>
-        <td>${sanitizeInput(key.usage_limit_sec)}</td>
-        <td>${sanitizeInput(key.usage_limit_min)}</td>
-        <td>${sanitizeInput(key.usage_limit_5min)}</td>
-        <td>${sanitizeInput(key.usage_limit_10min)}</td>
-        <td>${sanitizeInput(key.usage_limit_15min)}</td>
-        <td>${sanitizeInput(key.usage_limit_hour)}</td>
-        <td>${sanitizeInput(key.usage_limit_day)}</td>
+        <td>${formatCell(key.usage_limit_sec)}</td>
+        <td>${formatCell(key.usage_limit_min)}</td>
+        <td>${formatCell(key.usage_limit_5min)}</td>
+        <td>${formatCell(key.usage_limit_10min)}</td>
+        <td>${formatCell(key.usage_limit_15min)}</td>
+        <td>${formatCell(key.usage_limit_hour)}</td>
+        <td>${formatCell(key.usage_limit_day)}</td>
         <td>$${parseFloat(key.cost_per_month || 0).toFixed(2)}</td>
-        <td>${sanitizeInput(key.billing_interval)}</td>
-        <td>${sanitizeInput(key.key_type)}</td>
+        <td>${sanitizeInput(formatCell(key.billing_interval))}</td>
+        <td>${sanitizeInput(formatCell(key.key_type))}</td>
       `;
 
       table.appendChild(row);
@@ -139,7 +135,6 @@ function confirmApiAction() {
 
   console.log(`✅ Confirmed [${activeApiAction}] for:`, Array.from(selectedApiRows));
 
-  // 🔁 Example for Delete (only)
   if (activeApiAction === "delete") {
     const table = document.getElementById("api-keys-table");
     const selectedRows = document.querySelectorAll("tr.selected-row");
@@ -197,6 +192,10 @@ function sanitizeInput(input) {
   return typeof input === "string"
     ? input.replace(/</g, "&lt;").replace(/>/g, "&gt;")
     : input ?? "—";
+}
+
+function formatCell(value) {
+  return value === null || value === undefined ? "—" : value;
 }
 
 function capitalize(word) {
