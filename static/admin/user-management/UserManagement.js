@@ -48,7 +48,7 @@ async function loadUsers() {
         <td>${user.email}</td>
         <td>${user.username}</td>
         <td>${user.phone || ''}</td>
-        <td>${sanitizeInput((user.access || []).join(', '))}</td>
+        <td>${Array.isArray(user.access) ? user.access.map(a => sanitizeInput(a)).join(', ') : '—'}</td>
       `;
 
       userTableBody.appendChild(row);
