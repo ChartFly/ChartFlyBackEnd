@@ -27,21 +27,25 @@ function updateMarketStatus() {
     return;
   }
 
-  let status = "Market Closed";
+  let status = "";
+  let statusClass = "";
 
   if (dayOfWeek === 0 || dayOfWeek === 6) {
     status = "Market Closed (Weekend)";
+    statusClass = "market-closed";
   } else if (hours < 9.5) {
     status = "Pre-Market Trading";
-    statusElement.className = "market-status-text market-prepost";
+    statusClass = "market-prepost";
   } else if (hours < 16) {
     status = "Market Open";
-    statusElement.className = "market-status-text market-open";
+    statusClass = "market-open";
   } else {
     status = "After-Market Trading";
-    statusElement.className = "market-status-text market-prepost";
+    statusClass = "market-prepost";
   }
 
+  statusElement.classList.remove("market-open", "market-closed", "market-prepost");
+  statusElement.classList.add("market-status-text", statusClass);
   statusElement.innerText = status;
 }
 
