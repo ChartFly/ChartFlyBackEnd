@@ -48,7 +48,7 @@ async function loadUsers() {
         <td>${user.email}</td>
         <td>${user.username}</td>
         <td>${user.phone || ''}</td>
-        <td>${(user.access || []).join(', ')}</td>
+        <td>${sanitizeInput((user.access || []).join(', '))}</td>
       `;
 
       userTableBody.appendChild(row);
@@ -168,4 +168,10 @@ function updateUserConfirmBox() {
 
 function capitalize(word) {
   return word.charAt(0).toUpperCase() + word.slice(1);
+}
+
+function sanitizeInput(input) {
+  return typeof input === 'string'
+    ? input.replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    : input;
 }
