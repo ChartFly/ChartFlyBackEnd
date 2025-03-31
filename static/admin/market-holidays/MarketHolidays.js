@@ -27,8 +27,8 @@ async function loadMarketHolidays() {
         <td>${sanitizeInput(holiday.name || "N/A")}</td>
         <td>${sanitizeInput(holiday.date || "N/A")}</td>
         <td>
-          ${sanitizeInput(holiday.status || "Unknown")}
-          ${isEarlyClose ? `<br><small>(Closes at ${readableTime})</small>` : ""}
+           ${sanitizeInput(holiday.status || "Unknown")}<br>
+           ${isEarlyClose ? `<small>(Closes at ${readableTime})</small>` : ""}
         </td>
       `;
 
