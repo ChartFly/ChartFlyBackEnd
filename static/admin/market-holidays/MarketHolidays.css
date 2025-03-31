@@ -83,12 +83,13 @@
 
 #market-holidays-section td:nth-child(4),
 #market-holidays-section th:nth-child(4) {
-  min-width: 18ch;
-  max-width: 28ch;
-  white-space: normal;
-  word-wrap: break-word;
-  vertical-align: top;
-  padding-top: 6px;
+  min-width: 22ch !important;
+  max-width: 36ch !important;
+  white-space: normal !important;
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
+  vertical-align: top !important;
+  padding-top: 6px !important;
 }
 
 #market-holidays-section .admin-table td.col-select {
