@@ -97,11 +97,18 @@ async function loadMarketHolidays() {
             selectedIds.forEach(id => {
               const row = table.querySelector(`tr[data-id="${id}"]`);
               if (!row) return;
+
               const cells = row.querySelectorAll("td:not(.col-select)");
+
               cells.forEach(cell => {
+                // 🧼 Strip (Closes at...) span if present
+                const note = cell.querySelector(".early-close-note");
+                if (note) note.remove();
+
                 cell.setAttribute("contenteditable", "true");
                 cell.classList.add("editable");
               });
+
               row.classList.add("editing");
             });
             break;

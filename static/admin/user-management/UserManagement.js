@@ -4,6 +4,7 @@ const USERS_API = '/api/users/';
 const PERMISSIONS_API = '/api/users/tabs';
 
 // 🛠️ DOM Elements
+const accessCheckboxes = document.getElementById('accessCheckboxes');
 const userTableBody = document.querySelector('#userTable tbody');
 const userForm = document.getElementById('userForm');
 const confirmBox = document.getElementById('user-confirm');
