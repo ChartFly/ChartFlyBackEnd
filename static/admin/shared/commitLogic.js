@@ -61,7 +61,7 @@ function initCommitLogic({ section, sectionDomId = `${section}-section`, onConfi
         return;
       }
 
-      // Pre-action changes before Confirm (highlight, editable, etc.)
+      // Pre-action visual cue for edit
       if (action === "edit") {
         for (const id of state.selectedRows) {
           const row = document.querySelector(`#${state.domId} tr[data-id="${id}"]`);
@@ -76,7 +76,7 @@ function initCommitLogic({ section, sectionDomId = `${section}-section`, onConfi
         }
       }
 
-      // Show Confirm UI
+      // Confirm UI
       const selectedIndexes = Array.from(document.querySelectorAll(`#${state.domId} tr.selected-row`))
         .map(row => row.dataset.index);
 
@@ -128,7 +128,6 @@ function wireCheckboxes(section) {
   });
 }
 
-
 function confirmCommitAction(section) {
   const state = getState(section);
   const confirmBox = document.getElementById(`${section}-confirm`);
@@ -144,13 +143,23 @@ function confirmCommitAction(section) {
     state.onConfirm(state.activeAction, Array.from(state.selectedRows));
   }
 
+  // ✅ Finalize edited rows for all actions except undo
+  if (state.activeAction !== "undo") {
+    document.querySelectorAll(`#${state.domId} tr.editing`).forEach(row => {
+      row.classList.remove("editing");
+      row.querySelectorAll("td.editable").forEach(cell => {
+        cell.removeAttribute("contenteditable");
+        cell.classList.remove("editable");
+      });
+    });
+  }
+
   const successMsg = document.createElement("div");
   successMsg.className = "confirm-box success";
   successMsg.textContent = msg.confirmSuccess(state.activeAction);
   confirmBox.innerHTML = "";
   confirmBox.appendChild(successMsg);
 
-  // ⏲️ Clear message after 7 seconds
   setTimeout(() => {
     if (confirmBox.contains(successMsg)) {
       confirmBox.innerHTML = "";
