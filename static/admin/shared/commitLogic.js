@@ -22,19 +22,21 @@ function getState(section) {
       selectedRows: new Set(),
       activeAction: null,
       undoBuffer: null,
-      onConfirm: null
+      onConfirm: null,
+      domId: null
     };
   }
   return sectionStates[section];
 }
 
 // 🚀 Init Commit Logic
-function initCommitLogic({ section, onConfirm, messages = {} }) {
+function initCommitLogic({ section, sectionDomId = `${section}-section`, onConfirm, messages = {} }) {
   const confirmBox = document.getElementById(`${section}-confirm`);
   const actions = ["edit", "copy", "paste", "add", "delete", "save"];
   const msg = { ...defaultMessages, ...messages };
   const state = getState(section);
   state.onConfirm = onConfirm;
+  state.domId = sectionDomId;
 
   // 🔘 Button Listeners
   actions.forEach(action => {
@@ -56,7 +58,7 @@ function initCommitLogic({ section, onConfirm, messages = {} }) {
         return;
       }
 
-      const selectedIndexes = Array.from(document.querySelectorAll(`#${section}-section tr.selected-row`))
+      const selectedIndexes = Array.from(document.querySelectorAll(`#${state.domId} tr.selected-row`))
         .map(row => row.dataset.index);
 
       const confirmDiv = document.createElement("div");
@@ -81,14 +83,14 @@ function initCommitLogic({ section, onConfirm, messages = {} }) {
     });
   });
 
-  // ⏳ Wait until DOM settles, then wire checkboxes
+  // ⏳ Delay to ensure table rows exist before wiring checkboxes
   setTimeout(() => wireCheckboxes(section), 0);
 }
 
 // ✅ Checkbox Logic
 function wireCheckboxes(section) {
   const state = getState(section);
-  const checkboxes = document.querySelectorAll(`#${section}-section .admin-table input[type="checkbox"]`);
+  const checkboxes = document.querySelectorAll(`#${state.domId} input[type="checkbox"]`);
 
   checkboxes.forEach(box => {
     const id = box.dataset.id;
@@ -137,15 +139,15 @@ function resetSelection(section) {
   state.activeAction = null;
   state.selectedRows.clear();
 
-  document.querySelectorAll(`#${section}-section .action-btn`).forEach(btn =>
+  document.querySelectorAll(`#${state.domId} .action-btn`).forEach(btn =>
     btn.classList.remove("active")
   );
 
-  document.querySelectorAll(`#${section}-section .admin-table input[type="checkbox"]`).forEach(box =>
+  document.querySelectorAll(`#${state.domId} input[type="checkbox"]`).forEach(box =>
     (box.checked = false)
   );
 
-  document.querySelectorAll(`#${section}-section .admin-table tr.selected-row`).forEach(row =>
+  document.querySelectorAll(`#${state.domId} tr.selected-row`).forEach(row =>
     row.classList.remove("selected-row")
   );
 }
