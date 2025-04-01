@@ -148,5 +148,16 @@ function capitalize(word) {
   return word.charAt(0).toUpperCase() + word.slice(1);
 }
 
+function toggleRowSelection(id, isSelected) {
+  for (const section in sectionStates) {
+    const state = sectionStates[section];
+    if (isSelected) {
+      state.selectedRows.add(id);
+    } else {
+      state.selectedRows.delete(id);
+    }
+  }
+}
+
 // ✅ Make available to other modules
 window.initCommitLogic = initCommitLogic;
