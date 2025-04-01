@@ -1,14 +1,10 @@
 // static/admin/market-holidays/MarketHolidays.js
 (() => {
-  let selectedHolidayRows = new Set();
-  let activeHolidayAction = null;
   let clipboardHolidayRow = null;
   let undoBuffer = null;
 
   if (!window.MARKET_HOLIDAYS_LOADED) {
-    window.addEventListener("DOMContentLoaded", () => {
-      loadMarketHolidays();
-    });
+    window.addEventListener("DOMContentLoaded", loadMarketHolidays);
   }
 
   async function loadMarketHolidays() {
@@ -44,25 +40,7 @@
         table.appendChild(row);
       });
 
-      // ✅ Hook up checkboxes to shared selection logic
-      document.querySelectorAll(".holiday-select-checkbox").forEach(box => {
-        box.addEventListener("change", () => {
-          const row = box.closest("tr");
-          const id = box.dataset.id;
-
-          if (box.checked) {
-            selectedHolidayRows.add(id);
-            row.classList.add("selected-row");
-            toggleRowSelection(id, true);
-          } else {
-            selectedHolidayRows.delete(id);
-            row.classList.remove("selected-row");
-            toggleRowSelection(id, false);
-          }
-        });
-      });
-
-      // ✅ Init commit logic (shared module)
+      // ✅ Init commit logic — handles row selection & confirm UI
       initCommitLogic({
         section: "holiday",
         onConfirm: async (action, selectedIds) => {
@@ -176,7 +154,7 @@
         }
       });
 
-      // ✅ Wire up Undo
+      // 🔁 Undo Logic
       const undoBtn = document.getElementById("holiday-undo-btn");
       if (undoBtn) {
         undoBtn.addEventListener("click", () => {
