@@ -4,32 +4,51 @@
 /* ============================== */
 
 .commit-bar {
-  display: none;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #f0f0f0;
-  border: 2px solid #007a8a;
-  padding: 10px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 12px 18px;
   margin-bottom: 1rem;
-  border-radius: 6px;
-  font-weight: bold;
+  background-color: #f8f9fa;
+  border: 2px solid #007a8a;
+  border-radius: 8px;
   font-size: 14px;
-  gap: 12px;
-  flex-wrap: wrap;
+  font-weight: bold;
 }
 
-.commit-message {
-  flex-grow: 1;
-  color: #333;
+/* 👁️ Confirm Messages */
+.confirm-box {
+  padding: 10px;
+  border-radius: 5px;
+  font-weight: bold;
+  line-height: 1.4;
 }
 
+.confirm-box.info {
+  background-color: #007a8a;
+  color: white;
+}
+
+.confirm-box.warn {
+  background-color: #fff4e5;
+  color: #cc7700;
+}
+
+.confirm-box.success {
+  background-color: #e6f9ed;
+  color: #00aa55;
+}
+
+/* 🎯 Button Styling */
 .confirm-btn {
-  padding: 6px 12px;
+  display: inline-block;
+  padding: 6px 14px;
   font-weight: bold;
   border-radius: 5px;
   border: none;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
+  margin-top: 0.5rem;
 }
 
 .confirm-btn.yellow {
