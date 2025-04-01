@@ -11,19 +11,20 @@
     <button class="action-btn" id="holiday-add-btn">Add</button>
     <button class="action-btn" id="holiday-delete-btn">Delete</button>
     <button class="action-btn" id="holiday-save-btn">Save</button>
+    <button class="action-btn" id="holiday-undo-btn">Undo</button> <!-- 🆕 -->
   </div>
 
-  <!-- ✅ Commit Bar -->
+  <!-- ✅ Commit Message Bar -->
   <div class="commit-bar" id="holiday-confirm"></div>
 
-  <!-- ⏰ Early Close Time Input (Optional) -->
+  <!-- ⏰ Optional Close Time -->
   <div class="early-close-input" style="margin-bottom: 1rem;">
     <label for="holiday-close-time"><strong>Close Time (if Early Close):</strong></label>
     <input type="time" id="holiday-close-time" name="close_time" step="1800" />
     <small>(Optional. Leave blank for full-day holidays.)</small>
   </div>
 
-  <!-- 📋 Market Holidays Table -->
+  <!-- 📋 Holidays Table -->
   <div class="table-wrapper">
     <table class="admin-table">
       <thead>

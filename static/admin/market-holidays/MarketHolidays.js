@@ -6,9 +6,17 @@ let activeHolidayAction = null;
 let clipboardHolidayRow = null;
 let undoBuffer = null;
 
-window.addEventListener("DOMContentLoaded", loadMarketHolidays);
+// Only bind loader if NOT already being called from main.js tab handler
+if (!window.MARKET_HOLIDAYS_LOADED) {
+  window.addEventListener("DOMContentLoaded", () => {
+    loadMarketHolidays();
+  });
+}
 
 async function loadMarketHolidays() {
+  if (window.MARKET_HOLIDAYS_LOADED) return;
+  window.MARKET_HOLIDAYS_LOADED = true;
+
   try {
     const response = await fetch("https://chartflybackend.onrender.com/api/holidays/year/2025");
     if (!response.ok) throw new Error("Failed to fetch market holidays");
@@ -98,16 +106,13 @@ async function loadMarketHolidays() {
             selectedIds.forEach(id => {
               const row = table.querySelector(`tr[data-id="${id}"]`);
               if (!row) return;
-
               const cells = row.querySelectorAll("td:not(.col-select)");
               cells.forEach(cell => {
                 const note = cell.querySelector(".early-close-note");
                 if (note) note.remove();
-
                 cell.setAttribute("contenteditable", "true");
                 cell.classList.add("editable");
               });
-
               row.classList.add("editing");
             });
             break;
@@ -143,21 +148,18 @@ async function loadMarketHolidays() {
             const name = cells[0]?.innerText.trim();
             const date = cells[1]?.innerText.trim();
             const status = cells[2]?.innerText.trim();
-
             const isValidDate = /^\d{4}-\d{2}-\d{2}$/.test(date);
             const isValidStatus = ["Upcoming", "Passed"].includes(status);
-
             if (!name) return "Holiday name is required.";
             if (!isValidDate) return "Date must be in YYYY-MM-DD format.";
             if (!isValidStatus) return "Status must be 'Upcoming' or 'Passed'.";
-
             return true;
           }
         }
       }
     });
 
-    // 🔄 Undo Button (safe)
+    // 🔄 Undo Button (safe binding)
     const undoBtn = document.getElementById("holiday-undo-btn");
     if (undoBtn) {
       undoBtn.addEventListener("click", () => {
