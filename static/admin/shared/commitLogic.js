@@ -1,6 +1,5 @@
 // static/admin/shared/commitLogic.js
 
-// 🔧 Configurable Defaults
 const defaultMessages = {
   edit: "Edit mode enabled. You may now make changes.",
   copy: "Row(s) copied. Use Paste to duplicate.",
@@ -14,7 +13,6 @@ const defaultMessages = {
   nothingToUndo: "Nothing to undo.",
 };
 
-// 🧠 State per section
 const sectionStates = {};
 function getState(section) {
   if (!sectionStates[section]) {
@@ -29,7 +27,6 @@ function getState(section) {
   return sectionStates[section];
 }
 
-// 🚀 Init Commit Logic
 function initCommitLogic({ section, sectionDomId = `${section}-section`, onConfirm, messages = {} }) {
   const confirmBox = document.getElementById(`${section}-confirm`);
   const actions = ["edit", "copy", "paste", "add", "delete", "save"];
@@ -38,7 +35,6 @@ function initCommitLogic({ section, sectionDomId = `${section}-section`, onConfi
   state.onConfirm = onConfirm;
   state.domId = sectionDomId;
 
-  // 🔘 Button Listeners
   actions.forEach(action => {
     const btn = document.getElementById(`${section}-${action}-btn`);
     if (!btn) return;
@@ -53,7 +49,12 @@ function initCommitLogic({ section, sectionDomId = `${section}-section`, onConfi
 
       btn.classList.add("active");
 
-      if (state.selectedRows.size === 0) {
+      if (action === "save") {
+        confirmCommitAction(section); // save acts immediately
+        return;
+      }
+
+      if (state.selectedRows.size === 0 && !["add", "paste", "undo"].includes(action)) {
         confirmBox.innerHTML = `<div class="confirm-box warn">${msg.noSelection}</div>`;
         return;
       }
@@ -67,27 +68,25 @@ function initCommitLogic({ section, sectionDomId = `${section}-section`, onConfi
       const actionInfo = document.createElement("div");
       actionInfo.innerHTML = `
         <strong>Action:</strong> ${action.toUpperCase()}<br>
-        <strong>Selected Rows:</strong> ${selectedIndexes.join(", ")}
+        <strong>Selected Rows:</strong> ${selectedIndexes.join(", ") || "(None)"}
       `;
 
       const confirmButton = document.createElement("button");
       confirmButton.className = "confirm-btn yellow";
-      confirmButton.textContent = `Confirm ${action}`;
+      confirmButton.textContent = `Confirm and Save ${capitalize(action)}`;
       confirmButton.addEventListener("click", () => confirmCommitAction(section));
 
       confirmDiv.appendChild(actionInfo);
       confirmDiv.appendChild(confirmButton);
 
-      confirmBox.innerHTML = ""; // Clear old content
+      confirmBox.innerHTML = "";
       confirmBox.appendChild(confirmDiv);
     });
   });
 
-  // ⏳ Delay to ensure table rows exist before wiring checkboxes
   setTimeout(() => wireCheckboxes(section), 0);
 }
 
-// ✅ Checkbox Logic
 function wireCheckboxes(section) {
   const state = getState(section);
   const checkboxes = document.querySelectorAll(`#${state.domId} input[type="checkbox"]`);
@@ -111,16 +110,13 @@ function wireCheckboxes(section) {
   });
 }
 
-// 🟡 Confirm Handler
 function confirmCommitAction(section) {
   const state = getState(section);
   const confirmBox = document.getElementById(`${section}-confirm`);
   const msg = defaultMessages;
 
-  console.log("🔥 confirmCommitAction called with section:", section);
-  console.log("✅ Committing action:", state.activeAction, "for IDs:", [...state.selectedRows]);
-
-  if (!state.activeAction || state.selectedRows.size === 0) {
+  console.log("🔥 confirmCommitAction called:", section);
+  if (!state.activeAction) {
     confirmBox.innerHTML = `<div class="confirm-box warn">${msg.noSelection}</div>`;
     return;
   }
@@ -133,7 +129,6 @@ function confirmCommitAction(section) {
   resetSelection(section);
 }
 
-// 🔄 Reset UI
 function resetSelection(section) {
   const state = getState(section);
   state.activeAction = null;
@@ -152,7 +147,6 @@ function resetSelection(section) {
   );
 }
 
-// 🧮 Count Bar
 function updateConfirmCount(section) {
   const state = getState(section);
   const box = document.getElementById(`${section}-confirm`);
@@ -169,11 +163,9 @@ function updateConfirmCount(section) {
   `;
 }
 
-// 🧰 Utility
 function capitalize(word) {
   return word.charAt(0).toUpperCase() + word.slice(1);
 }
 
-// ✅ Export
 window.initCommitLogic = initCommitLogic;
 window.confirmCommitAction = confirmCommitAction;

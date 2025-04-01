@@ -12,7 +12,7 @@
     window.MARKET_HOLIDAYS_LOADED = true;
 
     try {
-      const response = await fetch("https://chartflybackend.onrender.com/api/holidays/year/2025");
+      const response = await fetch("https://chartflybackend.onrender.com/api/holidays/year/2025`);
       if (!response.ok) throw new Error("Failed to fetch market holidays");
 
       const holidays = await response.json();
@@ -42,119 +42,123 @@
 
       // ✅ Now that table is rendered, wire commit logic
       initCommitLogic({
-  section: "holiday",
-  sectionDomId: "market-holidays-section", // 👈 This is the fix
-  onConfirm: async (action, selectedIds) => {
-    const table = document.getElementById("holidays-table");
+        section: "holiday",
+        sectionDomId: "market-holidays-section",
+        onConfirm: async (action, selectedIds) => {
+          const table = document.getElementById("holidays-table");
 
-    switch (action) {
-      case "delete":
-        undoBuffer = [];
-        for (const id of selectedIds) {
-          const row = table.querySelector(`tr[data-id="${id}"]`);
-          if (row) {
-            undoBuffer.push(row.cloneNode(true));
-            row.remove();
+          switch (action) {
+            case "delete":
+              undoBuffer = [];
+              selectedIds.forEach(id => {
+                const row = table.querySelector(`tr[data-id="${id}"]`);
+                if (row) {
+                  undoBuffer.push(row.cloneNode(true));
+                  row.remove();
+                }
+              });
+              break;
+
+            case "copy":
+              if (selectedIds.length !== 1) {
+                alert("Copy requires exactly 1 row selected.");
+                return;
+              }
+              clipboardHolidayRow = table.querySelector(`tr[data-id="${selectedIds[0]}"]`).cloneNode(true);
+              break;
+
+            case "paste":
+              if (!clipboardHolidayRow) {
+                alert("Nothing in clipboard. Copy something first.");
+                return;
+              }
+              const pasteId = "paste-" + Date.now();
+              const pasted = clipboardHolidayRow.cloneNode(true);
+              pasted.setAttribute("data-id", pasteId);
+              pasted.classList.add("editing");
+              pasted.querySelectorAll("td:not(.col-select)").forEach(cell => {
+                const note = cell.querySelector(".early-close-note");
+                if (note) note.remove();
+                cell.setAttribute("contenteditable", "true");
+                cell.classList.add("editable");
+              });
+              pasted.querySelectorAll("input[type='checkbox']").forEach(box => {
+                box.checked = false;
+                box.setAttribute("data-id", pasteId);
+              });
+              table.insertBefore(pasted, table.firstChild);
+              undoBuffer = [pasted.cloneNode(true)];
+              break;
+
+            case "add":
+              const newId = `new-${Date.now()}`;
+              const newRow = document.createElement("tr");
+              newRow.setAttribute("data-id", newId);
+              newRow.classList.add("editing");
+              newRow.innerHTML = `
+                <td class="col-select"><input type="checkbox" class="holiday-select-checkbox" data-id="${newId}"></td>
+                <td contenteditable="true" class="editable">New Holiday</td>
+                <td contenteditable="true" class="editable">YYYY-MM-DD</td>
+                <td contenteditable="true" class="editable">Upcoming</td>
+              `;
+              table.insertBefore(newRow, table.firstChild);
+              undoBuffer = [newRow.cloneNode(true)];
+              break;
+
+            case "edit":
+              selectedIds.forEach(id => {
+                const row = table.querySelector(`tr[data-id="${id}"]`);
+                if (!row) return;
+                row.classList.add("editing");
+                row.querySelectorAll("td:not(.col-select)").forEach(cell => {
+                  const note = cell.querySelector(".early-close-note");
+                  if (note) note.remove();
+                  cell.setAttribute("contenteditable", "true");
+                  cell.classList.add("editable");
+                });
+              });
+              break;
+
+            case "save":
+              const dirtyRows = table.querySelectorAll("tr.editing");
+              dirtyRows.forEach(row => {
+                row.querySelectorAll("td:not(.col-select)").forEach(cell => {
+                  cell.removeAttribute("contenteditable");
+                  cell.classList.remove("editable");
+                });
+                row.classList.remove("editing");
+              });
+              undoBuffer = null;
+              console.log("✅ Saved rows:", dirtyRows.length);
+              break;
+
+            default:
+              console.warn("Unhandled action:", action);
+          }
+        },
+        messages: {
+          delete: "You're about to delete one or more holidays!",
+          copy: "Copied 1 row to clipboard.",
+          paste: "Pasted a cloned row at the top.",
+          add: "A new blank holiday row was added to the top.",
+          edit: "You can now edit the selected rows.",
+          save: {
+            message: "Holiday changes saved (frontend only).",
+            validate: (row) => {
+              const cells = row.querySelectorAll("td:not(.col-select)");
+              const name = cells[0]?.innerText.trim();
+              const date = cells[1]?.innerText.trim();
+              const status = cells[2]?.innerText.trim();
+              const isValidDate = /^\d{4}-\d{2}-\d{2}$/.test(date);
+              const isValidStatus = ["Upcoming", "Passed"].includes(status);
+              if (!name) return "Holiday name is required.";
+              if (!isValidDate) return "Date must be in YYYY-MM-DD format.";
+              if (!isValidStatus) return "Status must be 'Upcoming' or 'Passed'.";
+              return true;
+            }
           }
         }
-        break;
-
-      case "copy":
-        if (selectedIds.length !== 1) {
-          alert("Copy requires exactly 1 row selected.");
-          return;
-        }
-        clipboardHolidayRow = table.querySelector(`tr[data-id="${selectedIds[0]}"]`).cloneNode(true);
-        break;
-
-      case "paste":
-        if (!clipboardHolidayRow) {
-          alert("Nothing in clipboard. Copy something first.");
-          return;
-        }
-        const pasted = clipboardHolidayRow.cloneNode(true);
-        const pasteId = "paste-" + Date.now();
-        pasted.setAttribute("data-id", pasteId);
-        pasted.classList.remove("selected-row");
-        pasted.querySelectorAll("input[type='checkbox']").forEach(box => {
-          box.checked = false;
-          box.setAttribute("data-id", pasteId);
-        });
-        table.appendChild(pasted);
-        undoBuffer = [pasted.cloneNode(true)];
-        break;
-
-      case "add":
-        const id = `new-${Date.now()}`;
-        const row = document.createElement("tr");
-        row.setAttribute("data-id", id);
-        row.innerHTML = `
-          <td class="col-select"><input type="checkbox" class="holiday-select-checkbox" data-id="${id}"></td>
-          <td contenteditable="true" class="editable">New Holiday</td>
-          <td contenteditable="true" class="editable">YYYY-MM-DD</td>
-          <td contenteditable="true" class="editable">Upcoming</td>
-        `;
-        table.appendChild(row);
-        undoBuffer = [row.cloneNode(true)];
-        break;
-
-      case "edit":
-        selectedIds.forEach(id => {
-          const row = table.querySelector(`tr[data-id="${id}"]`);
-          if (!row) return;
-          const cells = row.querySelectorAll("td:not(.col-select)");
-          cells.forEach(cell => {
-            const note = cell.querySelector(".early-close-note");
-            if (note) note.remove();
-            cell.setAttribute("contenteditable", "true");
-            cell.classList.add("editable");
-          });
-          row.classList.add("editing");
-        });
-        break;
-
-      case "save":
-        const dirtyRows = table.querySelectorAll("tr.editing");
-        dirtyRows.forEach(row => {
-          const cells = row.querySelectorAll("td:not(.col-select)");
-          cells.forEach(cell => {
-            cell.removeAttribute("contenteditable");
-            cell.classList.remove("editable");
-          });
-          row.classList.remove("editing");
-        });
-        undoBuffer = null;
-        console.log("✅ Saved rows:", dirtyRows.length);
-        break;
-
-      default:
-        console.warn("Unhandled action:", action);
-    }
-  },
-  messages: {
-    delete: "You're about to delete one or more holidays!",
-    copy: "Copied 1 row to clipboard.",
-    paste: "Pasted a cloned row at the end.",
-    add: "A new blank holiday row was added.",
-    edit: "You can now edit the selected rows.",
-    save: {
-      message: "Holiday changes saved (frontend only).",
-      validate: (row) => {
-        const cells = row.querySelectorAll("td:not(.col-select)");
-        const name = cells[0]?.innerText.trim();
-        const date = cells[1]?.innerText.trim();
-        const status = cells[2]?.innerText.trim();
-        const isValidDate = /^\d{4}-\d{2}-\d{2}$/.test(date);
-        const isValidStatus = ["Upcoming", "Passed"].includes(status);
-        if (!name) return "Holiday name is required.";
-        if (!isValidDate) return "Date must be in YYYY-MM-DD format.";
-        if (!isValidStatus) return "Status must be 'Upcoming' or 'Passed'.";
-        return true;
-      }
-    }
-  }
-});
-
+      });
 
       // 🔁 Undo Logic
       const undoBtn = document.getElementById("holiday-undo-btn");
@@ -170,7 +174,7 @@
               box.checked = false;
               box.setAttribute("data-id", newId);
             });
-            table.appendChild(cloned);
+            table.insertBefore(cloned, table.firstChild);
           });
           undoBuffer = null;
         });
