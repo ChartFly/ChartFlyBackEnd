@@ -76,7 +76,14 @@ function showTab(tabName) {
   });
 
   // 🧠 Trigger data loader for each tab (if defined)
-  if (tabName === "market-holidays" && typeof loadMarketHolidays === "function") loadMarketHolidays();
-  if (tabName === "api-keys" && typeof loadApiKeys === "function") loadApiKeys();
-  if (tabName === "user-management" && typeof loadUsers === "function") loadUsers();
+  if (tabName === "market-holidays" && typeof loadMarketHolidays === "function") {
+    loadMarketHolidays();
+  }
+  if (tabName === "api-keys" && typeof loadApiKeys === "function") {
+    loadApiKeys();
+  }
+  if (tabName === "user-management" && typeof loadUsers === "function") {
+    loadUsers();
+    if (typeof loadTabAccess === "function") loadTabAccess(); // ✅ moved here
+  }
 }

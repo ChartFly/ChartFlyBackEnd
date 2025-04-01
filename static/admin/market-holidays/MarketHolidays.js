@@ -1,4 +1,5 @@
 // static/admin/market-holidays/MarketHolidays.js
+(() => {
 
 let selectedHolidayRows = new Set();
 let activeHolidayAction = null;
@@ -199,3 +200,5 @@ function sanitizeInput(input) {
 function capitalize(word) {
   return word.charAt(0).toUpperCase() + word.slice(1);
 }
+
+})();
