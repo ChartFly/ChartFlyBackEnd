@@ -12,7 +12,7 @@
     window.MARKET_HOLIDAYS_LOADED = true;
 
     try {
-      const response = await fetch("https://chartflybackend.onrender.com/api/holidays/year/2025`);
+      const response = await fetch("https://chartflybackend.onrender.com/api/holidays/year/2025");
       if (!response.ok) throw new Error("Failed to fetch market holidays");
 
       const holidays = await response.json();
