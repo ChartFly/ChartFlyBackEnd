@@ -108,6 +108,9 @@ window.confirmCommitAction = function (section) {
     return;
   }
 
+console.log("✅ Triggering onConfirm for:", section);
+console.log("Selected rows:", state.selectedRows);
+
   if (typeof sectionStates[section].onConfirm === "function") {
     sectionStates[section].onConfirm(state.activeAction, Array.from(state.selectedRows));
   }
