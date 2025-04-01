@@ -50,15 +50,33 @@ function initCommitLogic({ section, sectionDomId = `${section}-section`, onConfi
       btn.classList.add("active");
 
       if (action === "save") {
-        confirmCommitAction(section); // save acts immediately
+        confirmCommitAction(section);
         return;
       }
 
-      if (state.selectedRows.size === 0 && !["add", "paste", "undo"].includes(action)) {
+      const hasSelection = state.selectedRows.size > 0;
+      const actionNeedsSelection = !["add", "paste", "undo"].includes(action);
+      if (!hasSelection && actionNeedsSelection) {
         confirmBox.innerHTML = `<div class="confirm-box warn">${msg.noSelection}</div>`;
         return;
       }
 
+      // Pre-action changes before Confirm (highlight, editable, etc.)
+      if (action === "edit") {
+        for (const id of state.selectedRows) {
+          const row = document.querySelector(`#${state.domId} tr[data-id="${id}"]`);
+          if (!row) continue;
+          row.classList.add("editing");
+          row.querySelectorAll("td:not(.col-select)").forEach(cell => {
+            const note = cell.querySelector(".early-close-note");
+            if (note) note.remove();
+            cell.setAttribute("contenteditable", "true");
+            cell.classList.add("editable");
+          });
+        }
+      }
+
+      // Show Confirm UI
       const selectedIndexes = Array.from(document.querySelectorAll(`#${state.domId} tr.selected-row`))
         .map(row => row.dataset.index);
 
@@ -115,15 +133,25 @@ function confirmCommitAction(section) {
   const confirmBox = document.getElementById(`${section}-confirm`);
   const msg = defaultMessages;
 
-  console.log("🔥 confirmCommitAction called:", section);
   if (!state.activeAction) {
     confirmBox.innerHTML = `<div class="confirm-box warn">${msg.noSelection}</div>`;
     return;
   }
 
+  const selectedIds = Array.from(state.selectedRows);
+
   if (typeof state.onConfirm === "function") {
-    state.onConfirm(state.activeAction, Array.from(state.selectedRows));
+    state.onConfirm(state.activeAction, selectedIds);
   }
+
+  // Mark edited rows as saved (turn from yellow to white)
+  document.querySelectorAll(`#${state.domId} tr.editing`).forEach(row => {
+    row.classList.remove("editing");
+    row.querySelectorAll("td.editable").forEach(cell => {
+      cell.removeAttribute("contenteditable");
+      cell.classList.remove("editable");
+    });
+  });
 
   confirmBox.innerHTML = `<div class="confirm-box success">${msg.confirmSuccess(state.activeAction)}</div>`;
   resetSelection(section);

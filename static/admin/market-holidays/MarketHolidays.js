@@ -36,11 +36,10 @@
             ${isEarlyClose ? `<span class="early-close-note"> (Closes at ${readableTime})</span>` : ""}
           </td>
         `;
-
         table.appendChild(row);
       });
 
-      // ✅ Now that table is rendered, wire commit logic
+      // ✅ Init commit logic
       initCommitLogic({
         section: "holiday",
         sectionDomId: "market-holidays-section",
@@ -103,20 +102,6 @@
               `;
               table.insertBefore(newRow, table.firstChild);
               undoBuffer = [newRow.cloneNode(true)];
-              break;
-
-            case "edit":
-              selectedIds.forEach(id => {
-                const row = table.querySelector(`tr[data-id="${id}"]`);
-                if (!row) return;
-                row.classList.add("editing");
-                row.querySelectorAll("td:not(.col-select)").forEach(cell => {
-                  const note = cell.querySelector(".early-close-note");
-                  if (note) note.remove();
-                  cell.setAttribute("contenteditable", "true");
-                  cell.classList.add("editable");
-                });
-              });
               break;
 
             case "save":
