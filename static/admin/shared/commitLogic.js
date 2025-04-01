@@ -128,32 +128,35 @@ function wireCheckboxes(section) {
   });
 }
 
+
 function confirmCommitAction(section) {
   const state = getState(section);
   const confirmBox = document.getElementById(`${section}-confirm`);
   const msg = defaultMessages;
 
+  console.log("🔥 confirmCommitAction called:", section);
   if (!state.activeAction) {
     confirmBox.innerHTML = `<div class="confirm-box warn">${msg.noSelection}</div>`;
     return;
   }
 
-  const selectedIds = Array.from(state.selectedRows);
-
   if (typeof state.onConfirm === "function") {
-    state.onConfirm(state.activeAction, selectedIds);
+    state.onConfirm(state.activeAction, Array.from(state.selectedRows));
   }
 
-  // Mark edited rows as saved (turn from yellow to white)
-  document.querySelectorAll(`#${state.domId} tr.editing`).forEach(row => {
-    row.classList.remove("editing");
-    row.querySelectorAll("td.editable").forEach(cell => {
-      cell.removeAttribute("contenteditable");
-      cell.classList.remove("editable");
-    });
-  });
+  const successMsg = document.createElement("div");
+  successMsg.className = "confirm-box success";
+  successMsg.textContent = msg.confirmSuccess(state.activeAction);
+  confirmBox.innerHTML = "";
+  confirmBox.appendChild(successMsg);
 
-  confirmBox.innerHTML = `<div class="confirm-box success">${msg.confirmSuccess(state.activeAction)}</div>`;
+  // ⏲️ Clear message after 7 seconds
+  setTimeout(() => {
+    if (confirmBox.contains(successMsg)) {
+      confirmBox.innerHTML = "";
+    }
+  }, 7000);
+
   resetSelection(section);
 }
 
