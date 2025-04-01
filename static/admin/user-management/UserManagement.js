@@ -19,7 +19,9 @@ let activeUserAction = null;
 // 🚀 Init
 window.addEventListener('DOMContentLoaded', () => {
   loadUsers();
-  loadTabAccess();
+  if (accessCheckboxes) {
+    loadTabAccess();
+  }
 });
 
 // 📥 Load Users
@@ -74,12 +76,12 @@ async function loadTabAccess() {
 
     accessCheckboxes.innerHTML = '';
 
-   tabs.forEach(tab => {
-     const span = document.createElement('span');
-     span.classList.add('access-tab-label');
-     span.textContent = tab;
-     accessCheckboxes.appendChild(span);
-});
+    tabs.forEach(tab => {
+      const span = document.createElement('span');
+      span.classList.add('access-tab-label');
+      span.textContent = tab;
+      accessCheckboxes.appendChild(span);
+    });
 
   } catch (err) {
     console.error('Error loading tabs:', err);

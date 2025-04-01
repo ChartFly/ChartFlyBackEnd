@@ -100,9 +100,7 @@ async function loadMarketHolidays() {
               if (!row) return;
 
               const cells = row.querySelectorAll("td:not(.col-select)");
-
               cells.forEach(cell => {
-                // 🧼 Strip (Closes at...) span if present
                 const note = cell.querySelector(".early-close-note");
                 if (note) note.remove();
 
@@ -159,22 +157,25 @@ async function loadMarketHolidays() {
       }
     });
 
-    // 🔄 Undo Button
-    document.getElementById("holiday-undo-btn").addEventListener("click", () => {
-      if (!undoBuffer || undoBuffer.length === 0) return;
-      const table = document.getElementById("holidays-table");
-      undoBuffer.forEach(row => {
-        const cloned = row.cloneNode(true);
-        const newId = "undo-" + Date.now();
-        cloned.setAttribute("data-id", newId);
-        cloned.querySelectorAll("input[type='checkbox']").forEach(box => {
-          box.checked = false;
-          box.setAttribute("data-id", newId);
+    // 🔄 Undo Button (safe)
+    const undoBtn = document.getElementById("holiday-undo-btn");
+    if (undoBtn) {
+      undoBtn.addEventListener("click", () => {
+        if (!undoBuffer || undoBuffer.length === 0) return;
+        const table = document.getElementById("holidays-table");
+        undoBuffer.forEach(row => {
+          const cloned = row.cloneNode(true);
+          const newId = "undo-" + Date.now();
+          cloned.setAttribute("data-id", newId);
+          cloned.querySelectorAll("input[type='checkbox']").forEach(box => {
+            box.checked = false;
+            box.setAttribute("data-id", newId);
+          });
+          table.appendChild(cloned);
         });
-        table.appendChild(cloned);
+        undoBuffer = null;
       });
-      undoBuffer = null;
-    });
+    }
 
   } catch (error) {
     console.error("❌ Failed to load holidays:", error);
