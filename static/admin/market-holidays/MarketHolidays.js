@@ -117,6 +117,29 @@
               console.log("✅ Saved rows:", dirtyRows.length);
               break;
 
+            case "undo":
+              if (!undoBuffer || undoBuffer.length === 0) {
+                alert("Nothing to undo.");
+                return;
+              }
+              undoBuffer.forEach(row => {
+                const cloned = row.cloneNode(true);
+                const newId = "undo-" + Date.now();
+                cloned.setAttribute("data-id", newId);
+                cloned.querySelectorAll("input[type='checkbox']").forEach(box => {
+                  box.checked = false;
+                  box.setAttribute("data-id", newId);
+                });
+                cloned.classList.add("editing");
+                cloned.querySelectorAll("td:not(.col-select)").forEach(cell => {
+                  cell.setAttribute("contenteditable", "true");
+                  cell.classList.add("editable");
+                });
+                table.insertBefore(cloned, table.firstChild);
+              });
+              undoBuffer = null;
+              break;
+
             default:
               console.warn("Unhandled action:", action);
           }
@@ -127,6 +150,7 @@
           paste: "Pasted a cloned row at the top.",
           add: "A new blank holiday row was added to the top.",
           edit: "You can now edit the selected rows.",
+          undo: "Restored the most recent deleted or changed row(s).",
           save: {
             message: "Holiday changes saved (frontend only).",
             validate: (row) => {
@@ -144,26 +168,6 @@
           }
         }
       });
-
-      // 🔁 Undo Logic
-      const undoBtn = document.getElementById("holiday-undo-btn");
-      if (undoBtn) {
-        undoBtn.addEventListener("click", () => {
-          if (!undoBuffer || undoBuffer.length === 0) return;
-          const table = document.getElementById("holidays-table");
-          undoBuffer.forEach(row => {
-            const cloned = row.cloneNode(true);
-            const newId = "undo-" + Date.now();
-            cloned.setAttribute("data-id", newId);
-            cloned.querySelectorAll("input[type='checkbox']").forEach(box => {
-              box.checked = false;
-              box.setAttribute("data-id", newId);
-            });
-            table.insertBefore(cloned, table.firstChild);
-          });
-          undoBuffer = null;
-        });
-      }
 
     } catch (error) {
       console.error("❌ Failed to load holidays:", error);

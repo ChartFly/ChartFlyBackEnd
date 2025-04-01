@@ -10,7 +10,7 @@
   padding: 12px 18px;
   margin-bottom: 1rem;
   background-color: #f8f9fa;
-  border: 2px solid #007a8a;
+  border: 2px solid #007a8a; /* ChartFly Blue */
   border-radius: 8px;
   font-size: 14px;
   font-weight: bold;
@@ -21,12 +21,13 @@
   padding: 10px;
   border-radius: 5px;
   font-weight: bold;
+  font-size: 16px; /* 🔥 Now 12pt instead of 10pt */
   line-height: 1.4;
 }
 
 .confirm-box.info {
   background-color: #fff9c4;
-  color: #007a8a;
+  color: black;
 }
 
 .confirm-box.warn {

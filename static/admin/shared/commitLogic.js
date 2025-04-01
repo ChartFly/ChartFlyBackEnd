@@ -164,7 +164,7 @@ function confirmCommitAction(section) {
     if (confirmBox.contains(successMsg)) {
       confirmBox.innerHTML = "";
     }
-  }, 7000);
+  }, 6000);
 
   resetSelection(section);
 }
