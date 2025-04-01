@@ -21,7 +21,8 @@ function getState(section) {
     sectionStates[section] = {
       selectedRows: new Set(),
       activeAction: null,
-      undoBuffer: null
+      undoBuffer: null,
+      onConfirm: null
     };
   }
   return sectionStates[section];
@@ -33,8 +34,7 @@ function initCommitLogic({ section, onConfirm, messages = {} }) {
   const actions = ["edit", "copy", "paste", "add", "delete", "save"];
   const msg = { ...defaultMessages, ...messages };
   const state = getState(section);
-
-  sectionStates[section].onConfirm = onConfirm;
+  state.onConfirm = onConfirm;
 
   // 🔘 Button Listeners
   actions.forEach(action => {
@@ -59,21 +59,33 @@ function initCommitLogic({ section, onConfirm, messages = {} }) {
       const selectedIndexes = Array.from(document.querySelectorAll(`#${section}-section tr.selected-row`))
         .map(row => row.dataset.index);
 
-      confirmBox.innerHTML = `
-        <div class="confirm-box info">
-          <strong>Action:</strong> ${action.toUpperCase()}<br>
-          <strong>Selected Rows:</strong> ${selectedIndexes.join(", ")}<br>
-          <button class="confirm-btn yellow" onclick="confirmCommitAction('${section}')">Confirm ${action}</button>
-        </div>
+      const confirmDiv = document.createElement("div");
+      confirmDiv.className = "confirm-box info";
+
+      const actionInfo = document.createElement("div");
+      actionInfo.innerHTML = `
+        <strong>Action:</strong> ${action.toUpperCase()}<br>
+        <strong>Selected Rows:</strong> ${selectedIndexes.join(", ")}
       `;
+
+      const confirmButton = document.createElement("button");
+      confirmButton.className = "confirm-btn yellow";
+      confirmButton.textContent = `Confirm ${action}`;
+      confirmButton.addEventListener("click", () => confirmCommitAction(section));
+
+      confirmDiv.appendChild(actionInfo);
+      confirmDiv.appendChild(confirmButton);
+
+      confirmBox.innerHTML = ""; // Clear old content
+      confirmBox.appendChild(confirmDiv);
     });
   });
 
-  // 🧷 Delay checkbox hookup until after DOM is rendered
+  // ⏳ Wait until DOM settles, then wire checkboxes
   setTimeout(() => wireCheckboxes(section), 0);
 }
 
-// 🧲 Wire up checkboxes per section
+// ✅ Checkbox Logic
 function wireCheckboxes(section) {
   const state = getState(section);
   const checkboxes = document.querySelectorAll(`#${section}-section .admin-table input[type="checkbox"]`);
@@ -97,29 +109,29 @@ function wireCheckboxes(section) {
   });
 }
 
-// 🟡 Confirm Button Handler
-window.confirmCommitAction = function (section) {
+// 🟡 Confirm Handler
+function confirmCommitAction(section) {
   const state = getState(section);
   const confirmBox = document.getElementById(`${section}-confirm`);
   const msg = defaultMessages;
+
+  console.log("🔥 confirmCommitAction called with section:", section);
+  console.log("✅ Committing action:", state.activeAction, "for IDs:", [...state.selectedRows]);
 
   if (!state.activeAction || state.selectedRows.size === 0) {
     confirmBox.innerHTML = `<div class="confirm-box warn">${msg.noSelection}</div>`;
     return;
   }
 
-console.log("✅ Triggering onConfirm for:", section);
-console.log("Selected rows:", state.selectedRows);
-
-  if (typeof sectionStates[section].onConfirm === "function") {
-    sectionStates[section].onConfirm(state.activeAction, Array.from(state.selectedRows));
+  if (typeof state.onConfirm === "function") {
+    state.onConfirm(state.activeAction, Array.from(state.selectedRows));
   }
 
   confirmBox.innerHTML = `<div class="confirm-box success">${msg.confirmSuccess(state.activeAction)}</div>`;
   resetSelection(section);
-};
+}
 
-// 🔄 Reset UI after Confirm
+// 🔄 Reset UI
 function resetSelection(section) {
   const state = getState(section);
   state.activeAction = null;
@@ -138,7 +150,7 @@ function resetSelection(section) {
   );
 }
 
-// 🧮 Update Row Count Bar (reusable)
+// 🧮 Count Bar
 function updateConfirmCount(section) {
   const state = getState(section);
   const box = document.getElementById(`${section}-confirm`);
@@ -160,8 +172,6 @@ function capitalize(word) {
   return word.charAt(0).toUpperCase() + word.slice(1);
 }
 
-// ✅ Make available to other modules
+// ✅ Export
 window.initCommitLogic = initCommitLogic;
-window.confirmCommitAction = function (section) {
-  // everything from inside your previous definition...
-};
+window.confirmCommitAction = confirmCommitAction;
