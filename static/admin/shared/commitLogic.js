@@ -33,8 +33,8 @@ function initCommitLogic({ section, onConfirm, messages = {} }) {
   const actions = ["edit", "copy", "paste", "add", "delete", "save"];
   const msg = { ...defaultMessages, ...messages };
   const state = getState(section);
-sectionStates[section].onConfirm = onConfirm; // 🧠 Store callback
 
+  sectionStates[section].onConfirm = onConfirm;
 
   // 🔘 Button Listeners
   actions.forEach(action => {
@@ -44,7 +44,6 @@ sectionStates[section].onConfirm = onConfirm; // 🧠 Store callback
     btn.addEventListener("click", () => {
       state.activeAction = action;
 
-      // Remove .active from all buttons
       actions.forEach(a => {
         const otherBtn = document.getElementById(`${section}-${a}-btn`);
         if (otherBtn) otherBtn.classList.remove("active");
@@ -70,8 +69,16 @@ sectionStates[section].onConfirm = onConfirm; // 🧠 Store callback
     });
   });
 
-  // ✅ Checkbox Row Selection Wiring
-  document.querySelectorAll(`#${section}-section .admin-table input[type="checkbox"]`).forEach(box => {
+  // 🧷 Delay checkbox hookup until after DOM is rendered
+  setTimeout(() => wireCheckboxes(section), 0);
+}
+
+// 🧲 Wire up checkboxes per section
+function wireCheckboxes(section) {
+  const state = getState(section);
+  const checkboxes = document.querySelectorAll(`#${section}-section .admin-table input[type="checkbox"]`);
+
+  checkboxes.forEach(box => {
     const id = box.dataset.id;
     box.addEventListener("change", () => {
       const row = box.closest("tr");
@@ -101,9 +108,9 @@ window.confirmCommitAction = function (section) {
     return;
   }
 
-  iif (typeof state.onConfirm === "function") {
-  state.onConfirm(state.activeAction, Array.from(state.selectedRows));
-}
+  if (typeof sectionStates[section].onConfirm === "function") {
+    sectionStates[section].onConfirm(state.activeAction, Array.from(state.selectedRows));
+  }
 
   confirmBox.innerHTML = `<div class="confirm-box success">${msg.confirmSuccess(state.activeAction)}</div>`;
   resetSelection(section);
@@ -148,17 +155,6 @@ function updateConfirmCount(section) {
 // 🧰 Utility
 function capitalize(word) {
   return word.charAt(0).toUpperCase() + word.slice(1);
-}
-
-function toggleRowSelection(id, isSelected) {
-  for (const section in sectionStates) {
-    const state = sectionStates[section];
-    if (isSelected) {
-      state.selectedRows.add(id);
-    } else {
-      state.selectedRows.delete(id);
-    }
-  }
 }
 
 // ✅ Make available to other modules
