@@ -33,6 +33,8 @@ function initCommitLogic({ section, onConfirm, messages = {} }) {
   const actions = ["edit", "copy", "paste", "add", "delete", "save"];
   const msg = { ...defaultMessages, ...messages };
   const state = getState(section);
+sectionStates[section].onConfirm = onConfirm; // 🧠 Store callback
+
 
   // 🔘 Button Listeners
   actions.forEach(action => {
@@ -99,9 +101,9 @@ window.confirmCommitAction = function (section) {
     return;
   }
 
-  if (typeof sectionStates[section].onConfirm === "function") {
-    sectionStates[section].onConfirm(state.activeAction, Array.from(state.selectedRows));
-  }
+  iif (typeof state.onConfirm === "function") {
+  state.onConfirm(state.activeAction, Array.from(state.selectedRows));
+}
 
   confirmBox.innerHTML = `<div class="confirm-box success">${msg.confirmSuccess(state.activeAction)}</div>`;
   resetSelection(section);
