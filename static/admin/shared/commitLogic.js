@@ -14,31 +14,35 @@ const defaultMessages = {
   nothingToUndo: "Nothing to undo.",
 };
 
-// 🔁 State Tracking
-let selectedRows = new Set();
-let activeAction = null;
-let undoBuffer = null;
+// 🧠 State per section
+const sectionStates = {};
+function getState(section) {
+  if (!sectionStates[section]) {
+    sectionStates[section] = {
+      selectedRows: new Set(),
+      activeAction: null,
+      undoBuffer: null
+    };
+  }
+  return sectionStates[section];
+}
 
-/**
- * Initializes commit logic for a tab
- * @param {Object} config - Configuration object
- * @param {string} config.section - ID prefix (e.g., "holiday", "api", "user")
- * @param {Function} config.onConfirm - Function to execute on Confirm
- * @param {Object} config.messages - (Optional) Custom messages for buttons
- */
+// 🚀 Init Commit Logic
 function initCommitLogic({ section, onConfirm, messages = {} }) {
   const confirmBox = document.getElementById(`${section}-confirm`);
   const actions = ["edit", "copy", "paste", "add", "delete", "save"];
-  const mergedMessages = { ...defaultMessages, ...messages };
+  const msg = { ...defaultMessages, ...messages };
+  const state = getState(section);
 
-  // ✅ Button Wiring
+  // 🔘 Button Listeners
   actions.forEach(action => {
     const btn = document.getElementById(`${section}-${action}-btn`);
     if (!btn) return;
 
     btn.addEventListener("click", () => {
-      activeAction = action;
+      state.activeAction = action;
 
+      // Remove .active from all buttons
       actions.forEach(a => {
         const otherBtn = document.getElementById(`${section}-${a}-btn`);
         if (otherBtn) otherBtn.classList.remove("active");
@@ -46,12 +50,12 @@ function initCommitLogic({ section, onConfirm, messages = {} }) {
 
       btn.classList.add("active");
 
-      if (selectedRows.size === 0) {
-        confirmBox.innerHTML = `<div class="confirm-box warn">${mergedMessages.noSelection}</div>`;
+      if (state.selectedRows.size === 0) {
+        confirmBox.innerHTML = `<div class="confirm-box warn">${msg.noSelection}</div>`;
         return;
       }
 
-      const selectedIndexes = Array.from(document.querySelectorAll("tr.selected-row"))
+      const selectedIndexes = Array.from(document.querySelectorAll(`#${section}-section tr.selected-row`))
         .map(row => row.dataset.index);
 
       confirmBox.innerHTML = `
@@ -64,28 +68,50 @@ function initCommitLogic({ section, onConfirm, messages = {} }) {
     });
   });
 
-  // ✅ Confirm Hook
-  window[`confirmCommitAction`] = function (sectionKey) {
-    if (!activeAction || selectedRows.size === 0) {
-      confirmBox.innerHTML = `<div class="confirm-box warn">${mergedMessages.noSelection}</div>`;
-      return;
-    }
+  // ✅ Checkbox Row Selection Wiring
+  document.querySelectorAll(`#${section}-section .admin-table input[type="checkbox"]`).forEach(box => {
+    const id = box.dataset.id;
+    box.addEventListener("change", () => {
+      const row = box.closest("tr");
+      if (!row) return;
 
-    if (typeof onConfirm === "function") {
-      onConfirm(activeAction, Array.from(selectedRows));
-    }
+      if (box.checked) {
+        state.selectedRows.add(id);
+        row.classList.add("selected-row");
+      } else {
+        state.selectedRows.delete(id);
+        row.classList.remove("selected-row");
+      }
 
-    confirmBox.innerHTML = `<div class="confirm-box success">${mergedMessages.confirmSuccess(activeAction)}</div>`;
-    resetSelection(section);
-  };
+      updateConfirmCount(section);
+    });
+  });
 }
 
-/**
- * Resets state and UI selections
- */
+// 🟡 Confirm Button Handler
+window.confirmCommitAction = function (section) {
+  const state = getState(section);
+  const confirmBox = document.getElementById(`${section}-confirm`);
+  const msg = defaultMessages;
+
+  if (!state.activeAction || state.selectedRows.size === 0) {
+    confirmBox.innerHTML = `<div class="confirm-box warn">${msg.noSelection}</div>`;
+    return;
+  }
+
+  if (typeof sectionStates[section].onConfirm === "function") {
+    sectionStates[section].onConfirm(state.activeAction, Array.from(state.selectedRows));
+  }
+
+  confirmBox.innerHTML = `<div class="confirm-box success">${msg.confirmSuccess(state.activeAction)}</div>`;
+  resetSelection(section);
+};
+
+// 🔄 Reset UI after Confirm
 function resetSelection(section) {
-  activeAction = null;
-  selectedRows.clear();
+  const state = getState(section);
+  state.activeAction = null;
+  state.selectedRows.clear();
 
   document.querySelectorAll(`#${section}-section .action-btn`).forEach(btn =>
     btn.classList.remove("active")
@@ -100,22 +126,27 @@ function resetSelection(section) {
   );
 }
 
-/**
- * Used to update selected row state externally
- */
-function toggleRowSelection(id, isSelected) {
-  if (isSelected) {
-    selectedRows.add(id);
-  } else {
-    selectedRows.delete(id);
+// 🧮 Update Row Count Bar (reusable)
+function updateConfirmCount(section) {
+  const state = getState(section);
+  const box = document.getElementById(`${section}-confirm`);
+
+  if (state.selectedRows.size === 0) {
+    box.innerHTML = "";
+    return;
   }
+
+  box.innerHTML = `
+    <div class="confirm-box info">
+      ${state.selectedRows.size} row(s) selected.
+    </div>
+  `;
 }
 
-/**
- * Utility
- */
+// 🧰 Utility
 function capitalize(word) {
   return word.charAt(0).toUpperCase() + word.slice(1);
 }
 
+// ✅ Make available to other modules
 window.initCommitLogic = initCommitLogic;

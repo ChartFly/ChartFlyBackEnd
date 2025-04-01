@@ -147,6 +147,27 @@ body.compact-mode #market-holidays-section .admin-table td {
   color: #00aa55;
 }
 
+/* ✅ Confirm Bar (NEW) */
+#market-holidays-section .confirm-bar {
+  display: none;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f0f0f0;
+  border: 2px solid #007a8a;
+  padding: 10px 16px;
+  margin-bottom: 1rem;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 14px;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+#market-holidays-section .confirm-message {
+  flex-grow: 1;
+  color: #333;
+}
+
 /* ✅ Confirm Buttons */
 #market-holidays-section .confirm-btn.green {
   background-color: #00aa55;
@@ -175,7 +196,7 @@ body.compact-mode #market-holidays-section .admin-table td {
 
 /* ✏️ Editable Cell Visuals */
 #market-holidays-section .editable {
-  background-color: #fff8dc; /* light yellow */
+  background-color: #fff8dc;
   border: 1px dashed #ccc;
   outline: none;
 }
