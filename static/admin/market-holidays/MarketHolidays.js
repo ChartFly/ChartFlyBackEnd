@@ -40,7 +40,7 @@
         table.appendChild(row);
       });
 
-      // ✅ Init commit logic — handles row selection & confirm UI
+      // ✅ Now that table is rendered, wire commit logic
       initCommitLogic({
         section: "holiday",
         onConfirm: async (action, selectedIds) => {
