@@ -14,8 +14,12 @@
     <button class="action-btn" id="holiday-undo-btn">Undo</button> <!-- 🆕 -->
   </div>
 
-  <!-- ✅ Commit Message Bar -->
-  <div class="commit-bar" id="holiday-confirm"></div>
+  <!-- ✅ Confirm Bar w/ Undo and Save -->
+<div class="confirm-bar" id="holiday-confirm-bar" style="display: none;">
+  <span class="confirm-message" id="holiday-confirm-message">You made changes.</span>
+  <button class="confirm-btn yellow" id="holiday-undo-btn" title="Undo last change">Undo</button>
+  <button class="confirm-btn green" id="holiday-save-btn">Save</button>
+</div>
 
   <!-- ⏰ Optional Close Time -->
   <div class="early-close-input" style="margin-bottom: 1rem;">
