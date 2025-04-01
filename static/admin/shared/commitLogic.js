@@ -162,3 +162,6 @@ function capitalize(word) {
 
 // ✅ Make available to other modules
 window.initCommitLogic = initCommitLogic;
+window.confirmCommitAction = function (section) {
+  // everything from inside your previous definition...
+};
