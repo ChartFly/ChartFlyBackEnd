@@ -7,6 +7,10 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start; /* 💥 Ensure left alignment */
+  max-width: 1000px; /* 📏 Keep layout consistent */
+  margin: 0 auto; /* 🧲 Center section horizontally */
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .commit-bar {
@@ -20,9 +24,10 @@
   border-radius: 8px;
   font-size: 14px;
   font-weight: bold;
-  width: 100%; /* 🧲 Stretch full width */
+  width: 100%;
   align-items: flex-start;
   box-sizing: border-box;
+  max-width: 1000px; /* 🎯 Match table width */
 }
 
 /* 👁️ Confirm Messages */
