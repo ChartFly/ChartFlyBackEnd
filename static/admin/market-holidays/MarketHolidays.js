@@ -82,7 +82,7 @@
 
               const cells = cloned.querySelectorAll("td:not(.col-select)");
               cells.forEach(cell => {
-                cell.innerText = "";
+                cell.innerText = "New line, edit & save";
                 cell.setAttribute("contenteditable", "true");
                 cell.classList.add("editable");
               });
@@ -103,7 +103,7 @@
               newRow.classList.add("editing");
               newRow.innerHTML = `
                 <td class="col-select"><input type="checkbox" class="holiday-select-checkbox" data-id="${newId}"></td>
-                <td contenteditable="true" class="editable"></td>
+                <td contenteditable="true" class="editable">New line, edit & save</td>
                 <td contenteditable="true" class="editable">YYYY-MM-DD</td>
                 <td contenteditable="true" class="editable">Upcoming</td>
                 <td contenteditable="true" class="editable">13:00</td>
