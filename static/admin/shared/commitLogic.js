@@ -4,7 +4,7 @@ const defaultMessages = {
   edit: "Edit mode enabled. You may now make changes.",
   copy: "Row(s) copied. Use Paste to duplicate.",
   paste: "Paste mode active. Select a destination.",
-  add: "Ready to add new row(s).",
+  add: "New line, edit & save.",
   delete: "Row(s) marked for deletion. Confirm to proceed.",
   save: "Changes ready to be saved.",
   noSelection: "Please select one or more rows before choosing an action.",
@@ -23,7 +23,7 @@ function getState(section) {
       undoBuffer: null,
       onConfirm: null,
       domId: null,
-      clipboard: null, // <-- stores copied row per section
+      clipboard: null,
     };
   }
   return sectionStates[section];
@@ -63,7 +63,6 @@ function initCommitLogic({ section, sectionDomId = `${section}-section`, onConfi
         return;
       }
 
-      // Paste safety check
       if (action === "paste") {
         if (!state.clipboard) {
           confirmBox.innerHTML = `<div class="confirm-box warn">${msg.nothingToPaste}</div>`;
@@ -71,7 +70,6 @@ function initCommitLogic({ section, sectionDomId = `${section}-section`, onConfi
         }
       }
 
-      // Pre-action visual cue for edit
       if (action === "edit") {
         for (const id of state.selectedRows) {
           const row = document.querySelector(`#${state.domId} tr[data-id="${id}"]`);
@@ -86,7 +84,6 @@ function initCommitLogic({ section, sectionDomId = `${section}-section`, onConfi
         }
       }
 
-      // Confirm UI
       const selectedIndexes = Array.from(document.querySelectorAll(`#${state.domId} tr.selected-row`))
         .map(row => row.dataset.index);
 
@@ -153,7 +150,8 @@ function confirmCommitAction(section) {
     state.onConfirm(state.activeAction, Array.from(state.selectedRows));
   }
 
-  if (!["undo", "paste", "add"].includes(state.activeAction)) {
+  // ❌ Don't wipe editable class on 'add' or 'paste'
+  if (!["undo", "add", "paste"].includes(state.activeAction)) {
     document.querySelectorAll(`#${state.domId} tr.editing`).forEach(row => {
       row.classList.remove("editing");
       row.querySelectorAll("td.editable").forEach(cell => {
@@ -218,3 +216,4 @@ function capitalize(word) {
 
 window.initCommitLogic = initCommitLogic;
 window.confirmCommitAction = confirmCommitAction;
+window.getState = getState;
