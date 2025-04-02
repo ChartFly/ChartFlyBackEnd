@@ -60,13 +60,13 @@
 
 .confirm-box.info {
   background-color: #fff9c4;
-  color: black;
+  color: #333333; /* 🔥 Darker for better contrast */
   border: 2px solid #007a8a;
 }
 
 .confirm-box.warn {
   background-color: #fff4e5;
-  color: #4b2e00; /* 🟤 Richer dark brown for better contrast */
+  color: #2c1a00; /* 🟤 Richer dark brown for better contrast */
   border: 2px solid #007a8a;
 }
 
@@ -100,4 +100,16 @@
 
 .confirm-btn:hover {
   filter: brightness(1.1);
+}
+
+/* 🟡 Add Row Style: Highlight clearly for new entries */
+#market-holidays-section tr[data-id^="new-"] td {
+  background-color: #fff8dc !important; /* Light yellow */
+  border: 1px dashed #ccc !important;
+}
+
+#market-holidays-section tr[data-id^="new-"] td:nth-child(2)::before {
+  content: "New line, edit & save - ";
+  font-style: italic;
+  color: #555;
 }
