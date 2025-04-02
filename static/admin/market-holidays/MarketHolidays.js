@@ -82,7 +82,7 @@
                 });
 
                 cloned.querySelectorAll("input[type='checkbox']").forEach(box => {
-                  box.checked = false;
+                  box.checked = true;
                   box.setAttribute("data-id", pasteId);
                 });
 
@@ -113,7 +113,7 @@
               });
 
               cloned.querySelectorAll("input[type='checkbox']").forEach(box => {
-                box.checked = false;
+                box.checked = true;
                 box.setAttribute("data-id", pasteId);
               });
 
@@ -122,7 +122,7 @@
               wireCheckboxes("holiday");
               break;
 
-            case "add":
+            case "add": {
               const newId = `new-${Date.now()}`;
               const newRow = document.createElement("tr");
               newRow.setAttribute("data-id", newId);
@@ -130,11 +130,13 @@
               newRow.classList.add("editing");
 
               newRow.innerHTML = `
-                <td class="col-select"><input type="checkbox" class="holiday-select-checkbox" data-id="${newId}" checked></td>
-                <td contenteditable="true" class="editable"></td>
+                <td class="col-select">
+                  <input type="checkbox" class="holiday-select-checkbox" data-id="${newId}" checked>
+                </td>
+                <td contenteditable="true" class="editable">Edit</td>
                 <td contenteditable="true" class="editable">YYYY-MM-DD</td>
-                <td contenteditable="true" class="editable">Upcoming</td>
-                <td contenteditable="true" class="editable">13:00</td>
+                <td contenteditable="true" class="editable"></td>
+                <td contenteditable="true" class="editable"></td>
               `;
 
               newRow.querySelectorAll("td[contenteditable]").forEach(cell => {
@@ -145,6 +147,7 @@
               undoBuffer = [newRow.cloneNode(true)];
               wireCheckboxes("holiday");
               break;
+            }
 
             case "save":
               const dirtyRows = table.querySelectorAll("tr.editing");
