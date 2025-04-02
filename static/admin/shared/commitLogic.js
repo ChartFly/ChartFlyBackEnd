@@ -147,7 +147,7 @@ function confirmCommitAction(section) {
     state.onConfirm(state.activeAction, Array.from(state.selectedRows));
   }
 
-  if (state.activeAction !== "undo") {
+  if (!["undo", "add", "paste"].includes(state.activeAction)) {
     document.querySelectorAll(`#${state.domId} tr.editing`).forEach(row => {
       row.classList.remove("editing");
       row.querySelectorAll("td.editable").forEach(cell => {
@@ -210,7 +210,6 @@ function capitalize(word) {
   return word.charAt(0).toUpperCase() + word.slice(1);
 }
 
-// ✅ Export globally so other scripts can access
 window.initCommitLogic = initCommitLogic;
 window.getState = getState;
 window.wireCheckboxes = wireCheckboxes;
