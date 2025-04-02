@@ -164,36 +164,46 @@ function confirmCommitAction(section) {
     }
   }
 
-  // ✅ Finalize rows for Edit and Save
+  // ✅ Finalize editable rows for Edit or Save
   if (["edit", "save"].includes(state.activeAction)) {
-    document.querySelectorAll(`#${state.domId} tr.editing`).forEach(row => {
-      const checkbox = row.querySelector('input[type="checkbox"]');
-      if (checkbox?.checked || state.activeAction === "edit") {
+    const editableRows = document.querySelectorAll(`#${state.domId} tr.editing`);
+    let finalized = 0;
+
+    editableRows.forEach(row => {
+      const box = row.querySelector('input[type="checkbox"]');
+      const shouldSave = state.activeAction === "edit" || (box && box.checked);
+      if (shouldSave) {
         row.classList.remove("editing", "dirty");
         row.querySelectorAll("td.editable").forEach(cell => {
           cell.removeAttribute("contenteditable");
           cell.classList.remove("editable");
         });
-        if (checkbox) checkbox.checked = false;
+        if (box) box.checked = false;
         row.classList.remove("selected-row");
+        finalized++;
       }
     });
+
+    if (state.activeAction === "save" && finalized === 0) {
+      confirmBox.innerHTML = `<div class="confirm-box warn">No rows selected. Please check one or more rows to save.</div>`;
+      return;
+    }
+
     state.selectedRows.clear();
   }
 
-  // Trigger the onConfirm hook (e.g., to insert rows, update undoBuffer, etc.)
+  // Trigger onConfirm (insert/delete logic)
   if (typeof state.onConfirm === "function") {
     state.onConfirm(state.activeAction, Array.from(state.selectedRows));
   }
 
-  // ✅ Show success message
+  // ✅ Success Message
   const successMsg = document.createElement("div");
   successMsg.className = "confirm-box success";
   successMsg.textContent = msg.confirmSuccess(state.activeAction);
   confirmBox.innerHTML = "";
   confirmBox.appendChild(successMsg);
 
-  // ✅ Auto-clear confirm bar after 5s
   setTimeout(() => {
     if (confirmBox.contains(successMsg)) {
       confirmBox.innerHTML = "";
