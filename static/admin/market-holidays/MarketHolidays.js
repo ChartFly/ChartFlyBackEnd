@@ -134,7 +134,7 @@
           delete: "You're about to delete one or more holidays!",
           copy: "Copied 1 row to clipboard.",
           paste: "Pasted a cloned row at the top.",
-          add: "New line, edit & save!.",
+          add: "New line, edit & save.",
           edit: "You can now edit the selected rows.",
           save: {
             message: "Holiday changes saved (frontend only).",

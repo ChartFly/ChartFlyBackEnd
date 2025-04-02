@@ -4,7 +4,7 @@ const defaultMessages = {
   edit: "Edit mode enabled. You may now make changes.",
   copy: "Row(s) copied. Use Paste to duplicate.",
   paste: "Paste mode active. Select a destination.",
-  add: "New line, edit & save!!.",
+  add: "New line, edit & save.",
   delete: "Row(s) marked for deletion. Confirm to proceed.",
   save: "Changes ready to be saved.",
   noSelection: "Please select one or more rows before choosing an action.",

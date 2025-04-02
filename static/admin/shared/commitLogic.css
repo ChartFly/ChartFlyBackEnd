@@ -107,9 +107,3 @@
   background-color: #fff8dc !important; /* Light yellow */
   border: 1px dashed #ccc !important;
 }
-
-#market-holidays-section tr[data-id^="new-"] td:nth-child(2)::before {
-  content: "New line, edit & save - ";
-  font-style: italic;
-  color: #555;
-}
