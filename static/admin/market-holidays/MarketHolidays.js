@@ -77,8 +77,8 @@
               const pasteId = "paste-" + Date.now();
               const cloned = clipboardHolidayRow.cloneNode(true);
               cloned.setAttribute("data-id", pasteId);
-              cloned.classList.add("editing");
               cloned.setAttribute("data-index", "0");
+              cloned.classList.add("editing");
 
               cloned.querySelectorAll("td:not(.col-select)").forEach(cell => {
                 cell.setAttribute("contenteditable", "true");
@@ -90,6 +90,7 @@
               });
               table.insertBefore(cloned, table.firstChild);
               undoBuffer = [cloned.cloneNode(true)];
+              wireCheckboxes("holiday");
               break;
 
             case "add":
@@ -107,6 +108,7 @@
               `;
               table.insertBefore(newRow, table.firstChild);
               undoBuffer = [newRow.cloneNode(true)];
+              wireCheckboxes("holiday");
               break;
 
             case "save":
@@ -172,6 +174,7 @@
             table.insertBefore(cloned, table.firstChild);
           });
           undoBuffer = null;
+          wireCheckboxes("holiday");
         });
       }
 
