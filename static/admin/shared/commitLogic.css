@@ -35,6 +35,16 @@
   align-self: flex-start; /* 🧲 Lock box itself to the left inside flex layout */
 }
 
+/* 🛠️ Force confirm box wrapper inside commit-bar to left-align */
+.commit-bar > .confirm-box {
+  margin-left: 0;
+  margin-right: auto;
+  width: 100%;
+  max-width: 1000px;
+  text-align: left;
+  align-self: flex-start;
+}
+
 .confirm-box.info {
   background-color: #fff9c4;
   color: black;
@@ -77,12 +87,4 @@
 
 .confirm-btn:hover {
   filter: brightness(1.1);
-}
-
-/* 🛠️ Force dynamic confirm box alignment inside commit bar */
-.commit-bar .confirm-box {
-  align-self: flex-start !important;
-  text-align: left !important;
-  margin-left: 0 !important;
-  margin-right: auto !important;
 }
