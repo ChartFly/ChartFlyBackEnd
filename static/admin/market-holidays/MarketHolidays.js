@@ -55,39 +55,43 @@
               break;
 
             case "copy":
-  if (selectedIds.length !== 1) {
-    const confirmBox = document.getElementById("holiday-confirm");
-    confirmBox.innerHTML = `<div class="confirm-box warn">Copy requires exactly 1 row selected.</div>`;
-    return;
-  }
-  const copiedRow = table.querySelector(`tr[data-id="${selectedIds[0]}"]`);
-  if (copiedRow) {
-    clipboardHolidayRow = copiedRow.cloneNode(true);
-    const state = window.getState("holiday");
-    if (state) state.clipboard = clipboardHolidayRow;
+              if (selectedIds.length !== 1) {
+                const confirmBox = document.getElementById("holiday-confirm");
+                confirmBox.innerHTML = `<div class="confirm-box warn">Copy requires exactly 1 row selected.</div>`;
+                return;
+              }
+              const copiedRow = table.querySelector(`tr[data-id="${selectedIds[0]}"]`);
+              if (copiedRow) {
+                clipboardHolidayRow = copiedRow.cloneNode(true);
+                const state = window.getState("holiday");
+                if (state) state.clipboard = clipboardHolidayRow;
 
-    // 🧠 Immediately trigger a paste
-    const pasteId = "paste-" + Date.now();
-    const cloned = clipboardHolidayRow.cloneNode(true);
-    cloned.setAttribute("data-id", pasteId);
-    cloned.setAttribute("data-index", "0");
-    cloned.classList.add("editing");
+                // Paste logic on confirm copy
+                const pasteId = "paste-" + Date.now();
+                const cloned = clipboardHolidayRow.cloneNode(true);
+                cloned.setAttribute("data-id", pasteId);
+                cloned.setAttribute("data-index", "0");
+                cloned.classList.add("editing");
 
-    const cells = cloned.querySelectorAll("td:not(.col-select)");
-    cells.forEach(cell => {
-      cell.innerText = "";
-      cell.setAttribute("contenteditable", "true");
-      cell.classList.add("editable");
-    });
-    cloned.querySelectorAll("input[type='checkbox']").forEach(box => {
-      box.checked = false;
-      box.setAttribute("data-id", pasteId);
-    });
-    table.insertBefore(cloned, table.firstChild);
-    undoBuffer = [cloned.cloneNode(true)];
-    wireCheckboxes("holiday");
-  }
-  break;
+                const cells = cloned.querySelectorAll("td:not(.col-select)");
+                const originalCells = clipboardHolidayRow.querySelectorAll("td:not(.col-select)");
+
+                cells.forEach((cell, i) => {
+                  cell.innerText = originalCells[i]?.innerText || "";
+                  cell.setAttribute("contenteditable", "true");
+                  cell.classList.add("editable");
+                });
+
+                cloned.querySelectorAll("input[type='checkbox']").forEach(box => {
+                  box.checked = false;
+                  box.setAttribute("data-id", pasteId);
+                });
+
+                table.insertBefore(cloned, table.firstChild);
+                undoBuffer = [cloned.cloneNode(true)];
+                wireCheckboxes("holiday");
+              }
+              break;
 
             case "paste":
               if (!clipboardHolidayRow) {
