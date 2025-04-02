@@ -143,20 +143,51 @@ function confirmCommitAction(section) {
     return;
   }
 
+  // 🚫 ADD requires edit before confirm
+  if (state.activeAction === "add") {
+    const newRow = document.querySelector(`#${state.domId} tr[data-id^="new-"]`);
+    if (newRow && !newRow.classList.contains("dirty")) {
+      confirmBox.innerHTML = `<div class="confirm-box warn">Please edit the new row before confirming Add.</div>`;
+      return;
+    }
+  }
+
+  // ✅ COPY inserts editable yellow clone
+  if (state.activeAction === "copy") {
+    const copied = document.querySelector(`#${state.domId} tr[data-id^="copy-"]`);
+    if (copied) {
+      copied.classList.add("editing");
+      copied.querySelectorAll("td:not(.col-select)").forEach(cell => {
+        cell.setAttribute("contenteditable", "true");
+        cell.classList.add("editable");
+      });
+    }
+  }
+
+  // ✅ SAVE finalizes only yellow checked rows
+  if (state.activeAction === "save") {
+    document.querySelectorAll(`#${state.domId} tr.editing`).forEach(row => {
+      const id = row.dataset.id;
+      const box = row.querySelector('input[type="checkbox"]');
+      if (box?.checked) {
+        row.classList.remove("editing");
+        row.querySelectorAll("td.editable").forEach(cell => {
+          cell.removeAttribute("contenteditable");
+          cell.classList.remove("editable");
+        });
+        box.checked = false;
+        row.classList.remove("selected-row");
+      }
+    });
+    state.selectedRows.clear();
+  }
+
+  // Trigger the onConfirm hook
   if (typeof state.onConfirm === "function") {
     state.onConfirm(state.activeAction, Array.from(state.selectedRows));
   }
 
-  if (!["undo", "add", "paste"].includes(state.activeAction)) {
-    document.querySelectorAll(`#${state.domId} tr.editing`).forEach(row => {
-      row.classList.remove("editing");
-      row.querySelectorAll("td.editable").forEach(cell => {
-        cell.removeAttribute("contenteditable");
-        cell.classList.remove("editable");
-      });
-    });
-  }
-
+  // Message Box
   const successMsg = document.createElement("div");
   successMsg.className = "confirm-box success";
   successMsg.textContent = msg.confirmSuccess(state.activeAction);
@@ -167,10 +198,11 @@ function confirmCommitAction(section) {
     if (confirmBox.contains(successMsg)) {
       confirmBox.innerHTML = "";
     }
-  }, 6000);
+  }, 5000);
 
   resetSelection(section);
 }
+
 
 function resetSelection(section) {
   const state = getState(section);

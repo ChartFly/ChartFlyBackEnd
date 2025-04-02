@@ -56,30 +56,29 @@
 
             case "copy":
               if (selectedIds.length !== 1) {
-                const confirmBox = document.getElementById("holiday-confirm");
-                confirmBox.innerHTML = `<div class="confirm-box warn">Copy requires exactly 1 row selected.</div>`;
+                document.getElementById("holiday-confirm").innerHTML = `<div class="confirm-box warn">Copy requires exactly 1 row selected.</div>`;
                 return;
               }
+
               const copiedRow = table.querySelector(`tr[data-id="${selectedIds[0]}"]`);
               if (copiedRow) {
                 clipboardHolidayRow = copiedRow.cloneNode(true);
                 const state = window.getState("holiday");
                 if (state) state.clipboard = clipboardHolidayRow;
 
-                // Paste logic on confirm copy
-                const pasteId = "paste-" + Date.now();
+                const pasteId = "copy-" + Date.now();
                 const cloned = clipboardHolidayRow.cloneNode(true);
                 cloned.setAttribute("data-id", pasteId);
                 cloned.setAttribute("data-index", "0");
                 cloned.classList.add("editing");
 
                 const cells = cloned.querySelectorAll("td:not(.col-select)");
-                const originalCells = clipboardHolidayRow.querySelectorAll("td:not(.col-select)");
-
+                const originals = clipboardHolidayRow.querySelectorAll("td:not(.col-select)");
                 cells.forEach((cell, i) => {
-                  cell.innerText = originalCells[i]?.innerText || "";
+                  cell.innerText = originals[i]?.innerText || "";
                   cell.setAttribute("contenteditable", "true");
                   cell.classList.add("editable");
+                  cell.addEventListener("input", () => cloned.classList.add("dirty"));
                 });
 
                 cloned.querySelectorAll("input[type='checkbox']").forEach(box => {
@@ -95,10 +94,10 @@
 
             case "paste":
               if (!clipboardHolidayRow) {
-                const confirmBox = document.getElementById("holiday-confirm");
-                confirmBox.innerHTML = `<div class="confirm-box warn">Nothing to paste. You must copy something first.</div>`;
+                document.getElementById("holiday-confirm").innerHTML = `<div class="confirm-box warn">Nothing to paste. You must copy something first.</div>`;
                 return;
               }
+
               const pasteId = "paste-" + Date.now();
               const cloned = clipboardHolidayRow.cloneNode(true);
               cloned.setAttribute("data-id", pasteId);
@@ -110,11 +109,14 @@
                 cell.innerText = "";
                 cell.setAttribute("contenteditable", "true");
                 cell.classList.add("editable");
+                cell.addEventListener("input", () => cloned.classList.add("dirty"));
               });
+
               cloned.querySelectorAll("input[type='checkbox']").forEach(box => {
                 box.checked = false;
                 box.setAttribute("data-id", pasteId);
               });
+
               table.insertBefore(cloned, table.firstChild);
               undoBuffer = [cloned.cloneNode(true)];
               wireCheckboxes("holiday");
@@ -126,6 +128,7 @@
               newRow.setAttribute("data-id", newId);
               newRow.setAttribute("data-index", "0");
               newRow.classList.add("editing");
+
               newRow.innerHTML = `
                 <td class="col-select"><input type="checkbox" class="holiday-select-checkbox" data-id="${newId}" checked></td>
                 <td contenteditable="true" class="editable"></td>
@@ -133,6 +136,11 @@
                 <td contenteditable="true" class="editable">Upcoming</td>
                 <td contenteditable="true" class="editable">13:00</td>
               `;
+
+              newRow.querySelectorAll("td[contenteditable]").forEach(cell => {
+                cell.addEventListener("input", () => newRow.classList.add("dirty"));
+              });
+
               table.insertBefore(newRow, table.firstChild);
               undoBuffer = [newRow.cloneNode(true)];
               wireCheckboxes("holiday");
@@ -140,15 +148,24 @@
 
             case "save":
               const dirtyRows = table.querySelectorAll("tr.editing");
+              let savedCount = 0;
+
               dirtyRows.forEach(row => {
-                row.classList.remove("editing");
-                row.querySelectorAll("td:not(.col-select)").forEach(cell => {
-                  cell.removeAttribute("contenteditable");
-                  cell.classList.remove("editable");
-                });
+                const checkbox = row.querySelector('input[type="checkbox"]');
+                if (checkbox?.checked) {
+                  row.classList.remove("editing", "dirty");
+                  row.querySelectorAll("td:not(.col-select)").forEach(cell => {
+                    cell.removeAttribute("contenteditable");
+                    cell.classList.remove("editable");
+                  });
+                  checkbox.checked = false;
+                  row.classList.remove("selected-row");
+                  savedCount++;
+                }
               });
+
               undoBuffer = null;
-              console.log("✅ Saved rows:", dirtyRows.length);
+              console.log(`✅ Saved rows: ${savedCount}`);
               break;
 
             default:
