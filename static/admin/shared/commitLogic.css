@@ -1,4 +1,5 @@
 /* ============================== */
+/*commitLogic.css
 /* 🔁 Shared Commit Bar Styling   */
 /* ✅ Used in Market Holidays, API Keys, Users */
 /* ============================== */
@@ -29,6 +30,9 @@
   font-size: 16px; /* 🔥 Now 12pt instead of 10pt */
   line-height: 1.4;
   margin: 0 0 1rem 0; /* Align left, with bottom space */
+  text-align: left;
+  margin-left: 0;
+  margin-right: auto;
 }
 
 .confirm-box.info {
