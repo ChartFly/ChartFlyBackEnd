@@ -78,6 +78,7 @@
               const cloned = clipboardHolidayRow.cloneNode(true);
               cloned.setAttribute("data-id", pasteId);
               cloned.classList.add("editing");
+              cloned.setAttribute("data-index", "0");
 
               cloned.querySelectorAll("td:not(.col-select)").forEach(cell => {
                 cell.setAttribute("contenteditable", "true");
@@ -95,6 +96,7 @@
               const newId = `new-${Date.now()}`;
               const newRow = document.createElement("tr");
               newRow.setAttribute("data-id", newId);
+              newRow.setAttribute("data-index", "0");
               newRow.classList.add("editing");
               newRow.innerHTML = `
                 <td class="col-select"><input type="checkbox" class="holiday-select-checkbox" data-id="${newId}"></td>
@@ -162,6 +164,7 @@
             const cloned = row.cloneNode(true);
             const newId = "undo-" + Date.now();
             cloned.setAttribute("data-id", newId);
+            cloned.setAttribute("data-index", "0");
             cloned.querySelectorAll("input[type='checkbox']").forEach(box => {
               box.checked = false;
               box.setAttribute("data-id", newId);
