@@ -8,7 +8,7 @@
   flex-direction: column;
   align-items: flex-start; /* 💥 Ensure left alignment */
   max-width: 1000px; /* 📏 Keep layout consistent */
-  margin: 0 auto; /* 🧲 Center section horizontally */
+  margin: 0; /* ⬅️ Switch from centered to left-aligned */
   width: 100%;
   box-sizing: border-box;
 }
