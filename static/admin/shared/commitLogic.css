@@ -1,5 +1,4 @@
 /* ============================== */
-/*commitLogic.css
 /* 🔁 Shared Commit Bar Styling   */
 /* ✅ Used in Market Holidays, API Keys, Users */
 /* ============================== */
@@ -27,9 +26,9 @@
   padding: 10px;
   border-radius: 5px;
   font-weight: bold;
-  font-size: 16px;
+  font-size: 16px; /* 🔥 Now 12pt instead of 10pt */
   line-height: 1.4;
-  margin: 0 auto 1rem auto; /* Center horizontally */
+  margin: 0 auto 1rem auto; /* Center the box, but text stays left */
   text-align: left;
 }
 
