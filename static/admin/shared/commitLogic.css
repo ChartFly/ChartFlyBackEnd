@@ -20,8 +20,7 @@
   border-radius: 8px;
   font-size: 14px;
   font-weight: bold;
-  max-width: 100%;
-  width: fit-content; /* 🧲 Match table-wrapper width */
+  width: 100%; /* 🧲 Stretch full width */
   align-items: flex-start;
   box-sizing: border-box;
 }
