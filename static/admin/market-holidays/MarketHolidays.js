@@ -80,7 +80,12 @@
               cloned.setAttribute("data-index", "0");
               cloned.classList.add("editing");
 
-              cloned.querySelectorAll("td:not(.col-select)").forEach(cell => {
+              const cells = cloned.querySelectorAll("td:not(.col-select)");
+              if (cells.length > 0) {
+                cells[0].innerText = "New line, edit & save";
+              }
+
+              cells.forEach(cell => {
                 cell.setAttribute("contenteditable", "true");
                 cell.classList.add("editable");
               });
