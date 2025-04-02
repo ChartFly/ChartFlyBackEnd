@@ -102,7 +102,7 @@
               newRow.setAttribute("data-index", "0");
               newRow.classList.add("editing");
               newRow.innerHTML = `
-                <td class="col-select"><input type="checkbox" class="holiday-select-checkbox" data-id="${newId}"></td>
+                <td class="col-select"><input type="checkbox" class="holiday-select-checkbox" data-id="${newId}" checked></td>
                 <td contenteditable="true" class="editable"></td>
                 <td contenteditable="true" class="editable">YYYY-MM-DD</td>
                 <td contenteditable="true" class="editable">Upcoming</td>
