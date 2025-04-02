@@ -3,14 +3,12 @@
   let clipboardHolidayRow = null;
   let undoBuffer = null;
 
-  if (!window.MARKET_HOLIDAYS_LOADED) {
-    window.addEventListener("DOMContentLoaded", loadMarketHolidays);
-  }
+  if (window.MARKET_HOLIDAYS_LOADED) return;
+  window.MARKET_HOLIDAYS_LOADED = true;
+
+  window.addEventListener("DOMContentLoaded", loadMarketHolidays);
 
   async function loadMarketHolidays() {
-    if (window.MARKET_HOLIDAYS_LOADED) return;
-    window.MARKET_HOLIDAYS_LOADED = true;
-
     try {
       const response = await fetch("https://chartflybackend.onrender.com/api/holidays/year/2025");
       if (!response.ok) throw new Error("Failed to fetch market holidays");
@@ -25,21 +23,19 @@
         row.setAttribute("data-index", index + 1);
 
         const isEarlyClose = holiday.close_time !== null;
-        const readableTime = isEarlyClose ? formatTime(holiday.close_time) : null;
+        const readableTime = isEarlyClose ? formatTime(holiday.close_time) : "";
 
         row.innerHTML = `
           <td class="col-select"><input type="checkbox" class="holiday-select-checkbox" data-id="${holiday.id}"></td>
           <td>${sanitizeInput(holiday.name || "N/A")}</td>
           <td>${sanitizeInput(holiday.date || "N/A")}</td>
-          <td>
-            ${sanitizeInput(holiday.status || "Unknown")}
-            ${isEarlyClose ? `<span class="early-close-note"> (Closes at ${readableTime})</span>` : ""}
-          </td>
+          <td>${sanitizeInput(holiday.status || "Unknown")}</td>
+          <td>${readableTime}</td>
         `;
+
         table.appendChild(row);
       });
 
-      // ✅ Init commit logic
       initCommitLogic({
         section: "holiday",
         sectionDomId: "market-holidays-section",
@@ -75,9 +71,8 @@
               const pasted = clipboardHolidayRow.cloneNode(true);
               pasted.setAttribute("data-id", pasteId);
               pasted.classList.add("editing");
+
               pasted.querySelectorAll("td:not(.col-select)").forEach(cell => {
-                const note = cell.querySelector(".early-close-note");
-                if (note) note.remove();
                 cell.setAttribute("contenteditable", "true");
                 cell.classList.add("editable");
               });
@@ -99,6 +94,7 @@
                 <td contenteditable="true" class="editable">New Holiday</td>
                 <td contenteditable="true" class="editable">YYYY-MM-DD</td>
                 <td contenteditable="true" class="editable">Upcoming</td>
+                <td contenteditable="true" class="editable">13:00</td>
               `;
               table.insertBefore(newRow, table.firstChild);
               undoBuffer = [newRow.cloneNode(true)];
@@ -117,29 +113,6 @@
               console.log("✅ Saved rows:", dirtyRows.length);
               break;
 
-            case "undo":
-              if (!undoBuffer || undoBuffer.length === 0) {
-                alert("Nothing to undo.");
-                return;
-              }
-              undoBuffer.forEach(row => {
-                const cloned = row.cloneNode(true);
-                const newId = "undo-" + Date.now();
-                cloned.setAttribute("data-id", newId);
-                cloned.querySelectorAll("input[type='checkbox']").forEach(box => {
-                  box.checked = false;
-                  box.setAttribute("data-id", newId);
-                });
-                cloned.classList.add("editing");
-                cloned.querySelectorAll("td:not(.col-select)").forEach(cell => {
-                  cell.setAttribute("contenteditable", "true");
-                  cell.classList.add("editable");
-                });
-                table.insertBefore(cloned, table.firstChild);
-              });
-              undoBuffer = null;
-              break;
-
             default:
               console.warn("Unhandled action:", action);
           }
@@ -150,7 +123,6 @@
           paste: "Pasted a cloned row at the top.",
           add: "A new blank holiday row was added to the top.",
           edit: "You can now edit the selected rows.",
-          undo: "Restored the most recent deleted or changed row(s).",
           save: {
             message: "Holiday changes saved (frontend only).",
             validate: (row) => {
@@ -158,21 +130,45 @@
               const name = cells[0]?.innerText.trim();
               const date = cells[1]?.innerText.trim();
               const status = cells[2]?.innerText.trim();
+              const closeTime = cells[3]?.innerText.trim();
+
               const isValidDate = /^\d{4}-\d{2}-\d{2}$/.test(date);
               const isValidStatus = ["Upcoming", "Passed"].includes(status);
+              const isValidTime = !closeTime || /^([01]\d|2[0-3]):(00|30)$/.test(closeTime);
+
               if (!name) return "Holiday name is required.";
               if (!isValidDate) return "Date must be in YYYY-MM-DD format.";
               if (!isValidStatus) return "Status must be 'Upcoming' or 'Passed'.";
+              if (!isValidTime) return "Close Time must be HH:MM in 30-minute intervals or left blank.";
               return true;
             }
           }
         }
       });
 
+      const undoBtn = document.getElementById("holiday-undo-btn");
+      if (undoBtn) {
+        undoBtn.addEventListener("click", () => {
+          if (!undoBuffer || undoBuffer.length === 0) return;
+          const table = document.getElementById("holidays-table");
+          undoBuffer.forEach(row => {
+            const cloned = row.cloneNode(true);
+            const newId = "undo-" + Date.now();
+            cloned.setAttribute("data-id", newId);
+            cloned.querySelectorAll("input[type='checkbox']").forEach(box => {
+              box.checked = false;
+              box.setAttribute("data-id", newId);
+            });
+            table.insertBefore(cloned, table.firstChild);
+          });
+          undoBuffer = null;
+        });
+      }
+
     } catch (error) {
       console.error("❌ Failed to load holidays:", error);
       const table = document.getElementById("holidays-table");
-      table.innerHTML = `<tr><td colspan="4">Failed to load holidays. Please try again later.</td></tr>`;
+      table.innerHTML = `<tr><td colspan="5">Failed to load holidays. Please try again later.</td></tr>`;
     }
   }
 

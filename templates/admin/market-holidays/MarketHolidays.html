@@ -2,17 +2,16 @@
 
 <section id="market-holidays-section" class="admin-tab-section" style="display: none;">
 
-  <!-- 🔧 Action Toolbar -->
+  <!-- 🔧 Section Title -->
   <h2>Manage Market Holidays</h2>
 
-<!-- 💡 Instructional Tip -->
-<div class="confirm-box warn" style="margin: 18px 0; font-size: 18px;">
-  Tip: Check one or more rows in the “Select” column before clicking an action button.
-</div>
+  <!-- 💡 Instructional Tip (styled via commitLogic.css) -->
+  <div class="confirm-box warn" style="margin: 18px auto; font-size: 18px; max-width: 1000px;">
+    Tip: Check one or more rows in the “Select” column before clicking an action button.
+  </div>
 
-<!-- 🔧 Action Toolbar -->
-<div class="action-toolbar" id="holiday-actions">
-
+  <!-- 🎛️ Action Toolbar -->
+  <div class="action-toolbar" id="holiday-actions">
     <button class="action-btn" id="holiday-edit-btn">Edit</button>
     <button class="action-btn" id="holiday-copy-btn">Copy</button>
     <button class="action-btn" id="holiday-paste-btn">Paste</button>
@@ -22,15 +21,8 @@
     <button class="action-btn" id="holiday-undo-btn">Undo</button>
   </div>
 
-  <!-- ✅ Commit Bar (Used by commitLogic.js) -->
+  <!-- ✅ Commit Bar (dynamic feedback area) -->
   <div class="commit-bar" id="holiday-confirm"></div>
-
-  <!-- ⏰ Optional Close Time -->
-  <div class="early-close-input" style="margin-bottom: 1rem;">
-    <label for="holiday-close-time"><strong>Close Time (if Early Close):</strong></label>
-    <input type="time" id="holiday-close-time" name="close_time" step="1800" />
-    <small>(Optional. Leave blank for full-day holidays.)</small>
-  </div>
 
   <!-- 📋 Holidays Table -->
   <div class="table-wrapper">
@@ -41,11 +33,13 @@
           <th class="col-name">Holiday Name</th>
           <th class="col-date">Date</th>
           <th class="col-status">Status</th>
+          <th class="col-close-time">Close Time</th>
         </tr>
       </thead>
       <tbody id="holidays-table">
-        <tr><td colspan="4">Loading holidays...</td></tr>
+        <tr><td colspan="5">Loading holidays...</td></tr>
       </tbody>
     </table>
   </div>
+
 </section>
