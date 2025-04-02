@@ -28,7 +28,7 @@
   font-weight: bold;
   font-size: 16px; /* 🔥 Now 12pt instead of 10pt */
   line-height: 1.4;
-  margin: 0 auto 1rem 0; /* Align left, with bottom space */
+  margin: 0 0 1rem 0; /* Align left, with bottom space */
 }
 
 .confirm-box.info {
