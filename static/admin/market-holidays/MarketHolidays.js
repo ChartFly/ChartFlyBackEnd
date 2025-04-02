@@ -75,20 +75,20 @@
                 return;
               }
               const pasteId = "paste-" + Date.now();
-              const pasted = clipboardHolidayRow.cloneNode(true);
-              pasted.setAttribute("data-id", pasteId);
-              pasted.classList.add("editing");
+              const cloned = clipboardHolidayRow.cloneNode(true);
+              cloned.setAttribute("data-id", pasteId);
+              cloned.classList.add("editing");
 
-              pasted.querySelectorAll("td:not(.col-select)").forEach(cell => {
+              cloned.querySelectorAll("td:not(.col-select)").forEach(cell => {
                 cell.setAttribute("contenteditable", "true");
                 cell.classList.add("editable");
               });
-              pasted.querySelectorAll("input[type='checkbox']").forEach(box => {
+              cloned.querySelectorAll("input[type='checkbox']").forEach(box => {
                 box.checked = false;
                 box.setAttribute("data-id", pasteId);
               });
-              table.insertBefore(pasted, table.firstChild);
-              undoBuffer = [pasted.cloneNode(true)];
+              table.insertBefore(cloned, table.firstChild);
+              undoBuffer = [cloned.cloneNode(true)];
               break;
 
             case "add":
