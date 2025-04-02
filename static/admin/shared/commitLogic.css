@@ -14,18 +14,21 @@
   border-radius: 8px;
   font-size: 14px;
   font-weight: bold;
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* 👁️ Confirm Messages */
 .confirm-box {
-  width: 100%;
+  max-width: 1000px;
   box-sizing: border-box;
   padding: 10px;
   border-radius: 5px;
   font-weight: bold;
   font-size: 16px; /* 🔥 Now 12pt instead of 10pt */
   line-height: 1.4;
-  margin: 0 auto; /* Centers inside parent container */
+  margin: 0 auto 1rem 0; /* Align left, with bottom space */
 }
 
 .confirm-box.info {
