@@ -58,7 +58,7 @@
 
 .confirm-box.warn {
   background-color: #fff4e5;
-  color: #cc7700;
+  color: #663300; /* 🔧 Improved contrast */
   border: 2px solid #007a8a;
 }
 
