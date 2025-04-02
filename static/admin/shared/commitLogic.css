@@ -3,21 +3,26 @@
 /* ✅ Used in Market Holidays, API Keys, Users */
 /* ============================== */
 
+#market-holidays-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* 💥 Ensure left alignment */
+}
+
 .commit-bar {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
   padding: 12px 18px;
-  margin-bottom: 1rem;
+  margin: 1rem 0;
   background-color: #f8f9fa;
   border: 2px solid #007a8a; /* ChartFly Blue */
   border-radius: 8px;
   font-size: 14px;
   font-weight: bold;
   max-width: 1000px;
-  margin-left: auto;
-  margin-right: auto;
-  align-items: flex-start; /* 💥 Ensure contents like confirm-box align left */
+  width: 100%;
+  align-items: flex-start;
 }
 
 /* 👁️ Confirm Messages */
@@ -31,7 +36,7 @@
   font-weight: bold;
   font-size: 16px; /* 🔥 Now 12pt instead of 10pt */
   line-height: 1.4;
-  margin: 0 0 1rem 0; /* Flush left like the table */
+  margin: 0 0 1rem 0;
   text-align: left;
   align-self: flex-start;
 }
