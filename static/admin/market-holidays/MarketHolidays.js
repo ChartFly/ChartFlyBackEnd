@@ -6,6 +6,8 @@
   if (window.MARKET_HOLIDAYS_LOADED) return;
   window.MARKET_HOLIDAYS_LOADED = true;
 
+  window.addEventListener("DOMContentLoaded", loadMarketHolidays);
+
   async function loadMarketHolidays() {
     try {
       const response = await fetch("https://chartflybackend.onrender.com/api/holidays/year/2025");
@@ -185,17 +187,6 @@
     }
   }
 
-  window.addEventListener("DOMContentLoaded", () => {
-    const waitForCommitLogic = () => {
-      if (typeof initCommitLogic === "function") {
-        loadMarketHolidays();
-      } else {
-        setTimeout(waitForCommitLogic, 50);
-      }
-    };
-    waitForCommitLogic();
-  });
-
   function formatTime(rawTime) {
     const [hour, minute] = rawTime.split(":");
     const h = parseInt(hour, 10);
@@ -213,4 +204,8 @@
   function capitalize(word) {
     return word.charAt(0).toUpperCase() + word.slice(1);
   }
+
+  window.initCommitLogic = initCommitLogic;
+  window.getState = getState;
+  window.wireCheckboxes = wireCheckboxes;
 })();
