@@ -6,7 +6,16 @@
   if (window.MARKET_HOLIDAYS_LOADED) return;
   window.MARKET_HOLIDAYS_LOADED = true;
 
-  window.addEventListener("DOMContentLoaded", loadMarketHolidays);
+  window.addEventListener("DOMContentLoaded", () => {
+    const waitForCommitLogic = () => {
+      if (typeof initCommitLogic === "function") {
+        loadMarketHolidays();
+      } else {
+        setTimeout(waitForCommitLogic, 50);
+      }
+    };
+    waitForCommitLogic();
+  });
 
   async function loadMarketHolidays() {
     try {
@@ -116,11 +125,11 @@
             case "save":
               const dirtyRows = table.querySelectorAll("tr.editing");
               dirtyRows.forEach(row => {
+                row.classList.remove("editing");
                 row.querySelectorAll("td:not(.col-select)").forEach(cell => {
                   cell.removeAttribute("contenteditable");
                   cell.classList.remove("editable");
                 });
-                row.classList.remove("editing");
               });
               undoBuffer = null;
               console.log("✅ Saved rows:", dirtyRows.length);
