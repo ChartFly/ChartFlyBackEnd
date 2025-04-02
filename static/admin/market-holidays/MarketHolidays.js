@@ -81,11 +81,8 @@
               cloned.classList.add("editing");
 
               const cells = cloned.querySelectorAll("td:not(.col-select)");
-              if (cells.length > 0) {
-                cells[0].innerText = "New line, edit & save";
-              }
-
-              cells.forEach(cell => {
+              cells.forEach((cell, index) => {
+                cell.innerText = index === 0 ? "New line, edit & save" : "";
                 cell.setAttribute("contenteditable", "true");
                 cell.classList.add("editable");
               });
