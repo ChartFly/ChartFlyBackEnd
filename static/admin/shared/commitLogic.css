@@ -32,6 +32,7 @@
   line-height: 1.4;
   margin: 0 0 1rem 0; /* Flush left like the table */
   text-align: left;
+  align-self: flex-start; /* 🧲 Lock box itself to the left inside flex layout */
 }
 
 .confirm-box.info {
