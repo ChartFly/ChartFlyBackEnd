@@ -44,10 +44,13 @@
 
 /* 🛠️ Confirm box inside commit-bar specifically */
 .commit-bar > .confirm-box {
-  margin-left: 0;
-  margin-right: auto;
+  margin: 0 auto;
   text-align: left;
   align-self: flex-start;
+  width: 100%;
+  max-width: 1000px;
+  min-height: 52px; /* 💪 Match Tip box base height */
+  box-sizing: border-box;
 }
 
 .confirm-box.info {
@@ -58,7 +61,7 @@
 
 .confirm-box.warn {
   background-color: #fff4e5;
-  color: #663300; /* 🔧 Improved contrast */
+  color: #4b2e00; /* 🟤 Richer dark brown for better contrast */
   border: 2px solid #007a8a;
 }
 
