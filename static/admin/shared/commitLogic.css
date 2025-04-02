@@ -6,7 +6,7 @@
 #market-holidays-section {
   display: flex;
   flex-direction: column;
-  align-items: flex-start; /* 💥 Ensure left alignment */
+  align-items: flex-start;
 }
 
 .commit-bar {
@@ -23,51 +23,41 @@
   max-width: 1000px;
   width: 100%;
   align-items: flex-start;
+  box-sizing: border-box;
 }
 
-/* 👁️ Confirm Messages */
+/* 👁️ Confirm + Tip Boxes (Shared style) */
 .confirm-box {
-  display: block !important;
   width: 100%;
   max-width: 1000px;
-  box-sizing: border-box;
-  padding: 10px;
-  border-radius: 5px;
+  padding: 10px 14px;
+  margin-bottom: 1rem;
+  font-size: 16px;
   font-weight: bold;
-  font-size: 16px; /* 🔥 Now 12pt instead of 10pt */
   line-height: 1.4;
-  margin: 0 0 1rem 0;
+  border-radius: 5px;
   text-align: left;
-  align-self: flex-start;
+  box-sizing: border-box;
+  border: 2px solid #007a8a; /* ChartFly Blue */
 }
 
-/* 🛠️ Confirm box inside commit-bar specifically */
-.commit-bar > .confirm-box {
-  margin-left: 0;
-  margin-right: auto;
-  text-align: left;
-  align-self: flex-start;
-}
-
+/* 🎨 Color Variants */
 .confirm-box.info {
   background-color: #fff9c4;
   color: black;
-  border: 2px solid #007a8a;
 }
 
 .confirm-box.warn {
   background-color: #fff4e5;
   color: #cc7700;
-  border: 2px solid #007a8a;
 }
 
 .confirm-box.success {
   background-color: #e6f9ed;
   color: #00aa55;
-  border: 2px solid #007a8a;
 }
 
-/* 🎯 Button Styling */
+/* 🎯 Buttons */
 .confirm-btn {
   display: inline-block;
   padding: 6px 14px;
