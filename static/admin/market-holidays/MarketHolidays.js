@@ -56,15 +56,22 @@
 
             case "copy":
               if (selectedIds.length !== 1) {
-                alert("Copy requires exactly 1 row selected.");
+                const confirmBox = document.getElementById("holiday-confirm");
+                confirmBox.innerHTML = `<div class="confirm-box warn">Copy requires exactly 1 row selected.</div>`;
                 return;
               }
-              clipboardHolidayRow = table.querySelector(`tr[data-id="${selectedIds[0]}"]`).cloneNode(true);
+              const copiedRow = table.querySelector(`tr[data-id="${selectedIds[0]}"]`);
+              if (copiedRow) {
+                clipboardHolidayRow = copiedRow.cloneNode(true);
+                const state = window.getState("holiday");
+                if (state) state.clipboard = clipboardHolidayRow;
+              }
               break;
 
             case "paste":
               if (!clipboardHolidayRow) {
-                alert("Nothing in clipboard. Copy something first.");
+                const confirmBox = document.getElementById("holiday-confirm");
+                confirmBox.innerHTML = `<div class="confirm-box warn">Nothing to paste. You must copy something first.</div>`;
                 return;
               }
               const pasteId = "paste-" + Date.now();
