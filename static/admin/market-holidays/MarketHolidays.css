@@ -140,7 +140,7 @@ body.compact-mode #market-holidays-section .admin-table td {
 }
 #market-holidays-section .confirm-box.warn {
   background-color: #fff4e5;
-  color: #cc7700;
+  color: black;
 }
 #market-holidays-section .confirm-box.success {
   background-color: #e6f9ed;
