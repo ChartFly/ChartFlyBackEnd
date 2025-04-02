@@ -11,6 +11,7 @@ const defaultMessages = {
   confirmSuccess: (action) => `✅ ${capitalize(action)} confirmed!`,
   undoSuccess: "Last change undone.",
   nothingToUndo: "Nothing to undo.",
+  nothingToPaste: "Nothing to paste. You must copy something first.",
 };
 
 const sectionStates = {};
@@ -21,7 +22,8 @@ function getState(section) {
       activeAction: null,
       undoBuffer: null,
       onConfirm: null,
-      domId: null
+      domId: null,
+      clipboard: null, // <-- stores copied row per section
     };
   }
   return sectionStates[section];
@@ -59,6 +61,14 @@ function initCommitLogic({ section, sectionDomId = `${section}-section`, onConfi
       if (!hasSelection && actionNeedsSelection) {
         confirmBox.innerHTML = `<div class="confirm-box warn">${msg.noSelection}</div>`;
         return;
+      }
+
+      // Paste safety check
+      if (action === "paste") {
+        if (!state.clipboard) {
+          confirmBox.innerHTML = `<div class="confirm-box warn">${msg.nothingToPaste}</div>`;
+          return;
+        }
       }
 
       // Pre-action visual cue for edit
@@ -143,7 +153,6 @@ function confirmCommitAction(section) {
     state.onConfirm(state.activeAction, Array.from(state.selectedRows));
   }
 
-  // ✅ Finalize edited rows for all actions except undo
   if (state.activeAction !== "undo") {
     document.querySelectorAll(`#${state.domId} tr.editing`).forEach(row => {
       row.classList.remove("editing");
