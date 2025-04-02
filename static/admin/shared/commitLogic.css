@@ -20,9 +20,10 @@
   border-radius: 8px;
   font-size: 14px;
   font-weight: bold;
-  max-width: 1000px;
-  width: 100%;
+  max-width: 100%;
+  width: fit-content; /* 🧲 Match table-wrapper width */
   align-items: flex-start;
+  box-sizing: border-box;
 }
 
 /* 👁️ Confirm Messages */
@@ -44,13 +45,13 @@
 
 /* 🛠️ Confirm box inside commit-bar specifically */
 .commit-bar > .confirm-box {
-  margin: 0 auto;
-  text-align: left;
-  align-self: flex-start;
   width: 100%;
   max-width: 1000px;
-  min-height: 52px; /* 💪 Match Tip box base height */
+  min-height: 52px;
+  text-align: left;
+  align-self: flex-start;
   box-sizing: border-box;
+  margin: 0;
 }
 
 .confirm-box.info {
