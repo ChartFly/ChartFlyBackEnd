@@ -164,36 +164,36 @@ function confirmCommitAction(section) {
     }
   }
 
-  // ✅ SAVE finalizes only yellow checked rows
-  if (state.activeAction === "save") {
+  // ✅ Finalize rows for Edit and Save
+  if (["edit", "save"].includes(state.activeAction)) {
     document.querySelectorAll(`#${state.domId} tr.editing`).forEach(row => {
-      const id = row.dataset.id;
-      const box = row.querySelector('input[type="checkbox"]');
-      if (box?.checked) {
-        row.classList.remove("editing");
+      const checkbox = row.querySelector('input[type="checkbox"]');
+      if (checkbox?.checked || state.activeAction === "edit") {
+        row.classList.remove("editing", "dirty");
         row.querySelectorAll("td.editable").forEach(cell => {
           cell.removeAttribute("contenteditable");
           cell.classList.remove("editable");
         });
-        box.checked = false;
+        if (checkbox) checkbox.checked = false;
         row.classList.remove("selected-row");
       }
     });
     state.selectedRows.clear();
   }
 
-  // Trigger the onConfirm hook
+  // Trigger the onConfirm hook (e.g., to insert rows, update undoBuffer, etc.)
   if (typeof state.onConfirm === "function") {
     state.onConfirm(state.activeAction, Array.from(state.selectedRows));
   }
 
-  // Message Box
+  // ✅ Show success message
   const successMsg = document.createElement("div");
   successMsg.className = "confirm-box success";
   successMsg.textContent = msg.confirmSuccess(state.activeAction);
   confirmBox.innerHTML = "";
   confirmBox.appendChild(successMsg);
 
+  // ✅ Auto-clear confirm bar after 5s
   setTimeout(() => {
     if (confirmBox.contains(successMsg)) {
       confirmBox.innerHTML = "";
@@ -202,7 +202,6 @@ function confirmCommitAction(section) {
 
   resetSelection(section);
 }
-
 
 function resetSelection(section) {
   const state = getState(section);
