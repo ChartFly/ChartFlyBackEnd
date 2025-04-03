@@ -13,12 +13,8 @@
     <button class="action-btn" id="api-save-btn">Save</button>
   </div>
 
-  <!-- ✅ Commit Bar with Undo + Save -->
-  <div class="confirm-bar" id="apikeys-confirm-bar" style="display: none;">
-    <span class="confirm-message" id="apikeys-confirm-message">You made changes.</span>
-    <button class="confirm-btn yellow" id="apikeys-undo-btn" title="Undo your last change. Works only before Save.">Undo</button>
-    <button class="confirm-btn green" id="apikeys-save-btn">Save</button>
-  </div>
+  <!-- ✅ ButtonBox Confirm Bar -->
+  {% include "shared/ButtonBox.html" %}
 
   <!-- 🆔 Show ID Toggle -->
   <div class="toggle-ids">
@@ -53,7 +49,7 @@
         </tr>
       </thead>
       <tbody id="api-keys-table">
-        <tr><td colspan="16">Loading API keys...</td></tr>
+        <tr><td colspan="17">Loading API keys...</td></tr>
       </tbody>
     </table>
   </div>
