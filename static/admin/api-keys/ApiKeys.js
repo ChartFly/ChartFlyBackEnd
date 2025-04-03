@@ -58,6 +58,8 @@ async function loadApiKeys() {
       tableId: "api-keys-table",
       confirmBoxId: "apikeys-confirm-bar",
       messageId: "apikeys-confirm-message",
+      tipBoxId: "api-tip-box",
+      warningBoxId: "api-warning-box",
       onAction: (action, selectedIds) => {
         console.log(`📦 [ButtonBox] Action triggered: ${action}`, selectedIds);
 
@@ -82,6 +84,9 @@ async function loadApiKeys() {
 
           const table = document.getElementById("api-keys-table");
           table.prepend(clone);
+
+          const checkbox = clone.querySelector("input[type='checkbox']");
+          if (checkbox) checkbox.checked = true;
         }
 
         // Additional actions (add, edit, paste) can be implemented similarly
