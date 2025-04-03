@@ -1,9 +1,5 @@
 // static/admin/api-keys/ApiKeys.js
 
-let selectedApiRows = new Set();
-let activeApiAction = null;
-let apiKeysUndoBuffer = null;
-
 window.addEventListener("DOMContentLoaded", () => {
   loadApiKeys();
 
@@ -12,26 +8,6 @@ window.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll(".id-col").forEach(el => {
       el.style.display = show ? "" : "none";
     });
-  });
-
-  document.getElementById("apikeys-undo-btn").addEventListener("click", () => {
-    if (!apiKeysUndoBuffer) return;
-
-    const buffer = apiKeysUndoBuffer;
-    const tableBody = document.getElementById("api-keys-table");
-
-    if (buffer.action === 'delete') {
-      tableBody.appendChild(buffer.rowElement);
-    }
-
-    apiKeysUndoBuffer = null;
-    showConfirmBar("Last change undone.");
-  });
-
-  document.getElementById("apikeys-save-btn").addEventListener("click", () => {
-    apiKeysUndoBuffer = null;
-    hideConfirmBar();
-    console.log("✅ Changes saved!");
   });
 });
 
@@ -72,120 +48,20 @@ async function loadApiKeys() {
       table.appendChild(row);
     });
 
-    setupApiToolbar();
+    // 🔌 Plug in the ButtonBox
+    ButtonBox.init({
+      section: "api",
+      tableId: "api-keys-table",
+      domId: "api-keys-section",
+      confirmBoxId: "apikeys-confirm-bar",
+      messageId: "apikeys-confirm-message"
+    });
+
   } catch (error) {
     console.error("❌ Failed to load API keys:", error);
     const table = document.getElementById("api-keys-table");
     table.innerHTML = `<tr><td colspan="16">Failed to load data. Please try again later.</td></tr>`;
   }
-}
-
-function setupApiToolbar() {
-  const checkboxes = document.querySelectorAll(".api-select-checkbox");
-
-  checkboxes.forEach(box => {
-    box.addEventListener("change", () => {
-      const row = box.closest("tr");
-      const id = box.dataset.id;
-
-      if (box.checked) {
-        selectedApiRows.add(id);
-        row.classList.add("selected-row");
-      } else {
-        selectedApiRows.delete(id);
-        row.classList.remove("selected-row");
-      }
-
-      updateApiConfirmBox();
-    });
-  });
-
-  const actions = ["edit", "copy", "paste", "add", "delete", "save"];
-  actions.forEach(action => {
-    const btn = document.getElementById(`api-${action}-btn`);
-    if (!btn) return;
-
-    btn.addEventListener("click", () => {
-      activeApiAction = action;
-
-      actions.forEach(a => {
-        const otherBtn = document.getElementById(`api-${a}-btn`);
-        if (otherBtn) otherBtn.classList.remove("active");
-      });
-      btn.classList.add("active");
-
-      if (selectedApiRows.size === 0) {
-        showConfirmBar("Please select at least one row first.");
-        return;
-      }
-
-      const selectedIndexes = Array.from(document.querySelectorAll("tr.selected-row"))
-        .map(row => row.dataset.index);
-
-      showConfirmBar(`Ready to ${action} row(s): ${selectedIndexes.join(", ")}`);
-    });
-  });
-}
-
-function confirmApiAction() {
-  if (!activeApiAction || selectedApiRows.size === 0) {
-    showConfirmBar("No action or rows selected.");
-    return;
-  }
-
-  console.log(`✅ Confirmed [${activeApiAction}] for:`, Array.from(selectedApiRows));
-
-  if (activeApiAction === "delete") {
-    const table = document.getElementById("api-keys-table");
-    const selectedRows = document.querySelectorAll("tr.selected-row");
-
-    selectedRows.forEach(row => {
-      const rowId = row.getAttribute("data-id");
-      const rowClone = row.cloneNode(true);
-
-      apiKeysUndoBuffer = {
-        action: 'delete',
-        rowId: rowId,
-        rowElement: rowClone
-      };
-
-      row.remove();
-    });
-
-    showConfirmBar("1 or more rows deleted.");
-  }
-
-  activeApiAction = null;
-  selectedApiRows.clear();
-  document.querySelectorAll(".api-select-checkbox").forEach(box => (box.checked = false));
-  document.querySelectorAll("tr.selected-row").forEach(row => row.classList.remove("selected-row"));
-  document.querySelectorAll(".action-btn").forEach(btn => btn.classList.remove("active"));
-}
-
-function updateApiConfirmBox() {
-  const bar = document.getElementById("apikeys-confirm-bar");
-  const msg = document.getElementById("apikeys-confirm-message");
-
-  if (selectedApiRows.size === 0) {
-    bar.style.display = "none";
-    msg.textContent = "";
-    return;
-  }
-
-  showConfirmBar(`${selectedApiRows.size} row(s) selected.`);
-}
-
-function showConfirmBar(message) {
-  const bar = document.getElementById("apikeys-confirm-bar");
-  const msg = document.getElementById("apikeys-confirm-message");
-
-  msg.textContent = message;
-  bar.style.display = "flex";
-}
-
-function hideConfirmBar() {
-  const bar = document.getElementById("apikeys-confirm-bar");
-  bar.style.display = "none";
 }
 
 function sanitizeInput(input) {
@@ -196,8 +72,4 @@ function sanitizeInput(input) {
 
 function formatCell(value) {
   return value === null || value === undefined ? "—" : value;
-}
-
-function capitalize(word) {
-  return word.charAt(0).toUpperCase() + word.slice(1);
 }
