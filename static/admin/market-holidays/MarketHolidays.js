@@ -81,10 +81,10 @@
                   cell.addEventListener("input", () => cloned.classList.add("dirty"));
                 });
 
-                cloned.querySelectorAll("input[type='checkbox']").forEach(box => {
-                  box.checked = true;
-                  box.setAttribute("data-id", pasteId);
-                });
+                const checkboxCell = cloned.querySelector("td.col-select");
+                checkboxCell.innerHTML = `
+                   <input type="checkbox" class="holiday-select-checkbox" data-id="${pasteId}" checked>
+                `;
 
                 table.insertBefore(cloned, table.firstChild);
                 undoBuffer = [cloned.cloneNode(true)];
