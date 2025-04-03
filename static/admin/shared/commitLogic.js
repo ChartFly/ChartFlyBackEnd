@@ -20,7 +20,7 @@ function getState(section) {
     sectionStates[section] = {
       selectedRows: new Set(),
       activeAction: null,
-      undoBuffer: [],
+      undoBuffer: [], // 🧠 Multi-level stack
       onConfirm: null,
       domId: null,
       clipboard: null,
@@ -120,6 +120,7 @@ function initCommitLogic({ section, sectionDomId = `${section}-section`, onConfi
     });
   });
 
+  // 🧠 Wire Undo button
   const undoBtn = document.getElementById(`${section}-undo-btn`);
   if (undoBtn) {
     undoBtn.addEventListener("click", () => {
@@ -127,17 +128,12 @@ function initCommitLogic({ section, sectionDomId = `${section}-section`, onConfi
       const table = document.getElementById("holidays-table");
       if (!state.undoBuffer.length) return;
 
-      const lastRows = state.undoBuffer.pop();
-      lastRows.forEach(row => {
+      const lastSnapshot = state.undoBuffer.pop();
+      table.innerHTML = ""; // 🔥 Clear the table
+
+      lastSnapshot.forEach(row => {
         const cloned = row.cloneNode(true);
-        const newId = "undo-" + Date.now();
-        cloned.setAttribute("data-id", newId);
-        cloned.setAttribute("data-index", "0");
-
-        const checkbox = cloned.querySelector("input[type='checkbox']");
-        if (checkbox) checkbox.setAttribute("data-id", newId);
-
-        table.insertBefore(cloned, table.firstChild);
+        table.appendChild(cloned);
       });
 
       wireCheckboxes(section);
@@ -238,9 +234,8 @@ function confirmCommitAction(section) {
         });
         if (box) box.checked = false;
         row.classList.remove("selected-row");
-        row.style.backgroundColor = ""; // ✅ Clear yellow
+        finalized++;
       }
-      finalized++;
     });
 
     if (state.activeAction === "save" && finalized === 0) {
@@ -254,9 +249,10 @@ function confirmCommitAction(section) {
   if (typeof state.onConfirm === "function") {
     const table = document.getElementById("holidays-table");
     const snapshot = Array.from(table.querySelectorAll("tr")).map(row => row.cloneNode(true));
-    if (state.undoBuffer.length >= 20) state.undoBuffer.shift();
+    if (state.undoBuffer.length >= 20) state.undoBuffer.shift(); // Cap stack at 20
     state.undoBuffer.push(snapshot);
     updateUndoButton(section);
+
     state.onConfirm(state.activeAction, Array.from(state.selectedRows));
   }
 
