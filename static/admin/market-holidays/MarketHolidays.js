@@ -1,8 +1,5 @@
 // static/admin/market-holidays/MarketHolidays.js
 (() => {
-  let clipboardHolidayRow = null;
-  let undoBuffer = null;
-
   if (window.MARKET_HOLIDAYS_LOADED) return;
   window.MARKET_HOLIDAYS_LOADED = true;
 
@@ -36,214 +33,84 @@
         table.appendChild(row);
       });
 
-      initCommitLogic({
+      ButtonBox.init({
         section: "holiday",
-        sectionDomId: "market-holidays-section",
-        onConfirm: async (action, selectedIds) => {
+        domId: "market-holidays-section",
+        tableId: "holidays-table",
+        confirmBoxId: "holiday-confirm-bar",
+        messageId: "holiday-confirm-message",
+        onAction: (action, selectedIds) => {
           const table = document.getElementById("holidays-table");
 
-          switch (action) {
-            case "delete":
-              undoBuffer = [];
-              selectedIds.forEach(id => {
-                const row = table.querySelector(`tr[data-id="${id}"]`);
-                if (row) {
-                  undoBuffer.push(row.cloneNode(true));
-                  row.remove();
-                }
-              });
-              break;
-
-            case "copy":
-              if (selectedIds.length !== 1) {
-                document.getElementById("holiday-confirm").innerHTML =
-                  `<div class="confirm-box warn">Copy requires exactly 1 row selected.</div>`;
-                return;
-              }
-
-              const copiedRow = table.querySelector(`tr[data-id="${selectedIds[0]}"]`);
-              if (copiedRow) {
-                clipboardHolidayRow = copiedRow.cloneNode(true);
-                const state = window.getState("holiday");
-                if (state) state.clipboard = clipboardHolidayRow;
-
-                const pasteId = "copy-" + Date.now();
-                const cloned = clipboardHolidayRow.cloneNode(true);
-                cloned.setAttribute("data-id", pasteId);
-                cloned.setAttribute("data-index", "0");
-                cloned.classList.add("editing");
-
-                const cells = cloned.querySelectorAll("td:not(.col-select)");
-                const originals = copiedRow.querySelectorAll("td:not(.col-select)");
-                cells.forEach((cell, i) => {
-                  cell.innerText = originals[i]?.innerText || "";
-                  cell.setAttribute("contenteditable", "true");
-                  cell.classList.add("editable");
-                  cell.addEventListener("input", () => cloned.classList.add("dirty"));
-                });
-
-                const checkboxCell = cloned.querySelector("td.col-select");
-                checkboxCell.innerHTML = `
-                  <input type="checkbox" class="holiday-select-checkbox" data-id="${pasteId}">
-                `;
-
-                table.insertBefore(cloned, table.firstChild);
-
-                // ✅ Force it checked after insert
-                const forcedCheck = cloned.querySelector('input[type="checkbox"]');
-                if (forcedCheck) forcedCheck.checked = true;
-
-                undoBuffer = [cloned.cloneNode(true)];
-                wireCheckboxes("holiday");
-              }
-              break;
-
-            case "paste":
-              if (!clipboardHolidayRow) {
-                document.getElementById("holiday-confirm").innerHTML =
-                  `<div class="confirm-box warn">Nothing to paste. You must copy something first.</div>`;
-                return;
-              }
-
-              const pasteId = "paste-" + Date.now();
-              const cloned = clipboardHolidayRow.cloneNode(true);
-              cloned.setAttribute("data-id", pasteId);
-              cloned.setAttribute("data-index", "0");
-              cloned.classList.add("editing");
-
-              const cells = cloned.querySelectorAll("td:not(.col-select)");
-              cells.forEach(cell => {
-                cell.innerText = "";
-                cell.setAttribute("contenteditable", "true");
-                cell.classList.add("editable");
-                cell.addEventListener("input", () => cloned.classList.add("dirty"));
-              });
-
-              const checkboxCell = cloned.querySelector("td.col-select");
-              checkboxCell.innerHTML = `
-                <input type="checkbox" class="holiday-select-checkbox" data-id="${pasteId}">
-              `;
-
-              table.insertBefore(cloned, table.firstChild);
-
-              // ✅ Force it checked after insert
-              const forcedPasteCheck = cloned.querySelector('input[type="checkbox"]');
-              if (forcedPasteCheck) forcedPasteCheck.checked = true;
-
-              undoBuffer = [cloned.cloneNode(true)];
-              wireCheckboxes("holiday");
-              break;
-
-            case "add": {
-              const newId = `new-${Date.now()}`;
-              const newRow = document.createElement("tr");
-              newRow.setAttribute("data-id", newId);
-              newRow.setAttribute("data-index", "0");
-              newRow.classList.add("editing");
-
-              newRow.innerHTML = `
-                <td class="col-select">
-                  <input type="checkbox" class="holiday-select-checkbox" data-id="${newId}" checked>
-                </td>
-                <td contenteditable="true" class="editable">Edit</td>
-                <td contenteditable="true" class="editable">YYYY-MM-DD</td>
-                <td contenteditable="true" class="editable"></td>
-                <td contenteditable="true" class="editable"></td>
-              `;
-
-              newRow.querySelectorAll("td[contenteditable]").forEach(cell => {
-                cell.addEventListener("input", () => newRow.classList.add("dirty"));
-              });
-
-              table.insertBefore(newRow, table.firstChild);
-
-              // ✅ Force it checked after insert
-              const forcedAddCheck = newRow.querySelector('input[type="checkbox"]');
-              if (forcedAddCheck) forcedAddCheck.checked = true;
-
-              undoBuffer = [newRow.cloneNode(true)];
-              wireCheckboxes("holiday");
-              break;
-            }
-
-            case "save":
-              const dirtyRows = table.querySelectorAll("tr.editing");
-              let savedCount = 0;
-
-              dirtyRows.forEach(row => {
-                const checkbox = row.querySelector('input[type="checkbox"]');
-                if (checkbox?.checked) {
-                  row.classList.remove("editing", "dirty");
-                  row.querySelectorAll("td:not(.col-select)").forEach(cell => {
-                    cell.removeAttribute("contenteditable");
-                    cell.classList.remove("editable");
-                  });
-                  checkbox.checked = false;
-                  row.classList.remove("selected-row");
-                  savedCount++;
-                }
-              });
-
-              undoBuffer = null;
-              console.log(`✅ Saved rows: ${savedCount}`);
-              break;
-
-            default:
-              console.warn("Unhandled action:", action);
+          if (action === "delete") {
+            selectedIds.forEach(id => {
+              const row = table.querySelector(`tr[data-id="${id}"]`);
+              if (row) row.remove();
+            });
           }
-        },
-        messages: {
-          delete: "You're about to delete one or more holidays!",
-          copy: "Copied 1 row to clipboard.",
-          paste: "Pasted a cloned row at the top.",
-          add: "New line, edit & save.",
-          edit: "You can now edit the selected rows.",
-          save: {
-            message: "Holiday changes saved (frontend only).",
-            validate: (row) => {
-              const cells = row.querySelectorAll("td:not(.col-select)");
-              const name = cells[0]?.innerText.trim();
-              const date = cells[1]?.innerText.trim();
-              const status = cells[2]?.innerText.trim();
-              const closeTime = cells[3]?.innerText.trim();
 
-              const isValidDate = /^\d{4}-\d{2}-\d{2}$/.test(date);
-              const isValidStatus = ["Upcoming", "Passed"].includes(status);
-              const isValidTime = !closeTime || /^([01]\d|2[0-3]):(00|30)$/.test(closeTime);
+          if (action === "copy") {
+            const row = table.querySelector(`tr[data-id="${selectedIds[0]}"]`);
+            if (!row) return;
 
-              if (!name) return "Holiday name is required.";
-              if (!isValidDate) return "Date must be in YYYY-MM-DD format.";
-              if (!isValidStatus) return "Status must be 'Upcoming' or 'Passed'.";
-              if (!isValidTime) return "Close Time must be HH:MM in 30-minute intervals or left blank.";
-              return true;
-            }
+            const clone = row.cloneNode(true);
+            const newId = `copy-${Date.now()}`;
+            clone.setAttribute("data-id", newId);
+            clone.classList.add("editing");
+            clone.querySelectorAll("td:not(.col-select)").forEach(cell => {
+              cell.setAttribute("contenteditable", "true");
+              cell.classList.add("editable");
+            });
+
+            clone.querySelector(".col-select").innerHTML =
+              `<input type="checkbox" class="holiday-select-checkbox" data-id="${newId}" checked>`;
+
+            table.prepend(clone);
+          }
+
+          if (action === "add") {
+            const newId = `new-${Date.now()}`;
+            const row = document.createElement("tr");
+            row.classList.add("editing");
+            row.setAttribute("data-id", newId);
+            row.setAttribute("data-index", "0");
+
+            row.innerHTML = `
+              <td class="col-select">
+                <input type="checkbox" class="holiday-select-checkbox" data-id="${newId}" checked>
+              </td>
+              <td contenteditable="true" class="editable">Edit</td>
+              <td contenteditable="true" class="editable">YYYY-MM-DD</td>
+              <td contenteditable="true" class="editable">Upcoming</td>
+              <td contenteditable="true" class="editable"></td>
+            `;
+
+            row.querySelectorAll("td[contenteditable]").forEach(cell => {
+              cell.addEventListener("input", () => row.classList.add("dirty"));
+            });
+
+            table.prepend(row);
+          }
+
+          if (action === "save") {
+            const dirtyRows = table.querySelectorAll("tr.editing");
+            dirtyRows.forEach(row => {
+              row.classList.remove("editing", "dirty");
+              row.querySelectorAll("td[contenteditable]").forEach(cell => {
+                cell.removeAttribute("contenteditable");
+                cell.classList.remove("editable");
+              });
+              const checkbox = row.querySelector("input[type='checkbox']");
+              if (checkbox) checkbox.checked = false;
+              row.classList.remove("selected-row");
+            });
+          }
+
+          if (action === "paste") {
+            console.warn("Paste logic not yet implemented for Market Holidays");
           }
         }
       });
-
-      const undoBtn = document.getElementById("holiday-undo-btn");
-      if (undoBtn) {
-        undoBtn.addEventListener("click", () => {
-          if (!undoBuffer || undoBuffer.length === 0) return;
-          const table = document.getElementById("holidays-table");
-          undoBuffer.forEach(row => {
-            const cloned = row.cloneNode(true);
-            const newId = "undo-" + Date.now();
-            cloned.setAttribute("data-id", newId);
-            cloned.setAttribute("data-index", "0");
-
-            const checkboxCell = cloned.querySelector("td.col-select");
-            checkboxCell.innerHTML = `
-              <input type="checkbox" class="holiday-select-checkbox" data-id="${newId}">
-            `;
-
-            table.insertBefore(cloned, table.firstChild);
-          });
-          undoBuffer = null;
-          wireCheckboxes("holiday");
-        });
-      }
-
     } catch (error) {
       console.error("❌ Failed to load holidays:", error);
       const table = document.getElementById("holidays-table");
@@ -264,12 +131,4 @@
       ? input.replace(/</g, "&lt;").replace(/>/g, "&gt;")
       : input ?? "—";
   }
-
-  function capitalize(word) {
-    return word.charAt(0).toUpperCase() + word.slice(1);
-  }
-
-  window.initCommitLogic = initCommitLogic;
-  window.getState = getState;
-  window.wireCheckboxes = wireCheckboxes;
 })();
