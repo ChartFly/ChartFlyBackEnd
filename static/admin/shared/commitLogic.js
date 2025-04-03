@@ -20,7 +20,7 @@ function getState(section) {
     sectionStates[section] = {
       selectedRows: new Set(),
       activeAction: null,
-      undoBuffer: [], // 🧠 Multi-level stack
+      undoBuffer: [],
       onConfirm: null,
       domId: null,
       clipboard: null,
@@ -48,7 +48,6 @@ function initCommitLogic({ section, sectionDomId = `${section}-section`, onConfi
 
     btn.addEventListener("click", () => {
       state.activeAction = action;
-
       actions.forEach(a => {
         const otherBtn = document.getElementById(`${section}-${a}-btn`);
         if (otherBtn) otherBtn.classList.remove("active");
@@ -120,7 +119,6 @@ function initCommitLogic({ section, sectionDomId = `${section}-section`, onConfi
     });
   });
 
-  // 🧠 Wire Undo button
   const undoBtn = document.getElementById(`${section}-undo-btn`);
   if (undoBtn) {
     undoBtn.addEventListener("click", () => {
@@ -129,8 +127,7 @@ function initCommitLogic({ section, sectionDomId = `${section}-section`, onConfi
       if (!state.undoBuffer.length) return;
 
       const lastSnapshot = state.undoBuffer.pop();
-      table.innerHTML = ""; // 🔥 Clear the table
-
+      table.innerHTML = "";
       lastSnapshot.forEach(row => {
         const cloned = row.cloneNode(true);
         table.appendChild(cloned);
@@ -169,7 +166,6 @@ function wireCheckboxes(section) {
 
     box.addEventListener("change", () => {
       if (!row) return;
-
       if (box.checked) {
         state.selectedRows.add(id);
         row.classList.add("selected-row");
@@ -177,7 +173,6 @@ function wireCheckboxes(section) {
         state.selectedRows.delete(id);
         row.classList.remove("selected-row");
       }
-
       updateConfirmCount(section);
     });
 
@@ -227,13 +222,18 @@ function confirmCommitAction(section) {
       const box = row.querySelector('input[type="checkbox"]');
       const shouldSave = state.activeAction === "edit" || (box && box.checked);
       if (shouldSave) {
-        row.classList.remove("editing", "dirty");
+        const oldId = row.getAttribute("data-id");
+        const newId = `saved-${Date.now()}`;
+        row.setAttribute("data-id", newId);
         row.querySelectorAll("td.editable").forEach(cell => {
           cell.removeAttribute("contenteditable");
           cell.classList.remove("editable");
         });
-        if (box) box.checked = false;
-        row.classList.remove("selected-row");
+        if (box) {
+          box.checked = false;
+          box.setAttribute("data-id", newId);
+        }
+        row.classList.remove("editing", "dirty", "selected-row");
         finalized++;
       }
     });
@@ -249,10 +249,9 @@ function confirmCommitAction(section) {
   if (typeof state.onConfirm === "function") {
     const table = document.getElementById("holidays-table");
     const snapshot = Array.from(table.querySelectorAll("tr")).map(row => row.cloneNode(true));
-    if (state.undoBuffer.length >= 20) state.undoBuffer.shift(); // Cap stack at 20
+    if (state.undoBuffer.length >= 20) state.undoBuffer.shift();
     state.undoBuffer.push(snapshot);
     updateUndoButton(section);
-
     state.onConfirm(state.activeAction, Array.from(state.selectedRows));
   }
 
