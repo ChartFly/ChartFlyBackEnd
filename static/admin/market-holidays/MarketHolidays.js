@@ -81,10 +81,15 @@
                   cell.addEventListener("input", () => cloned.classList.add("dirty"));
                 });
 
+                // 💥 Force new checkbox to be checked and clean
                 const checkboxCell = cloned.querySelector("td.col-select");
-                checkboxCell.innerHTML = `
-                   <input type="checkbox" class="holiday-select-checkbox" data-id="${pasteId}" checked>
-                `;
+                checkboxCell.innerHTML = "";
+                const newCheckbox = document.createElement("input");
+                newCheckbox.type = "checkbox";
+                newCheckbox.className = "holiday-select-checkbox";
+                newCheckbox.setAttribute("data-id", pasteId);
+                newCheckbox.checked = true;
+                checkboxCell.appendChild(newCheckbox);
 
                 table.insertBefore(cloned, table.firstChild);
                 undoBuffer = [cloned.cloneNode(true)];
@@ -112,10 +117,15 @@
                 cell.addEventListener("input", () => cloned.classList.add("dirty"));
               });
 
-              cloned.querySelectorAll("input[type='checkbox']").forEach(box => {
-                box.checked = true;
-                box.setAttribute("data-id", pasteId);
-              });
+              // 💥 Same fix for paste — force checkbox clean + checked
+              const checkboxCell = cloned.querySelector("td.col-select");
+              checkboxCell.innerHTML = "";
+              const newCheckbox = document.createElement("input");
+              newCheckbox.type = "checkbox";
+              newCheckbox.className = "holiday-select-checkbox";
+              newCheckbox.setAttribute("data-id", pasteId);
+              newCheckbox.checked = true;
+              checkboxCell.appendChild(newCheckbox);
 
               table.insertBefore(cloned, table.firstChild);
               undoBuffer = [cloned.cloneNode(true)];
@@ -214,10 +224,12 @@
             const newId = "undo-" + Date.now();
             cloned.setAttribute("data-id", newId);
             cloned.setAttribute("data-index", "0");
-            cloned.querySelectorAll("input[type='checkbox']").forEach(box => {
-              box.checked = false;
-              box.setAttribute("data-id", newId);
-            });
+
+            const checkboxCell = cloned.querySelector("td.col-select");
+            checkboxCell.innerHTML = `
+              <input type="checkbox" class="holiday-select-checkbox" data-id="${newId}">
+            `;
+
             table.insertBefore(cloned, table.firstChild);
           });
           undoBuffer = null;
