@@ -6,9 +6,9 @@
 #market-holidays-section {
   display: flex;
   flex-direction: column;
-  align-items: flex-start; /* 💥 Ensure left alignment */
-  max-width: 1000px; /* 📏 Keep layout consistent */
-  margin: 0; /* ⬅️ Switch from centered to left-aligned */
+  align-items: flex-start;
+  max-width: 1000px;
+  margin: 0;
   width: 100%;
   box-sizing: border-box;
 }
@@ -20,14 +20,14 @@
   padding: 12px 18px;
   margin: 1rem 0;
   background-color: #f8f9fa;
-  border: 2px solid #007a8a; /* ChartFly Blue */
+  border: 2px solid #007a8a;
   border-radius: 8px;
   font-size: 14px;
   font-weight: bold;
   width: 100%;
   align-items: flex-start;
   box-sizing: border-box;
-  max-width: 1000px; /* 🎯 Match table width */
+  max-width: 1000px;
 }
 
 /* 👁️ Confirm Messages */
@@ -39,15 +39,14 @@
   padding: 10px;
   border-radius: 5px;
   font-weight: bold;
-  font-size: 16px; /* 🔥 Now 12pt instead of 10pt */
+  font-size: 16px;
   line-height: 1.4;
   margin: 0 0 1rem 0;
   text-align: left;
   align-self: flex-start;
-  min-height: 52px; /* 📏 Match tip box height */
+  min-height: 52px;
 }
 
-/* 🛠️ Confirm box inside commit-bar specifically */
 .commit-bar > .confirm-box {
   width: 100%;
   max-width: 1000px;
@@ -60,13 +59,13 @@
 
 .confirm-box.info {
   background-color: #fff9c4;
-  color: #333333; /* 🔥 Darker for better contrast */
+  color: #333333;
   border: 2px solid #007a8a;
 }
 
 .confirm-box.warn {
   background-color: #fff4e5;
-  color: #5c4033; /* 🟤 Richer dark brown for better contrast */
+  color: #5c4033;
   border: 2px solid #007a8a;
 }
 
@@ -76,7 +75,40 @@
   border: 2px solid #007a8a;
 }
 
-/* 🎯 Button Styling */
+/* 🎯 Action Buttons (Toolbar Buttons) */
+.action-btn {
+  background-color: #00a3b1; /* Resting state: lighter ChartFly Blue */
+  color: white;
+  font-weight: bold;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  margin: 0 4px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s, box-shadow 0.1s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.action-btn:hover {
+  background-color: #008d9b;
+}
+
+.action-btn.active {
+  background-color: #007a8a; /* Full ChartFly Blue on click */
+  transform: translateY(2px);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.action-btn.disabled-btn,
+.action-btn:disabled {
+  background-color: #ccc !important;
+  color: #666 !important;
+  cursor: not-allowed;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* 🎯 Confirm Buttons (Commit Bar) */
 .confirm-btn {
   display: inline-block;
   padding: 6px 14px;
@@ -102,8 +134,18 @@
   filter: brightness(1.1);
 }
 
-/* 🟡 Add Row Style: Highlight clearly for new entries */
+/* 🟡 New Row Style */
 #market-holidays-section tr[data-id^="new-"] td {
-  background-color: #fff8dc !important; /* Light yellow */
+  background-color: #fff8dc !important;
   border: 1px dashed #ccc !important;
+}
+
+/* ✅ Checkbox Cell Enhancements */
+.col-select {
+  cursor: pointer;
+}
+
+.col-select input[type="checkbox"] {
+  transform: scale(1.6); /* Bigger box */
+  cursor: pointer;
 }

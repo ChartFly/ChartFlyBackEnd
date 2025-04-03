@@ -56,7 +56,8 @@
 
             case "copy":
               if (selectedIds.length !== 1) {
-                document.getElementById("holiday-confirm").innerHTML = `<div class="confirm-box warn">Copy requires exactly 1 row selected.</div>`;
+                document.getElementById("holiday-confirm").innerHTML =
+                  `<div class="confirm-box warn">Copy requires exactly 1 row selected.</div>`;
                 return;
               }
 
@@ -73,7 +74,7 @@
                 cloned.classList.add("editing");
 
                 const cells = cloned.querySelectorAll("td:not(.col-select)");
-                const originals = clipboardHolidayRow.querySelectorAll("td:not(.col-select)");
+                const originals = copiedRow.querySelectorAll("td:not(.col-select)");
                 cells.forEach((cell, i) => {
                   cell.innerText = originals[i]?.innerText || "";
                   cell.setAttribute("contenteditable", "true");
@@ -81,7 +82,6 @@
                   cell.addEventListener("input", () => cloned.classList.add("dirty"));
                 });
 
-                // 💥 Force new checkbox to be checked and clean
                 const checkboxCell = cloned.querySelector("td.col-select");
                 checkboxCell.innerHTML = "";
                 const newCheckbox = document.createElement("input");
@@ -99,7 +99,8 @@
 
             case "paste":
               if (!clipboardHolidayRow) {
-                document.getElementById("holiday-confirm").innerHTML = `<div class="confirm-box warn">Nothing to paste. You must copy something first.</div>`;
+                document.getElementById("holiday-confirm").innerHTML =
+                  `<div class="confirm-box warn">Nothing to paste. You must copy something first.</div>`;
                 return;
               }
 
@@ -117,7 +118,6 @@
                 cell.addEventListener("input", () => cloned.classList.add("dirty"));
               });
 
-              // 💥 Same fix for paste — force checkbox clean + checked
               const checkboxCell = cloned.querySelector("td.col-select");
               checkboxCell.innerHTML = "";
               const newCheckbox = document.createElement("input");

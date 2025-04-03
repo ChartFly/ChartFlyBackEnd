@@ -41,6 +41,12 @@ function initCommitLogic({ section, sectionDomId = `${section}-section`, onConfi
     const btn = document.getElementById(`${section}-${action}-btn`);
     if (!btn) return;
 
+    // 🔒 Disable paste button by default
+    if (action === "paste") {
+      btn.disabled = true;
+      btn.classList.add("disabled-btn");
+    }
+
     btn.addEventListener("click", () => {
       state.activeAction = action;
 
@@ -66,6 +72,22 @@ function initCommitLogic({ section, sectionDomId = `${section}-section`, onConfi
       if (action === "paste" && !state.clipboard) {
         confirmBox.innerHTML = `<div class="confirm-box warn">${msg.nothingToPaste}</div>`;
         return;
+      }
+
+      if (action === "copy") {
+        const pasteBtn = document.getElementById(`${section}-paste-btn`);
+        if (pasteBtn) {
+          pasteBtn.disabled = false;
+          pasteBtn.classList.remove("disabled-btn");
+        }
+      }
+
+      if (["paste", "add", "delete", "undo"].includes(action)) {
+        const pasteBtn = document.getElementById(`${section}-paste-btn`);
+        if (pasteBtn) {
+          pasteBtn.disabled = true;
+          pasteBtn.classList.add("disabled-btn");
+        }
       }
 
       if (action === "edit") {
@@ -116,8 +138,9 @@ function wireCheckboxes(section) {
 
   checkboxes.forEach(box => {
     const id = box.dataset.id;
+    const row = box.closest("tr");
+
     box.addEventListener("change", () => {
-      const row = box.closest("tr");
       if (!row) return;
 
       if (box.checked) {
@@ -130,6 +153,13 @@ function wireCheckboxes(section) {
 
       updateConfirmCount(section);
     });
+
+    const cell = box.closest("td");
+    if (cell) {
+      cell.addEventListener("click", (e) => {
+        if (e.target !== box) box.click();
+      });
+    }
   });
 }
 
@@ -143,7 +173,6 @@ function confirmCommitAction(section) {
     return;
   }
 
-  // 🚫 ADD requires edit before confirm
   if (state.activeAction === "add") {
     const newRow = document.querySelector(`#${state.domId} tr[data-id^="new-"]`);
     if (newRow && !newRow.classList.contains("dirty")) {
@@ -152,7 +181,6 @@ function confirmCommitAction(section) {
     }
   }
 
-  // ✅ COPY inserts editable yellow clone
   if (state.activeAction === "copy") {
     const copied = document.querySelector(`#${state.domId} tr[data-id^="copy-"]`);
     if (copied) {
@@ -164,7 +192,6 @@ function confirmCommitAction(section) {
     }
   }
 
-  // ✅ Finalize editable rows for Edit or Save
   if (["edit", "save"].includes(state.activeAction)) {
     const editableRows = document.querySelectorAll(`#${state.domId} tr.editing`);
     let finalized = 0;
@@ -192,12 +219,10 @@ function confirmCommitAction(section) {
     state.selectedRows.clear();
   }
 
-  // Trigger onConfirm (insert/delete logic)
   if (typeof state.onConfirm === "function") {
     state.onConfirm(state.activeAction, Array.from(state.selectedRows));
   }
 
-  // ✅ Success Message
   const successMsg = document.createElement("div");
   successMsg.className = "confirm-box success";
   successMsg.textContent = msg.confirmSuccess(state.activeAction);
@@ -209,6 +234,14 @@ function confirmCommitAction(section) {
       confirmBox.innerHTML = "";
     }
   }, 5000);
+
+  // 🔒 Reset clipboard and disable Paste
+  const pasteBtn = document.getElementById(`${section}-paste-btn`);
+  if (pasteBtn) {
+    pasteBtn.disabled = true;
+    pasteBtn.classList.add("disabled-btn");
+  }
+  state.clipboard = null;
 
   resetSelection(section);
 }
