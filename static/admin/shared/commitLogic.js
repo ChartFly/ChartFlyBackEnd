@@ -20,7 +20,7 @@ function getState(section) {
     sectionStates[section] = {
       selectedRows: new Set(),
       activeAction: null,
-      undoBuffer: [], // 🧠 Multi-level stack
+      undoBuffer: [],
       onConfirm: null,
       domId: null,
       clipboard: null,
@@ -120,7 +120,6 @@ function initCommitLogic({ section, sectionDomId = `${section}-section`, onConfi
     });
   });
 
-  // 🧠 Wire Undo button
   const undoBtn = document.getElementById(`${section}-undo-btn`);
   if (undoBtn) {
     undoBtn.addEventListener("click", () => {
@@ -239,8 +238,9 @@ function confirmCommitAction(section) {
         });
         if (box) box.checked = false;
         row.classList.remove("selected-row");
-        finalized++;
+        row.style.backgroundColor = ""; // ✅ Clear yellow
       }
+      finalized++;
     });
 
     if (state.activeAction === "save" && finalized === 0) {
@@ -254,7 +254,7 @@ function confirmCommitAction(section) {
   if (typeof state.onConfirm === "function") {
     const table = document.getElementById("holidays-table");
     const snapshot = Array.from(table.querySelectorAll("tr")).map(row => row.cloneNode(true));
-    if (state.undoBuffer.length >= 20) state.undoBuffer.shift(); // ⛔ cap at 20
+    if (state.undoBuffer.length >= 20) state.undoBuffer.shift();
     state.undoBuffer.push(snapshot);
     updateUndoButton(section);
     state.onConfirm(state.activeAction, Array.from(state.selectedRows));
