@@ -15,17 +15,19 @@ window.ButtonBox = (() => {
         tableId: null,
         confirmBoxId: null,
         messageId: null,
+        onAction: null
       };
     }
     return sectionStates[section];
   }
 
-  function init({ section, domId, tableId, confirmBoxId, messageId }) {
+  function init({ section, domId, tableId, confirmBoxId, messageId, onAction }) {
     const state = getState(section);
     state.domId = domId;
     state.tableId = tableId;
     state.confirmBoxId = confirmBoxId;
     state.messageId = messageId;
+    state.onAction = onAction;
 
     console.log(`🚀 ButtonBox initialized for section: ${section}`);
 
@@ -78,11 +80,16 @@ window.ButtonBox = (() => {
     updateUndoButton(section);
   }
 
-  function showMessage(section, message) {
+  function showMessage(section, message, type = "info") {
     const state = getState(section);
     const msg = document.getElementById(state.messageId);
-    if (msg) msg.textContent = message;
     const box = document.getElementById(state.confirmBoxId);
+
+    if (msg) {
+      msg.className = `confirm-box ${type}`;
+      msg.innerHTML = message;
+    }
+
     if (box) box.style.display = "flex";
   }
 
@@ -96,6 +103,7 @@ window.ButtonBox = (() => {
     ).map(row => row.dataset.index);
 
     if (msg) {
+      msg.className = "confirm-box info";
       msg.innerHTML = `
         <strong>Action:</strong> ${action.toUpperCase()}<br>
         <strong>Selected Rows:</strong> ${selectedIndexes.join(", ") || "(None)"}
@@ -152,7 +160,7 @@ window.ButtonBox = (() => {
 
     wireCheckboxes(section);
     updateUndoButton(section);
-    showMessage(section, "Last change undone.");
+    showMessage(section, "Last change undone.", "success");
   }
 
   function updateUndoButton(section) {

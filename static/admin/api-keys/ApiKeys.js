@@ -48,19 +48,50 @@ async function loadApiKeys() {
       table.appendChild(row);
     });
 
-    // 🔌 Plug in the ButtonBox
+    // ✅ Wire up checkboxes
+    window.wireCheckboxes("api");
+
+    // ✅ Initialize ButtonBox
     ButtonBox.init({
       section: "api",
-      tableId: "api-keys-table",
       domId: "api-keys-section",
+      tableId: "api-keys-table",
       confirmBoxId: "apikeys-confirm-bar",
-      messageId: "apikeys-confirm-message"
+      messageId: "apikeys-confirm-message",
+      onAction: (action, selectedIds) => {
+        console.log(`📦 [ButtonBox] Action triggered: ${action}`, selectedIds);
+
+        if (action === "delete") {
+          selectedIds.forEach(id => {
+            const row = document.querySelector(`#api-keys-section tr[data-id="${id}"]`);
+            if (row) row.remove();
+          });
+        }
+
+        if (action === "copy") {
+          const row = document.querySelector(`#api-keys-section tr[data-id="${selectedIds[0]}"]`);
+          if (!row) return;
+
+          const clone = row.cloneNode(true);
+          clone.setAttribute("data-id", `copy-${Date.now()}`);
+          clone.classList.add("editing");
+          clone.querySelectorAll("td:not(.col-select)").forEach(cell => {
+            cell.setAttribute("contenteditable", "true");
+            cell.classList.add("editable");
+          });
+
+          const table = document.getElementById("api-keys-table");
+          table.prepend(clone);
+        }
+
+        // Additional actions (add, edit, paste) can be implemented similarly
+      }
     });
 
   } catch (error) {
     console.error("❌ Failed to load API keys:", error);
     const table = document.getElementById("api-keys-table");
-    table.innerHTML = `<tr><td colspan="16">Failed to load data. Please try again later.</td></tr>`;
+    table.innerHTML = `<tr><td colspan="17">Failed to load data. Please try again later.</td></tr>`;
   }
 }
 

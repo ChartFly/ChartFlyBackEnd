@@ -82,3 +82,17 @@
   background-color: mediumseagreen;
   color: white;
 }
+
+/* 💡 Tip Box */
+.tip-box {
+  background-color: #f0faff;
+  color: #007a8a;
+  border-left: 4px solid #00a3b1;
+  padding: 10px 16px;
+  margin-bottom: 12px;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+/* ⚠️ Warning Box */
+.warning
