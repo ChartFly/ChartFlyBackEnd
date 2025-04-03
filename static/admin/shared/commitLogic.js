@@ -20,7 +20,7 @@ function getState(section) {
     sectionStates[section] = {
       selectedRows: new Set(),
       activeAction: null,
-      undoBuffer: null,
+      undoBuffer: [], // 🧠 Multi-level stack
       onConfirm: null,
       domId: null,
       clipboard: null,
@@ -41,7 +41,6 @@ function initCommitLogic({ section, sectionDomId = `${section}-section`, onConfi
     const btn = document.getElementById(`${section}-${action}-btn`);
     if (!btn) return;
 
-    // 🔒 Disable paste button by default
     if (action === "paste") {
       btn.disabled = true;
       btn.classList.add("disabled-btn");
@@ -79,14 +78,6 @@ function initCommitLogic({ section, sectionDomId = `${section}-section`, onConfi
         if (pasteBtn) {
           pasteBtn.disabled = false;
           pasteBtn.classList.remove("disabled-btn");
-        }
-      }
-
-      if (["paste", "add", "delete", "undo"].includes(action)) {
-        const pasteBtn = document.getElementById(`${section}-paste-btn`);
-        if (pasteBtn) {
-          pasteBtn.disabled = true;
-          pasteBtn.classList.add("disabled-btn");
         }
       }
 
@@ -129,7 +120,48 @@ function initCommitLogic({ section, sectionDomId = `${section}-section`, onConfi
     });
   });
 
+  // 🧠 Wire Undo button
+  const undoBtn = document.getElementById(`${section}-undo-btn`);
+  if (undoBtn) {
+    undoBtn.addEventListener("click", () => {
+      const state = getState(section);
+      const table = document.getElementById("holidays-table");
+      if (!state.undoBuffer.length) return;
+
+      const lastRows = state.undoBuffer.pop();
+      lastRows.forEach(row => {
+        const cloned = row.cloneNode(true);
+        const newId = "undo-" + Date.now();
+        cloned.setAttribute("data-id", newId);
+        cloned.setAttribute("data-index", "0");
+
+        const checkbox = cloned.querySelector("input[type='checkbox']");
+        if (checkbox) checkbox.setAttribute("data-id", newId);
+
+        table.insertBefore(cloned, table.firstChild);
+      });
+
+      wireCheckboxes(section);
+      updateUndoButton(section);
+    });
+  }
+
   setTimeout(() => wireCheckboxes(section), 0);
+  updateUndoButton(section);
+}
+
+function updateUndoButton(section) {
+  const state = getState(section);
+  const undoBtn = document.getElementById(`${section}-undo-btn`);
+  if (!undoBtn) return;
+
+  if (state.undoBuffer.length === 0) {
+    undoBtn.disabled = true;
+    undoBtn.classList.add("disabled-btn");
+  } else {
+    undoBtn.disabled = false;
+    undoBtn.classList.remove("disabled-btn");
+  }
 }
 
 function wireCheckboxes(section) {
@@ -220,6 +252,11 @@ function confirmCommitAction(section) {
   }
 
   if (typeof state.onConfirm === "function") {
+    const table = document.getElementById("holidays-table");
+    const snapshot = Array.from(table.querySelectorAll("tr")).map(row => row.cloneNode(true));
+    if (state.undoBuffer.length >= 20) state.undoBuffer.shift(); // ⛔ cap at 20
+    state.undoBuffer.push(snapshot);
+    updateUndoButton(section);
     state.onConfirm(state.activeAction, Array.from(state.selectedRows));
   }
 
@@ -230,18 +267,8 @@ function confirmCommitAction(section) {
   confirmBox.appendChild(successMsg);
 
   setTimeout(() => {
-    if (confirmBox.contains(successMsg)) {
-      confirmBox.innerHTML = "";
-    }
+    if (confirmBox.contains(successMsg)) confirmBox.innerHTML = "";
   }, 5000);
-
-  // 🔒 Reset clipboard and disable Paste
-  const pasteBtn = document.getElementById(`${section}-paste-btn`);
-  if (pasteBtn) {
-    pasteBtn.disabled = true;
-    pasteBtn.classList.add("disabled-btn");
-  }
-  state.clipboard = null;
 
   resetSelection(section);
 }

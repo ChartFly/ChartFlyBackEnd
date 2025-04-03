@@ -83,15 +83,16 @@
                 });
 
                 const checkboxCell = cloned.querySelector("td.col-select");
-                checkboxCell.innerHTML = "";
-                const newCheckbox = document.createElement("input");
-                newCheckbox.type = "checkbox";
-                newCheckbox.className = "holiday-select-checkbox";
-                newCheckbox.setAttribute("data-id", pasteId);
-                newCheckbox.checked = true;
-                checkboxCell.appendChild(newCheckbox);
+                checkboxCell.innerHTML = `
+                  <input type="checkbox" class="holiday-select-checkbox" data-id="${pasteId}">
+                `;
 
                 table.insertBefore(cloned, table.firstChild);
+
+                // ✅ Force it checked after insert
+                const forcedCheck = cloned.querySelector('input[type="checkbox"]');
+                if (forcedCheck) forcedCheck.checked = true;
+
                 undoBuffer = [cloned.cloneNode(true)];
                 wireCheckboxes("holiday");
               }
@@ -119,15 +120,16 @@
               });
 
               const checkboxCell = cloned.querySelector("td.col-select");
-              checkboxCell.innerHTML = "";
-              const newCheckbox = document.createElement("input");
-              newCheckbox.type = "checkbox";
-              newCheckbox.className = "holiday-select-checkbox";
-              newCheckbox.setAttribute("data-id", pasteId);
-              newCheckbox.checked = true;
-              checkboxCell.appendChild(newCheckbox);
+              checkboxCell.innerHTML = `
+                <input type="checkbox" class="holiday-select-checkbox" data-id="${pasteId}">
+              `;
 
               table.insertBefore(cloned, table.firstChild);
+
+              // ✅ Force it checked after insert
+              const forcedPasteCheck = cloned.querySelector('input[type="checkbox"]');
+              if (forcedPasteCheck) forcedPasteCheck.checked = true;
+
               undoBuffer = [cloned.cloneNode(true)];
               wireCheckboxes("holiday");
               break;
@@ -154,6 +156,11 @@
               });
 
               table.insertBefore(newRow, table.firstChild);
+
+              // ✅ Force it checked after insert
+              const forcedAddCheck = newRow.querySelector('input[type="checkbox"]');
+              if (forcedAddCheck) forcedAddCheck.checked = true;
+
               undoBuffer = [newRow.cloneNode(true)];
               wireCheckboxes("holiday");
               break;
