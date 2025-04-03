@@ -52,7 +52,6 @@ function initCommitLogic({ section, sectionDomId = `${section}-section`, onConfi
         const otherBtn = document.getElementById(`${section}-${a}-btn`);
         if (otherBtn) otherBtn.classList.remove("active");
       });
-
       btn.classList.add("active");
 
       if (action === "save") {
@@ -99,9 +98,7 @@ function initCommitLogic({ section, sectionDomId = `${section}-section`, onConfi
 
       const confirmDiv = document.createElement("div");
       confirmDiv.className = "confirm-box info";
-
-      const actionInfo = document.createElement("div");
-      actionInfo.innerHTML = `
+      confirmDiv.innerHTML = `
         <strong>Action:</strong> ${action.toUpperCase()}<br>
         <strong>Selected Rows:</strong> ${selectedIndexes.join(", ") || "(None)"}
       `;
@@ -111,11 +108,9 @@ function initCommitLogic({ section, sectionDomId = `${section}-section`, onConfi
       confirmButton.textContent = `Confirm and Save ${capitalize(action)}`;
       confirmButton.addEventListener("click", () => confirmCommitAction(section));
 
-      confirmDiv.appendChild(actionInfo);
-      confirmDiv.appendChild(confirmButton);
-
       confirmBox.innerHTML = "";
       confirmBox.appendChild(confirmDiv);
+      confirmDiv.appendChild(confirmButton);
     });
   });
 
@@ -128,8 +123,12 @@ function initCommitLogic({ section, sectionDomId = `${section}-section`, onConfi
 
       const lastSnapshot = state.undoBuffer.pop();
       table.innerHTML = "";
-      lastSnapshot.forEach(row => {
-        const cloned = row.cloneNode(true);
+      lastSnapshot.forEach(oldRow => {
+        const cloned = oldRow.cloneNode(true);
+        const newId = `undo-${Date.now()}-${Math.floor(Math.random() * 10000)}`;
+        cloned.setAttribute("data-id", newId);
+        const checkbox = cloned.querySelector("input[type='checkbox']");
+        if (checkbox) checkbox.setAttribute("data-id", newId);
         table.appendChild(cloned);
       });
 
@@ -140,49 +139,6 @@ function initCommitLogic({ section, sectionDomId = `${section}-section`, onConfi
 
   setTimeout(() => wireCheckboxes(section), 0);
   updateUndoButton(section);
-}
-
-function updateUndoButton(section) {
-  const state = getState(section);
-  const undoBtn = document.getElementById(`${section}-undo-btn`);
-  if (!undoBtn) return;
-
-  if (state.undoBuffer.length === 0) {
-    undoBtn.disabled = true;
-    undoBtn.classList.add("disabled-btn");
-  } else {
-    undoBtn.disabled = false;
-    undoBtn.classList.remove("disabled-btn");
-  }
-}
-
-function wireCheckboxes(section) {
-  const state = getState(section);
-  const checkboxes = document.querySelectorAll(`#${state.domId} input[type="checkbox"]`);
-
-  checkboxes.forEach(box => {
-    const id = box.dataset.id;
-    const row = box.closest("tr");
-
-    box.addEventListener("change", () => {
-      if (!row) return;
-      if (box.checked) {
-        state.selectedRows.add(id);
-        row.classList.add("selected-row");
-      } else {
-        state.selectedRows.delete(id);
-        row.classList.remove("selected-row");
-      }
-      updateConfirmCount(section);
-    });
-
-    const cell = box.closest("td");
-    if (cell) {
-      cell.addEventListener("click", (e) => {
-        if (e.target !== box) box.click();
-      });
-    }
-  });
 }
 
 function confirmCommitAction(section) {
@@ -222,9 +178,9 @@ function confirmCommitAction(section) {
       const box = row.querySelector('input[type="checkbox"]');
       const shouldSave = state.activeAction === "edit" || (box && box.checked);
       if (shouldSave) {
-        const oldId = row.getAttribute("data-id");
         const newId = `saved-${Date.now()}`;
         row.setAttribute("data-id", newId);
+        row.classList.remove("editing", "dirty", "selected-row");
         row.querySelectorAll("td.editable").forEach(cell => {
           cell.removeAttribute("contenteditable");
           cell.classList.remove("editable");
@@ -233,7 +189,6 @@ function confirmCommitAction(section) {
           box.checked = false;
           box.setAttribute("data-id", newId);
         }
-        row.classList.remove("editing", "dirty", "selected-row");
         finalized++;
       }
     });
@@ -255,14 +210,9 @@ function confirmCommitAction(section) {
     state.onConfirm(state.activeAction, Array.from(state.selectedRows));
   }
 
-  const successMsg = document.createElement("div");
-  successMsg.className = "confirm-box success";
-  successMsg.textContent = msg.confirmSuccess(state.activeAction);
-  confirmBox.innerHTML = "";
-  confirmBox.appendChild(successMsg);
-
+  confirmBox.innerHTML = `<div class="confirm-box success">${msg.confirmSuccess(state.activeAction)}</div>`;
   setTimeout(() => {
-    if (confirmBox.contains(successMsg)) confirmBox.innerHTML = "";
+    if (confirmBox.innerHTML.includes("✅")) confirmBox.innerHTML = "";
   }, 5000);
 
   resetSelection(section);
@@ -276,30 +226,30 @@ function resetSelection(section) {
   document.querySelectorAll(`#${state.domId} .action-btn`).forEach(btn =>
     btn.classList.remove("active")
   );
-
   document.querySelectorAll(`#${state.domId} input[type="checkbox"]`).forEach(box =>
     (box.checked = false)
   );
-
   document.querySelectorAll(`#${state.domId} tr.selected-row`).forEach(row =>
     row.classList.remove("selected-row")
   );
 }
 
+function updateUndoButton(section) {
+  const state = getState(section);
+  const undoBtn = document.getElementById(`${section}-undo-btn`);
+  if (!undoBtn) return;
+  undoBtn.disabled = state.undoBuffer.length === 0;
+  undoBtn.classList.toggle("disabled-btn", undoBtn.disabled);
+}
+
 function updateConfirmCount(section) {
   const state = getState(section);
   const box = document.getElementById(`${section}-confirm`);
-
   if (state.selectedRows.size === 0) {
     box.innerHTML = "";
     return;
   }
-
-  box.innerHTML = `
-    <div class="confirm-box info">
-      ${state.selectedRows.size} row(s) selected.
-    </div>
-  `;
+  box.innerHTML = `<div class="confirm-box info">${state.selectedRows.size} row(s) selected.</div>`;
 }
 
 function capitalize(word) {
