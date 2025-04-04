@@ -5,24 +5,8 @@
   <!-- 🔧 Section Title -->
   <h2>Manage Market Holidays</h2>
 
-  <!-- 💡 Instructional Tip -->
-  <div class="confirm-box warn">
-    Tip: Check one or more rows in the “Select” column before clicking an action button.
-  </div>
-
-  <!-- 🎛️ Action Toolbar -->
-  <div class="action-toolbar" id="holiday-actions">
-    <button class="action-btn" id="holiday-edit-btn">Edit</button>
-    <button class="action-btn" id="holiday-copy-btn">Copy</button>
-    <button class="action-btn" id="holiday-paste-btn">Paste</button>
-    <button class="action-btn" id="holiday-add-btn">Add</button>
-    <button class="action-btn" id="holiday-delete-btn">Delete</button>
-    <button class="action-btn" id="holiday-save-btn">Save</button>
-    <button class="action-btn" id="holiday-undo-btn">Undo</button>
-  </div>
-
-  <!-- ✅ Commit Bar -->
-  <div class="commit-bar" id="holiday-confirm"></div>
+  <!-- 🧠 Modular ButtonBox Component (shared) -->
+  {% include "shared/ButtonBox.html" with context %}
 
   <!-- 📋 Holidays Table -->
   <div class="table-wrapper">
