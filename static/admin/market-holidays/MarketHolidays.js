@@ -109,16 +109,33 @@
 
     if (action === "save") {
       const dirtyRows = table.querySelectorAll("tr.editing");
-      dirtyRows.forEach(row => {
+
+      dirtyRows.forEach((row, i) => {
         row.classList.remove("editing", "dirty");
+
         row.querySelectorAll("td[contenteditable]").forEach(cell => {
           cell.removeAttribute("contenteditable");
           cell.classList.remove("editable");
         });
+
+        // Assign a real ID (simulated)
+        const finalId = `saved-${Date.now()}-${i}`;
+        row.setAttribute("data-id", finalId);
+
+        // Update checkbox data-id and uncheck
         const checkbox = row.querySelector("input[type='checkbox']");
-        if (checkbox) checkbox.checked = false;
+        if (checkbox) {
+          checkbox.setAttribute("data-id", finalId);
+          checkbox.checked = false;
+        }
+
         row.classList.remove("selected-row");
       });
+
+      // Rewire checkboxes for full button compatibility
+      if (typeof ButtonBox.wireCheckboxes === "function") {
+        ButtonBox.wireCheckboxes("holiday");
+      }
 
       ButtonBox.showMessage("holiday", "Holiday rows saved (frontend only).", "success");
     }
