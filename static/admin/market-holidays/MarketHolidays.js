@@ -107,6 +107,22 @@
       table.prepend(newRow);
     }
 
+    if (action === "edit") {
+      selectedIds.forEach(id => {
+        const row = table.querySelector(`tr[data-id="${id}"]`);
+        if (!row) return;
+
+        row.classList.add("editing");
+
+        row.querySelectorAll("td:not(.col-select)").forEach(cell => {
+          cell.setAttribute("contenteditable", "true");
+          cell.classList.add("editable");
+        });
+
+        row.classList.add("dirty");
+      });
+    }
+
     if (action === "save") {
       const dirtyRows = table.querySelectorAll("tr.editing");
 
@@ -118,11 +134,9 @@
           cell.classList.remove("editable");
         });
 
-        // Assign a real ID (simulated)
         const finalId = `saved-${Date.now()}-${i}`;
         row.setAttribute("data-id", finalId);
 
-        // Update checkbox data-id and uncheck
         const checkbox = row.querySelector("input[type='checkbox']");
         if (checkbox) {
           checkbox.setAttribute("data-id", finalId);
@@ -132,7 +146,6 @@
         row.classList.remove("selected-row");
       });
 
-      // Rewire checkboxes for full button compatibility
       if (typeof ButtonBox.wireCheckboxes === "function") {
         ButtonBox.wireCheckboxes("holiday");
       }

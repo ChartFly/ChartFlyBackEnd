@@ -70,13 +70,11 @@ window.ButtonBox = (() => {
         }
 
         if (action === "edit") {
-          // Immediately trigger the edit transformation
-         state.onAction("edit", Array.from(state.selectedRows));
-         return; // Skip confirm box for edit — we're doing it live
-}
+          state.onAction("edit", Array.from(state.selectedRows));
+          return; // Edit happens immediately
+        }
 
-showConfirmBox(section, action);
-
+        showConfirmBox(section, action);
       });
     });
 
@@ -273,6 +271,7 @@ showConfirmBox(section, action);
     return Array.from(getState(section).selectedRows);
   }
 
+  // ✅ Final exposed interface
   return {
     init,
     showTip,
@@ -280,6 +279,7 @@ showConfirmBox(section, action);
     clearTip,
     clearWarning,
     showMessage,
-    getSelectedIds
+    getSelectedIds,
+    wireCheckboxes // ✅ Exposed for safe external re-use
   };
 })();
