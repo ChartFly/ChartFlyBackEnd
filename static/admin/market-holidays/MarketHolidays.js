@@ -39,6 +39,8 @@
         tableId: "holidays-table",
         confirmBoxId: "holiday-confirm-bar",
         messageId: "holiday-confirm-message",
+        tipBoxId: null,
+        warningBoxId: null,
         onAction: (action, selectedIds) => {
           const table = document.getElementById("holidays-table");
 
@@ -50,13 +52,14 @@
           }
 
           if (action === "copy") {
-            const row = table.querySelector(`tr[data-id="${selectedIds[0]}"]`);
-            if (!row) return;
+            const sourceRow = table.querySelector(`tr[data-id="${selectedIds[0]}"]`);
+            if (!sourceRow) return;
 
-            const clone = row.cloneNode(true);
+            const clone = sourceRow.cloneNode(true);
             const newId = `copy-${Date.now()}`;
             clone.setAttribute("data-id", newId);
             clone.classList.add("editing");
+
             clone.querySelectorAll("td:not(.col-select)").forEach(cell => {
               cell.setAttribute("contenteditable", "true");
               cell.classList.add("editable");
@@ -70,12 +73,12 @@
 
           if (action === "add") {
             const newId = `new-${Date.now()}`;
-            const row = document.createElement("tr");
-            row.classList.add("editing");
-            row.setAttribute("data-id", newId);
-            row.setAttribute("data-index", "0");
+            const newRow = document.createElement("tr");
+            newRow.classList.add("editing");
+            newRow.setAttribute("data-id", newId);
+            newRow.setAttribute("data-index", "0");
 
-            row.innerHTML = `
+            newRow.innerHTML = `
               <td class="col-select">
                 <input type="checkbox" class="holiday-select-checkbox" data-id="${newId}" checked>
               </td>
@@ -85,11 +88,11 @@
               <td contenteditable="true" class="editable"></td>
             `;
 
-            row.querySelectorAll("td[contenteditable]").forEach(cell => {
-              cell.addEventListener("input", () => row.classList.add("dirty"));
+            newRow.querySelectorAll("td[contenteditable]").forEach(cell => {
+              cell.addEventListener("input", () => newRow.classList.add("dirty"));
             });
 
-            table.prepend(row);
+            table.prepend(newRow);
           }
 
           if (action === "save") {
@@ -104,13 +107,15 @@
               if (checkbox) checkbox.checked = false;
               row.classList.remove("selected-row");
             });
+            ButtonBox.showMessage("holiday", "Holiday rows saved (frontend only).", "success");
           }
 
           if (action === "paste") {
-            console.warn("Paste logic not yet implemented for Market Holidays");
+            ButtonBox.showWarning("holiday", "Paste is not implemented yet.");
           }
         }
       });
+
     } catch (error) {
       console.error("❌ Failed to load holidays:", error);
       const table = document.getElementById("holidays-table");
