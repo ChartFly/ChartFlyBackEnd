@@ -1,3 +1,4 @@
+<!-- templates/admin.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,6 +11,9 @@
 
   <!-- ✅ Global Styles -->
   <link rel="stylesheet" href="/static/css/styles.css" />
+
+  <!-- ✅ Shared Styles (ButtonBox) -->
+  <link rel="stylesheet" href="/static/admin/shared/ButtonBox.css" />
 
   <!-- ✅ Per-Tab Styles -->
   <link rel="stylesheet" href="/static/admin/market-holidays/MarketHolidays.css" />
@@ -46,7 +50,7 @@
   {% include "admin/api-keys/ApiKeys.html" %}
   {% include "admin/user-management/UserManagement.html" %}
 
-  <!-- ✅ Shared Logic -->
+  <!-- ✅ Shared Logic (ButtonBox) -->
   <script defer src="/static/admin/shared/ButtonBox.js"></script>
 
   <!-- ✅ Per-Tab Scripts -->
