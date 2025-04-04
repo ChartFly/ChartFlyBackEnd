@@ -37,10 +37,9 @@
   border-collapse: collapse;
   table-layout: fixed;
   font-size: 0.95rem;
-  min-width: 100%;
 }
 
-/* 📀 Column Resizing Defaults (except .col-select) */
+/* 📐 Column Resizing Defaults (except .col-select) */
 #user-management-section .admin-table th:not(.col-select),
 #user-management-section .admin-table td:not(.col-select) {
   min-width: 8ch;
@@ -48,6 +47,18 @@
   white-space: normal;
   overflow-wrap: anywhere;
   word-break: break-word;
+}
+
+/* 🔧 Match Market Holidays behavior for column 4 (Email) */
+#user-management-section td:nth-child(4),
+#user-management-section th:nth-child(4) {
+  min-width: 20ch !important;
+  max-width: 32ch !important;
+  white-space: normal !important;
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
+  vertical-align: top !important;
+  padding-top: 6px !important;
 }
 
 /* 🔠 Header Styling */
