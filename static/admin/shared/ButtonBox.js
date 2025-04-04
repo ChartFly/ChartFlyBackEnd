@@ -17,7 +17,7 @@ window.ButtonBox = (() => {
         messageId: null,
         tipBoxId: null,
         warningBoxId: null,
-        onAction: null
+        onAction: defaultHandler
       };
     }
     return sectionStates[section];
@@ -25,9 +25,14 @@ window.ButtonBox = (() => {
 
   function init({ section, domId, tableId, confirmBoxId, messageId, tipBoxId, warningBoxId, onAction }) {
     const state = getState(section);
-    Object.assign(state, { domId, tableId, confirmBoxId, messageId, tipBoxId, warningBoxId, onAction });
+    Object.assign(state, { domId, tableId, confirmBoxId, messageId, tipBoxId, warningBoxId });
+
+    if (typeof onAction === "function") {
+      state.onAction = onAction;
+    }
 
     console.log(`🚀 ButtonBox initialized for section: ${section}`);
+    showTip(section, "Tip: Check one or more rows before clicking an action.");
 
     const actions = ["edit", "copy", "paste", "add", "delete", "save", "undo"];
     actions.forEach(action => {
@@ -70,6 +75,11 @@ window.ButtonBox = (() => {
 
     wireCheckboxes(section);
     updateUndoButton(section);
+  }
+
+  function defaultHandler(action, selectedIds) {
+    console.warn(`⚠️ No custom handler defined for action "${action}". Selected:`, selectedIds);
+    showTip("global", `Default handler received: ${action}`);
   }
 
   function showMessage(section, message, type = "info") {
@@ -150,10 +160,7 @@ window.ButtonBox = (() => {
     if (state.undoStack.length >= state.maxUndo) state.undoStack.shift();
     state.undoStack.push(snapshot);
 
-    if (typeof state.onAction === "function") {
-      state.onAction(state.activeAction, Array.from(state.selectedRows));
-    }
-
+    state.onAction(state.activeAction, Array.from(state.selectedRows));
     state.activeAction = null;
     state.selectedRows.clear();
 
@@ -241,7 +248,6 @@ window.ButtonBox = (() => {
   function updateConfirmCount(section) {
     const state = getState(section);
     const msg = document.getElementById(state.messageId);
-
     if (!msg) return;
 
     if (state.selectedRows.size === 0) {
@@ -256,5 +262,17 @@ window.ButtonBox = (() => {
     return word.charAt(0).toUpperCase() + word.slice(1);
   }
 
-  return { init, showTip, showWarning, clearTip, clearWarning };
+  function getSelectedIds(section) {
+    return Array.from(getState(section).selectedRows);
+  }
+
+  return {
+    init,
+    showTip,
+    showWarning,
+    clearTip,
+    clearWarning,
+    showMessage,
+    getSelectedIds
+  };
 })();
