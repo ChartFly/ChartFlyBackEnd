@@ -6,7 +6,9 @@
   <h2>Manage Market Holidays</h2>
 
   <!-- 🧠 Modular ButtonBox Component (shared) -->
-  {% include "shared/ButtonBox.html" with section="holiday" %}
+  {% set section = "holiday" %}
+  {% include "shared/ButtonBox.html" %}
+
 
   <!-- 📋 Holidays Table -->
   <div class="table-wrapper">
