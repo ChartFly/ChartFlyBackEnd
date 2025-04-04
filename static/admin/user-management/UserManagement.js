@@ -6,7 +6,8 @@ window.addEventListener("DOMContentLoaded", () => {
 
 async function loadAdminUsers() {
   try {
-    const response = await fetch("https://chartflybackend.onrender.com/api/admin-users");
+    // ✅ Corrected API route — trailing slash required
+    const response = await fetch("https://chartflybackend.onrender.com/api/users/");
     if (!response.ok) throw new Error("Failed to fetch admin users");
 
     const users = await response.json();
@@ -41,9 +42,10 @@ async function loadAdminUsers() {
       tableId: "user-management-table",
       confirmBoxId: "user-confirm-bar",
       messageId: "user-confirm-message",
+      tipBoxId: "user-tip-box",
+      warningBoxId: "user-warning-box",
       onAction: (action, selectedIds) => {
         console.log(`📦 [ButtonBox] Action triggered: ${action}`, selectedIds);
-
         const table = document.getElementById("user-management-table");
 
         if (action === "delete") {

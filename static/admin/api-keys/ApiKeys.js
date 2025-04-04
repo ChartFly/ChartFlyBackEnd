@@ -13,7 +13,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
 async function loadApiKeys() {
   try {
-    const response = await fetch("https://chartflybackend.onrender.com/api/api-keys");
+    const response = await fetch("https://chartflybackend.onrender.com/api/api-keys/");
     if (!response.ok) throw new Error("Failed to fetch API keys");
 
     const apiKeys = await response.json();
