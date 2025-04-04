@@ -69,7 +69,14 @@ window.ButtonBox = (() => {
           return;
         }
 
-        showConfirmBox(section, action);
+        if (action === "edit") {
+          // Immediately trigger the edit transformation
+         state.onAction("edit", Array.from(state.selectedRows));
+         return; // Skip confirm box for edit — we're doing it live
+}
+
+showConfirmBox(section, action);
+
       });
     });
 

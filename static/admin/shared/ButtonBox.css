@@ -54,13 +54,14 @@
   background: #eef8fa;
   border: 1px solid #cbe6ec;
   padding: 8px 16px;
-  margin-bottom: 12px;
   border-radius: 6px;
   font-size: 14px;
   flex-wrap: wrap;
   gap: 12px;
+  min-height: 48px;
 }
 
+/* 📦 Confirm Message Box */
 .commit-bar .confirm-box {
   flex-grow: 1;
 }
@@ -101,9 +102,11 @@
   color: #007a8a;
   border-left: 4px solid #00a3b1;
   padding: 10px 16px;
-  margin-bottom: 12px;
   border-radius: 4px;
   font-size: 14px;
+  min-height: 36px;
+  display: flex;
+  align-items: center;
 }
 
 /* ⚠️ Warning Box */
@@ -112,7 +115,31 @@
   color: #a34f00;
   border-left: 4px solid #ffcc00;
   padding: 10px 16px;
-  margin-bottom: 12px;
   border-radius: 4px;
   font-size: 14px;
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+}
+
+/* 🔻 Feedback Container (Warning + Confirm) */
+.button-feedback {
+  min-height: 96px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 8px;
+  border-top: 1px solid #d0e6eb;
+  padding-top: 12px;
+  margin-top: 12px;
+}
+
+/* 🟡 Editable Row */
+.editable-row {
+  background-color: #fffacd; /* Light yellow */
+}
+
+/* 🧼 Prevent tip/warning from crowding */
+.tip-box + .warning-box {
+  margin-top: 8px;
 }
