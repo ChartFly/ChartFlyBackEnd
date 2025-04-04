@@ -51,15 +51,13 @@ async function loadApiKeys() {
     // ✅ Wire up checkboxes
     window.wireCheckboxes("api");
 
-    // ✅ Initialize ButtonBox
+    // ✅ Initialize ButtonBox (no tip/warning boxes)
     ButtonBox.init({
       section: "api",
       domId: "api-keys-section",
       tableId: "api-keys-table",
       confirmBoxId: "apikeys-confirm-bar",
       messageId: "apikeys-confirm-message",
-      tipBoxId: "api-tip-box",
-      warningBoxId: "api-warning-box",
       onAction: (action, selectedIds) => {
         console.log(`📦 [ButtonBox] Action triggered: ${action}`, selectedIds);
 

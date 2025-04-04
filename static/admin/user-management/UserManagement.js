@@ -41,8 +41,6 @@ async function loadAdminUsers() {
       tableId: "user-management-table",
       confirmBoxId: "user-confirm-bar",
       messageId: "user-confirm-message",
-      tipBoxId: "user-tip-box",
-      warningBoxId: "user-warning-box",
       onAction: (action, selectedIds) => {
         console.log(`📦 [ButtonBox] Action triggered: ${action}`, selectedIds);
 
