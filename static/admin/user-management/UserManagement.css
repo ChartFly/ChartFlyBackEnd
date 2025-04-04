@@ -37,6 +37,7 @@
   border-collapse: collapse;
   table-layout: fixed;
   font-size: 0.95rem;
+  min-width: 100%;
 }
 
 /* 📀 Column Resizing Defaults (except .col-select) */
