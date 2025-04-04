@@ -1,6 +1,8 @@
 <!-- static/admin/user-management/UserManagement.html -->
 
 <section id="user-management-section" class="admin-tab-section" style="display: none;">
+
+  <!-- 🔧 Section Title -->
   <h2>Manage Admin Users</h2>
 
   <!-- 🧠 Modular ButtonBox Toolbar & Message Bars -->
@@ -8,7 +10,7 @@
 
   <!-- 📋 User Table -->
   <div class="table-wrapper">
-    <table id="user-management-table" class="admin-table">
+    <table class="admin-table">
       <thead>
         <tr>
           <th class="col-select">Select</th>
@@ -22,9 +24,10 @@
           <th>Last Login</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody id="user-management-table">
         <tr><td colspan="9">Loading users...</td></tr>
       </tbody>
     </table>
   </div>
+
 </section>
