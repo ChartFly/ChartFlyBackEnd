@@ -1,23 +1,25 @@
 <!-- templates/shared/ButtonBox.html -->
 
-<!-- 🔔 Message Bar (Info, Warn, Success) -->
-<div class="commit-bar" id="{{ section }}-confirm-bar" style="display: none;">
-  <div id="{{ section }}-confirm-message" class="confirm-box info"></div>
+<div class="button-box-wrapper">
+  <!-- 🔔 Message Bar (Info, Warn, Success) -->
+  <div class="commit-bar" id="{{ section }}-confirm-bar" style="display: none;">
+    <div id="{{ section }}-confirm-message" class="confirm-box info"></div>
+  </div>
+
+  <!-- 🛠️ Action Buttons Toolbar -->
+  <div class="button-toolbar" id="{{ section }}-toolbar">
+    <button id="{{ section }}-edit-btn" class="action-btn">Edit</button>
+    <button id="{{ section }}-copy-btn" class="action-btn">Copy</button>
+    <button id="{{ section }}-paste-btn" class="action-btn disabled-btn" disabled>Paste</button>
+    <button id="{{ section }}-add-btn" class="action-btn">Add</button>
+    <button id="{{ section }}-delete-btn" class="action-btn">Delete</button>
+    <button id="{{ section }}-save-btn" class="action-btn">Save</button>
+    <button id="{{ section }}-undo-btn" class="action-btn disabled-btn" disabled>Undo</button>
+  </div>
+
+  <!-- 💡 Tip Box -->
+  <div class="tip-box" id="{{ section }}-tip-box" style="display: none;"></div>
+
+  <!-- ⚠️ Warning Box -->
+  <div class="warning-box" id="{{ section }}-warning-box" style="display: none;"></div>
 </div>
-
-<!-- 🛠️ Action Buttons Toolbar -->
-<div class="button-toolbar" id="{{ section }}-toolbar">
-  <button id="{{ section }}-edit-btn" class="action-btn">Edit</button>
-  <button id="{{ section }}-copy-btn" class="action-btn">Copy</button>
-  <button id="{{ section }}-paste-btn" class="action-btn disabled-btn" disabled>Paste</button>
-  <button id="{{ section }}-add-btn" class="action-btn">Add</button>
-  <button id="{{ section }}-delete-btn" class="action-btn">Delete</button>
-  <button id="{{ section }}-save-btn" class="action-btn">Save</button>
-  <button id="{{ section }}-undo-btn" class="action-btn disabled-btn" disabled>Undo</button>
-</div>
-
-<!-- 💡 Tip Box -->
-<div class="tip-box" id="{{ section }}-tip-box" style="display: none;"></div>
-
-<!-- ⚠️ Warning Box -->
-<div class="warning-box" id="{{ section }}-warning-box" style="display: none;"></div>
