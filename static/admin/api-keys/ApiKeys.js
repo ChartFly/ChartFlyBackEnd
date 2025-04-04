@@ -1,109 +1,172 @@
 // static/admin/api-keys/ApiKeys.js
+(() => {
+  if (window.API_KEYS_LOADED) return;
+  window.API_KEYS_LOADED = true;
 
-window.addEventListener("DOMContentLoaded", () => {
-  loadApiKeys();
+  window.addEventListener("DOMContentLoaded", loadApiKeys);
 
-  document.getElementById("toggle-id-column").addEventListener("change", function (e) {
-    const show = e.target.checked;
-    document.querySelectorAll(".id-col").forEach(el => {
-      el.style.display = show ? "" : "none";
-    });
-  });
-});
+  async function loadApiKeys() {
+    try {
+      const response = await fetch("https://chartflybackend.onrender.com/api/api-keys/");
+      if (!response.ok) throw new Error("Failed to fetch API keys");
 
-async function loadApiKeys() {
-  try {
-    const response = await fetch("https://chartflybackend.onrender.com/api/api-keys/");
-    if (!response.ok) throw new Error("Failed to fetch API keys");
+      const apiKeys = await response.json();
+      const table = document.getElementById("api-keys-table");
+      table.innerHTML = "";
 
-    const apiKeys = await response.json();
-    const table = document.getElementById("api-keys-table");
-    table.innerHTML = "";
+      apiKeys.forEach((key, index) => {
+        const row = document.createElement("tr");
+        row.setAttribute("data-id", key.id);
+        row.setAttribute("data-index", index + 1);
 
-    apiKeys.forEach((key, index) => {
-      const row = document.createElement("tr");
-      row.setAttribute("data-id", key.id);
-      row.setAttribute("data-index", index + 1);
+        row.innerHTML = `
+          <td class="col-select"><input type="checkbox" class="api-select-checkbox" data-id="${key.id}"></td>
+          <td class="id-col" style="display: none;">${formatCell(key.id)}</td>
+          <td>${sanitizeInput(key.key_label)}</td>
+          <td>${sanitizeInput(key.api_key_identifier)}</td>
+          <td>${sanitizeInput(key.provider)}</td>
+          <td>${formatCell(key.priority_order)}</td>
+          <td>${key.is_active ? "Active" : "Inactive"}</td>
+          <td>${formatCell(key.usage_limit_sec)}</td>
+          <td>${formatCell(key.usage_limit_min)}</td>
+          <td>${formatCell(key.usage_limit_5min)}</td>
+          <td>${formatCell(key.usage_limit_10min)}</td>
+          <td>${formatCell(key.usage_limit_15min)}</td>
+          <td>${formatCell(key.usage_limit_hour)}</td>
+          <td>${formatCell(key.usage_limit_day)}</td>
+          <td>$${parseFloat(key.cost_per_month || 0).toFixed(2)}</td>
+          <td>${sanitizeInput(key.billing_interval)}</td>
+          <td>${sanitizeInput(key.key_type)}</td>
+        `;
 
-      row.innerHTML = `
-        <td class="col-select"><input type="checkbox" class="api-select-checkbox" data-id="${key.id}"></td>
-        <td class="id-col" style="display: none;">${formatCell(key.id)}</td>
-        <td>${sanitizeInput(formatCell(key.key_label))}</td>
-        <td>${sanitizeInput(formatCell(key.api_key_identifier))}</td>
-        <td>${sanitizeInput(formatCell(key.provider))}</td>
-        <td>${formatCell(key.priority_order)}</td>
-        <td>${key.is_active ? 'Active' : 'Inactive'}</td>
-        <td>${formatCell(key.usage_limit_sec)}</td>
-        <td>${formatCell(key.usage_limit_min)}</td>
-        <td>${formatCell(key.usage_limit_5min)}</td>
-        <td>${formatCell(key.usage_limit_10min)}</td>
-        <td>${formatCell(key.usage_limit_15min)}</td>
-        <td>${formatCell(key.usage_limit_hour)}</td>
-        <td>${formatCell(key.usage_limit_day)}</td>
-        <td>$${parseFloat(key.cost_per_month || 0).toFixed(2)}</td>
-        <td>${sanitizeInput(formatCell(key.billing_interval))}</td>
-        <td>${sanitizeInput(formatCell(key.key_type))}</td>
-      `;
+        table.appendChild(row);
+      });
 
-      table.appendChild(row);
-    });
-
-    // ✅ Wire up checkboxes
-    window.wireCheckboxes("api");
-
-    // ✅ Initialize ButtonBox (no tip/warning boxes)
-    ButtonBox.init({
-      section: "api",
-      domId: "api-keys-section",
-      tableId: "api-keys-table",
-      confirmBoxId: "apikeys-confirm-bar",
-      messageId: "apikeys-confirm-message",
-      onAction: (action, selectedIds) => {
-        console.log(`📦 [ButtonBox] Action triggered: ${action}`, selectedIds);
-
-        if (action === "delete") {
-          selectedIds.forEach(id => {
-            const row = document.querySelector(`#api-keys-section tr[data-id="${id}"]`);
-            if (row) row.remove();
+      // Toggle column checkbox logic
+      const toggle = document.getElementById("toggle-id-column");
+      if (toggle) {
+        toggle.addEventListener("change", (e) => {
+          const show = e.target.checked;
+          document.querySelectorAll(".id-col").forEach(col => {
+            col.style.display = show ? "" : "none";
           });
-        }
-
-        if (action === "copy") {
-          const row = document.querySelector(`#api-keys-section tr[data-id="${selectedIds[0]}"]`);
-          if (!row) return;
-
-          const clone = row.cloneNode(true);
-          clone.setAttribute("data-id", `copy-${Date.now()}`);
-          clone.classList.add("editing");
-          clone.querySelectorAll("td:not(.col-select)").forEach(cell => {
-            cell.setAttribute("contenteditable", "true");
-            cell.classList.add("editable");
-          });
-
-          const table = document.getElementById("api-keys-table");
-          table.prepend(clone);
-
-          const checkbox = clone.querySelector("input[type='checkbox']");
-          if (checkbox) checkbox.checked = true;
-        }
-
-        // Additional actions (add, edit, paste) can be implemented similarly
+        });
       }
-    });
 
-  } catch (error) {
-    console.error("❌ Failed to load API keys:", error);
-    const table = document.getElementById("api-keys-table");
-    table.innerHTML = `<tr><td colspan="17">Failed to load data. Please try again later.</td></tr>`;
+      ButtonBox.init({
+        section: "api",
+        domId: "api-keys-section",
+        tableId: "api-keys-table",
+        confirmBoxId: "apikeys-confirm-bar",
+        messageId: "apikeys-confirm-message",
+        tipBoxId: "api-tip-box",
+        warningBoxId: "api-warning-box",
+        onAction: (action, selectedIds) => {
+          const table = document.getElementById("api-keys-table");
+
+          if (action === "delete") {
+            selectedIds.forEach(id => {
+              const row = table.querySelector(`tr[data-id="${id}"]`);
+              if (row) row.remove();
+            });
+          }
+
+          if (action === "copy") {
+            if (selectedIds.length !== 1) {
+              ButtonBox.showWarning("api", "Copy requires exactly 1 row selected.");
+              return;
+            }
+
+            const row = table.querySelector(`tr[data-id="${selectedIds[0]}"]`);
+            if (!row) return;
+
+            const clone = row.cloneNode(true);
+            const newId = `copy-${Date.now()}`;
+            clone.setAttribute("data-id", newId);
+            clone.classList.add("editing");
+
+            clone.querySelectorAll("td:not(.col-select)").forEach(cell => {
+              cell.setAttribute("contenteditable", "true");
+              cell.classList.add("editable");
+            });
+
+            clone.querySelector(".col-select").innerHTML =
+              `<input type="checkbox" class="api-select-checkbox" data-id="${newId}" checked>`;
+
+            table.prepend(clone);
+          }
+
+          if (action === "add") {
+            const newId = `new-${Date.now()}`;
+            const row = document.createElement("tr");
+            row.classList.add("editing");
+            row.setAttribute("data-id", newId);
+            row.setAttribute("data-index", "0");
+
+            row.innerHTML = `
+              <td class="col-select"><input type="checkbox" class="api-select-checkbox" data-id="${newId}" checked></td>
+              <td class="id-col" style="display: none;">${newId}</td>
+              <td contenteditable="true" class="editable">Label</td>
+              <td contenteditable="true" class="editable">Key123</td>
+              <td contenteditable="true" class="editable">Provider</td>
+              <td contenteditable="true" class="editable">1</td>
+              <td contenteditable="true" class="editable">Active</td>
+              <td contenteditable="true" class="editable">1</td>
+              <td contenteditable="true" class="editable">10</td>
+              <td contenteditable="true" class="editable">20</td>
+              <td contenteditable="true" class="editable">30</td>
+              <td contenteditable="true" class="editable">45</td>
+              <td contenteditable="true" class="editable">60</td>
+              <td contenteditable="true" class="editable">100</td>
+              <td contenteditable="true" class="editable">$0.00</td>
+              <td contenteditable="true" class="editable">monthly</td>
+              <td contenteditable="true" class="editable">read</td>
+            `;
+
+            row.querySelectorAll("td[contenteditable]").forEach(cell => {
+              cell.addEventListener("input", () => row.classList.add("dirty"));
+            });
+
+            table.prepend(row);
+          }
+
+          if (action === "save") {
+            const dirtyRows = table.querySelectorAll("tr.editing");
+            dirtyRows.forEach(row => {
+              row.classList.remove("editing", "dirty");
+              row.querySelectorAll("td[contenteditable]").forEach(cell => {
+                cell.removeAttribute("contenteditable");
+                cell.classList.remove("editable");
+              });
+              const checkbox = row.querySelector("input[type='checkbox']");
+              if (checkbox) checkbox.checked = false;
+              row.classList.remove("selected-row");
+            });
+            ButtonBox.showMessage("api", "API key rows saved (frontend only).", "success");
+          }
+
+          if (action === "paste") {
+            console.warn("Paste logic not yet implemented for API Keys.");
+          }
+        }
+      });
+
+    } catch (error) {
+      console.error("❌ Failed to load API keys:", error);
+      const table = document.getElementById("api-keys-table");
+      if (table) {
+        table.innerHTML = `<tr><td colspan="17">Failed to load API keys. Please try again later.</td></tr>`;
+      }
+    }
   }
-}
 
-function sanitizeInput(input) {
-  return typeof input === "string"
-    ? input.replace(/</g, "&lt;").replace(/>/g, "&gt;")
-    : input ?? "—";
-}
+  function sanitizeInput(input) {
+    return typeof input === "string"
+      ? input.replace(/</g, "&lt;").replace(/>/g, "&gt;")
+      : input ?? "—";
+  }
 
-function formatCell(value) {
-  return value === null || value === undefined ? "—" : value;
-}
+  function formatCell(value) {
+    return value === null || value === undefined ? "—" : value;
+  }
+})();
