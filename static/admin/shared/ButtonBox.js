@@ -2,6 +2,13 @@
 
 window.ButtonBox = (() => {
   const sectionStates = {};
+  const rotatingTips = [
+    "Click a button to begin an action.",
+    "Select rows before editing or deleting.",
+    "Paste only works after you Copy.",
+    "Undo will reverse your last change."
+  ];
+  const tipTimers = {};
 
   function getState(section) {
     if (!sectionStates[section]) {
@@ -13,7 +20,8 @@ window.ButtonBox = (() => {
         maxUndo: 20,
         domId: null,
         tableId: null,
-        onAction: defaultHandler
+        onAction: defaultHandler,
+        tipIndex: 0
       };
     }
     return sectionStates[section];
@@ -26,17 +34,13 @@ window.ButtonBox = (() => {
     if (typeof onAction === "function") state.onAction = onAction;
 
     console.log(`🚀 ButtonBox initialized for section: ${section}`);
+    showTip(section, rotatingTips[state.tipIndex]);
 
-    const tips = [
-      "Click a button to begin an action.",
-      "Select rows before editing or deleting.",
-      "Paste only works after you Copy.",
-      "Undo will reverse your last change."
-    ];
-
-    let tipIndex = 0;
-    setInterval(() => showTip(section, tips[(tipIndex++) % tips.length]), 60000);
-    showTip(section, tips[0]);
+    // 🔄 Start rotating tips
+    tipTimers[section] = setInterval(() => {
+      state.tipIndex = (state.tipIndex + 1) % rotatingTips.length;
+      showTip(section, rotatingTips[state.tipIndex]);
+    }, 60000);
 
     const actions = ["edit", "copy", "paste", "add", "delete", "save", "undo"];
     actions.forEach(action => {
@@ -71,9 +75,9 @@ window.ButtonBox = (() => {
         }
 
         if (action === "edit" || action === "copy") {
-         state.onAction(action, Array.from(state.selectedRows));
-         return; // Edit and Copy happen immediately
-       }
+          state.onAction(action, Array.from(state.selectedRows));
+          return;
+        }
 
         enableConfirm(section, action);
       });
@@ -104,10 +108,21 @@ window.ButtonBox = (() => {
       label.textContent = "Warning:";
       text.textContent = message;
     }
+
+    // 🔁 Stop tip rotation temporarily
+    if (tipTimers[section]) clearInterval(tipTimers[section]);
   }
 
   function clearWarning(section) {
-    showTip(section, "Click a button to begin an action.");
+    const state = getState(section);
+    state.tipIndex = 0;
+    showTip(section, rotatingTips[0]);
+
+    if (tipTimers[section]) clearInterval(tipTimers[section]);
+    tipTimers[section] = setInterval(() => {
+      state.tipIndex = (state.tipIndex + 1) % rotatingTips.length;
+      showTip(section, rotatingTips[state.tipIndex]);
+    }, 60000);
   }
 
   function enableConfirm(section, action) {

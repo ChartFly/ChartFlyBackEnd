@@ -1,4 +1,5 @@
 /* static/admin/shared/ButtonBox.css */
+/* 🎛️ ButtonBox Styles — Modular, Reusable */
 
 /* 📦 ButtonBox Container */
 .button-box {
@@ -10,33 +11,6 @@
   box-shadow: 0 2px 4px rgba(0, 122, 138, 0.1);
 }
 
-/* 💬 Shared Info Box */
-.info-box {
-  display: flex;
-  align-items: center;
-  padding: 10px 16px;
-  border-radius: 4px;
-  font-size: 16px;
-  font-weight: bold;
-  min-height: 40px;
-  margin-bottom: 12px;
-  transition: background-color 0.3s ease;
-}
-
-/* Default = Tip Style */
-.info-box.tip {
-  background-color: #f0faff;
-  color: #007a8a;
-  border-left: 8px solid #00a3b1;
-}
-
-/* Warning Style */
-.info-box.warn {
-  background-color: #fff4e5;
-  color: #a34f00;
-  border-left: 8px solid #ffcc00;
-}
-
 /* 🔘 Action Buttons */
 .button-toolbar {
   display: flex;
@@ -46,22 +20,22 @@
 }
 
 .button-toolbar .action-btn {
-  background-color: #ccc;
-  color: black;
+  background-color: #007a8a; /* ChartFly Blue */
+  color: white;
   font-weight: bold;
   padding: 8px 16px;
   border: none;
   border-radius: 6px;
   cursor: pointer;
   transition: background 0.2s, transform 0.1s;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  font-size: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .button-toolbar .action-btn.active {
-  background-color: #007a8a;
-  color: white;
+  background-color: #005e6b;
   transform: translateY(2px);
-  box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .button-toolbar .action-btn.disabled-btn,
@@ -72,23 +46,44 @@
   pointer-events: none;
 }
 
-/* ✅ Confirm Button */
-.confirm-button-container {
+/* 💡 Shared Info Box (Tips + Warnings) */
+.info-box {
+  display: flex;
+  align-items: center;
+  padding: 10px 16px;
+  border-radius: 4px;
+  font-size: 18px;
+  min-height: 40px;
   margin-bottom: 12px;
 }
 
+.info-box.tip {
+  background-color: #f0faff;
+  color: #007a8a;
+  border-left: 8px solid #00a3b1;
+}
+
+.info-box.warn {
+  background-color: #fff4e5;
+  color: #a34f00;
+  border-left: 8px solid #ffcc00;
+}
+
+/* ✅ Confirm Button Container */
+.confirm-button-container {
+  margin-top: 8px;
+}
+
 .confirm-btn {
-  padding: 8px 18px;
+  background-color: #ccc;
+  color: black;
   font-weight: bold;
+  padding: 10px 16px;
   border: none;
   border-radius: 6px;
   cursor: pointer;
   font-size: 16px;
-}
-
-.confirm-btn.gray {
-  background-color: #eee;
-  color: #555;
+  transition: background 0.2s;
 }
 
 .confirm-btn.yellow {
@@ -96,11 +91,22 @@
   color: black;
 }
 
-/* 📊 Footer Info */
+.confirm-btn.gray {
+  background-color: #eee;
+  color: #777;
+  cursor: not-allowed;
+}
+
+/* 📊 Status Footer */
 .status-footer {
   display: flex;
   justify-content: space-between;
-  border-top: 1px solid #cbe6ec;
-  padding-top: 12px;
-  font-size: 14px;
+  margin-top: 12px;
+  font-size: 18px;
+  color: #333;
+}
+
+/* 🟡 Editable Row */
+.editable-row {
+  background-color: #fffacd; /* Light yellow */
 }
