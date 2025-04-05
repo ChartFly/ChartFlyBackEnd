@@ -48,7 +48,7 @@
 
 /* 🟨 Confirm Bar */
 .commit-bar {
-  display: none;
+  visibility: hidden;
   justify-content: space-between;
   align-items: center;
   background: #eef8fa;
@@ -107,6 +107,7 @@
   min-height: 36px;
   display: flex;
   align-items: center;
+  visibility: hidden;
 }
 
 /* ⚠️ Warning Box */
@@ -120,6 +121,7 @@
   min-height: 36px;
   display: flex;
   align-items: center;
+  visibility: hidden;
 }
 
 /* 🔻 Feedback Container (Warning + Confirm) */

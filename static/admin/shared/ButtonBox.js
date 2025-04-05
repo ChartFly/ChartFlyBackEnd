@@ -95,22 +95,22 @@ window.ButtonBox = (() => {
       msg.className = `confirm-box ${type}`;
       msg.innerHTML = message;
     }
-    if (box) box.style.display = "flex";
+    if (box) box.style.visibility = "visible";
   }
 
   function showTip(section, message) {
     const tip = document.getElementById(getState(section).tipBoxId);
     if (tip) {
       tip.innerHTML = `<strong>Tip:</strong> ${message}`;
-      tip.style.display = "block";
+      tip.style.visibility = "visible";
     }
   }
 
   function clearTip(section) {
     const tip = document.getElementById(getState(section).tipBoxId);
     if (tip) {
-      tip.style.display = "none";
       tip.innerHTML = "";
+      tip.style.visibility = "hidden";
     }
   }
 
@@ -118,15 +118,15 @@ window.ButtonBox = (() => {
     const box = document.getElementById(getState(section).warningBoxId);
     if (box) {
       box.innerHTML = `<strong>⚠️ Warning:</strong> ${message}`;
-      box.style.display = "block";
+      box.style.visibility = "visible";
     }
   }
 
   function clearWarning(section) {
     const box = document.getElementById(getState(section).warningBoxId);
     if (box) {
-      box.style.display = "none";
       box.innerHTML = "";
+      box.style.visibility = "hidden";
     }
   }
 
@@ -153,7 +153,15 @@ window.ButtonBox = (() => {
     confirmBtn.addEventListener("click", () => triggerConfirm(section));
 
     msg?.appendChild(confirmBtn);
-    bar.style.display = "flex";
+    if (bar) bar.style.visibility = "visible";
+  }
+
+  function hideConfirmBox(section) {
+    const state = getState(section);
+    const bar = document.getElementById(state.confirmBoxId);
+    const msg = document.getElementById(state.messageId);
+    if (bar) bar.style.visibility = "hidden";
+    if (msg) msg.innerHTML = "";
   }
 
   function triggerConfirm(section) {
@@ -211,14 +219,6 @@ window.ButtonBox = (() => {
     }
   }
 
-  function hideConfirmBox(section) {
-    const state = getState(section);
-    const bar = document.getElementById(state.confirmBoxId);
-    const msg = document.getElementById(state.messageId);
-    if (bar) bar.style.display = "none";
-    if (msg) msg.innerHTML = "";
-  }
-
   function wireCheckboxes(section) {
     const state = getState(section);
     const checkboxes = document.querySelectorAll(`#${state.domId} input[type="checkbox"]`);
@@ -271,7 +271,6 @@ window.ButtonBox = (() => {
     return Array.from(getState(section).selectedRows);
   }
 
-  // ✅ Final exposed interface
   return {
     init,
     showTip,
@@ -280,6 +279,6 @@ window.ButtonBox = (() => {
     clearWarning,
     showMessage,
     getSelectedIds,
-    wireCheckboxes // ✅ Exposed for safe external re-use
+    wireCheckboxes
   };
 })();
