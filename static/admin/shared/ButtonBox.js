@@ -29,6 +29,11 @@ window.ButtonBox = (() => {
     return sectionStates[section];
   }
 
+  function getEditMode(section) {
+    const selected = document.querySelector(`input[name="${section}-edit-mode"]:checked`);
+    return selected ? selected.value : "row";
+  }
+
   function init({ section, domId, tableId, onAction }) {
     const state = getState(section);
     Object.assign(state, { domId, tableId });
@@ -53,23 +58,31 @@ window.ButtonBox = (() => {
         clearWarning(section);
         resetButtons(section, btn);
 
-        // ✅ Cell-level copy
-        if (action === "copy" && window.getSelection().toString().trim()) {
-          state.clipboard = window.getSelection().toString().trim();
-          state.clipboardType = "cell";
-          showTip(section, "Copying specific data. Use Paste to apply to another cell.");
-          lockButtons(section, ["paste"]);
-          enableButton(document.getElementById(`${section}-paste-btn`));
-          return;
+        const mode = getEditMode(section);
+
+        if (mode === "cell") {
+          if (action === "copy" && window.getSelection().toString().trim()) {
+            state.clipboard = window.getSelection().toString().trim();
+            state.clipboardType = "cell";
+            showTip(section, "Copying specific data. Use Paste to apply to another cell.");
+            lockButtons(section, ["paste"]);
+            enableButton(document.getElementById(`${section}-paste-btn`));
+            return;
+          }
+
+          if (action === "paste" && state.clipboardType === "cell") {
+            activateCellPasteMode(section);
+            return;
+          }
+
+          // In cell mode, only Save and Undo allowed outside cell copy/paste
+          if (!["save", "undo"].includes(action)) {
+            showWarning(section, `Switch to 'Edit Lines' to use ${capitalize(action)} in row mode.`);
+            return;
+          }
         }
 
-        // ✅ Cell-level paste
-        if (action === "paste" && state.clipboardType === "cell") {
-          activateCellPasteMode(section);
-          return;
-        }
-
-        // ✅ Smart: Skip confirm for these
+        // Row mode behavior
         if (["edit", "copy", "delete"].includes(action)) {
           if (state.selectedRows.size === 0) {
             showWarning(section, `Please select one or more rows to ${action}.`);
@@ -88,6 +101,16 @@ window.ButtonBox = (() => {
       });
     });
 
+    // Handle "Show Line ID" toggle
+    const idToggle = document.getElementById(`${section}-show-id-toggle`);
+    if (idToggle) {
+      idToggle.addEventListener("change", () => {
+        document.querySelectorAll(`#${section}-table .line-id-col`).forEach(col => {
+          col.style.display = idToggle.checked ? "" : "none";
+        });
+      });
+    }
+
     wireCheckboxes(section);
     updateUndo(section);
     setStatus(section, "none");
@@ -105,17 +128,15 @@ window.ButtonBox = (() => {
           cell.classList.add("flash-yellow");
           setTimeout(() => cell.classList.remove("flash-yellow"), 500);
 
-          // Reset state
           state.clipboard = null;
           state.clipboardType = null;
           showTip(section, "Cell pasted. Copy again to paste more.");
           unlockButtons(section);
           disableButton(document.getElementById(`${section}-paste-btn`));
 
-          // Remove listeners
           cells.forEach(c => {
             c.classList.remove("cell-paste-ready");
-            c.replaceWith(c.cloneNode(true)); // Removes attached events
+            c.replaceWith(c.cloneNode(true));
           });
         }
       }, { once: true });
@@ -134,7 +155,8 @@ window.ButtonBox = (() => {
   function lockButtons(section, allow = []) {
     const all = document.querySelectorAll(`#${section}-toolbar .action-btn`);
     all.forEach(btn => {
-      if (!allow.includes(btn.id.replace(`${section}-`, "").replace("-btn", ""))) {
+      const key = btn.id.replace(`${section}-`, "").replace("-btn", "");
+      if (!allow.includes(key)) {
         btn.disabled = true;
         btn.classList.add("disabled-btn");
       }

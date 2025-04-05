@@ -18,6 +18,13 @@
     <button id="{{ section }}-delete-btn" class="action-btn">Delete</button>
     <button id="{{ section }}-save-btn" class="action-btn">Save</button>
     <button id="{{ section }}-undo-btn" class="action-btn disabled-btn" disabled>Undo</button>
+
+    <!-- 🎛️ Edit Mode Selector -->
+    <div class="edit-mode-selector">
+      <label><input type="radio" name="{{ section }}-edit-mode" value="row" checked> Edit Lines</label>
+      <label><input type="radio" name="{{ section }}-edit-mode" value="cell"> Edit Cells & Columns</label>
+      <label><input type="checkbox" id="{{ section }}-show-id-toggle"> Show Line ID</label>
+    </div>
   </div>
 
   <!-- ✅ Always Visible Confirm Button -->
