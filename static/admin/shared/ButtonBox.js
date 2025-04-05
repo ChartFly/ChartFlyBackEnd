@@ -65,16 +65,7 @@ window.ButtonBox = (() => {
 
         // ✅ Cell-level paste
         if (action === "paste" && state.clipboardType === "cell") {
-          document.addEventListener("click", function pasteHandler(e) {
-            const cell = e.target.closest("td");
-            if (cell) {
-              cell.textContent = state.clipboard;
-              cell.style.backgroundColor = "#fffacd";
-              setTimeout(() => (cell.style.backgroundColor = ""), 1000);
-              showTip(section, "Copied text pasted. You can paste again.");
-              document.removeEventListener("click", pasteHandler);
-            }
-          }, { once: true });
+          activateCellPasteMode(section);
           return;
         }
 
@@ -102,6 +93,35 @@ window.ButtonBox = (() => {
     setStatus(section, "none");
   }
 
+  function activateCellPasteMode(section) {
+    const state = getState(section);
+    const cells = document.querySelectorAll(`#${state.domId} td`);
+
+    cells.forEach(cell => {
+      cell.classList.add("cell-paste-ready");
+      cell.addEventListener("click", function cellPasteHandler(e) {
+        if (state.clipboardType === "cell" && state.clipboard) {
+          cell.textContent = state.clipboard;
+          cell.classList.add("flash-yellow");
+          setTimeout(() => cell.classList.remove("flash-yellow"), 500);
+
+          // Reset state
+          state.clipboard = null;
+          state.clipboardType = null;
+          showTip(section, "Cell pasted. Copy again to paste more.");
+          unlockButtons(section);
+          disableButton(document.getElementById(`${section}-paste-btn`));
+
+          // Remove listeners
+          cells.forEach(c => {
+            c.classList.remove("cell-paste-ready");
+            c.replaceWith(c.cloneNode(true)); // Removes attached events
+          });
+        }
+      }, { once: true });
+    });
+  }
+
   function resetButtons(section, activeBtn) {
     const actions = ["edit", "copy", "paste", "add", "delete", "save", "undo"];
     actions.forEach(action => {
@@ -118,6 +138,14 @@ window.ButtonBox = (() => {
         btn.disabled = true;
         btn.classList.add("disabled-btn");
       }
+    });
+  }
+
+  function unlockButtons(section) {
+    const all = document.querySelectorAll(`#${section}-toolbar .action-btn`);
+    all.forEach(btn => {
+      btn.disabled = false;
+      btn.classList.remove("disabled-btn");
     });
   }
 
