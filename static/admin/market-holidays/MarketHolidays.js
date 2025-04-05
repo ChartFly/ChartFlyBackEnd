@@ -62,6 +62,11 @@
     }
 
     if (action === "copy") {
+      if (selectedIds.length !== 1) {
+        ButtonBox.showWarning("holiday", "Please select exactly one row to copy.");
+        return;
+      }
+
       const sourceRow = table.querySelector(`tr[data-id="${selectedIds[0]}"]`);
       if (!sourceRow) return;
 
@@ -79,7 +84,8 @@
         <input type="checkbox" class="holiday-select-checkbox" data-id="${newId}" checked>
       `;
 
-      clone.querySelector(".line-id-col").textContent = newId;
+      const idCell = clone.querySelector(".line-id-col");
+      if (idCell) idCell.textContent = newId;
 
       table.prepend(clone);
     }
