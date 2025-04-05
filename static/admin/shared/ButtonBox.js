@@ -60,10 +60,7 @@ window.ButtonBox = (() => {
 
         const mode = getEditMode(section);
 
-        // ✅ Cell mode logic
         if (mode === "cell") {
-          enableCellEditMode(section);
-
           if (action === "copy") {
             const selectedText = window.getSelection().toString().trim();
             if (!selectedText) {
@@ -87,12 +84,13 @@ window.ButtonBox = (() => {
             showWarning(section, `Switch to 'Edit Lines' to use ${capitalize(action)}.`);
             return;
           }
-        } else {
-          disableCellEditMode(section);
         }
 
-        // ✅ Row-based behavior
         if (["edit", "copy", "delete"].includes(action)) {
+          if (mode === "cell") {
+            showWarning(section, `Switch to 'Edit Lines' to use ${capitalize(action)}.`);
+            return;
+          }
           if (state.selectedRows.size === 0) {
             showWarning(section, `Please select one or more rows to ${action}.`);
             return;
@@ -110,7 +108,6 @@ window.ButtonBox = (() => {
       });
     });
 
-    // Toggle Show Line ID Column
     const idToggle = document.getElementById(`${section}-show-id-toggle`);
     if (idToggle) {
       idToggle.addEventListener("change", () => {
@@ -123,22 +120,6 @@ window.ButtonBox = (() => {
     wireCheckboxes(section);
     updateUndo(section);
     setStatus(section, "none");
-  }
-
-  function enableCellEditMode(section) {
-    const cells = document.querySelectorAll(`#${section}-table td`);
-    cells.forEach(cell => {
-      cell.setAttribute("contenteditable", "true");
-      cell.classList.add("cell-editable");
-    });
-  }
-
-  function disableCellEditMode(section) {
-    const cells = document.querySelectorAll(`#${section}-table td`);
-    cells.forEach(cell => {
-      cell.removeAttribute("contenteditable");
-      cell.classList.remove("cell-editable");
-    });
   }
 
   function activateCellPasteMode(section) {
