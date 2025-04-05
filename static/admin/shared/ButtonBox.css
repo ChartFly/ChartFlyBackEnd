@@ -52,7 +52,7 @@
   margin-top: 8px;
   display: flex;
   justify-content: flex-start;
-  padding-left: 6px; /* 👈 Match radio spacing (adjust as needed) */
+  padding-left: 4px; /* 👈 Match radio spacing (adjust as needed) */
 }
 
 
