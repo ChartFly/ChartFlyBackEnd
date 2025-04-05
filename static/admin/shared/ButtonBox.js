@@ -70,10 +70,10 @@ window.ButtonBox = (() => {
           return;
         }
 
-        if (action === "edit") {
-          state.onAction("edit", Array.from(state.selectedRows));
-          return;
-        }
+        if (action === "edit" || action === "copy") {
+         state.onAction(action, Array.from(state.selectedRows));
+         return; // Edit and Copy happen immediately
+       }
 
         enableConfirm(section, action);
       });
