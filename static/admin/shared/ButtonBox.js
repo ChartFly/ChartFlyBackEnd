@@ -74,10 +74,19 @@ window.ButtonBox = (() => {
           return;
         }
 
-        if (action === "edit" || action === "copy") {
-          state.onAction(action, Array.from(state.selectedRows));
-          return;
-        }
+        if (action === "copy") {
+         // Slight delay ensures checkbox selection is finalized
+        setTimeout(() => {
+        state.onAction("copy", Array.from(state.selectedRows));
+        }, 10);
+        return;
+}
+
+if (action === "edit") {
+  state.onAction("edit", Array.from(state.selectedRows));
+  return;
+}
+
 
         enableConfirm(section, action);
       });
