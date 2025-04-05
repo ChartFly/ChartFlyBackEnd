@@ -34,12 +34,15 @@
         table.appendChild(row);
       });
 
-      ButtonBox.init({
-        section: "holiday",
-        domId: "market-holidays-section",
-        tableId: "holidays-table",
-        onAction: handleHolidayAction
-      });
+      // ✅ Defer ButtonBox init until DOM is fully updated
+      setTimeout(() => {
+        ButtonBox.init({
+          section: "holiday",
+          domId: "market-holidays-section",
+          tableId: "holidays-table",
+          onAction: handleHolidayAction
+        });
+      }, 0);
 
     } catch (error) {
       console.error("❌ Failed to load holidays:", error);
