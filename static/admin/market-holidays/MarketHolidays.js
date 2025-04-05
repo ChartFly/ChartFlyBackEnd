@@ -39,7 +39,7 @@
         ButtonBox.init({
           section: "holiday",
           domId: "market-holidays-section",
-          tableId: "holidays-table", // ✅ Corrected ID here
+          tableId: "holidays-table",
           onAction: handleHolidayAction
         });
       }, 0);
@@ -59,6 +59,7 @@
         const row = table.querySelector(`tr[data-id="${id}"]`);
         if (row) row.remove();
       });
+      ButtonBox.wireCheckboxes("holiday");
     }
 
     if (action === "copy") {
@@ -88,6 +89,7 @@
       if (idCell) idCell.textContent = newId;
 
       table.prepend(clone);
+      ButtonBox.wireCheckboxes("holiday"); // ✅ Re-wire checkbox
     }
 
     if (action === "add") {
@@ -113,6 +115,7 @@
       });
 
       table.prepend(newRow);
+      ButtonBox.wireCheckboxes("holiday"); // ✅ Re-wire checkbox
     }
 
     if (action === "edit") {
@@ -157,10 +160,7 @@
         row.classList.remove("selected-row");
       });
 
-      if (typeof ButtonBox.wireCheckboxes === "function") {
-        ButtonBox.wireCheckboxes("holiday");
-      }
-
+      ButtonBox.wireCheckboxes("holiday"); // ✅ Re-wire checkbox
       ButtonBox.showMessage("holiday", "Holiday rows saved (frontend only).", "success");
     }
 
