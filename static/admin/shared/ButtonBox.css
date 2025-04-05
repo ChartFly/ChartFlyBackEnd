@@ -133,15 +133,18 @@ input[type="checkbox"] {
 
 /* ✅ Status footer box for Action + Selected Rows */
 .status-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  width: fit-content;
+  padding: 8px 12px;
+  margin-top: 10px;
   border: 1px solid #aaa;
   border-radius: 6px;
-  padding: 6px 12px;
-  margin-top: 10px;
   background-color: #f0faff;
   color: #007a8a;
   font-weight: bold;
   font-size: 16px;
-  display: inline-block;
 }
 
 .button-footer-row {
