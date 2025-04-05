@@ -6,7 +6,8 @@ window.ButtonBox = (() => {
     "Click a button to begin an action.",
     "Select rows before editing or deleting.",
     "Paste only works after you Copy.",
-    "Undo will reverse your last change."
+    "Undo will reverse your last change.",
+    "You can copy/paste individual cell text!"
   ];
   const tipTimers = {};
 
@@ -16,6 +17,7 @@ window.ButtonBox = (() => {
         selectedRows: new Set(),
         activeAction: null,
         clipboard: null,
+        clipboardType: null,
         undoStack: [],
         maxUndo: 20,
         domId: null,
@@ -30,13 +32,10 @@ window.ButtonBox = (() => {
   function init({ section, domId, tableId, onAction }) {
     const state = getState(section);
     Object.assign(state, { domId, tableId });
-
     if (typeof onAction === "function") state.onAction = onAction;
 
     console.log(`🚀 ButtonBox initialized for section: ${section}`);
     showTip(section, rotatingTips[state.tipIndex]);
-
-    // 🔄 Start rotating tips
     tipTimers[section] = setInterval(() => {
       state.tipIndex = (state.tipIndex + 1) % rotatingTips.length;
       showTip(section, rotatingTips[state.tipIndex]);
@@ -46,47 +45,53 @@ window.ButtonBox = (() => {
     actions.forEach(action => {
       const btn = document.getElementById(`${section}-${action}-btn`);
       if (!btn) return;
-
       if (action === "paste") disableButton(btn);
 
       btn.addEventListener("click", () => {
         state.activeAction = action;
         setStatus(section, action);
         clearWarning(section);
+        resetButtons(section, btn);
 
-        actions.forEach(a => {
-          const otherBtn = document.getElementById(`${section}-${a}-btn`);
-          if (otherBtn) otherBtn.classList.remove("active");
-        });
+        // ✅ Cell-level copy
+        if (action === "copy" && window.getSelection().toString().trim()) {
+          state.clipboard = window.getSelection().toString().trim();
+          state.clipboardType = "cell";
+          showTip(section, "Copying specific data. Use Paste to apply to another cell.");
+          lockButtons(section, ["paste"]);
+          enableButton(document.getElementById(`${section}-paste-btn`));
+          return;
+        }
 
-        btn.classList.add("active");
+        // ✅ Cell-level paste
+        if (action === "paste" && state.clipboardType === "cell") {
+          document.addEventListener("click", function pasteHandler(e) {
+            const cell = e.target.closest("td");
+            if (cell) {
+              cell.textContent = state.clipboard;
+              cell.style.backgroundColor = "#fffacd";
+              setTimeout(() => (cell.style.backgroundColor = ""), 1000);
+              showTip(section, "Copied text pasted. You can paste again.");
+              document.removeEventListener("click", pasteHandler);
+            }
+          }, { once: true });
+          return;
+        }
+
+        // ✅ Smart: Skip confirm for these
+        if (["edit", "copy", "delete"].includes(action)) {
+          if (state.selectedRows.size === 0) {
+            showWarning(section, `Please select one or more rows to ${action}.`);
+            return;
+          }
+          setTimeout(() => {
+            state.onAction(action, Array.from(state.selectedRows));
+          }, 10);
+          return;
+        }
 
         if (action === "undo") return triggerUndo(section);
         if (action === "save") return triggerConfirm(section);
-
-        if (action === "paste" && !state.clipboard) {
-          showWarning(section, "Paste requires a copied row.");
-          return;
-        }
-
-        if (!["add", "paste"].includes(action) && state.selectedRows.size === 0) {
-          showWarning(section, "Please select one or more rows first.");
-          return;
-        }
-
-        if (action === "copy") {
-         // Slight delay ensures checkbox selection is finalized
-        setTimeout(() => {
-        state.onAction("copy", Array.from(state.selectedRows));
-        }, 10);
-        return;
-}
-
-if (action === "edit") {
-  state.onAction("edit", Array.from(state.selectedRows));
-  return;
-}
-
 
         enableConfirm(section, action);
       });
@@ -95,6 +100,31 @@ if (action === "edit") {
     wireCheckboxes(section);
     updateUndo(section);
     setStatus(section, "none");
+  }
+
+  function resetButtons(section, activeBtn) {
+    const actions = ["edit", "copy", "paste", "add", "delete", "save", "undo"];
+    actions.forEach(action => {
+      const otherBtn = document.getElementById(`${section}-${action}-btn`);
+      if (otherBtn) otherBtn.classList.remove("active");
+    });
+    if (activeBtn) activeBtn.classList.add("active");
+  }
+
+  function lockButtons(section, allow = []) {
+    const all = document.querySelectorAll(`#${section}-toolbar .action-btn`);
+    all.forEach(btn => {
+      if (!allow.includes(btn.id.replace(`${section}-`, "").replace("-btn", ""))) {
+        btn.disabled = true;
+        btn.classList.add("disabled-btn");
+      }
+    });
+  }
+
+  function enableButton(btn) {
+    if (!btn) return;
+    btn.disabled = false;
+    btn.classList.remove("disabled-btn");
   }
 
   function showTip(section, message) {
@@ -117,8 +147,6 @@ if (action === "edit") {
       label.textContent = "Warning:";
       text.textContent = message;
     }
-
-    // 🔁 Stop tip rotation temporarily
     if (tipTimers[section]) clearInterval(tipTimers[section]);
   }
 
@@ -126,7 +154,6 @@ if (action === "edit") {
     const state = getState(section);
     state.tipIndex = 0;
     showTip(section, rotatingTips[0]);
-
     if (tipTimers[section]) clearInterval(tipTimers[section]);
     tipTimers[section] = setInterval(() => {
       state.tipIndex = (state.tipIndex + 1) % rotatingTips.length;
@@ -137,7 +164,7 @@ if (action === "edit") {
   function enableConfirm(section, action) {
     const btn = document.getElementById(`${section}-confirm-btn`);
     if (btn) {
-      const actionLabels = {
+      const labels = {
         add: "Confirm and Make Editable",
         copy: "Confirm and Make Editable",
         edit: "Confirm and Make Editable",
@@ -148,7 +175,7 @@ if (action === "edit") {
       };
       btn.disabled = false;
       btn.className = "confirm-btn yellow";
-      btn.textContent = actionLabels[action] || `Confirm ${capitalize(action)}`;
+      btn.textContent = labels[action] || `Confirm ${capitalize(action)}`;
       btn.onclick = () => triggerConfirm(section);
     }
   }
@@ -171,15 +198,9 @@ if (action === "edit") {
     state.activeAction = null;
     state.selectedRows.clear();
 
-    document.querySelectorAll(`#${state.domId} .action-btn`).forEach(btn =>
-      btn.classList.remove("active")
-    );
-    document.querySelectorAll(`#${state.domId} tr.selected-row`).forEach(row =>
-      row.classList.remove("selected-row")
-    );
-    document.querySelectorAll(`#${state.domId} input[type="checkbox"]`).forEach(box =>
-      (box.checked = false)
-    );
+    document.querySelectorAll(`#${state.domId} .action-btn`).forEach(btn => btn.classList.remove("active"));
+    document.querySelectorAll(`#${state.domId} tr.selected-row`).forEach(row => row.classList.remove("selected-row"));
+    document.querySelectorAll(`#${state.domId} input[type="checkbox"]`).forEach(box => box.checked = false);
 
     updateUndo(section);
     setStatus(section, "none");

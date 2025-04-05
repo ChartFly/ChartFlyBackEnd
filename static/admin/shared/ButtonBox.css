@@ -23,13 +23,17 @@
   background-color: #007a8a; /* ChartFly Blue */
   color: white;
   font-weight: bold;
-  padding: 8px 16px;
+  padding: 10px 16px;
+  font-size: 16px;
   border: none;
   border-radius: 6px;
   cursor: pointer;
   transition: background 0.2s, transform 0.1s;
-  font-size: 16px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.button-toolbar .action-btn:hover:not(.disabled-btn):not(:disabled) {
+  background-color: #0093a1;
 }
 
 .button-toolbar .action-btn.active {
@@ -46,7 +50,7 @@
   pointer-events: none;
 }
 
-/* 💡 Shared Info Box (Tips + Warnings) */
+/* 💬 Shared Info Box (Tips + Warnings) */
 .info-box {
   display: flex;
   align-items: center;
@@ -79,11 +83,11 @@
   color: black;
   font-weight: bold;
   padding: 10px 16px;
+  font-size: 16px;
   border: none;
   border-radius: 6px;
   cursor: pointer;
-  font-size: 16px;
-  transition: background 0.2s;
+  transition: background 0.2s, transform 0.1s;
 }
 
 .confirm-btn.yellow {
