@@ -9,13 +9,13 @@
   {% set section = "holiday" %}
   {% include "shared/ButtonBox.html" %}
 
-
   <!-- 📋 Holidays Table -->
   <div class="table-wrapper">
-    <table class="admin-table">
+    <table id="holiday-table" class="admin-table">
       <thead>
         <tr>
           <th class="col-select">Select</th>
+          <th class="line-id-col">Line ID</th> <!-- ✅ Added -->
           <th class="col-name">Holiday Name</th>
           <th class="col-date">Date</th>
           <th class="col-status">Status</th>
@@ -23,7 +23,12 @@
         </tr>
       </thead>
       <tbody id="holidays-table">
-        <tr><td colspan="5">Loading holidays...</td></tr>
+        <tr>
+          <td colspan="6">
+            <span class="line-id-col" style="display:none;">&nbsp;</span> <!-- ✅ placeholder Line ID cell -->
+            Loading holidays...
+          </td>
+        </tr>
       </tbody>
     </table>
   </div>

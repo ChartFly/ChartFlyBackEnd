@@ -25,6 +25,7 @@
 
         row.innerHTML = `
           <td class="col-select"><input type="checkbox" class="holiday-select-checkbox" data-id="${holiday.id}"></td>
+          <td class="line-id-col">${holiday.id}</td>
           <td>${sanitizeInput(holiday.name || "N/A")}</td>
           <td>${sanitizeInput(holiday.date || "N/A")}</td>
           <td>${sanitizeInput(holiday.status || "Unknown")}</td>
@@ -34,12 +35,11 @@
         table.appendChild(row);
       });
 
-      // ✅ Defer ButtonBox init until DOM is fully updated
       setTimeout(() => {
         ButtonBox.init({
           section: "holiday",
           domId: "market-holidays-section",
-          tableId: "holidays-table",
+          tableId: "holiday-table",
           onAction: handleHolidayAction
         });
       }, 0);
@@ -47,7 +47,7 @@
     } catch (error) {
       console.error("❌ Failed to load holidays:", error);
       const table = document.getElementById("holidays-table");
-      table.innerHTML = `<tr><td colspan="5">Failed to load holidays. Please try again later.</td></tr>`;
+      table.innerHTML = `<tr><td colspan="6">Failed to load holidays. Please try again later.</td></tr>`;
     }
   }
 
@@ -70,7 +70,7 @@
       clone.setAttribute("data-id", newId);
       clone.classList.add("editing");
 
-      clone.querySelectorAll("td:not(.col-select)").forEach(cell => {
+      clone.querySelectorAll("td:not(.col-select):not(.line-id-col)").forEach(cell => {
         cell.setAttribute("contenteditable", "true");
         cell.classList.add("editable");
       });
@@ -78,6 +78,8 @@
       clone.querySelector(".col-select").innerHTML = `
         <input type="checkbox" class="holiday-select-checkbox" data-id="${newId}" checked>
       `;
+
+      clone.querySelector(".line-id-col").textContent = newId;
 
       table.prepend(clone);
     }
@@ -93,6 +95,7 @@
         <td class="col-select">
           <input type="checkbox" class="holiday-select-checkbox" data-id="${newId}" checked>
         </td>
+        <td class="line-id-col">${newId}</td>
         <td contenteditable="true" class="editable">Edit</td>
         <td contenteditable="true" class="editable">YYYY-MM-DD</td>
         <td contenteditable="true" class="editable">Upcoming</td>
@@ -113,7 +116,7 @@
 
         row.classList.add("editing");
 
-        row.querySelectorAll("td:not(.col-select)").forEach(cell => {
+        row.querySelectorAll("td:not(.col-select):not(.line-id-col)").forEach(cell => {
           cell.setAttribute("contenteditable", "true");
           cell.classList.add("editable");
         });
@@ -141,6 +144,9 @@
           checkbox.setAttribute("data-id", finalId);
           checkbox.checked = false;
         }
+
+        const idCell = row.querySelector(".line-id-col");
+        if (idCell) idCell.textContent = finalId;
 
         row.classList.remove("selected-row");
       });
