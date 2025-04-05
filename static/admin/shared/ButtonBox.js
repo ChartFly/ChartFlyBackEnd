@@ -124,7 +124,7 @@ window.ButtonBox = (() => {
       };
       btn.disabled = false;
       btn.className = "confirm-btn yellow";
-      btn.textContent = actionLabels[action] || `Confirm ${action}`;
+      btn.textContent = actionLabels[action] || `Confirm ${capitalize(action)}`;
       btn.onclick = () => triggerConfirm(section);
     }
   }
@@ -230,6 +230,10 @@ window.ButtonBox = (() => {
 
   function capitalize(word) {
     return word.charAt(0).toUpperCase() + word.slice(1);
+  }
+
+  function getSelectedIds(section) {
+    return Array.from(getState(section).selectedRows);
   }
 
   function defaultHandler(action, selectedIds) {
