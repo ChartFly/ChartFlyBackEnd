@@ -49,11 +49,12 @@
 }
 
 .confirm-button-container {
-  margin-top: 10px;
-  min-height: 40px; /* Prevent layout jump */
+  margin-top: 8px;
   display: flex;
-  justify-content: center; /* Center the button horizontally */
+  justify-content: flex-start;
+  padding-left: 6px; /* 👈 Match radio spacing (adjust as needed) */
 }
+
 
 .confirm-btn {
   padding: 6px 14px;
