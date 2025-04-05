@@ -170,7 +170,7 @@ input[type="checkbox"] {
 
 /* Match ButtonBox width to the table wrapper */
 .button-box {
-  max-width: 1200px;  /* 🎯 Limit width to match table */
+  max-width: 900px;  /* 🎯 Limit width to match table */
   width: 100%;
   min-width: 720px;
   margin-left: 0;
