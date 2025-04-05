@@ -33,7 +33,7 @@
   margin: 5px 0;
   border-radius: 6px;
   font-weight: bold;
-  font-size: 13px;
+  font-size: 16px;
   border: none;
   transition: background-color 0.2s ease;
 }
@@ -47,6 +47,33 @@
   background-color: #ffcf40;
   color: #000;
 }
+
+.confirm-button-container {
+  margin-top: 12px;
+  min-height: 40px; /* Prevent layout jump */
+  display: flex;
+  justify-content: center; /* Center the button horizontally */
+}
+
+.confirm-btn {
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 16px;
+  border: none;
+  transition: background-color 0.2s ease;
+  min-width: 160px;
+  opacity: 1;
+  visibility: visible;
+}
+
+.confirm-btn:disabled {
+  background-color: #ccc;
+  color: #666;
+  cursor: not-allowed;
+}
+
+
 
 /* Info box (tips and warnings) */
 .info-box {
@@ -112,7 +139,7 @@ input[type="checkbox"] {
   background-color: #f0faff;
   color: #007a8a;
   font-weight: bold;
-  font-size: 15px;
+  font-size: 16px;
   display: inline-block;
 }
 
@@ -124,7 +151,7 @@ input[type="checkbox"] {
 }
 
 .edit-mode-controls {
-  font-size: 14px;
+  font-size: 16px;
   display: flex;
   gap: 20px;
   align-items: center;
@@ -139,4 +166,13 @@ input[type="checkbox"] {
 /* Default hidden Line ID column */
 .line-id-col {
   display: none;
+}
+
+/* Match ButtonBox width to the table wrapper */
+.button-box {
+  max-width: 100%;
+  width: fit-content;
+  min-width: 720px; /* or whatever your table's base width is */
+  margin-left: auto;
+  margin-right: auto;
 }
