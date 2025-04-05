@@ -100,10 +100,10 @@
 .tip-box {
   background-color: #f0faff;
   color: #007a8a;
-  border-left: 4px solid #00a3b1;
+  border-left: 8px solid #00a3b1;
   padding: 10px 16px;
   border-radius: 4px;
-  font-size: 14px;
+  font-size: 18px;
   min-height: 36px;
   display: flex;
   align-items: center;
@@ -114,10 +114,10 @@
 .warning-box {
   background-color: #fff4e5;
   color: #a34f00;
-  border-left: 4px solid #ffcc00;
+  border-left: 8px solid #ffcc00;
   padding: 10px 16px;
   border-radius: 4px;
-  font-size: 14px;
+  font-size: 18px;
   min-height: 36px;
   display: flex;
   align-items: center;
