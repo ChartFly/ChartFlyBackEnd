@@ -89,10 +89,8 @@
 
       table.prepend(clone);
 
-      // ✅ Wire up the new checkbox so it's selectable
-      if (typeof ButtonBox.wireCheckboxes === "function") {
-        ButtonBox.wireCheckboxes("holiday");
-      }
+      // ✅ Update checkboxes and selection tracking
+      ButtonBox.wireCheckboxes("holiday");
     }
 
     if (action === "add") {
@@ -118,11 +116,7 @@
       });
 
       table.prepend(newRow);
-
-      // ✅ Wire up the checkbox immediately
-      if (typeof ButtonBox.wireCheckboxes === "function") {
-        ButtonBox.wireCheckboxes("holiday");
-      }
+      ButtonBox.wireCheckboxes("holiday");
     }
 
     if (action === "edit") {
@@ -145,6 +139,8 @@
       const dirtyRows = table.querySelectorAll("tr.editing");
 
       dirtyRows.forEach((row, i) => {
+        const oldId = row.getAttribute("data-id");
+
         row.classList.remove("editing", "dirty");
 
         row.querySelectorAll("td[contenteditable]").forEach(cell => {
@@ -165,11 +161,12 @@
         if (idCell) idCell.textContent = finalId;
 
         row.classList.remove("selected-row");
-      });
 
-      if (typeof ButtonBox.wireCheckboxes === "function") {
-        ButtonBox.wireCheckboxes("holiday");
-      }
+        // 🔄 Update selection map if needed
+        if (ButtonBox.getSelectedIds("holiday").includes(oldId)) {
+          ButtonBox.wireCheckboxes("holiday"); // rewires and clears stale selection
+        }
+      });
 
       ButtonBox.showMessage("holiday", "Holiday rows saved (frontend only).", "success");
     }
