@@ -39,7 +39,7 @@
         ButtonBox.init({
           section: "holiday",
           domId: "market-holidays-section",
-          tableId: "holiday-table",
+          tableId: "holidays-table", // ✅ Corrected ID here
           onAction: handleHolidayAction
         });
       }, 0);
