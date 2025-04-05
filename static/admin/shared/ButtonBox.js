@@ -95,10 +95,7 @@ window.ButtonBox = (() => {
       msg.className = `confirm-box ${type}`;
       msg.innerHTML = message;
     }
-    if (box) {
-      box.style.display = "flex";
-      box.style.visibility = "visible";
-    }
+    if (box) box.style.visibility = "visible";
   }
 
   function showTip(section, message) {
@@ -150,27 +147,34 @@ window.ButtonBox = (() => {
       `;
     }
 
+    const actionLabels = {
+      add: "Confirm and Make Editable",
+      copy: "Confirm and Make Editable",
+      edit: "Confirm and Make Editable",
+      delete: "Confirm and Delete",
+      paste: "Confirm and Paste",
+      undo: "Confirm and Undo",
+      save: "Confirm and Save"
+    };
+
+    const label = actionLabels[action] || `Confirm and ${capitalize(action)}`;
+
     const confirmBtn = document.createElement("button");
-    confirmBtn.textContent = `Confirm and Save ${capitalize(action)}`;
+    confirmBtn.textContent = label;
     confirmBtn.className = "confirm-btn yellow";
     confirmBtn.addEventListener("click", () => triggerConfirm(section));
 
     msg?.appendChild(confirmBtn);
-    bar.style.display = "flex";
     bar.style.visibility = "visible";
+    bar.style.display = "flex";
   }
 
   function hideConfirmBox(section) {
     const state = getState(section);
     const bar = document.getElementById(state.confirmBoxId);
     const msg = document.getElementById(state.messageId);
-    if (bar) {
-      bar.style.visibility = "hidden";
-      bar.style.display = "flex";
-    }
-    if (msg) {
-      msg.innerHTML = "";
-    }
+    if (bar) bar.style.visibility = "hidden";
+    if (msg) msg.innerHTML = "";
   }
 
   function triggerConfirm(section) {
