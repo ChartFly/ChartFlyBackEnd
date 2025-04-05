@@ -116,25 +116,27 @@ input[type="checkbox"] {
   display: inline-block;
 }
 
-/* 🎛️ Edit Mode Selector */
-.edit-mode-selector {
-  display: inline-flex;
-  gap: 12px;
-  margin-left: 20px;
-  align-items: center;
-  font-size: 13px;
-}
-
-.edit-mode-selector label {
+.button-footer-row {
   display: flex;
   align-items: center;
-  cursor: pointer;
-  user-select: none;
+  justify-content: space-between;
+  margin-top: 10px;
 }
 
-.edit-mode-selector input[type="radio"],
-.edit-mode-selector input[type="checkbox"] {
-  margin-right: 5px;
+.edit-mode-controls {
+  font-size: 14px;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.edit-mode-controls input[type="radio"],
+.edit-mode-controls input[type="checkbox"] {
+  margin-right: 6px;
   transform: scale(1.1);
-  cursor: pointer;
+}
+
+/* Default hidden Line ID column */
+.line-id-col {
+  display: none;
 }

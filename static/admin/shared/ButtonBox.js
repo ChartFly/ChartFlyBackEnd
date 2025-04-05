@@ -60,9 +60,17 @@ window.ButtonBox = (() => {
 
         const mode = getEditMode(section);
 
+        // ✅ Cell mode logic
         if (mode === "cell") {
-          if (action === "copy" && window.getSelection().toString().trim()) {
-            state.clipboard = window.getSelection().toString().trim();
+          enableCellEditMode(section);
+
+          if (action === "copy") {
+            const selectedText = window.getSelection().toString().trim();
+            if (!selectedText) {
+              showWarning(section, "Highlight text to Copy.");
+              return;
+            }
+            state.clipboard = selectedText;
             state.clipboardType = "cell";
             showTip(section, "Copying specific data. Use Paste to apply to another cell.");
             lockButtons(section, ["paste"]);
@@ -75,14 +83,15 @@ window.ButtonBox = (() => {
             return;
           }
 
-          // In cell mode, only Save and Undo allowed outside cell copy/paste
           if (!["save", "undo"].includes(action)) {
-            showWarning(section, `Switch to 'Edit Lines' to use ${capitalize(action)} in row mode.`);
+            showWarning(section, `Switch to 'Edit Lines' to use ${capitalize(action)}.`);
             return;
           }
+        } else {
+          disableCellEditMode(section);
         }
 
-        // Row mode behavior
+        // ✅ Row-based behavior
         if (["edit", "copy", "delete"].includes(action)) {
           if (state.selectedRows.size === 0) {
             showWarning(section, `Please select one or more rows to ${action}.`);
@@ -101,7 +110,7 @@ window.ButtonBox = (() => {
       });
     });
 
-    // Handle "Show Line ID" toggle
+    // Toggle Show Line ID Column
     const idToggle = document.getElementById(`${section}-show-id-toggle`);
     if (idToggle) {
       idToggle.addEventListener("change", () => {
@@ -116,13 +125,29 @@ window.ButtonBox = (() => {
     setStatus(section, "none");
   }
 
+  function enableCellEditMode(section) {
+    const cells = document.querySelectorAll(`#${section}-table td`);
+    cells.forEach(cell => {
+      cell.setAttribute("contenteditable", "true");
+      cell.classList.add("cell-editable");
+    });
+  }
+
+  function disableCellEditMode(section) {
+    const cells = document.querySelectorAll(`#${section}-table td`);
+    cells.forEach(cell => {
+      cell.removeAttribute("contenteditable");
+      cell.classList.remove("cell-editable");
+    });
+  }
+
   function activateCellPasteMode(section) {
     const state = getState(section);
     const cells = document.querySelectorAll(`#${state.domId} td`);
 
     cells.forEach(cell => {
       cell.classList.add("cell-paste-ready");
-      cell.addEventListener("click", function cellPasteHandler(e) {
+      cell.addEventListener("click", function cellPasteHandler() {
         if (state.clipboardType === "cell" && state.clipboard) {
           cell.textContent = state.clipboard;
           cell.classList.add("flash-yellow");
