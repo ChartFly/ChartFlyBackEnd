@@ -71,7 +71,7 @@ window.ButtonBox = (() => {
 
         if (action === "edit") {
           state.onAction("edit", Array.from(state.selectedRows));
-          return; // Edit happens immediately
+          return;
         }
 
         showConfirmBox(section, action);
@@ -95,7 +95,10 @@ window.ButtonBox = (() => {
       msg.className = `confirm-box ${type}`;
       msg.innerHTML = message;
     }
-    if (box) box.style.visibility = "visible";
+    if (box) {
+      box.style.display = "flex";
+      box.style.visibility = "visible";
+    }
   }
 
   function showTip(section, message) {
@@ -153,15 +156,21 @@ window.ButtonBox = (() => {
     confirmBtn.addEventListener("click", () => triggerConfirm(section));
 
     msg?.appendChild(confirmBtn);
-    if (bar) bar.style.visibility = "visible";
+    bar.style.display = "flex";
+    bar.style.visibility = "visible";
   }
 
   function hideConfirmBox(section) {
     const state = getState(section);
     const bar = document.getElementById(state.confirmBoxId);
     const msg = document.getElementById(state.messageId);
-    if (bar) bar.style.visibility = "hidden";
-    if (msg) msg.innerHTML = "";
+    if (bar) {
+      bar.style.visibility = "hidden";
+      bar.style.display = "flex";
+    }
+    if (msg) {
+      msg.innerHTML = "";
+    }
   }
 
   function triggerConfirm(section) {
