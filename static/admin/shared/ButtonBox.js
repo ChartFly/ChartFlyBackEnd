@@ -2,7 +2,6 @@
 
 window.ButtonBox = (() => {
   const sectionStates = {};
-  const tipIntervalMs = 60000;
 
   function getState(section) {
     if (!sectionStates[section]) {
@@ -14,55 +13,43 @@ window.ButtonBox = (() => {
         maxUndo: 20,
         domId: null,
         tableId: null,
-        confirmBoxId: null,
-        messageBoxId: null,
-        footerBoxId: null,
-        tips: [
-          "Check one or more rows before clicking an action.",
-          "Use Copy → Edit → Save to duplicate and modify entries.",
-          "Undo supports up to 20 levels of rollback.",
-          "Paste only works after Copy. Use wisely!"
-        ],
-        tipIndex: 0,
-        tipTimer: null,
         onAction: defaultHandler
       };
     }
     return sectionStates[section];
   }
 
-  function init({ section, domId, tableId, confirmBoxId, messageBoxId, footerBoxId, onAction }) {
+  function init({ section, domId, tableId, onAction }) {
     const state = getState(section);
-    Object.assign(state, { domId, tableId, confirmBoxId, messageBoxId, footerBoxId });
+    Object.assign(state, { domId, tableId });
 
     if (typeof onAction === "function") state.onAction = onAction;
 
     console.log(`🚀 ButtonBox initialized for section: ${section}`);
 
-    setupButtons(section);
-    updateUndoButton(section);
-    updateFooter(section);
-    wireCheckboxes(section);
-    cycleTips(section);
-  }
+    const tips = [
+      "Click a button to begin an action.",
+      "Select rows before editing or deleting.",
+      "Paste only works after you Copy.",
+      "Undo will reverse your last change."
+    ];
 
-  function setupButtons(section) {
+    let tipIndex = 0;
+    setInterval(() => showTip(section, tips[(tipIndex++) % tips.length]), 60000);
+    showTip(section, tips[0]);
+
     const actions = ["edit", "copy", "paste", "add", "delete", "save", "undo"];
-    const state = getState(section);
-
     actions.forEach(action => {
       const btn = document.getElementById(`${section}-${action}-btn`);
       if (!btn) return;
 
-      if (action === "paste") {
-        btn.disabled = true;
-        btn.classList.add("disabled-btn");
-      }
+      if (action === "paste") disableButton(btn);
 
       btn.addEventListener("click", () => {
         state.activeAction = action;
-        clearMessage(section);
-        updateFooter(section);
+        setStatus(section, action);
+        clearWarning(section);
+
         actions.forEach(a => {
           const otherBtn = document.getElementById(`${section}-${a}-btn`);
           if (otherBtn) otherBtn.classList.remove("active");
@@ -74,12 +61,12 @@ window.ButtonBox = (() => {
         if (action === "save") return triggerConfirm(section);
 
         if (action === "paste" && !state.clipboard) {
-          showMessage(section, "⚠️ Paste requires a copied row.", "warn");
+          showWarning(section, "Paste requires a copied row.");
           return;
         }
 
         if (!["add", "paste"].includes(action) && state.selectedRows.size === 0) {
-          showMessage(section, "⚠️ Please select one or more rows first.", "warn");
+          showWarning(section, "Please select one or more rows first.");
           return;
         }
 
@@ -88,33 +75,63 @@ window.ButtonBox = (() => {
           return;
         }
 
-        updateConfirmButton(section);
+        enableConfirm(section, action);
       });
     });
 
-    updateConfirmButton(section); // Show initial state
+    wireCheckboxes(section);
+    updateUndo(section);
+    setStatus(section, "none");
   }
 
-  function updateConfirmButton(section) {
-    const state = getState(section);
-    const bar = document.getElementById(state.confirmBoxId);
-    const btn = bar.querySelector("button.confirm-btn");
+  function showTip(section, message) {
+    const box = document.getElementById(`${section}-info-box`);
+    const label = document.getElementById(`${section}-info-label`);
+    const text = document.getElementById(`${section}-info-message`);
+    if (box && label && text) {
+      box.className = "info-box tip";
+      label.textContent = "Tip:";
+      text.textContent = message;
+    }
+  }
 
-    const labels = {
-      add: "Confirm and Make Editable",
-      copy: "Confirm and Make Editable",
-      edit: "Confirm and Make Editable",
-      delete: "Confirm and Delete",
-      paste: "Confirm and Paste",
-      undo: "Confirm and Undo",
-      save: "Confirm and Save"
-    };
+  function showWarning(section, message) {
+    const box = document.getElementById(`${section}-info-box`);
+    const label = document.getElementById(`${section}-info-label`);
+    const text = document.getElementById(`${section}-info-message`);
+    if (box && label && text) {
+      box.className = "info-box warn";
+      label.textContent = "Warning:";
+      text.textContent = message;
+    }
+  }
 
-    const label = labels[state.activeAction] || "Confirm Action";
+  function clearWarning(section) {
+    showTip(section, "Click a button to begin an action.");
+  }
 
-    btn.textContent = label;
-    btn.disabled = !state.activeAction;
-    btn.className = `confirm-btn ${state.activeAction ? "yellow" : "disabled-btn"}`;
+  function enableConfirm(section, action) {
+    const btn = document.getElementById(`${section}-confirm-btn`);
+    if (btn) {
+      const actionLabels = {
+        add: "Confirm and Make Editable",
+        copy: "Confirm and Make Editable",
+        edit: "Confirm and Make Editable",
+        delete: "Confirm and Delete",
+        paste: "Confirm and Paste",
+        undo: "Confirm and Undo",
+        save: "Confirm and Save"
+      };
+      btn.disabled = false;
+      btn.className = "confirm-btn yellow";
+      btn.textContent = actionLabels[action] || `Confirm ${action}`;
+      btn.onclick = () => triggerConfirm(section);
+    }
+  }
+
+  function disableButton(btn) {
+    btn.disabled = true;
+    btn.classList.add("disabled-btn");
   }
 
   function triggerConfirm(section) {
@@ -130,10 +147,6 @@ window.ButtonBox = (() => {
     state.activeAction = null;
     state.selectedRows.clear();
 
-    updateUndoButton(section);
-    updateConfirmButton(section);
-    updateFooter(section);
-
     document.querySelectorAll(`#${state.domId} .action-btn`).forEach(btn =>
       btn.classList.remove("active")
     );
@@ -143,6 +156,16 @@ window.ButtonBox = (() => {
     document.querySelectorAll(`#${state.domId} input[type="checkbox"]`).forEach(box =>
       (box.checked = false)
     );
+
+    updateUndo(section);
+    setStatus(section, "none");
+
+    const btn = document.getElementById(`${section}-confirm-btn`);
+    if (btn) {
+      btn.disabled = true;
+      btn.className = "confirm-btn gray";
+      btn.textContent = "Confirm";
+    }
   }
 
   function triggerUndo(section) {
@@ -150,69 +173,28 @@ window.ButtonBox = (() => {
     const table = document.getElementById(state.tableId);
     if (!table || state.undoStack.length === 0) return;
 
-    const lastSnapshot = state.undoStack.pop();
+    const last = state.undoStack.pop();
     table.innerHTML = "";
-    lastSnapshot.forEach(row => table.appendChild(row.cloneNode(true)));
+    last.forEach(row => table.appendChild(row.cloneNode(true)));
 
     wireCheckboxes(section);
-    updateUndoButton(section);
-    showMessage(section, "Tip: Last change was undone.", "tip");
+    updateUndo(section);
+    showTip(section, "Last change was undone.");
   }
 
-  function showMessage(section, text, type = "tip") {
-    const box = document.getElementById(getState(section).messageBoxId);
-    if (!box) return;
-    box.className = type === "warn" ? "tip-box warn" : "tip-box tip";
-    box.innerHTML = `<strong>${type === "warn" ? "⚠️ Warning:" : "Tip:"}</strong> ${text}`;
-  }
-
-  function clearMessage(section) {
-    const box = document.getElementById(getState(section).messageBoxId);
-    if (box) {
-      box.className = "tip-box tip";
-      box.innerHTML = "";
+  function updateUndo(section) {
+    const btn = document.getElementById(`${section}-undo-btn`);
+    const hasUndo = getState(section).undoStack.length > 0;
+    if (btn) {
+      btn.disabled = !hasUndo;
+      btn.classList.toggle("disabled-btn", !hasUndo);
     }
-  }
-
-  function updateFooter(section) {
-    const state = getState(section);
-    const footer = document.getElementById(state.footerBoxId);
-    if (!footer) return;
-    footer.innerHTML = `
-      <strong>Action:</strong> ${state.activeAction || "None"} &nbsp;&nbsp;&nbsp;
-      <strong>Selected Rows:</strong> ${state.selectedRows.size}
-    `;
-  }
-
-  function updateUndoButton(section) {
-    const state = getState(section);
-    const undoBtn = document.getElementById(`${section}-undo-btn`);
-    if (!undoBtn) return;
-
-    if (state.undoStack.length === 0) {
-      undoBtn.disabled = true;
-      undoBtn.classList.add("disabled-btn");
-    } else {
-      undoBtn.disabled = false;
-      undoBtn.classList.remove("disabled-btn");
-    }
-  }
-
-  function cycleTips(section) {
-    const state = getState(section);
-    if (state.tipTimer) clearInterval(state.tipTimer);
-
-    state.tipTimer = setInterval(() => {
-      if (!state.activeAction) {
-        state.tipIndex = (state.tipIndex + 1) % state.tips.length;
-        showMessage(section, state.tips[state.tipIndex], "tip");
-      }
-    }, tipIntervalMs);
   }
 
   function wireCheckboxes(section) {
     const state = getState(section);
     const checkboxes = document.querySelectorAll(`#${state.domId} input[type="checkbox"]`);
+    const count = document.getElementById(`${section}-selected-count`);
 
     checkboxes.forEach(box => {
       const id = box.dataset.id;
@@ -220,7 +202,6 @@ window.ButtonBox = (() => {
 
       box.addEventListener("change", () => {
         if (!row) return;
-
         if (box.checked) {
           state.selectedRows.add(id);
           row.classList.add("selected-row");
@@ -228,27 +209,40 @@ window.ButtonBox = (() => {
           state.selectedRows.delete(id);
           row.classList.remove("selected-row");
         }
-
-        updateFooter(section);
+        if (count) count.textContent = state.selectedRows.size;
       });
 
       const cell = box.closest("td");
       if (cell) {
-        cell.addEventListener("click", (e) => {
+        cell.addEventListener("click", e => {
           if (e.target !== box) box.click();
         });
       }
     });
+
+    if (count) count.textContent = state.selectedRows.size;
   }
 
-  function defaultHandler(action, selected) {
-    console.log("🛠️ Default handler:", action, selected);
+  function setStatus(section, action) {
+    const actionBox = document.getElementById(`${section}-current-action`);
+    if (actionBox) actionBox.textContent = capitalize(action);
+  }
+
+  function capitalize(word) {
+    return word.charAt(0).toUpperCase() + word.slice(1);
+  }
+
+  function defaultHandler(action, selectedIds) {
+    console.warn(`⚠️ No custom handler for action "${action}".`, selectedIds);
+    showTip("global", `Unhandled: ${action}`);
   }
 
   return {
     init,
-    showMessage,
-    getSelectedIds: section => Array.from(getState(section).selectedRows),
-    clearMessage
+    showTip,
+    showWarning,
+    clearWarning,
+    getSelectedIds,
+    wireCheckboxes
   };
 })();

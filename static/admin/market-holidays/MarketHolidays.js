@@ -38,10 +38,6 @@
         section: "holiday",
         domId: "market-holidays-section",
         tableId: "holidays-table",
-        confirmBoxId: "holiday-confirm-bar",
-        messageId: "holiday-confirm-message",
-        tipBoxId: "holiday-tip-box",
-        warningBoxId: "holiday-warning-box",
         onAction: handleHolidayAction
       });
 
