@@ -3,10 +3,8 @@
 <!-- 📦 Modular ButtonBox Container -->
 <div class="button-box">
 
-  <!-- 🔔 Commit Bar (Info, Warn, Success, Dynamic Confirm Button) -->
-  <div class="commit-bar" id="{{ section }}-confirm-bar" style="display: none;">
-    <div id="{{ section }}-confirm-message" class="confirm-box info"></div>
-  </div>
+  <!-- 💡 Tip Box -->
+  <div class="tip-box" id="{{ section }}-tip-box"></div>
 
   <!-- 🛠️ Action Buttons Toolbar -->
   <div class="button-toolbar" id="{{ section }}-toolbar">
@@ -19,9 +17,15 @@
     <button id="{{ section }}-undo-btn" class="action-btn disabled-btn" disabled>Undo</button>
   </div>
 
-  <!-- 💡 Tip Box -->
-  <div class="tip-box" id="{{ section }}-tip-box" style="display: none;"></div>
+  <!-- 🔻 Feedback Container: Warning + Confirm -->
+  <div class="button-feedback">
+    <!-- ⚠️ Warning Box -->
+    <div class="warning-box" id="{{ section }}-warning-box"></div>
 
-  <!-- ⚠️ Warning Box -->
-  <div class="warning-box" id="{{ section }}-warning-box" style="display: none;"></div>
+    <!-- 🔔 Confirm Bar -->
+    <div class="commit-bar" id="{{ section }}-confirm-bar">
+      <div id="{{ section }}-confirm-message" class="confirm-box info"></div>
+    </div>
+  </div>
+
 </div>
