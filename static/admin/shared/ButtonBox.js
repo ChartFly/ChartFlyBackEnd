@@ -292,42 +292,51 @@ window.ButtonBox = (() => {
     }
   }
 
-  function wireCheckboxes(section) {
-    const state = getState(section);
-    const checkboxes = document.querySelectorAll(`#${state.domId} input[type="checkbox"]`);
-    const count = document.getElementById(`${section}-selected-count`);
+ function wireCheckboxes(section) {
+   const state = getState(section);
+   const checkboxes = document.querySelectorAll(`#${state.domId} input[type="checkbox"]`);
+   const count = document.getElementById(`${section}-selected-count`);
 
-    checkboxes.forEach(box => {
+   state.selectedRows.clear(); // 🔁 reset selection map to avoid stale IDs
+
+   checkboxes.forEach(box => {
       const id = box.dataset.id;
       const row = box.closest("tr");
 
-      box.addEventListener("change", () => {
-        if (!row) return;
-        if (box.checked) {
-          state.selectedRows.add(id);
-          row.classList.add("selected-row");
-        } else {
-          state.selectedRows.delete(id);
-          row.classList.remove("selected-row");
-        }
-        if (count) count.textContent = state.selectedRows.size;
-      });
+      // 🔁 Unbind previous listeners by replacing the checkbox element
+      const newBox = box.cloneNode(true);
+      box.replaceWith(newBox);
 
-      const cell = box.closest("td");
-      if (cell) {
-        cell.addEventListener("click", e => {
-          if (e.target !== box) box.click();
-        });
+      newBox.addEventListener("change", () => {
+         if (!row) return;
+         if (newBox.checked) {
+           state.selectedRows.add(id);
+           row.classList.add("selected-row");
+      } else {
+        state.selectedRows.delete(id);
+        row.classList.remove("selected-row");
       }
+      if (count) count.textContent = state.selectedRows.size;
     });
 
-    if (count) count.textContent = state.selectedRows.size;
-  }
+    // 👆 Make entire cell clickable
+    const cell = newBox.closest("td");
+    if (cell) {
+      cell.addEventListener("click", e => {
+        if (e.target !== newBox) newBox.click();
+      });
+    }
 
-  function setStatus(section, action) {
-    const actionBox = document.getElementById(`${section}-current-action`);
-    if (actionBox) actionBox.textContent = capitalize(action);
-  }
+    // 👇 If already checked on init, add to selectedRows
+    if (newBox.checked) {
+      state.selectedRows.add(id);
+      row.classList.add("selected-row");
+    }
+  });
+
+  if (count) count.textContent = state.selectedRows.size;
+}
+
 
   function capitalize(word) {
     return word.charAt(0).toUpperCase() + word.slice(1);

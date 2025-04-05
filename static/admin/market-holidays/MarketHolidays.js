@@ -1,5 +1,3 @@
-// static/admin/market-holidays/MarketHolidays.js
-
 (() => {
   if (window.MARKET_HOLIDAYS_LOADED) return;
   window.MARKET_HOLIDAYS_LOADED = true;
@@ -39,7 +37,7 @@
         ButtonBox.init({
           section: "holiday",
           domId: "market-holidays-section",
-          tableId: "holidays-table",
+          tableId: "holidays-table", // ✅ Corrected ID
           onAction: handleHolidayAction
         });
       }, 0);
@@ -59,6 +57,7 @@
         const row = table.querySelector(`tr[data-id="${id}"]`);
         if (row) row.remove();
       });
+      ButtonBox.wireCheckboxes("holiday");
     }
 
     if (action === "copy") {
@@ -88,8 +87,6 @@
       if (idCell) idCell.textContent = newId;
 
       table.prepend(clone);
-
-      // ✅ Update checkboxes and selection tracking
       ButtonBox.wireCheckboxes("holiday");
     }
 
@@ -151,7 +148,7 @@
         const finalId = `saved-${Date.now()}-${i}`;
         row.setAttribute("data-id", finalId);
 
-        const checkbox = row.querySelector("input[type='checkbox']");
+        const checkbox = row.querySelector("input[type='checkbox']`);
         if (checkbox) {
           checkbox.setAttribute("data-id", finalId);
           checkbox.checked = false;
@@ -161,13 +158,9 @@
         if (idCell) idCell.textContent = finalId;
 
         row.classList.remove("selected-row");
-
-        // 🔄 Update selection map if needed
-        if (ButtonBox.getSelectedIds("holiday").includes(oldId)) {
-          ButtonBox.wireCheckboxes("holiday"); // rewires and clears stale selection
-        }
       });
 
+      ButtonBox.wireCheckboxes("holiday");
       ButtonBox.showMessage("holiday", "Holiday rows saved (frontend only).", "success");
     }
 
