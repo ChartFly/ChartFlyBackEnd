@@ -2,6 +2,7 @@
 
 window.ButtonBox = (() => {
   const sectionStates = {};
+  const tipIntervalMs = 60000;
 
   function getState(section) {
     if (!sectionStates[section]) {
@@ -14,27 +15,41 @@ window.ButtonBox = (() => {
         domId: null,
         tableId: null,
         confirmBoxId: null,
-        messageId: null,
-        tipBoxId: null,
-        warningBoxId: null,
+        messageBoxId: null,
+        footerBoxId: null,
+        tips: [
+          "Check one or more rows before clicking an action.",
+          "Use Copy → Edit → Save to duplicate and modify entries.",
+          "Undo supports up to 20 levels of rollback.",
+          "Paste only works after Copy. Use wisely!"
+        ],
+        tipIndex: 0,
+        tipTimer: null,
         onAction: defaultHandler
       };
     }
     return sectionStates[section];
   }
 
-  function init({ section, domId, tableId, confirmBoxId, messageId, tipBoxId, warningBoxId, onAction }) {
+  function init({ section, domId, tableId, confirmBoxId, messageBoxId, footerBoxId, onAction }) {
     const state = getState(section);
-    Object.assign(state, { domId, tableId, confirmBoxId, messageId, tipBoxId, warningBoxId });
+    Object.assign(state, { domId, tableId, confirmBoxId, messageBoxId, footerBoxId });
 
-    if (typeof onAction === "function") {
-      state.onAction = onAction;
-    }
+    if (typeof onAction === "function") state.onAction = onAction;
 
     console.log(`🚀 ButtonBox initialized for section: ${section}`);
-    showTip(section, "Tip: Check one or more rows before clicking an action.");
 
+    setupButtons(section);
+    updateUndoButton(section);
+    updateFooter(section);
+    wireCheckboxes(section);
+    cycleTips(section);
+  }
+
+  function setupButtons(section) {
     const actions = ["edit", "copy", "paste", "add", "delete", "save", "undo"];
+    const state = getState(section);
+
     actions.forEach(action => {
       const btn = document.getElementById(`${section}-${action}-btn`);
       if (!btn) return;
@@ -46,9 +61,8 @@ window.ButtonBox = (() => {
 
       btn.addEventListener("click", () => {
         state.activeAction = action;
-        clearTip(section);
-        clearWarning(section);
-
+        clearMessage(section);
+        updateFooter(section);
         actions.forEach(a => {
           const otherBtn = document.getElementById(`${section}-${a}-btn`);
           if (otherBtn) otherBtn.classList.remove("active");
@@ -60,12 +74,12 @@ window.ButtonBox = (() => {
         if (action === "save") return triggerConfirm(section);
 
         if (action === "paste" && !state.clipboard) {
-          showWarning(section, "Paste requires a copied row.");
+          showMessage(section, "⚠️ Paste requires a copied row.", "warn");
           return;
         }
 
         if (!["add", "paste"].includes(action) && state.selectedRows.size === 0) {
-          showWarning(section, "Please select one or more rows first.");
+          showMessage(section, "⚠️ Please select one or more rows first.", "warn");
           return;
         }
 
@@ -74,80 +88,19 @@ window.ButtonBox = (() => {
           return;
         }
 
-        showConfirmBox(section, action);
+        updateConfirmButton(section);
       });
     });
 
-    wireCheckboxes(section);
-    updateUndoButton(section);
+    updateConfirmButton(section); // Show initial state
   }
 
-  function defaultHandler(action, selectedIds) {
-    console.warn(`⚠️ No custom handler defined for action "${action}". Selected:`, selectedIds);
-    showTip("global", `Default handler received: ${action}`);
-  }
-
-  function showMessage(section, message, type = "info") {
+  function updateConfirmButton(section) {
     const state = getState(section);
-    const msg = document.getElementById(state.messageId);
-    const box = document.getElementById(state.confirmBoxId);
-    if (msg) {
-      msg.className = `confirm-box ${type}`;
-      msg.innerHTML = message;
-    }
-    if (box) box.style.visibility = "visible";
-  }
-
-  function showTip(section, message) {
-    const tip = document.getElementById(getState(section).tipBoxId);
-    if (tip) {
-      tip.innerHTML = `<strong>Tip:</strong> ${message}`;
-      tip.style.visibility = "visible";
-    }
-  }
-
-  function clearTip(section) {
-    const tip = document.getElementById(getState(section).tipBoxId);
-    if (tip) {
-      tip.innerHTML = "";
-      tip.style.visibility = "hidden";
-    }
-  }
-
-  function showWarning(section, message) {
-    const box = document.getElementById(getState(section).warningBoxId);
-    if (box) {
-      box.innerHTML = `<strong>⚠️ Warning:</strong> ${message}`;
-      box.style.visibility = "visible";
-    }
-  }
-
-  function clearWarning(section) {
-    const box = document.getElementById(getState(section).warningBoxId);
-    if (box) {
-      box.innerHTML = "";
-      box.style.visibility = "hidden";
-    }
-  }
-
-  function showConfirmBox(section, action) {
-    const state = getState(section);
-    const msg = document.getElementById(state.messageId);
     const bar = document.getElementById(state.confirmBoxId);
+    const btn = bar.querySelector("button.confirm-btn");
 
-    const selectedIndexes = Array.from(
-      document.querySelectorAll(`#${state.domId} tr.selected-row`)
-    ).map(row => row.dataset.index);
-
-    if (msg) {
-      msg.className = "confirm-box info";
-      msg.innerHTML = `
-        <strong>Action:</strong> ${action.toUpperCase()}<br>
-        <strong>Selected Rows:</strong> ${selectedIndexes.join(", ") || "(None)"}
-      `;
-    }
-
-    const actionLabels = {
+    const labels = {
       add: "Confirm and Make Editable",
       copy: "Confirm and Make Editable",
       edit: "Confirm and Make Editable",
@@ -157,24 +110,11 @@ window.ButtonBox = (() => {
       save: "Confirm and Save"
     };
 
-    const label = actionLabels[action] || `Confirm and ${capitalize(action)}`;
+    const label = labels[state.activeAction] || "Confirm Action";
 
-    const confirmBtn = document.createElement("button");
-    confirmBtn.textContent = label;
-    confirmBtn.className = "confirm-btn yellow";
-    confirmBtn.addEventListener("click", () => triggerConfirm(section));
-
-    msg?.appendChild(confirmBtn);
-    bar.style.visibility = "visible";
-    bar.style.display = "flex";
-  }
-
-  function hideConfirmBox(section) {
-    const state = getState(section);
-    const bar = document.getElementById(state.confirmBoxId);
-    const msg = document.getElementById(state.messageId);
-    if (bar) bar.style.visibility = "hidden";
-    if (msg) msg.innerHTML = "";
+    btn.textContent = label;
+    btn.disabled = !state.activeAction;
+    btn.className = `confirm-btn ${state.activeAction ? "yellow" : "disabled-btn"}`;
   }
 
   function triggerConfirm(section) {
@@ -190,6 +130,10 @@ window.ButtonBox = (() => {
     state.activeAction = null;
     state.selectedRows.clear();
 
+    updateUndoButton(section);
+    updateConfirmButton(section);
+    updateFooter(section);
+
     document.querySelectorAll(`#${state.domId} .action-btn`).forEach(btn =>
       btn.classList.remove("active")
     );
@@ -199,9 +143,6 @@ window.ButtonBox = (() => {
     document.querySelectorAll(`#${state.domId} input[type="checkbox"]`).forEach(box =>
       (box.checked = false)
     );
-
-    updateUndoButton(section);
-    hideConfirmBox(section);
   }
 
   function triggerUndo(section) {
@@ -215,7 +156,32 @@ window.ButtonBox = (() => {
 
     wireCheckboxes(section);
     updateUndoButton(section);
-    showTip(section, "Last change was undone.");
+    showMessage(section, "Tip: Last change was undone.", "tip");
+  }
+
+  function showMessage(section, text, type = "tip") {
+    const box = document.getElementById(getState(section).messageBoxId);
+    if (!box) return;
+    box.className = type === "warn" ? "tip-box warn" : "tip-box tip";
+    box.innerHTML = `<strong>${type === "warn" ? "⚠️ Warning:" : "Tip:"}</strong> ${text}`;
+  }
+
+  function clearMessage(section) {
+    const box = document.getElementById(getState(section).messageBoxId);
+    if (box) {
+      box.className = "tip-box tip";
+      box.innerHTML = "";
+    }
+  }
+
+  function updateFooter(section) {
+    const state = getState(section);
+    const footer = document.getElementById(state.footerBoxId);
+    if (!footer) return;
+    footer.innerHTML = `
+      <strong>Action:</strong> ${state.activeAction || "None"} &nbsp;&nbsp;&nbsp;
+      <strong>Selected Rows:</strong> ${state.selectedRows.size}
+    `;
   }
 
   function updateUndoButton(section) {
@@ -230,6 +196,18 @@ window.ButtonBox = (() => {
       undoBtn.disabled = false;
       undoBtn.classList.remove("disabled-btn");
     }
+  }
+
+  function cycleTips(section) {
+    const state = getState(section);
+    if (state.tipTimer) clearInterval(state.tipTimer);
+
+    state.tipTimer = setInterval(() => {
+      if (!state.activeAction) {
+        state.tipIndex = (state.tipIndex + 1) % state.tips.length;
+        showMessage(section, state.tips[state.tipIndex], "tip");
+      }
+    }, tipIntervalMs);
   }
 
   function wireCheckboxes(section) {
@@ -251,7 +229,7 @@ window.ButtonBox = (() => {
           row.classList.remove("selected-row");
         }
 
-        updateConfirmCount(section);
+        updateFooter(section);
       });
 
       const cell = box.closest("td");
@@ -263,35 +241,14 @@ window.ButtonBox = (() => {
     });
   }
 
-  function updateConfirmCount(section) {
-    const state = getState(section);
-    const msg = document.getElementById(state.messageId);
-    if (!msg) return;
-
-    if (state.selectedRows.size === 0) {
-      msg.textContent = "";
-      return;
-    }
-
-    msg.textContent = `${state.selectedRows.size} row(s) selected.`;
-  }
-
-  function capitalize(word) {
-    return word.charAt(0).toUpperCase() + word.slice(1);
-  }
-
-  function getSelectedIds(section) {
-    return Array.from(getState(section).selectedRows);
+  function defaultHandler(action, selected) {
+    console.log("🛠️ Default handler:", action, selected);
   }
 
   return {
     init,
-    showTip,
-    showWarning,
-    clearTip,
-    clearWarning,
     showMessage,
-    getSelectedIds,
-    wireCheckboxes
+    getSelectedIds: section => Array.from(getState(section).selectedRows),
+    clearMessage
   };
 })();

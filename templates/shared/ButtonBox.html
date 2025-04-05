@@ -3,8 +3,11 @@
 <!-- 📦 Modular ButtonBox Container -->
 <div class="button-box">
 
-  <!-- 💡 Tip Box -->
-  <div class="tip-box" id="{{ section }}-tip-box"></div>
+  <!-- 💬 Shared Tip/Warning Box -->
+  <div class="info-box" id="{{ section }}-info-box">
+    <strong id="{{ section }}-info-label">Tip:</strong>
+    <span id="{{ section }}-info-message">Click a button to begin an action.</span>
+  </div>
 
   <!-- 🛠️ Action Buttons Toolbar -->
   <div class="button-toolbar" id="{{ section }}-toolbar">
@@ -17,15 +20,15 @@
     <button id="{{ section }}-undo-btn" class="action-btn disabled-btn" disabled>Undo</button>
   </div>
 
-  <!-- 🔻 Feedback Container: Warning + Confirm -->
-  <div class="button-feedback">
-    <!-- ⚠️ Warning Box -->
-    <div class="warning-box" id="{{ section }}-warning-box"></div>
+  <!-- ✅ Always Visible Confirm Button -->
+  <div class="confirm-button-container">
+    <button id="{{ section }}-confirm-btn" class="confirm-btn gray" disabled>Confirm</button>
+  </div>
 
-    <!-- 🔔 Confirm Bar -->
-    <div class="commit-bar" id="{{ section }}-confirm-bar">
-      <div id="{{ section }}-confirm-message" class="confirm-box info"></div>
-    </div>
+  <!-- 📊 Footer: Action and Row Selection -->
+  <div class="status-footer">
+    <span><strong>Action:</strong> <span id="{{ section }}-current-action">None</span></span>
+    <span><strong>Selected Rows:</strong> <span id="{{ section }}-selected-count">0</span></span>
   </div>
 
 </div>
