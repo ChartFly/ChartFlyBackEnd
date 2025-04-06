@@ -8,17 +8,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="eb1da553-8e5b-4ae5-a8c1-d95ef0c30040" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/static/admin/api-keys/ButtonBoxApiKeys.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/admin/market-holidays/ButtonBoxMarketHolidays.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/admin/shared/ButtonBoxColumns.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/admin/shared/ButtonBoxDataBase.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/admin/shared/ButtonBoxMessages.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/admin/shared/ButtonBoxRows.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/admin/user-management/ButtonBoxUserManagement.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/admin/shared/ButtonBox.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/admin/shared/ButtonBox.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/admin/shared/commitLogic.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/admin/shared/Legacy/commitLogic.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/admin/shared/commitLogic.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/admin/shared/Legacy/commitLogic.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/admin.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/admin.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
