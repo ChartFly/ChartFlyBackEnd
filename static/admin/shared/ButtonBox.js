@@ -112,12 +112,17 @@ window.ButtonBox = (() => {
 
     const idToggle = document.getElementById(`${section}-show-id-toggle`);
     if (idToggle) {
-      idToggle.addEventListener("change", () => {
-        document.querySelectorAll(`#${state.domId} .line-id-col`).forEach(col => {
-          col.style.display = idToggle.checked ? "" : "none";
+      const toggleLineIdCol = () => {
+         document.querySelectorAll(`#${state.domId} .line-id-col, #${state.domId} th.line-id-col`).forEach(cell => {
+            cell.style.display = idToggle.checked ? "table-cell" : "none";
         });
-      });
-    }
+     };
+
+  idToggle.addEventListener("change", toggleLineIdCol);
+  // ✅ Apply on load too
+  toggleLineIdCol();
+}
+
 
     const modeRadios = document.querySelectorAll(`input[name="${section}-edit-mode"]`);
     modeRadios.forEach(radio => {

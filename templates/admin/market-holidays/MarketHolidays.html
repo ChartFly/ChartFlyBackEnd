@@ -7,7 +7,6 @@
   {% set section = "holiday" %}
   {% include "shared/ButtonBox.html" with context %}
 
-
   <!-- 📅 Holiday Table -->
   <div class="table-wrapper">
     <table class="admin-table">
@@ -22,6 +21,10 @@
         </tr>
       </thead>
       <tbody id="holidays-table">
+        <!-- ⚠️ Rows will be dynamically rendered in JS.
+             Make sure the ID cell has class="line-id-col" like:
+             <td class="line-id-col">123</td>
+        -->
         <tr><td colspan="6">Loading holidays...</td></tr>
       </tbody>
     </table>

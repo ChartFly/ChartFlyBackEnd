@@ -30,17 +30,25 @@ async function loadMarketHolidays() {
       table.appendChild(row);
     });
 
-    // ✅ Hide Line ID column by default
-    document.querySelectorAll(`#market-holidays-section .line-id-col`).forEach(el => {
-      el.style.display = "none";
-    });
-
     ButtonBox.init({
       section: "holiday",
       domId: "market-holidays-section",
       tableId: "holidays-table",
       onAction: handleHolidayAction
     });
+
+    // ✅ Force-wire Show Line ID toggle (belt and suspenders)
+    const toggle = document.getElementById("holiday-show-id-toggle");
+    if (toggle) {
+      toggle.addEventListener("change", () => {
+        document.querySelectorAll("#market-holidays-section .line-id-col")
+          .forEach(cell => cell.style.display = toggle.checked ? "table-cell" : "none");
+      });
+
+      // ✅ Also reflect the initial checkbox state on load
+      document.querySelectorAll("#market-holidays-section .line-id-col")
+        .forEach(cell => cell.style.display = toggle.checked ? "table-cell" : "none");
+    }
 
   } catch (error) {
     console.error("❌ Failed to load holidays:", error);
@@ -54,7 +62,7 @@ async function loadMarketHolidays() {
   if (window.MARKET_HOLIDAYS_LOADED) return;
   window.MARKET_HOLIDAYS_LOADED = true;
 
-  window.formatTime = function(rawTime) {
+  window.formatTime = function (rawTime) {
     const [hour, minute] = rawTime.split(":");
     const h = parseInt(hour, 10);
     const suffix = h >= 12 ? "PM" : "AM";
@@ -62,13 +70,13 @@ async function loadMarketHolidays() {
     return `${hour12}:${minute} ${suffix}`;
   };
 
-  window.sanitizeInput = function(input) {
+  window.sanitizeInput = function (input) {
     return typeof input === "string"
       ? input.replace(/</g, "&lt;").replace(/>/g, "&gt;")
       : input ?? "—";
   };
 
-  window.handleHolidayAction = function(action, selectedIds) {
+  window.handleHolidayAction = function (action, selectedIds) {
     const table = document.getElementById("holidays-table");
 
     if (action === "delete") {
