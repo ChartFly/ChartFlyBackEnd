@@ -42,7 +42,6 @@
         table.appendChild(row);
       });
 
-      // Toggle column checkbox logic
       const toggle = document.getElementById("toggle-id-column");
       if (toggle) {
         toggle.addEventListener("change", (e) => {
@@ -57,98 +56,7 @@
         section: "api",
         domId: "api-keys-section",
         tableId: "api-keys-table",
-        confirmBoxId: "apikeys-confirm-bar",
-        messageId: "apikeys-confirm-message",
-        tipBoxId: "api-tip-box",
-        warningBoxId: "api-warning-box",
-        onAction: (action, selectedIds) => {
-          const table = document.getElementById("api-keys-table");
-
-          if (action === "delete") {
-            selectedIds.forEach(id => {
-              const row = table.querySelector(`tr[data-id="${id}"]`);
-              if (row) row.remove();
-            });
-          }
-
-          if (action === "copy") {
-            if (selectedIds.length !== 1) {
-              ButtonBox.showWarning("api", "Copy requires exactly 1 row selected.");
-              return;
-            }
-
-            const row = table.querySelector(`tr[data-id="${selectedIds[0]}"]`);
-            if (!row) return;
-
-            const clone = row.cloneNode(true);
-            const newId = `copy-${Date.now()}`;
-            clone.setAttribute("data-id", newId);
-            clone.classList.add("editing");
-
-            clone.querySelectorAll("td:not(.col-select)").forEach(cell => {
-              cell.setAttribute("contenteditable", "true");
-              cell.classList.add("editable");
-            });
-
-            clone.querySelector(".col-select").innerHTML =
-              `<input type="checkbox" class="api-select-checkbox" data-id="${newId}" checked>`;
-
-            table.prepend(clone);
-          }
-
-          if (action === "add") {
-            const newId = `new-${Date.now()}`;
-            const row = document.createElement("tr");
-            row.classList.add("editing");
-            row.setAttribute("data-id", newId);
-            row.setAttribute("data-index", "0");
-
-            row.innerHTML = `
-              <td class="col-select"><input type="checkbox" class="api-select-checkbox" data-id="${newId}" checked></td>
-              <td class="id-col" style="display: none;">${newId}</td>
-              <td contenteditable="true" class="editable">Label</td>
-              <td contenteditable="true" class="editable">Key123</td>
-              <td contenteditable="true" class="editable">Provider</td>
-              <td contenteditable="true" class="editable">1</td>
-              <td contenteditable="true" class="editable">Active</td>
-              <td contenteditable="true" class="editable">1</td>
-              <td contenteditable="true" class="editable">10</td>
-              <td contenteditable="true" class="editable">20</td>
-              <td contenteditable="true" class="editable">30</td>
-              <td contenteditable="true" class="editable">45</td>
-              <td contenteditable="true" class="editable">60</td>
-              <td contenteditable="true" class="editable">100</td>
-              <td contenteditable="true" class="editable">$0.00</td>
-              <td contenteditable="true" class="editable">monthly</td>
-              <td contenteditable="true" class="editable">read</td>
-            `;
-
-            row.querySelectorAll("td[contenteditable]").forEach(cell => {
-              cell.addEventListener("input", () => row.classList.add("dirty"));
-            });
-
-            table.prepend(row);
-          }
-
-          if (action === "save") {
-            const dirtyRows = table.querySelectorAll("tr.editing");
-            dirtyRows.forEach(row => {
-              row.classList.remove("editing", "dirty");
-              row.querySelectorAll("td[contenteditable]").forEach(cell => {
-                cell.removeAttribute("contenteditable");
-                cell.classList.remove("editable");
-              });
-              const checkbox = row.querySelector("input[type='checkbox']");
-              if (checkbox) checkbox.checked = false;
-              row.classList.remove("selected-row");
-            });
-            ButtonBox.showMessage("api", "API key rows saved (frontend only).", "success");
-          }
-
-          if (action === "paste") {
-            console.warn("Paste logic not yet implemented for API Keys.");
-          }
-        }
+        onAction: handleApiKeyAction
       });
 
     } catch (error) {
@@ -157,6 +65,116 @@
       if (table) {
         table.innerHTML = `<tr><td colspan="17">Failed to load API keys. Please try again later.</td></tr>`;
       }
+    }
+  }
+
+  function handleApiKeyAction(action, selectedIds) {
+    const table = document.getElementById("api-keys-table");
+
+    if (action === "delete") {
+      selectedIds.forEach(id => {
+        const row = table.querySelector(`tr[data-id="${id}"]`);
+        if (row) row.remove();
+      });
+      ButtonBox.wireCheckboxes("api");
+    }
+
+    if (action === "copy") {
+      if (selectedIds.length !== 1) {
+        ButtonBox.showWarning("api", "Copy requires exactly 1 row selected.");
+        return;
+      }
+
+      const row = table.querySelector(`tr[data-id="${selectedIds[0]}"]`);
+      if (!row) return;
+
+      const clone = row.cloneNode(true);
+      const newId = `copy-${Date.now()}`;
+      clone.setAttribute("data-id", newId);
+      clone.classList.add("editing");
+
+      clone.querySelector(".col-select").innerHTML =
+        `<input type="checkbox" class="api-select-checkbox" data-id="${newId}" checked>`;
+
+      const idCell = clone.querySelector(".id-col");
+      if (idCell) idCell.textContent = newId;
+
+      clone.querySelectorAll("td:not(.col-select):not(.id-col)").forEach(cell => {
+        cell.setAttribute("contenteditable", "true");
+        cell.classList.add("editable");
+      });
+
+      table.prepend(clone);
+      ButtonBox.wireCheckboxes("api");
+    }
+
+    if (action === "add") {
+      const newId = `new-${Date.now()}`;
+      const row = document.createElement("tr");
+      row.classList.add("editing");
+      row.setAttribute("data-id", newId);
+      row.setAttribute("data-index", "0");
+
+      row.innerHTML = `
+        <td class="col-select"><input type="checkbox" class="api-select-checkbox" data-id="${newId}" checked></td>
+        <td class="id-col" style="display: none;">${newId}</td>
+        <td contenteditable="true" class="editable">Label</td>
+        <td contenteditable="true" class="editable">Key123</td>
+        <td contenteditable="true" class="editable">Provider</td>
+        <td contenteditable="true" class="editable">1</td>
+        <td contenteditable="true" class="editable">Active</td>
+        <td contenteditable="true" class="editable">1</td>
+        <td contenteditable="true" class="editable">10</td>
+        <td contenteditable="true" class="editable">20</td>
+        <td contenteditable="true" class="editable">30</td>
+        <td contenteditable="true" class="editable">45</td>
+        <td contenteditable="true" class="editable">60</td>
+        <td contenteditable="true" class="editable">100</td>
+        <td contenteditable="true" class="editable">$0.00</td>
+        <td contenteditable="true" class="editable">monthly</td>
+        <td contenteditable="true" class="editable">read</td>
+      `;
+
+      row.querySelectorAll("td[contenteditable]").forEach(cell => {
+        cell.addEventListener("input", () => row.classList.add("dirty"));
+      });
+
+      table.prepend(row);
+      ButtonBox.wireCheckboxes("api");
+    }
+
+    if (action === "save") {
+      const dirtyRows = table.querySelectorAll("tr.editing");
+
+      dirtyRows.forEach((row, i) => {
+        row.classList.remove("editing", "dirty");
+
+        row.querySelectorAll("td[contenteditable]").forEach(cell => {
+          cell.removeAttribute("contenteditable");
+          cell.classList.remove("editable");
+        });
+
+        const finalId = `saved-${Date.now()}-${i}`;
+        row.setAttribute("data-id", finalId);
+
+        const checkbox = row.querySelector("input[type='checkbox']");
+        if (checkbox) {
+          checkbox.setAttribute("data-id", finalId);
+          checkbox.checked = false;
+        }
+
+        const idCell = row.querySelector(".id-col");
+        if (idCell) idCell.textContent = finalId;
+
+        row.classList.remove("selected-row");
+      });
+
+      ButtonBox.wireCheckboxes("api");
+      ButtonBox.showMessage("api", "API key rows saved (frontend only).", "success");
+    }
+
+    if (action === "paste") {
+      ButtonBox.showWarning("api", "Paste is not implemented yet.");
     }
   }
 

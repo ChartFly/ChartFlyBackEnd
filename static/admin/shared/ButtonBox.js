@@ -122,6 +122,11 @@ window.ButtonBox = (() => {
     setStatus(section, "none");
   }
 
+  function setStatus(section, action) {
+    const box = document.getElementById(`${section}-current-action`);
+    if (box) box.textContent = capitalize(action);
+  }
+
   function activateCellPasteMode(section) {
     const state = getState(section);
     const cells = document.querySelectorAll(`#${state.domId} td`);
@@ -183,38 +188,9 @@ window.ButtonBox = (() => {
     btn.classList.remove("disabled-btn");
   }
 
-  function showTip(section, message) {
-    const box = document.getElementById(`${section}-info-box`);
-    const label = document.getElementById(`${section}-info-label`);
-    const text = document.getElementById(`${section}-info-message`);
-    if (box && label && text) {
-      box.className = "info-box tip";
-      label.textContent = "Tip:";
-      text.textContent = message;
-    }
-  }
-
-  function showWarning(section, message) {
-    const box = document.getElementById(`${section}-info-box`);
-    const label = document.getElementById(`${section}-info-label`);
-    const text = document.getElementById(`${section}-info-message`);
-    if (box && label && text) {
-      box.className = "info-box warn";
-      label.textContent = "Warning:";
-      text.textContent = message;
-    }
-    if (tipTimers[section]) clearInterval(tipTimers[section]);
-  }
-
-  function clearWarning(section) {
-    const state = getState(section);
-    state.tipIndex = 0;
-    showTip(section, rotatingTips[0]);
-    if (tipTimers[section]) clearInterval(tipTimers[section]);
-    tipTimers[section] = setInterval(() => {
-      state.tipIndex = (state.tipIndex + 1) % rotatingTips.length;
-      showTip(section, rotatingTips[state.tipIndex]);
-    }, 60000);
+  function disableButton(btn) {
+    btn.disabled = true;
+    btn.classList.add("disabled-btn");
   }
 
   function enableConfirm(section, action) {
@@ -234,11 +210,6 @@ window.ButtonBox = (() => {
       btn.textContent = labels[action] || `Confirm ${capitalize(action)}`;
       btn.onclick = () => triggerConfirm(section);
     }
-  }
-
-  function disableButton(btn) {
-    btn.disabled = true;
-    btn.classList.add("disabled-btn");
   }
 
   function triggerConfirm(section) {
@@ -292,51 +263,81 @@ window.ButtonBox = (() => {
     }
   }
 
- function wireCheckboxes(section) {
-   const state = getState(section);
-   const checkboxes = document.querySelectorAll(`#${state.domId} input[type="checkbox"]`);
-   const count = document.getElementById(`${section}-selected-count`);
+  function wireCheckboxes(section) {
+    const state = getState(section);
+    const checkboxes = document.querySelectorAll(`#${state.domId} input[type="checkbox"]`);
+    const count = document.getElementById(`${section}-selected-count`);
 
-   state.selectedRows.clear(); // 🔁 reset selection map to avoid stale IDs
+    state.selectedRows.clear();
 
-   checkboxes.forEach(box => {
+    checkboxes.forEach(box => {
       const id = box.dataset.id;
       const row = box.closest("tr");
 
-      // 🔁 Unbind previous listeners by replacing the checkbox element
       const newBox = box.cloneNode(true);
       box.replaceWith(newBox);
 
       newBox.addEventListener("change", () => {
-         if (!row) return;
-         if (newBox.checked) {
-           state.selectedRows.add(id);
-           row.classList.add("selected-row");
-      } else {
-        state.selectedRows.delete(id);
-        row.classList.remove("selected-row");
+        if (!row) return;
+        if (newBox.checked) {
+          state.selectedRows.add(id);
+          row.classList.add("selected-row");
+        } else {
+          state.selectedRows.delete(id);
+          row.classList.remove("selected-row");
+        }
+        if (count) count.textContent = state.selectedRows.size;
+      });
+
+      const cell = newBox.closest("td");
+      if (cell) {
+        cell.addEventListener("click", e => {
+          if (e.target !== newBox) newBox.click();
+        });
       }
-      if (count) count.textContent = state.selectedRows.size;
+
+      if (newBox.checked) {
+        state.selectedRows.add(id);
+        row.classList.add("selected-row");
+      }
     });
 
-    // 👆 Make entire cell clickable
-    const cell = newBox.closest("td");
-    if (cell) {
-      cell.addEventListener("click", e => {
-        if (e.target !== newBox) newBox.click();
-      });
+    if (count) count.textContent = state.selectedRows.size;
+  }
+
+  function showTip(section, message) {
+    const box = document.getElementById(`${section}-info-box`);
+    const label = document.getElementById(`${section}-info-label`);
+    const text = document.getElementById(`${section}-info-message`);
+    if (box && label && text) {
+      box.className = "info-box tip";
+      label.textContent = "Tip:";
+      text.textContent = message;
     }
+  }
 
-    // 👇 If already checked on init, add to selectedRows
-    if (newBox.checked) {
-      state.selectedRows.add(id);
-      row.classList.add("selected-row");
+  function showWarning(section, message) {
+    const box = document.getElementById(`${section}-info-box`);
+    const label = document.getElementById(`${section}-info-label`);
+    const text = document.getElementById(`${section}-info-message`);
+    if (box && label && text) {
+      box.className = "info-box warn";
+      label.textContent = "Warning:";
+      text.textContent = message;
     }
-  });
+    if (tipTimers[section]) clearInterval(tipTimers[section]);
+  }
 
-  if (count) count.textContent = state.selectedRows.size;
-}
-
+  function clearWarning(section) {
+    const state = getState(section);
+    state.tipIndex = 0;
+    showTip(section, rotatingTips[0]);
+    if (tipTimers[section]) clearInterval(tipTimers[section]);
+    tipTimers[section] = setInterval(() => {
+      state.tipIndex = (state.tipIndex + 1) % rotatingTips.length;
+      showTip(section, rotatingTips[state.tipIndex]);
+    }, 60000);
+  }
 
   function capitalize(word) {
     return word.charAt(0).toUpperCase() + word.slice(1);

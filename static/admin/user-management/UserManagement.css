@@ -103,6 +103,16 @@
   color: black;
 }
 
+/* 🆔 Show/Hide Line ID Column */
+#user-management-section .admin-table th.line-id-col,
+#user-management-section .admin-table td.line-id-col {
+  min-width: 6ch;
+  max-width: 10ch;
+  text-align: center;
+  white-space: nowrap;
+  display: none;
+}
+
 /* 🦓 Zebra Striping + Row Highlight */
 #user-management-section .admin-table tbody tr:nth-child(even) {
   background-color: #f9f9f9;

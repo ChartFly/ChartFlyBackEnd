@@ -37,7 +37,7 @@
         ButtonBox.init({
           section: "holiday",
           domId: "market-holidays-section",
-          tableId: "holidays-table", // ✅ Corrected ID
+          tableId: "holidays-table",
           onAction: handleHolidayAction
         });
       }, 0);
@@ -148,7 +148,7 @@
         const finalId = `saved-${Date.now()}-${i}`;
         row.setAttribute("data-id", finalId);
 
-        const checkbox = row.querySelector("input[type='checkbox']`);
+        const checkbox = row.querySelector("input[type='checkbox']");
         if (checkbox) {
           checkbox.setAttribute("data-id", finalId);
           checkbox.checked = false;

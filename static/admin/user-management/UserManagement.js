@@ -21,6 +21,7 @@
 
         row.innerHTML = `
           <td class="col-select"><input type="checkbox" class="user-select-checkbox" data-id="${user.id}"></td>
+          <td class="line-id-col" style="display: none;">${user.id}</td>
           <td>${sanitizeInput(user.first_name)}</td>
           <td>${sanitizeInput(user.last_name)}</td>
           <td>${sanitizeInput(user.email)}</td>
@@ -66,13 +67,14 @@
             clone.setAttribute("data-id", newId);
             clone.classList.add("editing");
 
-            clone.querySelectorAll("td:not(.col-select)").forEach(cell => {
+            clone.querySelectorAll("td:not(.col-select):not(.line-id-col)").forEach(cell => {
               cell.setAttribute("contenteditable", "true");
               cell.classList.add("editable");
             });
 
             clone.querySelector(".col-select").innerHTML =
               `<input type="checkbox" class="user-select-checkbox" data-id="${newId}" checked>`;
+            clone.querySelector(".line-id-col").textContent = newId;
 
             table.prepend(clone);
           }
@@ -86,6 +88,7 @@
 
             row.innerHTML = `
               <td class="col-select"><input type="checkbox" class="user-select-checkbox" data-id="${newId}" checked></td>
+              <td class="line-id-col" style="display: none;">${newId}</td>
               <td contenteditable="true" class="editable">First</td>
               <td contenteditable="true" class="editable">Last</td>
               <td contenteditable="true" class="editable">email@example.com</td>
@@ -128,7 +131,7 @@
       console.error("❌ Failed to load admin users:", error);
       const table = document.getElementById("user-management-table");
       if (table) {
-        table.innerHTML = `<tr><td colspan="9">Failed to load users. Please try again later.</td></tr>`;
+        table.innerHTML = `<tr><td colspan="10">Failed to load users. Please try again later.</td></tr>`;
       }
     }
   }
