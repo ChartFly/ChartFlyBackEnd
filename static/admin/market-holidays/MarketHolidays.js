@@ -162,7 +162,7 @@ async function loadMarketHolidays() {
         const finalId = `saved-${Date.now()}-${i}`;
         row.setAttribute("data-id", finalId);
 
-        const checkbox = row.querySelector("input[type='checkbox']`);
+        const checkbox = row.querySelector("input[type='checkbox']");
         if (checkbox) {
           checkbox.setAttribute("data-id", finalId);
           checkbox.checked = false;
