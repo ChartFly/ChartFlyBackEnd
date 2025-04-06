@@ -30,6 +30,11 @@ async function loadMarketHolidays() {
       table.appendChild(row);
     });
 
+    // ✅ Hide Line ID column by default
+    document.querySelectorAll(`#market-holidays-section .line-id-col`).forEach(el => {
+      el.style.display = "none";
+    });
+
     ButtonBox.init({
       section: "holiday",
       domId: "market-holidays-section",
