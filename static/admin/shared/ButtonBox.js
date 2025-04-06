@@ -358,10 +358,12 @@ window.ButtonBox = (() => {
     return Array.from(getState(section).selectedRows);
   }
 
+
   function defaultHandler(action, selectedIds) {
     console.warn(`⚠️ No custom handler for action "${action}".`, selectedIds);
     showTip("global", `Unhandled: ${action}`);
   }
+
 
   return {
     init,
