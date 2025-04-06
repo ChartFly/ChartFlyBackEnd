@@ -12,7 +12,7 @@
   <!-- ✅ Global Styles -->
   <link rel="stylesheet" href="/static/css/styles.css?v=5" />
 
-  <!-- ✅ Shared Styles (ButtonBox) -->
+  <!-- ✅ Shared Styles -->
   <link rel="stylesheet" href="/static/admin/shared/ButtonBox.css?v=5" />
 
   <!-- ✅ Per-Tab Styles -->
@@ -50,13 +50,11 @@
   {% include "admin/api-keys/ApiKeys.html" %}
   {% include "admin/user-management/UserManagement.html" %}
 
-  <!-- ✅ Modular ButtonBox Dependencies (MUST come before ButtonBox.js) -->
+  <!-- ✅ Shared ButtonBox Logic (order matters!) -->
   <script src="/static/admin/shared/ButtonBoxMessages.js?v=5"></script>
   <script src="/static/admin/shared/ButtonBoxColumns.js?v=5"></script>
   <script src="/static/admin/shared/ButtonBoxRows.js?v=5"></script>
   <script src="/static/admin/shared/ButtonBoxDataBase.js?v=5"></script>
-
-  <!-- ✅ Main ButtonBox Controller (after modules) -->
   <script src="/static/admin/shared/ButtonBox.js?v=5"></script>
 
   <!-- ✅ Per-Tab Scripts -->
@@ -64,7 +62,7 @@
   <script defer src="/static/admin/api-keys/ApiKeys.js?v=5"></script>
   <script defer src="/static/admin/user-management/UserManagement.js?v=5"></script>
 
-  <!-- ✅ Global Core Script -->
+  <!-- ✅ Global Script -->
   <script defer src="/static/frontend/core/main.js?v=5"></script>
 
 </body>
