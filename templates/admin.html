@@ -50,15 +50,19 @@
   {% include "admin/api-keys/ApiKeys.html" %}
   {% include "admin/user-management/UserManagement.html" %}
 
-  <!-- ✅ Shared Logic (ButtonBox MUST come first and NOT be deferred) -->
+  <!-- ✅ Shared Logic (must come first and NOT be deferred) -->
   <script src="/static/admin/shared/ButtonBox.js?v=5"></script>
+  <script src="/static/admin/shared/ButtonBoxMessages.js?v=5"></script>
+  <script src="/static/admin/shared/ButtonBoxColumns.js?v=5"></script>
+  <script src="/static/admin/shared/ButtonBoxRows.js?v=5"></script>
+  <script src="/static/admin/shared/ButtonBoxDataBase.js?v=5"></script>
 
   <!-- ✅ Per-Tab Scripts -->
   <script defer src="/static/admin/market-holidays/MarketHolidays.js?v=5"></script>
   <script defer src="/static/admin/api-keys/ApiKeys.js?v=5"></script>
   <script defer src="/static/admin/user-management/UserManagement.js?v=5"></script>
 
-  <!-- ✅ Global Core Script (tab logic, market status, etc.) -->
+  <!-- ✅ Global Core Script -->
   <script defer src="/static/frontend/core/main.js?v=5"></script>
 
 </body>
