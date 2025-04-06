@@ -21,6 +21,17 @@
   color: #fff;
 }
 
+/* 🟧 Burnt Orange for Cell Mode */
+.cell-mode {
+  background-color: #cc6600 !important;
+  border-color: #cc6600 !important;
+  color: #fff !important;
+}
+.cell-mode:hover:not(:disabled):not(.disabled-btn) {
+  background-color: #ff8000 !important;
+}
+
+/* Disabled button state */
 .disabled-btn {
   background-color: #ccc !important;
   color: #666 !important;
@@ -61,7 +72,7 @@
 .confirm-button-container {
   display: flex;
   align-items: center;
-  padding-left: 8px; /* 👈 Matches checkbox spacing */
+  padding-left: 8px;
 }
 
 /* Info box (tips and warnings) */
@@ -93,7 +104,7 @@
   margin-top: 5px;
 }
 
-/* ✅ Status footer box for Action + Selected Rows */
+/* Status footer box for Action + Selected Rows */
 .status-footer {
   display: flex;
   justify-content: space-between;
@@ -106,20 +117,20 @@
   color: #007a8a;
   font-weight: bold;
   font-size: 16px;
-  width: 100%; /* 💥 Match container/table width */
+  width: 100%;
   box-sizing: border-box;
 }
 
+/* Cell paste hover visual */
 .cell-paste-ready {
   cursor: cell;
   outline: 2px dashed transparent;
 }
-
 .cell-paste-ready:hover {
   outline-color: #ffcf40;
 }
 
-/* Table checkbox selection */
+/* Row selection style */
 .selected-row {
   background-color: #f0faff;
 }
@@ -129,7 +140,7 @@ input[type="checkbox"] {
   cursor: pointer;
 }
 
-/* 🎛️ Row with Edit mode + Confirm */
+/* Edit mode + confirm area */
 .button-footer-row {
   display: flex;
   align-items: center;
@@ -141,7 +152,7 @@ input[type="checkbox"] {
   padding-left: 12px;
 }
 
-/* Radio and checkbox row */
+/* Radio and checkbox controls */
 .edit-mode-controls {
   font-size: 16px;
   display: flex;
@@ -155,12 +166,12 @@ input[type="checkbox"] {
   transform: scale(1.1);
 }
 
-/* Default hidden Line ID column */
+/* Default hidden ID column */
 .line-id-col {
   display: none;
 }
 
-/* Match ButtonBox width to the table wrapper */
+/* Match button box width to table wrapper */
 .button-box {
   max-width: 800px;
   width: 100%;

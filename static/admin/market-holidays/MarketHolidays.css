@@ -75,6 +75,11 @@
   color: black;
 }
 
+/* 📛 ID Column Default Hidden */
+#market-holidays-section .line-id-col {
+  display: none;
+}
+
 /* 🦓 Row Striping */
 #market-holidays-section .admin-table tbody tr:nth-child(even) {
   background-color: #f9f9f9;

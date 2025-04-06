@@ -117,6 +117,15 @@ window.ButtonBox = (() => {
       });
     }
 
+    // 🔁 Watch for Edit Mode changes and refresh button visuals
+    const radios = document.querySelectorAll(`input[name="${section}-edit-mode"]`);
+    radios.forEach(radio => {
+      radio.addEventListener("change", () => {
+        updateButtonColors(section);
+      });
+    });
+    updateButtonColors(section);
+
     wireCheckboxes(section);
     updateUndo(section);
     setStatus(section, "none");
@@ -337,6 +346,18 @@ window.ButtonBox = (() => {
       state.tipIndex = (state.tipIndex + 1) % rotatingTips.length;
       showTip(section, rotatingTips[state.tipIndex]);
     }, 60000);
+  }
+
+  function updateButtonColors(section) {
+    const mode = getEditMode(section);
+    const buttons = document.querySelectorAll(`#${section}-toolbar .action-btn`);
+    buttons.forEach(btn => {
+      if (mode === "cell") {
+        btn.classList.add("cell-mode");
+      } else {
+        btn.classList.remove("cell-mode");
+      }
+    });
   }
 
   function capitalize(word) {
