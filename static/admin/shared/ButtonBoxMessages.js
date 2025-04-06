@@ -63,7 +63,13 @@ window.ButtonBoxMessages = (() => {
     btn.disabled = false;
     btn.className = "confirm-btn yellow";
     btn.textContent = labels[action] || `Confirm ${capitalize(action)}`;
-    btn.onclick = () => ButtonBoxRows.handleRowAction(section, "save");
+
+    const state = ButtonBox.getState(section);
+    btn.onclick = () => {
+      if (typeof state.onAction === "function") {
+        state.onAction(action, Array.from(state.selectedRows));
+      }
+    };
   }
 
   function disableButton(btn) {

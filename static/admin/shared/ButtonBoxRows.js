@@ -100,7 +100,7 @@ window.ButtonBoxRows = (() => {
           });
           const finalId = `saved-${Date.now()}-${i}`;
           row.setAttribute("data-id", finalId);
-          const cb = row.querySelector("input[type='checkbox']");
+          const cb = row.querySelector("input[type='checkbox']`);
           if (cb) cb.setAttribute("data-id", finalId);
           const idCell = row.querySelector(".line-id-col");
           if (idCell) idCell.textContent = finalId;
