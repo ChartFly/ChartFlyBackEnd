@@ -75,9 +75,13 @@
   color: black;
 }
 
-/* 📛 ID Column Default Hidden */
+/* Tighten up the ID column */
 #market-holidays-section .line-id-col {
-  display: none;
+  width: 4ch;
+  min-width: 2ch;
+  max-width: 8ch;
+  text-align: center;
+  white-space: nowrap;
 }
 
 /* 🦓 Row Striping */
