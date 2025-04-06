@@ -1,36 +1,43 @@
-<!-- static/admin/market-holidays/MarketHolidays.html -->
+<!-- templates/admin/market-holidays/MarketHolidays.html -->
 
 <section id="market-holidays-section" class="admin-tab-section" style="display: none;">
-
-  <!-- 🔧 Section Title -->
   <h2>Manage Market Holidays</h2>
 
-  <!-- 🧠 Modular ButtonBox Component (shared) -->
-  {% set section = "holiday" %}
-  {% include "shared/ButtonBox.html" %}
+  <!-- ✅ Modular ButtonBox -->
+  {% include "shared/ButtonBox.html" with context %}
 
-  <!-- 📋 Holidays Table -->
+  <!-- 🎛️ Edit Mode + Line ID Toggle -->
+  <div class="edit-mode-controls">
+    <label>
+      <input type="radio" name="holiday-edit-mode" value="row" checked />
+      Edit Lines
+    </label>
+    <label>
+      <input type="radio" name="holiday-edit-mode" value="cell" />
+      Edit Cells & Columns
+    </label>
+    <label>
+      <input type="checkbox" id="holiday-show-id-toggle" />
+      Show Line ID
+    </label>
+  </div>
+
+  <!-- 📅 Holiday Table -->
   <div class="table-wrapper">
-    <table id="holiday-table" class="admin-table">
+    <table class="admin-table">
       <thead>
         <tr>
           <th class="col-select">Select</th>
-          <th class="line-id-col">Line ID</th> <!-- ✅ Added -->
-          <th class="col-name">Holiday Name</th>
-          <th class="col-date">Date</th>
-          <th class="col-status">Status</th>
-          <th class="col-close-time">Close Time</th>
+          <th class="line-id-col">ID</th>
+          <th>Name</th>
+          <th>Date</th>
+          <th>Status</th>
+          <th>Close Time</th>
         </tr>
       </thead>
       <tbody id="holidays-table">
-        <tr>
-          <td colspan="6">
-            <span class="line-id-col" style="display:none;">&nbsp;</span> <!-- ✅ placeholder Line ID cell -->
-            Loading holidays...
-          </td>
-        </tr>
+        <tr><td colspan="6">Loading holidays...</td></tr>
       </tbody>
     </table>
   </div>
-
 </section>
