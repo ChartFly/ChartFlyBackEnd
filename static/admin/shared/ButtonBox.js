@@ -337,12 +337,17 @@ window.ButtonBox = (() => {
     showTip("global", `Unhandled: ${action}`);
   }
 
+function getSelectedIds(section) {
+  return Array.from(getState(section).selectedRows);
+}
+
   return {
     init,
     showTip,
     showWarning,
     clearWarning,
+    getSelectedIds,
     wireCheckboxes,
-    getSelectedIds
+
   };
 })();
