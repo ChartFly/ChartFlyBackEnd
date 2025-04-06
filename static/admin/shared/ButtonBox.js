@@ -113,7 +113,7 @@ window.ButtonBox = (() => {
     const idToggle = document.getElementById(`${section}-show-id-toggle`);
     if (idToggle) {
       idToggle.addEventListener("change", () => {
-        document.querySelectorAll(`#${state.tableId} .line-id-col`).forEach(col => {
+        document.querySelectorAll(`#${state.domId} .line-id-col`).forEach(col => {
           col.style.display = idToggle.checked ? "" : "none";
         });
       });
@@ -150,8 +150,9 @@ window.ButtonBox = (() => {
 
     cells.forEach(cell => {
       cell.classList.add("cell-paste-ready");
-      cell.addEventListener("click", function handler() {
+      cell.addEventListener("mousedown", function handler(e) {
         if (state.clipboardType === "cell" && state.clipboard) {
+          e.preventDefault();
           cell.textContent = state.clipboard;
           cell.classList.add("flash-yellow");
           setTimeout(() => cell.classList.remove("flash-yellow"), 500);
@@ -358,12 +359,10 @@ window.ButtonBox = (() => {
     return Array.from(getState(section).selectedRows);
   }
 
-
   function defaultHandler(action, selectedIds) {
     console.warn(`⚠️ No custom handler for action "${action}".`, selectedIds);
     showTip("global", `Unhandled: ${action}`);
   }
-
 
   return {
     init,
