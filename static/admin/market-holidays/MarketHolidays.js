@@ -1,6 +1,5 @@
 // static/admin/market-holidays/MarketHolidays.js
 
-// ✅ Global loader for ButtonBox
 async function loadMarketHolidays() {
   try {
     const response = await fetch("https://chartflybackend.onrender.com/api/holidays/year/2025");
@@ -37,15 +36,12 @@ async function loadMarketHolidays() {
       onAction: handleHolidayAction
     });
 
-    // ✅ Force-wire Show Line ID toggle (belt and suspenders)
     const toggle = document.getElementById("holiday-show-id-toggle");
     if (toggle) {
       toggle.addEventListener("change", () => {
         document.querySelectorAll("#market-holidays-section .line-id-col")
           .forEach(cell => cell.style.display = toggle.checked ? "table-cell" : "none");
       });
-
-      // ✅ Also reflect the initial checkbox state on load
       document.querySelectorAll("#market-holidays-section .line-id-col")
         .forEach(cell => cell.style.display = toggle.checked ? "table-cell" : "none");
     }
@@ -57,7 +53,6 @@ async function loadMarketHolidays() {
   }
 }
 
-// ✅ Utility functions and action handler
 (() => {
   if (window.MARKET_HOLIDAYS_LOADED) return;
   window.MARKET_HOLIDAYS_LOADED = true;
@@ -96,22 +91,21 @@ async function loadMarketHolidays() {
       const sourceRow = table.querySelector(`tr[data-id="${selectedIds[0]}"]`);
       if (!sourceRow) return;
 
-      const clone = sourceRow.cloneNode(true);
+      const clone = document.createElement("tr");
       const newId = `copy-${Date.now()}`;
       clone.setAttribute("data-id", newId);
       clone.classList.add("editing");
 
-      clone.querySelectorAll("td:not(.col-select):not(.line-id-col)").forEach(cell => {
-        cell.setAttribute("contenteditable", "true");
-        cell.classList.add("editable");
-      });
-
-      clone.querySelector(".col-select").innerHTML = `
-        <input type="checkbox" class="holiday-select-checkbox" data-id="${newId}" checked>
+      clone.innerHTML = `
+        <td class="col-select">
+          <input type="checkbox" class="holiday-select-checkbox" data-id="${newId}" checked>
+        </td>
+        <td class="line-id-col">${newId}</td>
+        <td contenteditable="true" class="editable">${sanitizeInput(sourceRow.children[2].textContent)}</td>
+        <td contenteditable="true" class="editable">${sanitizeInput(sourceRow.children[3].textContent)}</td>
+        <td contenteditable="true" class="editable">${sanitizeInput(sourceRow.children[4].textContent)}</td>
+        <td contenteditable="true" class="editable">${sanitizeInput(sourceRow.children[5].textContent)}</td>
       `;
-
-      const idCell = clone.querySelector(".line-id-col");
-      if (idCell) idCell.textContent = newId;
 
       table.prepend(clone);
       ButtonBox.wireCheckboxes("holiday");
@@ -149,7 +143,6 @@ async function loadMarketHolidays() {
         if (!row) return;
 
         row.classList.add("editing");
-
         row.querySelectorAll("td:not(.col-select):not(.line-id-col)").forEach(cell => {
           cell.setAttribute("contenteditable", "true");
           cell.classList.add("editable");
@@ -163,8 +156,6 @@ async function loadMarketHolidays() {
       const dirtyRows = table.querySelectorAll("tr.editing");
 
       dirtyRows.forEach((row, i) => {
-        const oldId = row.getAttribute("data-id");
-
         row.classList.remove("editing", "dirty");
 
         row.querySelectorAll("td[contenteditable]").forEach(cell => {
@@ -197,5 +188,4 @@ async function loadMarketHolidays() {
   };
 })();
 
-// 🚀 Start loading once DOM is ready
 window.addEventListener("DOMContentLoaded", loadMarketHolidays);
