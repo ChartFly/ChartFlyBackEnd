@@ -3,11 +3,11 @@
 window.ButtonBox = (() => {
   const sectionStates = {};
   const rotatingTips = [
-    "Click a cell to edit it.",
-    "Copy cell text and paste with keyboard shortcuts.",
-    "Undo reverses your last change.",
-    "Avoid editing IDs or checkboxes.",
-    "Click a button to begin an action."
+    "Click a button to begin an action.",
+    "Select rows before editing or deleting.",
+    "Paste only works after you Copy.",
+    "Undo will reverse your last change.",
+    "You can copy/paste individual cell text!"
   ];
   const tipTimers = {};
 
@@ -34,6 +34,13 @@ window.ButtonBox = (() => {
     return selected ? selected.value : "row";
   }
 
+  function updateButtonColors(section) {
+    const isCell = getEditMode(section) === "cell";
+    document.querySelectorAll(`#${section}-toolbar .action-btn`).forEach(btn => {
+      btn.classList.toggle("cell-mode", isCell);
+    });
+  }
+
   function init({ section, domId, tableId, onAction }) {
     const state = getState(section);
     Object.assign(state, { domId, tableId });
@@ -46,18 +53,6 @@ window.ButtonBox = (() => {
       showTip(section, rotatingTips[state.tipIndex]);
     }, 60000);
 
-    wireCheckboxes(section);
-    enableCellEditing(section);
-    updateUndo(section);
-    updateButtonColors(section);
-    setStatus(section, "none");
-
-    setupButtons(section);
-    setupIdToggle(section);
-    setupKeyboardPaste(section);
-  }
-
-  function setupButtons(section) {
     const actions = ["edit", "copy", "paste", "add", "delete", "save", "undo"];
     actions.forEach(action => {
       const btn = document.getElementById(`${section}-${action}-btn`);
@@ -65,134 +60,160 @@ window.ButtonBox = (() => {
       if (action === "paste") disableButton(btn);
 
       btn.addEventListener("click", () => {
-        const state = getState(section);
+        console.log(`👉 [${section}] Button clicked: ${action}`);
         state.activeAction = action;
         setStatus(section, action);
         clearWarning(section);
         resetButtons(section, btn);
 
-        if (["undo", "save"].includes(action)) {
-          action === "undo" ? triggerUndo(section) : triggerConfirm(section);
+        const mode = getEditMode(section);
+        console.log(`✏️ Mode is: ${mode}`);
+
+        if (mode === "cell") {
+          if (action === "copy") {
+            const selectedText = window.getSelection().toString().trim();
+            if (!selectedText) {
+              showWarning(section, "Highlight text to Copy.");
+              return;
+            }
+            state.clipboard = selectedText;
+            state.clipboardType = "cell";
+            showTip(section, "Copying specific data. Use Paste to apply to another cell.");
+            lockButtons(section, ["paste"]);
+            enableButton(document.getElementById(`${section}-paste-btn`));
+            return;
+          }
+
+          if (action === "paste" && state.clipboardType === "cell") {
+            activateCellPasteMode(section);
+            return;
+          }
+
+          if (!["save", "undo"].includes(action)) {
+            showWarning(section, `Switch to 'Edit Lines' to use ${capitalize(action)}.`);
+            return;
+          }
+        }
+
+        if (["edit", "copy", "delete"].includes(action)) {
+          if (mode === "cell") {
+            showWarning(section, `Switch to 'Edit Lines' to use ${capitalize(action)}.`);
+            return;
+          }
+          if (state.selectedRows.size === 0) {
+            showWarning(section, `Please select one or more rows to ${action}.`);
+            return;
+          }
+          setTimeout(() => {
+            state.onAction(action, Array.from(state.selectedRows));
+          }, 10);
           return;
         }
 
-        if (action === "copy") {
-          const selectedText = window.getSelection().toString().trim();
-          if (!selectedText) {
-            showWarning(section, "Highlight text to Copy.");
-            return;
-          }
-          state.clipboard = selectedText;
-          state.clipboardType = "cell";
-          showTip(section, "Copied text. Use keyboard or Paste to apply.");
-          lockButtons(section, ["paste"]);
-          enableButton(document.getElementById(`${section}-paste-btn`));
-        }
+        if (action === "undo") return triggerUndo(section);
+        if (action === "save") return triggerConfirm(section);
 
-        if (action === "paste" && state.clipboardType === "cell") {
-          showTip(section, "Click a cell or press ↓ to paste down column.");
-        }
-
-        if (!["save", "undo"].includes(action)) {
-          enableConfirm(section, action);
-        }
+        enableConfirm(section, action);
       });
     });
-  }
 
-  function enableCellEditing(section) {
-    const state = getState(section);
-    const table = document.getElementById(state.tableId);
-    if (!table) return;
-
-    table.addEventListener("click", (e) => {
-      const cell = e.target.closest("td");
-      if (!cell || cell.classList.contains("col-select") || cell.classList.contains("line-id-col")) return;
-
-      const row = cell.closest("tr");
-      const isEditable = !cell.hasAttribute("contenteditable");
-
-      if (isEditable) {
-        cell.setAttribute("contenteditable", "true");
-        cell.focus();
-        const range = document.createRange();
-        const sel = window.getSelection();
-        range.selectNodeContents(cell);
-        range.collapse(false);
-        sel.removeAllRanges();
-        sel.addRange(range);
-      }
-
-      cell.addEventListener("input", () => row.classList.add("dirty"));
-    });
-  }
-
-  function setupKeyboardPaste(section) {
-    const state = getState(section);
-    document.addEventListener("keydown", (e) => {
-      if (!state.clipboard || state.clipboardType !== "cell") return;
-
-      const sel = window.getSelection();
-      const active = sel.anchorNode?.parentElement;
-      if (!active || !active.isContentEditable) return;
-
-      if (e.key === "ArrowDown") {
-        e.preventDefault();
-        const td = active.closest("td");
-        const tr = td.closest("tr");
-        const cellIndex = Array.from(tr.children).indexOf(td);
-        const nextRow = tr.nextElementSibling;
-        if (!nextRow) return;
-
-        const nextCell = nextRow.children[cellIndex];
-        if (nextCell && nextCell.isContentEditable) {
-          nextCell.textContent = state.clipboard;
-          nextRow.classList.add("dirty");
-          nextCell.classList.add("flash-yellow");
-          setTimeout(() => nextCell.classList.remove("flash-yellow"), 500);
-
-          const range = document.createRange();
-          const sel = window.getSelection();
-          range.selectNodeContents(nextCell);
-          range.collapse(false);
-          sel.removeAllRanges();
-          sel.addRange(range);
-        }
-      }
-    });
-  }
-
-  function setupIdToggle(section) {
-    const state = getState(section);
     const idToggle = document.getElementById(`${section}-show-id-toggle`);
-    if (!idToggle) return;
+    if (idToggle) {
+      const toggleLineIdCol = () => {
+        document.querySelectorAll(`#${state.domId} .line-id-col, #${state.domId} th.line-id-col`).forEach(cell => {
+          cell.style.display = idToggle.checked ? "table-cell" : "none";
+        });
+      };
 
-    const toggleLineIdCol = () => {
-      document.querySelectorAll(`#${state.domId} .line-id-col, #${state.domId} th.line-id-col`).forEach(cell => {
-        cell.style.display = idToggle.checked ? "table-cell" : "none";
+      idToggle.addEventListener("change", toggleLineIdCol);
+      toggleLineIdCol(); // ✅ On load
+    }
+
+    const modeRadios = document.querySelectorAll(`input[name="${section}-edit-mode"]`);
+    modeRadios.forEach(radio => {
+      radio.addEventListener("change", () => {
+        updateButtonColors(section);
       });
-    };
+    });
 
-    idToggle.addEventListener("change", toggleLineIdCol);
-    toggleLineIdCol();
+    updateButtonColors(section);
+    wireCheckboxes(section);
+    updateUndo(section);
+    setStatus(section, "none");
   }
 
-  function setStatus(section, action) {
-    const box = document.getElementById(`${section}-current-action`);
-    if (box) box.textContent = capitalize(action);
+  function activateCellPasteMode(section) {
+    const state = getState(section);
+    const cells = document.querySelectorAll(`#${state.domId} td`);
+
+    cells.forEach(cell => {
+      cell.classList.add("cell-paste-ready");
+      cell.addEventListener("mousedown", function handler(e) {
+        if (state.clipboardType === "cell" && state.clipboard) {
+          e.preventDefault();
+          cell.textContent = state.clipboard;
+          cell.classList.add("flash-yellow");
+          setTimeout(() => cell.classList.remove("flash-yellow"), 500);
+          state.clipboard = null;
+          state.clipboardType = null;
+          showTip(section, "Cell pasted. Copy again to paste more.");
+          unlockButtons(section);
+          disableButton(document.getElementById(`${section}-paste-btn`));
+          cells.forEach(c => c.replaceWith(c.cloneNode(true)));
+        }
+      }, { once: true });
+    });
+  }
+
+  function resetButtons(section, activeBtn) {
+    const actions = ["edit", "copy", "paste", "add", "delete", "save", "undo"];
+    actions.forEach(action => {
+      const otherBtn = document.getElementById(`${section}-${action}-btn`);
+      if (otherBtn) otherBtn.classList.remove("active");
+    });
+    if (activeBtn) activeBtn.classList.add("active");
+  }
+
+  function lockButtons(section, allow = []) {
+    document.querySelectorAll(`#${section}-toolbar .action-btn`).forEach(btn => {
+      const key = btn.id.replace(`${section}-`, "").replace("-btn", "");
+      if (!allow.includes(key)) {
+        btn.disabled = true;
+        btn.classList.add("disabled-btn");
+      }
+    });
+  }
+
+  function unlockButtons(section) {
+    document.querySelectorAll(`#${section}-toolbar .action-btn`).forEach(btn => {
+      btn.disabled = false;
+      btn.classList.remove("disabled-btn");
+    });
+  }
+
+  function enableButton(btn) {
+    if (!btn) return;
+    btn.disabled = false;
+    btn.classList.remove("disabled-btn");
+  }
+
+  function disableButton(btn) {
+    if (!btn) return;
+    btn.disabled = true;
+    btn.classList.add("disabled-btn");
   }
 
   function enableConfirm(section, action) {
     const btn = document.getElementById(`${section}-confirm-btn`);
     if (btn) {
       const labels = {
-        add: "Confirm and Add Row",
-        copy: "Confirm Copy",
-        edit: "Confirm Edit",
-        delete: "Confirm Delete",
-        paste: "Confirm Paste",
-        undo: "Confirm Undo",
-        save: "Confirm Save"
+        add: "Confirm and Make Editable",
+        copy: "Confirm and Make Editable",
+        edit: "Confirm and Make Editable",
+        delete: "Confirm and Delete",
+        paste: "Confirm and Paste",
+        undo: "Confirm and Undo",
+        save: "Confirm and Save"
       };
       btn.disabled = false;
       btn.className = "confirm-btn yellow";
@@ -332,14 +353,14 @@ window.ButtonBox = (() => {
     return word.charAt(0).toUpperCase() + word.slice(1);
   }
 
+  function getSelectedIds(section) {
+    return Array.from(getState(section).selectedRows);
+  }
+
   function defaultHandler(action, selectedIds) {
     console.warn(`⚠️ No custom handler for action "${action}".`, selectedIds);
     showTip("global", `Unhandled: ${action}`);
   }
-
-function getSelectedIds(section) {
-  return Array.from(getState(section).selectedRows);
-}
 
   return {
     init,
@@ -347,7 +368,6 @@ function getSelectedIds(section) {
     showWarning,
     clearWarning,
     getSelectedIds,
-    wireCheckboxes,
-
+    wireCheckboxes
   };
 })();
