@@ -53,12 +53,14 @@ window.ButtonBox = (() => {
       if (action === "paste") disableButton(btn);
 
       btn.addEventListener("click", () => {
+        console.log(`👉 [${section}] Button clicked: ${action}`);
         state.activeAction = action;
         setStatus(section, action);
         clearWarning(section);
         resetButtons(section, btn);
 
         const mode = getEditMode(section);
+        console.log(`✏️ Mode is: ${mode}`);
 
         if (mode === "cell") {
           if (action === "copy") {
@@ -111,24 +113,30 @@ window.ButtonBox = (() => {
     const idToggle = document.getElementById(`${section}-show-id-toggle`);
     if (idToggle) {
       idToggle.addEventListener("change", () => {
-        document.querySelectorAll(`#${section}-table .line-id-col`).forEach(col => {
+        document.querySelectorAll(`#${state.tableId} .line-id-col`).forEach(col => {
           col.style.display = idToggle.checked ? "" : "none";
         });
       });
     }
 
-    // 🔁 Watch for Edit Mode changes and refresh button visuals
-    const radios = document.querySelectorAll(`input[name="${section}-edit-mode"]`);
-    radios.forEach(radio => {
+    const modeRadios = document.querySelectorAll(`input[name="${section}-edit-mode"]`);
+    modeRadios.forEach(radio => {
       radio.addEventListener("change", () => {
         updateButtonColors(section);
       });
     });
-    updateButtonColors(section);
 
+    updateButtonColors(section);
     wireCheckboxes(section);
     updateUndo(section);
     setStatus(section, "none");
+  }
+
+  function updateButtonColors(section) {
+    const isCell = getEditMode(section) === "cell";
+    document.querySelectorAll(`#${section}-toolbar .action-btn`).forEach(btn => {
+      btn.classList.toggle("cell-mode", isCell);
+    });
   }
 
   function setStatus(section, action) {
@@ -142,22 +150,17 @@ window.ButtonBox = (() => {
 
     cells.forEach(cell => {
       cell.classList.add("cell-paste-ready");
-      cell.addEventListener("click", function cellPasteHandler() {
+      cell.addEventListener("click", function handler() {
         if (state.clipboardType === "cell" && state.clipboard) {
           cell.textContent = state.clipboard;
           cell.classList.add("flash-yellow");
           setTimeout(() => cell.classList.remove("flash-yellow"), 500);
-
           state.clipboard = null;
           state.clipboardType = null;
           showTip(section, "Cell pasted. Copy again to paste more.");
           unlockButtons(section);
           disableButton(document.getElementById(`${section}-paste-btn`));
-
-          cells.forEach(c => {
-            c.classList.remove("cell-paste-ready");
-            c.replaceWith(c.cloneNode(true));
-          });
+          cells.forEach(c => c.replaceWith(c.cloneNode(true)));
         }
       }, { once: true });
     });
@@ -173,8 +176,7 @@ window.ButtonBox = (() => {
   }
 
   function lockButtons(section, allow = []) {
-    const all = document.querySelectorAll(`#${section}-toolbar .action-btn`);
-    all.forEach(btn => {
+    document.querySelectorAll(`#${section}-toolbar .action-btn`).forEach(btn => {
       const key = btn.id.replace(`${section}-`, "").replace("-btn", "");
       if (!allow.includes(key)) {
         btn.disabled = true;
@@ -184,8 +186,7 @@ window.ButtonBox = (() => {
   }
 
   function unlockButtons(section) {
-    const all = document.querySelectorAll(`#${section}-toolbar .action-btn`);
-    all.forEach(btn => {
+    document.querySelectorAll(`#${section}-toolbar .action-btn`).forEach(btn => {
       btn.disabled = false;
       btn.classList.remove("disabled-btn");
     });
@@ -198,6 +199,7 @@ window.ButtonBox = (() => {
   }
 
   function disableButton(btn) {
+    if (!btn) return;
     btn.disabled = true;
     btn.classList.add("disabled-btn");
   }
@@ -346,18 +348,6 @@ window.ButtonBox = (() => {
       state.tipIndex = (state.tipIndex + 1) % rotatingTips.length;
       showTip(section, rotatingTips[state.tipIndex]);
     }, 60000);
-  }
-
-  function updateButtonColors(section) {
-    const mode = getEditMode(section);
-    const buttons = document.querySelectorAll(`#${section}-toolbar .action-btn`);
-    buttons.forEach(btn => {
-      if (mode === "cell") {
-        btn.classList.add("cell-mode");
-      } else {
-        btn.classList.remove("cell-mode");
-      }
-    });
   }
 
   function capitalize(word) {
