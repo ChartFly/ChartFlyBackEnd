@@ -29,6 +29,11 @@ window.ButtonBox = (() => {
     return sectionStates[section];
   }
 
+  function setStatus(section, action) {
+    const box = document.getElementById(`${section}-current-action`);
+    if (box) box.textContent = capitalize(action);
+ }
+
   function getEditMode(section) {
     const selected = document.querySelector(`input[name="${section}-edit-mode"]:checked`);
     return selected ? selected.value : "row";
