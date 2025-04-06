@@ -32,7 +32,7 @@ window.ButtonBox = (() => {
   function setStatus(section, action) {
     const box = document.getElementById(`${section}-current-action`);
     if (box) box.textContent = capitalize(action);
- }
+  }
 
   function getEditMode(section) {
     const selected = document.querySelector(`input[name="${section}-edit-mode"]:checked`);
@@ -43,6 +43,16 @@ window.ButtonBox = (() => {
     const isCell = getEditMode(section) === "cell";
     document.querySelectorAll(`#${section}-toolbar .action-btn`).forEach(btn => {
       btn.classList.toggle("cell-mode", isCell);
+    });
+  }
+
+  function updateIdColumnVisibility(section) {
+    const state = getState(section);
+    const idToggle = document.getElementById(`${section}-show-id-toggle`);
+    if (!idToggle) return;
+
+    document.querySelectorAll(`#${state.domId} .line-id-col, #${state.domId} th.line-id-col`).forEach(cell => {
+      cell.style.display = idToggle.checked ? "table-cell" : "none";
     });
   }
 
@@ -124,21 +134,13 @@ window.ButtonBox = (() => {
 
     const idToggle = document.getElementById(`${section}-show-id-toggle`);
     if (idToggle) {
-      const toggleLineIdCol = () => {
-        document.querySelectorAll(`#${state.domId} .line-id-col, #${state.domId} th.line-id-col`).forEach(cell => {
-          cell.style.display = idToggle.checked ? "table-cell" : "none";
-        });
-      };
-
-      idToggle.addEventListener("change", toggleLineIdCol);
-      toggleLineIdCol(); // ✅ On load
+      idToggle.addEventListener("change", () => updateIdColumnVisibility(section));
+      updateIdColumnVisibility(section);
     }
 
     const modeRadios = document.querySelectorAll(`input[name="${section}-edit-mode"]`);
     modeRadios.forEach(radio => {
-      radio.addEventListener("change", () => {
-        updateButtonColors(section);
-      });
+      radio.addEventListener("change", () => updateButtonColors(section));
     });
 
     updateButtonColors(section);
@@ -244,6 +246,7 @@ window.ButtonBox = (() => {
     document.querySelectorAll(`#${state.domId} tr.selected-row`).forEach(row => row.classList.remove("selected-row"));
     document.querySelectorAll(`#${state.domId} input[type="checkbox"]`).forEach(box => box.checked = false);
 
+    updateIdColumnVisibility(section);
     updateUndo(section);
     setStatus(section, "none");
 
@@ -266,6 +269,7 @@ window.ButtonBox = (() => {
 
     wireCheckboxes(section);
     updateUndo(section);
+    updateIdColumnVisibility(section);
     showTip(section, "Last change was undone.");
   }
 
@@ -373,6 +377,9 @@ window.ButtonBox = (() => {
     showWarning,
     clearWarning,
     getSelectedIds,
-    wireCheckboxes
+    wireCheckboxes,
+    updateButtonColors,
+    setStatus,
+    updateIdColumnVisibility
   };
 })();
