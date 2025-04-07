@@ -40,6 +40,7 @@ window.ButtonBoxRows = (() => {
         const clone = sourceRow.cloneNode(true);
         clone.setAttribute("data-id", newId);
         clone.classList.add("editing", "dirty");
+
         clone.querySelectorAll("td").forEach((cell, i) => {
           if (i === 0) {
             const cb = cell.querySelector("input");
@@ -52,8 +53,10 @@ window.ButtonBoxRows = (() => {
             cell.classList.add("editable");
           }
         });
+
         const idCell = clone.querySelector(".line-id-col");
         if (idCell) idCell.textContent = newId;
+
         table.prepend(clone);
         ButtonBox.wireCheckboxes(section);
         ButtonBoxMessages.enableConfirm(section, action);
@@ -64,7 +67,6 @@ window.ButtonBoxRows = (() => {
         const row = document.createElement("tr");
         row.setAttribute("data-id", id);
         row.classList.add("editing", "dirty");
-
         row.innerHTML = `
           <td class="col-select">
             <input type="checkbox" class="holiday-select-checkbox" data-id="${id}" checked>
@@ -100,7 +102,7 @@ window.ButtonBoxRows = (() => {
           });
           const finalId = `saved-${Date.now()}-${i}`;
           row.setAttribute("data-id", finalId);
-          const cb = row.querySelector("input[type='checkbox']`);
+          const cb = row.querySelector("input[type='checkbox']");
           if (cb) cb.setAttribute("data-id", finalId);
           const idCell = row.querySelector(".line-id-col");
           if (idCell) idCell.textContent = finalId;
