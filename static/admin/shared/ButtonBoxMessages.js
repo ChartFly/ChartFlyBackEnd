@@ -72,6 +72,14 @@ window.ButtonBoxMessages = (() => {
     };
   }
 
+  function toggleConfirmButton(section, action) {
+    const confirmBtn = document.getElementById(`${section}-confirm-btn`);
+    if (!confirmBtn) return;
+
+    const showActions = ["edit", "delete", "save"];
+    confirmBtn.style.visibility = showActions.includes(action) ? "visible" : "hidden";
+  }
+
   function disableButton(btn) {
     if (!btn) return;
     btn.disabled = true;
@@ -133,6 +141,7 @@ window.ButtonBoxMessages = (() => {
     resetButtons,
     setStatus,
     updateIdColumnVisibility,
-    updateButtonColors
+    updateButtonColors,
+    toggleConfirmButton
   };
 })();

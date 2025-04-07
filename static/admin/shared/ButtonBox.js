@@ -39,7 +39,7 @@ window.ButtonBox = (() => {
     ButtonBoxMessages.updateIdColumnVisibility(section);
     ButtonBoxMessages.updateUndo(section);
 
-    ButtonBoxRows.wireCheckboxes(section); // Initial wire
+    ButtonBoxRows.wireCheckboxes(section);
 
     const actions = ["edit", "copy", "paste", "add", "delete", "save", "undo"];
     actions.forEach(action => {
@@ -50,56 +50,4 @@ window.ButtonBox = (() => {
       btn.addEventListener("click", () => {
         console.log(`👉 [${section}] Button clicked: ${action}`);
         state.activeAction = action;
-        ButtonBoxMessages.setStatus(section, action);
-        ButtonBoxMessages.clearWarning(section);
-        ButtonBoxMessages.resetButtons(section, btn);
-
-        const mode = getEditMode(section);
-        console.log(`✏️ Mode is: ${mode}`);
-
-        if (mode === "cell") {
-          ButtonBoxColumns.handleCellAction(section, action);
-        } else {
-          ButtonBoxRows.handleRowAction(section, action);
-        }
-      });
-    });
-
-    const idToggle = document.getElementById(`${section}-show-id-toggle`);
-    if (idToggle) {
-      idToggle.addEventListener("change", () =>
-        ButtonBoxMessages.updateIdColumnVisibility(section)
-      );
-    }
-
-    const modeRadios = document.querySelectorAll(`input[name="${section}-edit-mode"]`);
-    modeRadios.forEach(radio => {
-      radio.addEventListener("change", () =>
-        ButtonBoxMessages.updateButtonColors(section)
-      );
-    });
-
-    ButtonBoxMessages.setStatus(section, "none");
-  }
-
-  function defaultHandler(action, selectedIds) {
-    console.warn(`⚠️ No handler for action "${action}".`, selectedIds);
-    ButtonBoxMessages.showTip("global", `Unhandled: ${action}`);
-  }
-
-  return {
-    init,
-    getState,
-    getEditMode,
-    getSelectedIds: (section) => Array.from(getState(section).selectedRows),
-
-    // Delegated helpers
-    wireCheckboxes: ButtonBoxRows.wireCheckboxes,
-    showTip: ButtonBoxMessages.showTip,
-    showWarning: ButtonBoxMessages.showWarning,
-    clearWarning: ButtonBoxMessages.clearWarning,
-    updateButtonColors: ButtonBoxMessages.updateButtonColors,
-    updateIdColumnVisibility: ButtonBoxMessages.updateIdColumnVisibility,
-    setStatus: ButtonBoxMessages.setStatus
-  };
-})();
+        ButtonBoxMessages.setStatus(section,

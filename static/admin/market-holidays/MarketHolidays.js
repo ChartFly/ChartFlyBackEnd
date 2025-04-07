@@ -29,12 +29,7 @@ async function loadMarketHolidays() {
       table.appendChild(row);
     });
 
-    ButtonBox.init({
-      section: "holiday",
-      domId: "market-holidays-section",
-      tableId: "holidays-table",
-      onAction: handleHolidayAction
-    });
+    ButtonBoxMarketHolidays.init();
 
     const toggle = document.getElementById("holiday-show-id-toggle");
     if (toggle) {
@@ -71,121 +66,8 @@ async function loadMarketHolidays() {
       : input ?? "—";
   };
 
-  window.handleHolidayAction = function (action, selectedIds) {
-    const table = document.getElementById("holidays-table");
-
-    if (action === "delete") {
-      selectedIds.forEach(id => {
-        const row = table.querySelector(`tr[data-id="${id}"]`);
-        if (row) row.remove();
-      });
-      ButtonBox.wireCheckboxes("holiday");
-    }
-
-    if (action === "copy") {
-      if (selectedIds.length !== 1) {
-        ButtonBox.showWarning("holiday", "Please select exactly one row to copy.");
-        return;
-      }
-
-      const sourceRow = table.querySelector(`tr[data-id="${selectedIds[0]}"]`);
-      if (!sourceRow) return;
-
-      const clone = document.createElement("tr");
-      const newId = `copy-${Date.now()}`;
-      clone.setAttribute("data-id", newId);
-      clone.classList.add("editing");
-
-      clone.innerHTML = `
-        <td class="col-select">
-          <input type="checkbox" class="holiday-select-checkbox" data-id="${newId}" checked>
-        </td>
-        <td class="line-id-col">${newId}</td>
-        <td contenteditable="true" class="editable">${sanitizeInput(sourceRow.children[2].textContent)}</td>
-        <td contenteditable="true" class="editable">${sanitizeInput(sourceRow.children[3].textContent)}</td>
-        <td contenteditable="true" class="editable">${sanitizeInput(sourceRow.children[4].textContent)}</td>
-        <td contenteditable="true" class="editable">${sanitizeInput(sourceRow.children[5].textContent)}</td>
-      `;
-
-      table.prepend(clone);
-      ButtonBox.wireCheckboxes("holiday");
-    }
-
-    if (action === "add") {
-      const newId = `new-${Date.now()}`;
-      const newRow = document.createElement("tr");
-      newRow.classList.add("editing");
-      newRow.setAttribute("data-id", newId);
-      newRow.setAttribute("data-index", "0");
-
-      newRow.innerHTML = `
-        <td class="col-select">
-          <input type="checkbox" class="holiday-select-checkbox" data-id="${newId}" checked>
-        </td>
-        <td class="line-id-col">${newId}</td>
-        <td contenteditable="true" class="editable">Edit</td>
-        <td contenteditable="true" class="editable">YYYY-MM-DD</td>
-        <td contenteditable="true" class="editable">Upcoming</td>
-        <td contenteditable="true" class="editable"></td>
-      `;
-
-      newRow.querySelectorAll("td[contenteditable]").forEach(cell => {
-        cell.addEventListener("input", () => newRow.classList.add("dirty"));
-      });
-
-      table.prepend(newRow);
-      ButtonBox.wireCheckboxes("holiday");
-    }
-
-    if (action === "edit") {
-      selectedIds.forEach(id => {
-        const row = table.querySelector(`tr[data-id="${id}"]`);
-        if (!row) return;
-
-        row.classList.add("editing");
-        row.querySelectorAll("td:not(.col-select):not(.line-id-col)").forEach(cell => {
-          cell.setAttribute("contenteditable", "true");
-          cell.classList.add("editable");
-        });
-
-        row.classList.add("dirty");
-      });
-    }
-
-    if (action === "save") {
-      const dirtyRows = table.querySelectorAll("tr.editing");
-
-      dirtyRows.forEach((row, i) => {
-        row.classList.remove("editing", "dirty");
-
-        row.querySelectorAll("td[contenteditable]").forEach(cell => {
-          cell.removeAttribute("contenteditable");
-          cell.classList.remove("editable");
-        });
-
-        const finalId = `saved-${Date.now()}-${i}`;
-        row.setAttribute("data-id", finalId);
-
-        const checkbox = row.querySelector("input[type='checkbox']");
-        if (checkbox) {
-          checkbox.setAttribute("data-id", finalId);
-          checkbox.checked = false;
-        }
-
-        const idCell = row.querySelector(".line-id-col");
-        if (idCell) idCell.textContent = finalId;
-
-        row.classList.remove("selected-row");
-      });
-
-      ButtonBox.wireCheckboxes("holiday");
-      ButtonBox.showMessage("holiday", "Holiday rows saved (frontend only).", "success");
-    }
-
-    if (action === "paste") {
-      ButtonBox.showWarning("holiday", "Paste is not implemented yet.");
-    }
-  };
+  // 🧠 Delegate to ButtonBoxRows
+  window.handleHolidayAction = ButtonBoxRows.handleRowAction;
 })();
 
 window.addEventListener("DOMContentLoaded", loadMarketHolidays);
