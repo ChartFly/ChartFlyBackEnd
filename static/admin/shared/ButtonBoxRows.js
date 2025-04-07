@@ -1,6 +1,25 @@
 // static/admin/shared/ButtonBoxRows.js
 
 window.ButtonBoxRows = (() => {
+  function wireCheckboxes(section) {
+    const table = document.querySelector(`#${section}-section table`);
+    const checkboxes = table.querySelectorAll(`.${section}-select-checkbox`);
+
+    ButtonBox.getState(section).selectedRows.clear();
+
+    checkboxes.forEach(checkbox => {
+      checkbox.addEventListener("change", () => {
+        const id = checkbox.dataset.id;
+        const state = ButtonBox.getState(section);
+        if (checkbox.checked) {
+          state.selectedRows.add(id);
+        } else {
+          state.selectedRows.delete(id);
+        }
+      });
+    });
+  }
+
   function handleRowAction(action, selectedIds, section) {
     const table = document.querySelector(`#${section}-section table`);
 
@@ -116,6 +135,7 @@ window.ButtonBoxRows = (() => {
   }
 
   return {
-    handleRowAction
+    handleRowAction,
+    wireCheckboxes
   };
 })();
