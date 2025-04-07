@@ -2,7 +2,9 @@
 
 async function loadMarketHolidays() {
   try {
-    const response = await fetch("https://chartflybackend.onrender.com/api/holidays/year/2025");
+    const response = await fetch(
+      "https://chartflybackend.onrender.com/api/holidays/year/2025"
+    );
     if (!response.ok) throw new Error("Failed to fetch market holidays");
 
     const holidays = await response.json();
@@ -18,7 +20,9 @@ async function loadMarketHolidays() {
       const readableTime = isEarlyClose ? formatTime(holiday.close_time) : "";
 
       row.innerHTML = `
-        <td class="col-select"><input type="checkbox" class="holiday-select-checkbox" data-id="${holiday.id}"></td>
+        <td class="col-select"><input type="checkbox" class="holiday-select-checkbox" data-id="${
+          holiday.id
+        }"></td>
         <td class="line-id-col">${holiday.id}</td>
         <td>${sanitizeInput(holiday.name || "N/A")}</td>
         <td>${sanitizeInput(holiday.date || "N/A")}</td>
@@ -29,18 +33,29 @@ async function loadMarketHolidays() {
       table.appendChild(row);
     });
 
+    // ✅ Initialize ButtonBox AFTER rows are in the DOM
     ButtonBoxMarketHolidays.init();
+
+    // ✅ Wire checkboxes AFTER rows are rendered
+    ButtonBox.wireCheckboxes("holiday");
 
     const toggle = document.getElementById("holiday-show-id-toggle");
     if (toggle) {
       toggle.addEventListener("change", () => {
-        document.querySelectorAll("#market-holidays-section .line-id-col")
-          .forEach(cell => cell.style.display = toggle.checked ? "table-cell" : "none");
+        document
+          .querySelectorAll("#market-holidays-section .line-id-col")
+          .forEach(
+            (cell) =>
+              (cell.style.display = toggle.checked ? "table-cell" : "none")
+          );
       });
-      document.querySelectorAll("#market-holidays-section .line-id-col")
-        .forEach(cell => cell.style.display = toggle.checked ? "table-cell" : "none");
+      document
+        .querySelectorAll("#market-holidays-section .line-id-col")
+        .forEach(
+          (cell) =>
+            (cell.style.display = toggle.checked ? "table-cell" : "none")
+        );
     }
-
   } catch (error) {
     console.error("❌ Failed to load holidays:", error);
     const table = document.getElementById("holidays-table");
@@ -56,7 +71,7 @@ async function loadMarketHolidays() {
     const [hour, minute] = rawTime.split(":");
     const h = parseInt(hour, 10);
     const suffix = h >= 12 ? "PM" : "AM";
-    const hour12 = ((h + 11) % 12 + 1);
+    const hour12 = ((h + 11) % 12) + 1;
     return `${hour12}:${minute} ${suffix}`;
   };
 

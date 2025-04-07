@@ -1,7 +1,8 @@
 // static/admin/shared/ButtonBox.js
 
 // Assume these are loaded globally (since we're in-browser, not using modules)
-if (typeof ButtonBoxRows === "undefined") console.warn("⚠️ ButtonBoxRows is not defined.");
+if (typeof ButtonBoxRows === "undefined")
+  console.warn("⚠️ ButtonBoxRows is not defined.");
 
 window.ButtonBox = (() => {
   const sectionStates = {};
@@ -19,14 +20,16 @@ window.ButtonBox = (() => {
         domId: null,
         tableId: null,
         onAction: defaultHandler,
-        tipIndex: 0
+        tipIndex: 0,
       };
     }
     return sectionStates[section];
   }
 
   function getEditMode(section) {
-    const selected = document.querySelector(`input[name="${section}-edit-mode"]:checked`);
+    const selected = document.querySelector(
+      `input[name="${section}-edit-mode"]:checked`
+    );
     return selected ? selected.value : "row";
   }
 
@@ -42,10 +45,8 @@ window.ButtonBox = (() => {
     ButtonBoxMessages.updateIdColumnVisibility(section);
     ButtonBoxMessages.updateUndo(section);
 
-    ButtonBoxRows.wireCheckboxes(section); // Initial wire
-
     const actions = ["edit", "copy", "paste", "add", "delete", "save", "undo"];
-    actions.forEach(action => {
+    actions.forEach((action) => {
       const btn = document.getElementById(`${section}-${action}-btn`);
       if (!btn) return;
       if (action === "paste") ButtonBoxMessages.disableButton(btn);
@@ -75,8 +76,10 @@ window.ButtonBox = (() => {
       );
     }
 
-    const modeRadios = document.querySelectorAll(`input[name="${section}-edit-mode"]`);
-    modeRadios.forEach(radio => {
+    const modeRadios = document.querySelectorAll(
+      `input[name="${section}-edit-mode"]`
+    );
+    modeRadios.forEach((radio) => {
       radio.addEventListener("change", () =>
         ButtonBoxMessages.updateButtonColors(section)
       );
@@ -103,6 +106,6 @@ window.ButtonBox = (() => {
     clearWarning: ButtonBoxMessages.clearWarning,
     updateButtonColors: ButtonBoxMessages.updateButtonColors,
     updateIdColumnVisibility: ButtonBoxMessages.updateIdColumnVisibility,
-    setStatus: ButtonBoxMessages.setStatus
+    setStatus: ButtonBoxMessages.setStatus,
   };
 })();
