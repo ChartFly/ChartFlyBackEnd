@@ -7,7 +7,7 @@ window.ButtonBoxRows = (() => {
 
     ButtonBox.getState(section).selectedRows.clear();
 
-    checkboxes.forEach(checkbox => {
+    checkboxes.forEach((checkbox) => {
       checkbox.addEventListener("change", () => {
         const id = checkbox.dataset.id;
         const state = ButtonBox.getState(section);
@@ -21,10 +21,17 @@ window.ButtonBoxRows = (() => {
   }
 
   function handleRowAction(action, selectedIds, section) {
-    const table = document.querySelector(`#${section}-section table`);
+    const state = ButtonBox.getState(section);
+    const table = document.getElementById(state.tableId);
+    if (!table) {
+      console.error(
+        `❌ Table not found for section "${section}" using ID "${state.tableId}"`
+      );
+      return;
+    }
 
     if (action === "delete") {
-      selectedIds.forEach(id => {
+      selectedIds.forEach((id) => {
         const row = table.querySelector(`tr[data-id="${id}"]`);
         if (row) row.remove();
       });
@@ -33,7 +40,10 @@ window.ButtonBoxRows = (() => {
 
     if (action === "copy") {
       if (selectedIds.length !== 1) {
-        ButtonBox.showWarning(section, "Please select exactly one row to copy.");
+        ButtonBox.showWarning(
+          section,
+          "Please select exactly one row to copy."
+        );
         return;
       }
 
@@ -53,10 +63,12 @@ window.ButtonBoxRows = (() => {
 
       clone.querySelector(".line-id-col").textContent = newId;
 
-      clone.querySelectorAll("td:not(.col-select):not(.line-id-col)").forEach(cell => {
-        cell.setAttribute("contenteditable", "true");
-        cell.classList.add("editable");
-      });
+      clone
+        .querySelectorAll("td:not(.col-select):not(.line-id-col)")
+        .forEach((cell) => {
+          cell.setAttribute("contenteditable", "true");
+          cell.classList.add("editable");
+        });
 
       table.prepend(clone);
       ButtonBox.wireCheckboxes(section);
@@ -78,7 +90,7 @@ window.ButtonBoxRows = (() => {
         <td contenteditable="true" class="editable"></td>
       `;
 
-      newRow.querySelectorAll("td[contenteditable]").forEach(cell => {
+      newRow.querySelectorAll("td[contenteditable]").forEach((cell) => {
         cell.addEventListener("input", () => newRow.classList.add("dirty"));
       });
 
@@ -87,15 +99,17 @@ window.ButtonBoxRows = (() => {
     }
 
     if (action === "edit") {
-      selectedIds.forEach(id => {
+      selectedIds.forEach((id) => {
         const row = table.querySelector(`tr[data-id="${id}"]`);
         if (!row) return;
 
         row.classList.add("editing", "dirty");
-        row.querySelectorAll("td:not(.col-select):not(.line-id-col)").forEach(cell => {
-          cell.setAttribute("contenteditable", "true");
-          cell.classList.add("editable");
-        });
+        row
+          .querySelectorAll("td:not(.col-select):not(.line-id-col)")
+          .forEach((cell) => {
+            cell.setAttribute("contenteditable", "true");
+            cell.classList.add("editable");
+          });
       });
     }
 
@@ -105,7 +119,7 @@ window.ButtonBoxRows = (() => {
       dirtyRows.forEach((row, i) => {
         row.classList.remove("editing", "dirty");
 
-        row.querySelectorAll("td[contenteditable]").forEach(cell => {
+        row.querySelectorAll("td[contenteditable]").forEach((cell) => {
           cell.removeAttribute("contenteditable");
           cell.classList.remove("editable");
         });
@@ -136,6 +150,6 @@ window.ButtonBoxRows = (() => {
 
   return {
     handleRowAction,
-    wireCheckboxes
+    wireCheckboxes,
   };
 })();
