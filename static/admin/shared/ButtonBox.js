@@ -1,5 +1,8 @@
 // static/admin/shared/ButtonBox.js
 
+// Assume these are loaded globally (since we're in-browser, not using modules)
+if (typeof ButtonBoxRows === "undefined") console.warn("⚠️ ButtonBoxRows is not defined.");
+
 window.ButtonBox = (() => {
   const sectionStates = {};
   const tipTimers = {};

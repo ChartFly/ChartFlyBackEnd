@@ -1,6 +1,7 @@
 <!-- templates/admin.html -->
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -20,6 +21,7 @@
   <link rel="stylesheet" href="/static/admin/api-keys/ApiKeys.css?v=5" />
   <link rel="stylesheet" href="/static/admin/user-management/UserManagement.css?v=5" />
 </head>
+
 <body>
 
   <!-- ✅ Header -->
@@ -51,19 +53,23 @@
   {% include "admin/user-management/UserManagement.html" %}
 
   <!-- ✅ Shared ButtonBox Logic (order matters!) -->
+  <!-- Shared Core First -->
   <script src="/static/admin/shared/ButtonBoxMessages.js?v=5"></script>
-  <script src="/static/admin/shared/ButtonBoxColumns.js?v=5"></script>
   <script src="/static/admin/shared/ButtonBoxRows.js?v=5"></script>
-  <script src="/static/admin/shared/ButtonBoxDataBase.js?v=5"></script>
+  <script src="/static/admin/shared/ButtonBoxColumns.js?v=5"></script>
+  <script src="/static/admin/shared/ButtonBoxDatabase.js?v=5"></script>
   <script src="/static/admin/shared/ButtonBox.js?v=5"></script>
 
-  <!-- ✅ Per-Tab Scripts -->
-  <script defer src="/static/admin/market-holidays/MarketHolidays.js?v=5"></script>
-  <script defer src="/static/admin/api-keys/ApiKeys.js?v=5"></script>
-  <script defer src="/static/admin/user-management/UserManagement.js?v=5"></script>
+  <!-- Section Adapters Next -->
+  <script src="/static/admin/market-holidays/ButtonBoxMarketHolidays.js?v=5"></script>
+  <script src="/static/admin/api-keys/ButtonBoxApiKeys.js?v=5"></script>
+  <script src="/static/admin/user-management/ButtonBoxUserManagement.js?v=5"></script>
 
-  <!-- ✅ Global Script -->
-  <script defer src="/static/frontend/core/main.js?v=5"></script>
+  <!-- Section Logic (final) -->
+  <script src="/static/admin/market-holidays/MarketHolidays.js?v=5"></script>
+  <script src="/static/admin/api-keys/ApiKeys.js?v=5"></script>
+  <script src="/static/admin/user-management/UserManagement.js?v=5"></script>
 
 </body>
+
 </html>
