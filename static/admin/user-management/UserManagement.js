@@ -8,7 +8,8 @@ async function loadAdminUsers() {
     if (!response.ok) throw new Error("Failed to fetch admin users");
 
     const users = await response.json();
-    const table = document.getElementById("admin-users-table");
+    const table = document.getElementById("users-table");
+    if (!table) throw new Error("❌ users-table element not found");
     table.innerHTML = "";
 
     users.forEach((user, index) => {
@@ -23,30 +24,41 @@ async function loadAdminUsers() {
         <td class="line-id-col">${user.id}</td>
         <td>${sanitizeInput(user.first_name || "")}</td>
         <td>${sanitizeInput(user.last_name || "")}</td>
-        <td>${sanitizeInput(user.email || "")}</td>
-        <td>${sanitizeInput(user.phone_number || "")}</td>
-        <td>${sanitizeInput(user.status || "")}</td>
+        <td>${sanitizeInput(user.username || "")}</td>
         <td>${sanitizeInput(user.role || "")}</td>
-        <td>${user.is_2fa_enabled ? "Yes" : "No"}</td>
-        <td>${sanitizeInput(user.two_fa_method || "")}</td>
       `;
 
       table.appendChild(row);
     });
 
-    // ✅ Init and wire checkboxes
     ButtonBoxUserManagement.init();
     ButtonBox.wireCheckboxes("user");
+
+    const toggle = document.getElementById("user-show-id-toggle");
+    if (toggle) {
+      const updateVisibility = () => {
+        document
+          .querySelectorAll("#user-management-section .line-id-col")
+          .forEach(
+            (cell) =>
+              (cell.style.display = toggle.checked ? "table-cell" : "none")
+          );
+      };
+      toggle.addEventListener("change", updateVisibility);
+      updateVisibility();
+    }
   } catch (error) {
     console.error("❌ Failed to load admin users:", error);
-    const table = document.getElementById("admin-users-table");
-    table.innerHTML = `<tr><td colspan="10">Failed to load admin users.</td></tr>`;
+    const table = document.getElementById("users-table");
+    if (table) {
+      table.innerHTML = `<tr><td colspan="6">Failed to load admin users. Please try again later.</td></tr>`;
+    }
   }
 }
 
 (() => {
-  if (window.USER_MANAGEMENT_LOADED) return;
-  window.USER_MANAGEMENT_LOADED = true;
+  if (window.ADMIN_USERS_LOADED) return;
+  window.ADMIN_USERS_LOADED = true;
 
   window.sanitizeInput = function (input) {
     return typeof input === "string"
@@ -54,7 +66,6 @@ async function loadAdminUsers() {
       : input ?? "—";
   };
 
-  // 🧠 Delegate to ButtonBoxRows
   window.handleUserAction = ButtonBoxRows.handleRowAction;
 })();
 

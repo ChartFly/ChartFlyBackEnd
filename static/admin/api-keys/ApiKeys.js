@@ -7,40 +7,52 @@ async function loadApiKeys() {
     );
     if (!response.ok) throw new Error("Failed to fetch API keys");
 
-    const data = await response.json();
+    const keys = await response.json();
     const table = document.getElementById("api-keys-table");
+    if (!table) throw new Error("❌ api-keys-table element not found");
     table.innerHTML = "";
 
-    data.forEach((item, index) => {
+    keys.forEach((key, index) => {
       const row = document.createElement("tr");
-      row.setAttribute("data-id", item.id);
+      row.setAttribute("data-id", key.id);
       row.setAttribute("data-index", index + 1);
 
       row.innerHTML = `
         <td class="col-select"><input type="checkbox" class="api-select-checkbox" data-id="${
-          item.id
+          key.id
         }"></td>
-        <td class="line-id-col">${item.id}</td>
-        <td>${sanitizeInput(item.name || "")}</td>
-        <td>${sanitizeInput(item.provider || "")}</td>
-        <td>${item.is_active ? "Active" : "Inactive"}</td>
-        <td>${sanitizeInput(item.key_type || "")}</td>
-        <td>${sanitizeInput(item.auth_method || "")}</td>
-        <td>${sanitizeInput(item.billing_interval || "")}</td>
-        <td>${item.cost_per_month ?? "—"}</td>
-        <td>${item.cost_per_year ?? "—"}</td>
+        <td class="line-id-col">${key.id}</td>
+        <td>${sanitizeInput(key.name || "—")}</td>
+        <td>${sanitizeInput(key.provider || "—")}</td>
+        <td>${sanitizeInput(key.key_label || "—")}</td>
+        <td>${sanitizeInput(key.status || "Unknown")}</td>
       `;
 
       table.appendChild(row);
     });
 
-    // ✅ Init and wire checkboxes
     ButtonBoxApiKeys.init();
     ButtonBox.wireCheckboxes("api");
+
+    const toggle = document.getElementById("api-show-id-toggle");
+    if (toggle) {
+      const updateVisibility = () => {
+        document
+          .querySelectorAll("#api-keys-section .line-id-col")
+          .forEach(
+            (cell) =>
+              (cell.style.display = toggle.checked ? "table-cell" : "none")
+          );
+      };
+      toggle.addEventListener("change", updateVisibility);
+      updateVisibility();
+    }
   } catch (error) {
     console.error("❌ Failed to load API keys:", error);
     const table = document.getElementById("api-keys-table");
-    table.innerHTML = `<tr><td colspan="10">Failed to load API keys.</td></tr>`;
+    if (table) {
+      table.innerHTML = `<tr><td colspan="6">Failed to load API keys. Please try again later.</td></tr>`;
+    }
   }
 }
 
@@ -54,8 +66,7 @@ async function loadApiKeys() {
       : input ?? "—";
   };
 
-  // 🧠 Delegate to ButtonBoxRows
-  window.handleApiAction = ButtonBoxRows.handleRowAction;
+  window.handleApiKeyAction = ButtonBoxRows.handleRowAction;
 })();
 
 window.addEventListener("DOMContentLoaded", loadApiKeys);

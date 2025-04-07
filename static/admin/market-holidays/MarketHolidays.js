@@ -9,6 +9,7 @@ async function loadMarketHolidays() {
 
     const holidays = await response.json();
     const table = document.getElementById("holidays-table");
+    if (!table) throw new Error("❌ holidays-table element not found");
     table.innerHTML = "";
 
     holidays.forEach((holiday, index) => {
@@ -20,9 +21,11 @@ async function loadMarketHolidays() {
       const readableTime = isEarlyClose ? formatTime(holiday.close_time) : "";
 
       row.innerHTML = `
-        <td class="col-select"><input type="checkbox" class="holiday-select-checkbox" data-id="${
-          holiday.id
-        }"></td>
+        <td class="col-select">
+          <input type="checkbox" class="holiday-select-checkbox" data-id="${
+            holiday.id
+          }">
+        </td>
         <td class="line-id-col">${holiday.id}</td>
         <td>${sanitizeInput(holiday.name || "N/A")}</td>
         <td>${sanitizeInput(holiday.date || "N/A")}</td>
@@ -33,33 +36,29 @@ async function loadMarketHolidays() {
       table.appendChild(row);
     });
 
-    // ✅ Initialize ButtonBox AFTER rows are in the DOM
+    // ✅ Safe to init and wire after rendering
     ButtonBoxMarketHolidays.init();
-
-    // ✅ Wire checkboxes AFTER rows are rendered
     ButtonBox.wireCheckboxes("holiday");
 
     const toggle = document.getElementById("holiday-show-id-toggle");
     if (toggle) {
-      toggle.addEventListener("change", () => {
+      const updateVisibility = () => {
         document
           .querySelectorAll("#market-holidays-section .line-id-col")
           .forEach(
             (cell) =>
               (cell.style.display = toggle.checked ? "table-cell" : "none")
           );
-      });
-      document
-        .querySelectorAll("#market-holidays-section .line-id-col")
-        .forEach(
-          (cell) =>
-            (cell.style.display = toggle.checked ? "table-cell" : "none")
-        );
+      };
+      toggle.addEventListener("change", updateVisibility);
+      updateVisibility(); // apply initial state
     }
   } catch (error) {
     console.error("❌ Failed to load holidays:", error);
     const table = document.getElementById("holidays-table");
-    table.innerHTML = `<tr><td colspan="6">Failed to load holidays. Please try again later.</td></tr>`;
+    if (table) {
+      table.innerHTML = `<tr><td colspan="6">Failed to load holidays. Please try again later.</td></tr>`;
+    }
   }
 }
 
