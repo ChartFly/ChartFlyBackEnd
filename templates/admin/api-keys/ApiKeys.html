@@ -1,6 +1,6 @@
 <!-- templates/admin/api-keys/ApiKeys.html -->
 
-<section id="api-keys-section" class="admin-tab-section" style="display: none;">
+<section id="api-keys-section" class="admin-tab-section" style="display: none">
   <h2>Manage API Keys</h2>
 
   <!-- ✅ Modular ButtonBox (Toolbar + Confirm Bar) -->
@@ -16,11 +16,11 @@
 
   <!-- 📊 API Keys Table -->
   <div class="table-wrapper">
-    <table class="admin-table">
+    <table id="api-keys-table" class="admin-table">
       <thead>
         <tr>
           <th class="col-select">Select</th>
-          <th class="id-col" style="display: none;">ID</th>
+          <th class="id-col" style="display: none">ID</th>
           <th class="col-name">Label</th>
           <th class="col-id-tag">ID Tag</th>
           <th class="col-provider">Provider</th>
@@ -38,8 +38,10 @@
           <th class="col-type">Type</th>
         </tr>
       </thead>
-      <tbody id="api-keys-table">
-        <tr><td colspan="17">Loading API keys...</td></tr>
+      <tbody>
+        <tr>
+          <td colspan="17">Loading API keys...</td>
+        </tr>
       </tbody>
     </table>
   </div>

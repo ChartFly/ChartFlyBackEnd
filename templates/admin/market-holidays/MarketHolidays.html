@@ -1,15 +1,19 @@
 <!-- templates/admin/market-holidays/MarketHolidays.html -->
 
-<section id="market-holidays-section" class="admin-tab-section" style="display: none;">
+<section
+  id="market-holidays-section"
+  class="admin-tab-section"
+  style="display: none"
+>
   <h2>Manage Market Holidays</h2>
 
   <!-- ✅ Modular ButtonBox -->
-  {% set section = "holiday" %}
-  {% include "shared/ButtonBox.html" with context %}
+  {% set section = "holiday" %} {% include "shared/ButtonBox.html" with context
+  %}
 
   <!-- 📅 Holiday Table -->
   <div class="table-wrapper">
-    <table class="admin-table">
+    <table id="holidays-table" class="admin-table">
       <thead>
         <tr>
           <th class="col-select">Select</th>
@@ -20,12 +24,10 @@
           <th>Close Time</th>
         </tr>
       </thead>
-      <tbody id="holidays-table">
-        <!-- ⚠️ Rows will be dynamically rendered in JS.
-             Make sure the ID cell has class="line-id-col" like:
-             <td class="line-id-col">123</td>
-        -->
-        <tr><td colspan="6">Loading holidays...</td></tr>
+      <tbody>
+        <tr>
+          <td colspan="6">Loading holidays...</td>
+        </tr>
       </tbody>
     </table>
   </div>
