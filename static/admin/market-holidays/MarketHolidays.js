@@ -1,5 +1,7 @@
 // static/admin/market-holidays/MarketHolidays.js
 
+const DEBUG = true; // 🔍 Set to true to enable debug logs and manual loading
+
 async function loadMarketHolidays() {
   try {
     const response = await fetch(
@@ -8,6 +10,8 @@ async function loadMarketHolidays() {
     if (!response.ok) throw new Error("Failed to fetch market holidays");
 
     const holidays = await response.json();
+    if (DEBUG) console.log("✅ Holidays fetched:", holidays);
+
     const table = document.getElementById("holidays-table");
     if (!table) throw new Error("❌ holidays-table element not found");
     table.innerHTML = "";
@@ -30,7 +34,9 @@ async function loadMarketHolidays() {
         <td>${sanitizeInput(holiday.status || "Unknown")}</td>
         <td>${readableTime}</td>
       `;
+
       table.appendChild(row);
+      if (DEBUG) console.log("📦 Appended row for holiday:", holiday.name);
     });
 
     ButtonBoxMarketHolidays.init();
@@ -39,6 +45,7 @@ async function loadMarketHolidays() {
       if (window.ButtonBox && ButtonBox.wireCheckboxes) {
         clearInterval(waitForButtonBox);
         ButtonBox.wireCheckboxes("holiday");
+        if (DEBUG) console.log("✅ Checkbox wiring complete.");
       }
     }, 50);
 
@@ -51,6 +58,8 @@ async function loadMarketHolidays() {
             (cell) =>
               (cell.style.display = toggle.checked ? "table-cell" : "none")
           );
+        if (DEBUG)
+          console.log("🕵️ Toggled ID column visibility:", toggle.checked);
       });
       toggle.dispatchEvent(new Event("change"));
     }
@@ -84,4 +93,13 @@ async function loadMarketHolidays() {
   window.handleHolidayAction = ButtonBoxRows.handleRowAction;
 })();
 
-window.addEventListener("DOMContentLoaded", loadMarketHolidays);
+if (!DEBUG) {
+  window.addEventListener("DOMContentLoaded", loadMarketHolidays);
+}
+
+if (DEBUG) {
+  console.log("🚧 DEBUG mode is ON — loadMarketHolidays() won't auto-run");
+  console.log("👉 Run it manually with: loadMarketHolidays()");
+} else {
+  console.log("✅ MarketHolidays.js loaded and ready");
+}
