@@ -2,8 +2,7 @@
 
 window.ButtonBoxApiKeys = (() => {
   function init() {
-    console.log("🚀 ButtonBox initialized for section: api");
-    ButtonBox.init({
+    const config = {
       section: "api",
       tableId: "api-keys-table",
       tipBoxId: "api-tips",
@@ -21,14 +20,16 @@ window.ButtonBoxApiKeys = (() => {
         "undo",
       ],
       handleAction: window.handleApiKeyAction,
-    });
+    };
+
+    const waitForBox = setInterval(() => {
+      if (window.ButtonBox) {
+        clearInterval(waitForBox);
+        console.log("🚀 ButtonBox initialized for section: api");
+        ButtonBox.init(config);
+      }
+    }, 50);
   }
 
   return { init };
 })();
-
-document.addEventListener("DOMContentLoaded", () => {
-  if (window.ButtonBoxApiKeys) {
-    ButtonBoxApiKeys.init();
-  }
-});

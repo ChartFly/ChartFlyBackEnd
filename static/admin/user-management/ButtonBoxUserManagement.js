@@ -2,8 +2,7 @@
 
 window.ButtonBoxUserManagement = (() => {
   function init() {
-    console.log("🚀 ButtonBox initialized for section: user");
-    ButtonBox.init({
+    const config = {
       section: "user",
       tableId: "user-management-table",
       tipBoxId: "user-tips",
@@ -21,14 +20,16 @@ window.ButtonBoxUserManagement = (() => {
         "undo",
       ],
       handleAction: window.handleUserAction,
-    });
+    };
+
+    const waitForBox = setInterval(() => {
+      if (window.ButtonBox) {
+        clearInterval(waitForBox);
+        console.log("🚀 ButtonBox initialized for section: user");
+        ButtonBox.init(config);
+      }
+    }, 50);
   }
 
   return { init };
 })();
-
-document.addEventListener("DOMContentLoaded", () => {
-  if (window.ButtonBoxUserManagement) {
-    ButtonBoxUserManagement.init();
-  }
-});
