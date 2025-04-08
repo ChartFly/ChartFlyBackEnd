@@ -18,7 +18,8 @@
 
 /* 📊 Table Styles */
 #market-holidays-section .admin-table {
-  width: max-content;
+  width: 100%; /* ✅ Fixed */
+  min-width: 800px; /* ✅ Optional safety */
   border-collapse: collapse;
   table-layout: fixed;
   font-size: 0.95rem;

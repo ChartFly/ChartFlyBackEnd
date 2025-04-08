@@ -171,12 +171,11 @@ input[type="checkbox"] {
   display: none;
 }
 
-/* Match button box width to table wrapper */
+/* ✅ FIXED: Match button box width to its container, not hard-coded values */
 .button-box {
-  max-width: 800px;
   width: 100%;
-  min-width: 720px;
-  margin-left: 0;
-  margin-right: 0;
-  padding-right: 10px;
+  max-width: 100%;
+  min-width: unset;
+  padding: 0 10px;
+  box-sizing: border-box;
 }

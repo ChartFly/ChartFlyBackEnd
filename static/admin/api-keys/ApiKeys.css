@@ -33,7 +33,8 @@
 
 /* 📊 Admin Table Styles */
 #api-keys-section .admin-table {
-  width: max-content;
+  width: 100%; /* ✅ Fixed */
+  min-width: 800px; /* ✅ Optional safety net */
   border-collapse: collapse;
   table-layout: fixed;
   font-size: 0.95rem;
@@ -81,14 +82,6 @@
   white-space: nowrap;
 }
 
-/* 🆔 API Key Identifier Column */
-#api-keys-section .admin-table th.col-id-tag,
-#api-keys-section .admin-table td.col-id-tag {
-  min-width: 6ch;
-  max-width: 8ch;
-  text-align: center;
-}
-
 #api-keys-section .admin-table td.col-select {
   background-color: #007a8a;
   color: white;
@@ -97,6 +90,14 @@
 #api-keys-section .admin-table tr.selected-row td.col-select {
   background-color: #d0f0ff;
   color: black;
+}
+
+/* 🆔 API Key Identifier Column */
+#api-keys-section .admin-table th.col-id-tag,
+#api-keys-section .admin-table td.col-id-tag {
+  min-width: 6ch;
+  max-width: 8ch;
+  text-align: center;
 }
 
 /* 📓 Zebra Striping + Row Highlight */

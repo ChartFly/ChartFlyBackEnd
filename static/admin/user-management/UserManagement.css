@@ -33,7 +33,8 @@
 
 /* 📊 Admin Table Styles */
 #user-management-section .admin-table {
-  width: max-content;
+  width: 100%; /* 🔧 FIXED: was max-content */
+  min-width: 800px; /* ✅ Optional for layout stability */
   border-collapse: collapse;
   table-layout: fixed;
   font-size: 0.95rem;
@@ -181,6 +182,9 @@ body.compact-mode #user-management-section .admin-table td {
 }
 
 /* ✅ Checkbox Accent */
-#user-management-section .admin-table td.col-select input[type="checkbox"]:checked {
+#user-management-section
+  .admin-table
+  td.col-select
+  input[type="checkbox"]:checked {
   accent-color: #00aa55;
 }
