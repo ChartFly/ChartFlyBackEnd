@@ -44,7 +44,11 @@ function updateMarketStatus() {
     statusClass = "market-prepost";
   }
 
-  statusElement.classList.remove("market-open", "market-closed", "market-prepost");
+  statusElement.classList.remove(
+    "market-open",
+    "market-closed",
+    "market-prepost"
+  );
   statusElement.classList.add("market-status-text", statusClass);
   statusElement.innerText = status;
 }
@@ -60,30 +64,35 @@ function sanitizeInput(input) {
 }
 
 // =============================================================
-// 🗂️ SECTION: Tab Display & Loading Logic
+// 🧭 SECTION: Tab Switching Logic
 // - Shows the clicked tab section, hides others
-// - Applies .active class to the correct button
-// - Calls tab-specific data loading function if it exists
+// - Applies .active class
+// - Calls tab-specific data loading function if defined
 // =============================================================
 function showTab(tabName) {
   const tabs = ["market-holidays", "api-keys", "user-management"];
-  tabs.forEach(name => {
+  tabs.forEach((name) => {
     const section = document.getElementById(`${name}-section`);
-    const button = document.querySelector(`button[onclick="showTab('${name}')"]`);
+    const button = document.querySelector(
+      `button[onclick="showTab('${name}')"]`
+    );
 
-    if (section) section.style.display = (name === tabName) ? "block" : "none";
+    if (section) section.style.display = name === tabName ? "block" : "none";
     if (button) button.classList.toggle("active", name === tabName);
   });
 
   // 🧠 Trigger data loader for each tab (if defined)
-  if (tabName === "market-holidays" && typeof loadMarketHolidays === "function") {
+  if (
+    tabName === "market-holidays" &&
+    typeof loadMarketHolidays === "function"
+  ) {
     loadMarketHolidays();
   }
   if (tabName === "api-keys" && typeof loadApiKeys === "function") {
     loadApiKeys();
   }
-  if (tabName === "user-management" && typeof loadUsers === "function") {
-    loadUsers();
-    if (typeof loadTabAccess === "function") loadTabAccess(); // ✅ moved here
+  if (tabName === "user-management" && typeof loadAdminUsers === "function") {
+    loadAdminUsers();
+    if (typeof loadTabAccess === "function") loadTabAccess();
   }
 }

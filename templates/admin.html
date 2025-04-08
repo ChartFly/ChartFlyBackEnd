@@ -1,75 +1,93 @@
 <!-- templates/admin.html -->
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ChartFly Admin Panel</title>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ChartFly Admin Panel</title>
+    <!-- ✅ Favicon -->
+    <link
+      rel="icon"
+      href="/static/images/ChartFly-Favicon.ico?v=5"
+      type="image/x-icon"
+    />
 
-  <!-- ✅ Favicon -->
-  <link rel="icon" href="/static/images/ChartFly-Favicon.ico?v=5" type="image/x-icon" />
+    <!-- ✅ Global Styles -->
+    <link rel="stylesheet" href="/static/css/styles.css?v=5" />
 
-  <!-- ✅ Global Styles -->
-  <link rel="stylesheet" href="/static/css/styles.css?v=5" />
+    <!-- ✅ Shared Styles -->
+    <link rel="stylesheet" href="/static/admin/shared/ButtonBox.css?v=5" />
 
-  <!-- ✅ Shared Styles -->
-  <link rel="stylesheet" href="/static/admin/shared/ButtonBox.css?v=5" />
+    <!-- ✅ Per-Tab Styles -->
+    <link
+      rel="stylesheet"
+      href="/static/admin/market-holidays/MarketHolidays.css?v=5"
+    />
+    <link rel="stylesheet" href="/static/admin/api-keys/ApiKeys.css?v=5" />
+    <link
+      rel="stylesheet"
+      href="/static/admin/user-management/UserManagement.css?v=5"
+    />
+  </head>
 
-  <!-- ✅ Per-Tab Styles -->
-  <link rel="stylesheet" href="/static/admin/market-holidays/MarketHolidays.css?v=5" />
-  <link rel="stylesheet" href="/static/admin/api-keys/ApiKeys.css?v=5" />
-  <link rel="stylesheet" href="/static/admin/user-management/UserManagement.css?v=5" />
-</head>
-
-<body>
-
-  <!-- ✅ Header -->
-  <header class="header">
-    <div class="header-left">
-      <div class="logo-container">
-        <img src="/static/images/Chartfly-logo.png?v=5" alt="ChartFly Logo" class="logo" width="144" height="144" />
+  <body>
+    <!-- ✅ Header -->
+    <header class="header">
+      <div class="header-left">
+        <div class="logo-container">
+          <img
+            src="/static/images/Chartfly-logo.png?v=5"
+            alt="ChartFly Logo"
+            class="logo"
+            width="144"
+            height="144"
+          />
+        </div>
       </div>
+      <div class="header-center">
+        <h1 class="admin-title">ChartFly Admin Panel</h1>
+      </div>
+      <div class="header-right market-status-container">
+        <div class="market-status-label">Market Status:</div>
+        <div id="market-status-text" class="market-status-text">Loading...</div>
+      </div>
+    </header>
+
+    <!-- ✅ Tab Navigation -->
+    <div class="tabs">
+      <button class="tab-button" onclick="showTab('market-holidays')">
+        Market Holidays
+      </button>
+      <button class="tab-button" onclick="showTab('api-keys')">API Keys</button>
+      <button class="tab-button" onclick="showTab('user-management')">
+        User Management
+      </button>
     </div>
-    <div class="header-center">
-      <h1 class="admin-title">ChartFly Admin Panel</h1>
-    </div>
-    <div class="header-right market-status-container">
-      <div class="market-status-label">Market Status:</div>
-      <div id="market-status-text" class="market-status-text">Loading...</div>
-    </div>
-  </header>
 
-  <!-- ✅ Tab Navigation -->
-  <div class="tabs">
-    <button class="tab-button" onclick="showTab('market-holidays')">Market Holidays</button>
-    <button class="tab-button" onclick="showTab('api-keys')">API Keys</button>
-    <button class="tab-button" onclick="showTab('user-management')">User Management</button>
-  </div>
+    <!-- ✅ Tab Sections -->
+    {% include "admin/market-holidays/MarketHolidays.html" %} {% include
+    "admin/api-keys/ApiKeys.html" %} {% include
+    "admin/user-management/UserManagement.html" %}
 
-  <!-- ✅ Tab Sections -->
-  {% include "admin/market-holidays/MarketHolidays.html" %}
-  {% include "admin/api-keys/ApiKeys.html" %}
-  {% include "admin/user-management/UserManagement.html" %}
+    <!-- ✅ Shared Core First (must be loaded in this order) -->
+    <script src="/static/admin/shared/ButtonBoxMessages.js?v=5"></script>
+    <script src="/static/admin/shared/ButtonBoxRows.js?v=5"></script>
+    <script src="/static/admin/shared/ButtonBoxColumns.js?v=5"></script>
+    <script src="/static/admin/shared/ButtonBoxDataBase.js?v=5"></script>
+    <script src="/static/admin/shared/ButtonBox.js?v=5"></script>
 
-  <!-- ✅ Shared ButtonBox Logic (order matters!) -->
-  <!-- Shared Core First -->
-  <script src="/static/admin/shared/ButtonBoxMessages.js?v=5"></script>
-  <script src="/static/admin/shared/ButtonBoxRows.js?v=5"></script>
-  <script src="/static/admin/shared/ButtonBoxColumns.js?v=5"></script>
-  <script src="/static/admin/shared/ButtonBoxDataBase.js?v=5"></script>
-  <script src="/static/admin/shared/ButtonBox.js?v=5"></script>
+    <!-- ✅ Section Adapters (require ButtonBox to be loaded) -->
+    <script src="/static/admin/market-holidays/ButtonBoxMarketHolidays.js?v=5"></script>
+    <script src="/static/admin/api-keys/ButtonBoxApiKeys.js?v=5"></script>
+    <script src="/static/admin/user-management/ButtonBoxUserManagement.js?v=5"></script>
 
-  <!-- Section Adapters Next -->
-  <script src="/static/admin/market-holidays/ButtonBoxMarketHolidays.js?v=5"></script>
-  <script src="/static/admin/api-keys/ButtonBoxApiKeys.js?v=5"></script>
-  <script src="/static/admin/user-management/ButtonBoxUserManagement.js?v=5"></script>
+    <!-- ✅ Section Logic (runs after adapter init) -->
+    <script src="/static/admin/market-holidays/MarketHolidays.js?v=5"></script>
+    <script src="/static/admin/api-keys/ApiKeys.js?v=5"></script>
+    <script src="/static/admin/user-management/UserManagement.js?v=5"></script>
 
-  <!-- Section Logic (final) -->
-  <script src="/static/admin/market-holidays/MarketHolidays.js?v=5"></script>
-  <script src="/static/admin/api-keys/ApiKeys.js?v=5"></script>
-  <script src="/static/admin/user-management/UserManagement.js?v=5"></script>
-
-</body>
-
+    <!-- ✅ Global Frontend Logic (tabs, market status, etc.) -->
+    <script src="/static/frontend/core/main.js?v=5"></script>
+  </body>
 </html>
