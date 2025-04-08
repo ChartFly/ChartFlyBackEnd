@@ -39,10 +39,9 @@ async function loadApiKeys() {
       toggle.addEventListener("change", () => {
         document
           .querySelectorAll("#api-keys-section .line-id-col")
-          .forEach(
-            (cell) =>
-              (cell.style.display = toggle.checked ? "table-cell" : "none")
-          );
+          .forEach((cell) => {
+            cell.style.display = toggle.checked ? "table-cell" : "none";
+          });
       });
       toggle.dispatchEvent(new Event("change"));
     }
@@ -68,4 +67,12 @@ async function loadApiKeys() {
   window.handleApiKeyAction = ButtonBoxRows.handleRowAction;
 })();
 
-window.addEventListener("DOMContentLoaded", loadApiKeys);
+// ⏳ Wait for ButtonBox and adapter to be available
+window.addEventListener("DOMContentLoaded", () => {
+  const waitForBox = setInterval(() => {
+    if (window.ButtonBox && window.ButtonBoxApiKeys) {
+      clearInterval(waitForBox);
+      loadApiKeys();
+    }
+  }, 50);
+});

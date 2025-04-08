@@ -43,10 +43,9 @@ async function loadAdminUsers() {
       toggle.addEventListener("change", () => {
         document
           .querySelectorAll("#user-management-section .line-id-col")
-          .forEach(
-            (cell) =>
-              (cell.style.display = toggle.checked ? "table-cell" : "none")
-          );
+          .forEach((cell) => {
+            cell.style.display = toggle.checked ? "table-cell" : "none";
+          });
       });
       toggle.dispatchEvent(new Event("change"));
     }
@@ -72,4 +71,12 @@ async function loadAdminUsers() {
   window.handleUserAction = ButtonBoxRows.handleRowAction;
 })();
 
-window.addEventListener("DOMContentLoaded", loadAdminUsers);
+// ⏳ Wait for ButtonBox and adapter to be available
+window.addEventListener("DOMContentLoaded", () => {
+  const waitForBox = setInterval(() => {
+    if (window.ButtonBox && window.ButtonBoxUserManagement) {
+      clearInterval(waitForBox);
+      loadAdminUsers();
+    }
+  }, 50);
+});

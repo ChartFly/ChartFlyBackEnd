@@ -26,3 +26,9 @@ window.ButtonBoxUserManagement = (() => {
 
   return { init };
 })();
+
+document.addEventListener("DOMContentLoaded", () => {
+  if (window.ButtonBoxUserManagement) {
+    ButtonBoxUserManagement.init();
+  }
+});

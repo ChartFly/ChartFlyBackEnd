@@ -26,3 +26,9 @@ window.ButtonBoxApiKeys = (() => {
 
   return { init };
 })();
+
+document.addEventListener("DOMContentLoaded", () => {
+  if (window.ButtonBoxApiKeys) {
+    ButtonBoxApiKeys.init();
+  }
+});
