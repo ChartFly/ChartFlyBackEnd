@@ -41,8 +41,8 @@ async function loadApiKeys() {
       }
     }, 50);
 
-    // Delay toggle wiring to avoid DOM not ready issue
-    setTimeout(() => {
+    // Resilient toggle logic using animation frame + retry
+    function waitForIdToggle() {
       const toggle = document.getElementById("api-show-id-toggle");
       if (toggle) {
         toggle.addEventListener("change", () => {
@@ -54,10 +54,14 @@ async function loadApiKeys() {
             );
         });
         toggle.dispatchEvent(new Event("change"));
+        console.log("✅ api-show-id-toggle wired successfully");
       } else {
-        console.warn("⚠️ api-show-id-toggle still not found after delay");
+        console.warn("⚠️ api-show-id-toggle still not found — retrying...");
+        setTimeout(waitForIdToggle, 100);
       }
-    }, 100);
+    }
+
+    requestAnimationFrame(waitForIdToggle);
   } catch (error) {
     console.error("❌ Failed to load API keys:", error);
     const table = document.getElementById("api-keys-table");
