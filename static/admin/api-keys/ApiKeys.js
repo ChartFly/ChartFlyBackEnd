@@ -1,6 +1,7 @@
 // static/admin/api-keys/ApiKeys.js
 
 async function loadApiKeys() {
+  console.log("🔥 loadApiKeys() has been called");
   try {
     const response = await fetch(
       "https://chartflybackend.onrender.com/api/api-keys/"
@@ -51,6 +52,8 @@ async function loadApiKeys() {
           );
       });
       toggle.dispatchEvent(new Event("change"));
+    } else {
+      console.warn("⚠️ api-show-id-toggle not found yet");
     }
   } catch (error) {
     console.error("❌ Failed to load API keys:", error);
@@ -74,4 +77,4 @@ async function loadApiKeys() {
   window.handleApiKeyAction = ButtonBoxRows.handleRowAction;
 })();
 
-window.addEventListener("DOMContentLoaded", loadApiKeys);
+// Removed: window.addEventListener("DOMContentLoaded", loadApiKeys);
