@@ -1,34 +1,32 @@
 /* 📁 FILE: MarketHolidays.css */
 /* 📍 LOCATION: static/admin/market-holidays/MarketHolidays.css */
-/* 🎯 SCOPE: Styles exclusive to #market-holidays-section — no global bleed */
+/* 🎯 SCOPE: Styles exclusive to #market-holidays-section */
 
 #market-holidays-section {
   margin-top: 2rem;
 }
 
-/* 🔲 Scrollable Container */
 #market-holidays-section .table-wrapper {
   display: block;
   overflow-x: auto;
   overflow-y: auto;
   max-height: 500px;
   max-width: 100%;
-  min-height: 200px;
   border: 1px solid #ccc;
   border-radius: 6px;
+  min-height: 200px;
 }
 
-/* 📊 Base Table Layout */
+/* 📊 Table Styles */
 #market-holidays-section .admin-table {
-  width: 100%; /* ✅ Fill container */
-  min-width: 800px; /* 🛡️ Ensure enough room for all columns */
+  width: 100%;
+  min-width: 800px;
   border-collapse: collapse;
-  table-layout: fixed; /* ✅ For equal width distribution */
+  table-layout: fixed;
   font-size: 0.95rem;
-  background-color: #fff;
 }
 
-/* 📐 Column Sizing (except Select) */
+/* 📐 Force cell layout */
 #market-holidays-section .admin-table th:not(.col-select),
 #market-holidays-section .admin-table td:not(.col-select) {
   min-width: 8ch;
@@ -36,14 +34,14 @@
   white-space: normal;
   overflow-wrap: anywhere;
   word-break: break-word;
-  vertical-align: top;
 }
 
-/* 🔠 Table Header */
+/* 🔠 Header Styling */
 #market-holidays-section .admin-table th {
   border: 1px solid #ccc;
   padding: 6px 10px;
   text-align: left;
+  vertical-align: top;
   background-color: #007a8a;
   color: white;
   font-weight: bold;
@@ -52,11 +50,19 @@
   z-index: 10;
 }
 
-/* 🔢 Table Body */
+/* 🔢 Body Cell Styling */
 #market-holidays-section .admin-table td {
   border: 1px solid #ccc;
   padding: 6px 10px;
   text-align: left;
+  vertical-align: top;
+  min-height: 24px;
+}
+
+/* 🫥 Prevent collapse on empty cells */
+#market-holidays-section .admin-table td:empty::after {
+  content: " "; /* non-breaking space */
+  visibility: hidden;
 }
 
 /* ✅ Select Column */
@@ -79,18 +85,17 @@
   color: black;
 }
 
-/* 🆔 ID Column */
-#market-holidays-section .admin-table th.line-id-col,
-#market-holidays-section .admin-table td.line-id-col {
-  width: 6ch;
-  min-width: 4ch;
-  max-width: 10ch;
+/* 🔠 Line ID Column */
+#market-holidays-section .line-id-col {
+  width: 4ch;
+  min-width: 2ch;
+  max-width: 8ch;
   text-align: center;
   white-space: nowrap;
-  display: none; /* 👁️ Controlled by JS toggle */
+  display: none;
 }
 
-/* 🦓 Zebra Rows + Highlights */
+/* 🦓 Row Striping */
 #market-holidays-section .admin-table tbody tr:nth-child(even) {
   background-color: #f9f9f9;
 }
@@ -101,26 +106,20 @@
   background-color: #d0f0ff !important;
 }
 
-/* ✏️ Editable Cells */
+/* ✏️ Editable Cell Styling */
 #market-holidays-section .editable {
   background-color: #fff8dc;
   border: 1px dashed #ccc;
   outline: none;
 }
-
-/* 🧩 Row Editing Box Highlight */
 #market-holidays-section tr.editing {
   box-shadow: inset 0 0 0 2px #007a8a;
   background-color: #e9f7f9;
 }
-
-/* 🆕 Copied/New Row Background */
 #market-holidays-section tr[data-id^="paste-"],
 #market-holidays-section tr[data-id^="new-"] {
   background-color: #f2fff4;
 }
-
-/* ❌ Invalid Cell */
 #market-holidays-section .invalid {
   background-color: #ffe5e5;
   border: 1px solid #ff4d4d;

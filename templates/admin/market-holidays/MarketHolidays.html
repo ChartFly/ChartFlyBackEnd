@@ -3,8 +3,16 @@
 <section
   id="market-holidays-section"
   class="admin-tab-section"
-  style="display: none"
+  style="display: block"
+  <!--
+  🔧
+  Force
+  visible
+  during
+  testing
+  --
 >
+  >
   <h2>Manage Market Holidays</h2>
 
   <!-- ✅ Modular ButtonBox -->
@@ -12,12 +20,24 @@
   %}
 
   <!-- 📅 Holiday Table -->
-  <div class="table-wrapper">
-    <table id="holidays-table" class="admin-table">
+  <div class="table-wrapper" style="min-height: 200px; overflow: visible">
+    <!-- 🔧 Patch -->
+    <table
+      id="holidays-table"
+      class="admin-table"
+      style="
+        display: table;
+        width: 100%;
+        table-layout: fixed;
+        border: 2px dashed red;
+      "
+    >
+      <!-- 🔧 Patch -->
       <thead>
         <tr>
           <th class="col-select">Select</th>
-          <th class="line-id-col">ID</th>
+          <th class="line-id-col" style="display: table-cell">ID</th>
+          <!-- 🔧 Force visible for test -->
           <th>Name</th>
           <th>Date</th>
           <th>Status</th>
@@ -25,8 +45,14 @@
         </tr>
       </thead>
       <tbody>
+        <!-- 🔧 Temporary hardcoded row for visibility testing -->
         <tr>
-          <td colspan="6">Loading holidays...</td>
+          <td class="col-select"><input type="checkbox" /></td>
+          <td class="line-id-col" style="display: table-cell">123</td>
+          <td>Test Holiday</td>
+          <td>2025-07-04</td>
+          <td>Upcoming</td>
+          <td>1:00 PM</td>
         </tr>
       </tbody>
     </table>
