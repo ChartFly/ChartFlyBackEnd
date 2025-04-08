@@ -1,31 +1,19 @@
 // static/frontend/core/main.js
 
-// =============================================================
-// ✅ SECTION: Page Initialization
-// - Kicks off once DOM is ready
-// - Updates market status
-// - (NO default tab shown on load)
-// =============================================================
 document.addEventListener("DOMContentLoaded", function () {
   updateMarketStatus();
-  // Removed default tab display – tab will load when user clicks
+  // Do not auto-select any tab on load
 });
 
-// =============================================================
-// 📈 SECTION: Market Status Logic
-// - Determines open/closed state based on time and day
-// - Applies appropriate class for background color
-// =============================================================
+// ✅ Market status display logic
 function updateMarketStatus() {
   const now = new Date();
   const hours = now.getHours();
+  const minutes = now.getMinutes();
   const dayOfWeek = now.getDay();
   const statusElement = document.getElementById("market-status-text");
 
-  if (!statusElement) {
-    console.error("Market status element missing in HTML");
-    return;
-  }
+  if (!statusElement) return;
 
   let status = "";
   let statusClass = "";
@@ -33,7 +21,7 @@ function updateMarketStatus() {
   if (dayOfWeek === 0 || dayOfWeek === 6) {
     status = "Market Closed (Weekend)";
     statusClass = "market-closed";
-  } else if (hours < 9.5) {
+  } else if (hours < 9 || (hours === 9 && minutes < 30)) {
     status = "Pre-Market Trading";
     statusClass = "market-prepost";
   } else if (hours < 16) {
@@ -53,22 +41,14 @@ function updateMarketStatus() {
   statusElement.innerText = status;
 }
 
-// =============================================================
-// 🧼 SECTION: Simple Sanitizer
-// - Escapes angle brackets in strings to prevent HTML injection
-// =============================================================
+// ✅ Sanitizer
 function sanitizeInput(input) {
   return typeof input === "string"
     ? input.replace(/</g, "&lt;").replace(/>/g, "&gt;")
     : input;
 }
 
-// =============================================================
-// 🧭 SECTION: Tab Switching Logic
-// - Shows the clicked tab section, hides others
-// - Applies .active class
-// - Calls tab-specific data loading function if defined
-// =============================================================
+// ✅ SINGLE showTab() function to rule them all
 function showTab(tabName) {
   const tabs = ["market-holidays", "api-keys", "user-management"];
   tabs.forEach((name) => {
@@ -81,7 +61,7 @@ function showTab(tabName) {
     if (button) button.classList.toggle("active", name === tabName);
   });
 
-  // 🧠 Trigger data loader for each tab (if defined)
+  // Call data loaders (if defined)
   if (
     tabName === "market-holidays" &&
     typeof loadMarketHolidays === "function"
@@ -93,6 +73,6 @@ function showTab(tabName) {
   }
   if (tabName === "user-management" && typeof loadAdminUsers === "function") {
     loadAdminUsers();
-    if (typeof loadTabAccess === "function") loadTabAccess();
+    if (typeof loadTabAccess === "function") loadTabAccess(); // Optional
   }
 }
