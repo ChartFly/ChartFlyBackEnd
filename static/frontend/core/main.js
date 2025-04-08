@@ -1,19 +1,10 @@
 // static/frontend/core/main.js
 
-const DEBUG = true; // 🔍 Set to true to enable debug logs
-
 document.addEventListener("DOMContentLoaded", function () {
   updateMarketStatus();
-  if (DEBUG) console.log("📈 Market status updated on DOM load");
   // Do not auto-select any tab on load
-});
-
-const DEBUG = true; // 🔍 Set to true to enable debug logs
-
-document.addEventListener("DOMContentLoaded", function () {
-  updateMarketStatus();
-  if (DEBUG) console.log("📈 Market status updated on DOM load");
-  // Do not auto-select any tab on load
+  if (window.DEBUG)
+    console.log("✅ main.js initialized and updateMarketStatus() called");
 });
 
 // ✅ Market status display logic
@@ -24,10 +15,7 @@ function updateMarketStatus() {
   const dayOfWeek = now.getDay();
   const statusElement = document.getElementById("market-status-text");
 
-  if (!statusElement) {
-    if (DEBUG) console.warn("⚠️ #market-status-text element not found");
-    return;
-  }
+  if (!statusElement) return;
 
   let status = "";
   let statusClass = "";
@@ -53,11 +41,6 @@ function updateMarketStatus() {
   );
   statusElement.classList.add("market-status-text", statusClass);
   statusElement.innerText = status;
-
-  if (DEBUG) {
-    console.log("⏰ Market status time:", now.toLocaleTimeString());
-    console.log("📢 Status set to:", status);
-  }
 }
 
 // ✅ Sanitizer
@@ -80,38 +63,28 @@ function showTab(tabName) {
     if (button) button.classList.toggle("active", name === tabName);
   });
 
-  if (DEBUG) console.log("🗂️ Switching to tab:", tabName);
-
   // Call data loaders (if defined)
   if (
     tabName === "market-holidays" &&
     typeof loadMarketHolidays === "function"
   ) {
-    if (DEBUG) console.log("📅 Loading Market Holidays...");
     loadMarketHolidays();
   }
   if (tabName === "api-keys" && typeof loadApiKeys === "function") {
-    if (DEBUG) console.log("🔑 Loading API Keys...");
     loadApiKeys();
   }
   if (tabName === "user-management" && typeof loadAdminUsers === "function") {
-    if (DEBUG) console.log("👤 Loading Admin Users...");
     loadAdminUsers();
-    if (typeof loadTabAccess === "function") {
-      if (DEBUG) console.log("🔐 Loading Tab Access...");
-      loadTabAccess();
-    }
+    if (typeof loadTabAccess === "function") loadTabAccess(); // Optional
   }
 }
 
-if (DEBUG) {
-  console.log(
-    "🚧 DEBUG mode ON in main.js — run `showTab('market-holidays')` manually to test tab logic"
-  );
-}
+// 🔧 DEBUG & Global hooks
+window.DEBUG = true;
+window.showTab = showTab;
+window.sanitizeInput = sanitizeInput;
 
-if (DEBUG) {
+if (DEBUG)
   console.log(
-    "🚧 DEBUG mode ON in main.js — run `showTab('market-holidays')` manually to test tab logic"
+    "🧭 main.js loaded — showTab and sanitizeInput exported globally"
   );
-}
