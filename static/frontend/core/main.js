@@ -88,3 +88,7 @@ if (DEBUG)
   console.log(
     "🧭 main.js loaded — showTab and sanitizeInput exported globally"
   );
+
+if (!location.hash && typeof showTab === "function") {
+  showTab("market-holidays");
+}
