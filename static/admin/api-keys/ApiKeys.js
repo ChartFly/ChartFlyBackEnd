@@ -41,20 +41,23 @@ async function loadApiKeys() {
       }
     }, 50);
 
-    const toggle = document.getElementById("api-show-id-toggle");
-    if (toggle) {
-      toggle.addEventListener("change", () => {
-        document
-          .querySelectorAll("#api-keys-section .line-id-col")
-          .forEach(
-            (cell) =>
-              (cell.style.display = toggle.checked ? "table-cell" : "none")
-          );
-      });
-      toggle.dispatchEvent(new Event("change"));
-    } else {
-      console.warn("⚠️ api-show-id-toggle not found yet");
-    }
+    // Delay toggle wiring to avoid DOM not ready issue
+    setTimeout(() => {
+      const toggle = document.getElementById("api-show-id-toggle");
+      if (toggle) {
+        toggle.addEventListener("change", () => {
+          document
+            .querySelectorAll("#api-keys-section .line-id-col")
+            .forEach(
+              (cell) =>
+                (cell.style.display = toggle.checked ? "table-cell" : "none")
+            );
+        });
+        toggle.dispatchEvent(new Event("change"));
+      } else {
+        console.warn("⚠️ api-show-id-toggle still not found after delay");
+      }
+    }, 100);
   } catch (error) {
     console.error("❌ Failed to load API keys:", error);
     const table = document.getElementById("api-keys-table");
