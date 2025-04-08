@@ -33,3 +33,6 @@ window.ButtonBoxApiKeys = (() => {
 
   return { init };
 })();
+
+// ✅ Add this line to actually run it!
+window.ButtonBoxApiKeys.init();

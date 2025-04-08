@@ -89,6 +89,9 @@ if (DEBUG)
     "🧭 main.js loaded — showTab and sanitizeInput exported globally"
   );
 
+// ✅ Default tab fallback
 if (!location.hash && typeof showTab === "function") {
+  if (window.DEBUG)
+    console.log("📌 No hash in URL — loading 'market-holidays' tab by default");
   showTab("market-holidays");
 }
