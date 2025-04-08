@@ -1,27 +1,15 @@
-// static/frontend/core/main.js
-
 document.addEventListener("DOMContentLoaded", function () {
   updateMarketStatus();
   if (window.DEBUG) {
     console.log("✅ main.js initialized and updateMarketStatus() called");
   }
 
-  // Set default tab if no hash
-  if (!location.hash) {
-    if (typeof showTab === "function") {
-      if (window.DEBUG)
-        console.log(
-          "📌 No hash in URL — loading 'market-holidays' tab by default"
-        );
-      showTab("market-holidays");
-      location.hash = "market-holidays";
-    } else {
-      console.warn("⚠️ showTab function not defined at DOMContentLoaded");
-    }
+  // 🔒 Force Market Holidays only
+  if (typeof showTab === "function") {
+    console.log("🔒 Forcing Market Holidays only — tabs disabled");
+    showTab("market-holidays");
   } else {
-    const tab = location.hash.replace("#", "");
-    if (window.DEBUG) console.log(`🔗 URL hash detected: ${tab}`);
-    if (typeof showTab === "function") showTab(tab);
+    console.warn("⚠️ showTab function not defined");
   }
 });
 
@@ -79,27 +67,21 @@ function showTab(tabName) {
       `button[onclick="showTab('${name}')"]`
     );
 
-    if (section) section.style.display = name === tabName ? "block" : "none";
-    if (button) button.classList.toggle("active", name === tabName);
+    // 🔒 Only show market-holidays section
+    const shouldShow = name === "market-holidays";
+    if (section) section.style.display = shouldShow ? "block" : "none";
+    if (button) button.classList.toggle("active", shouldShow);
   });
 
-  // Load tab data
+  // 🔃 Load Market Holidays only
   if (
     tabName === "market-holidays" &&
     typeof loadMarketHolidays === "function"
   ) {
     loadMarketHolidays();
   }
-  if (tabName === "api-keys" && typeof loadApiKeys === "function") {
-    loadApiKeys();
-  }
-  if (tabName === "user-management" && typeof loadAdminUsers === "function") {
-    loadAdminUsers();
-    if (typeof loadTabAccess === "function") loadTabAccess();
-  }
 
-  // Update hash
-  location.hash = tabName;
+  location.hash = "market-holidays"; // Always reset hash to safe zone
 }
 
 // 🔧 DEBUG + Export
