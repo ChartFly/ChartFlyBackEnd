@@ -2,9 +2,27 @@
 
 document.addEventListener("DOMContentLoaded", function () {
   updateMarketStatus();
-  // Do not auto-select any tab on load
-  if (window.DEBUG)
+  if (window.DEBUG) {
     console.log("✅ main.js initialized and updateMarketStatus() called");
+  }
+
+  // Set default tab if no hash
+  if (!location.hash) {
+    if (typeof showTab === "function") {
+      if (window.DEBUG)
+        console.log(
+          "📌 No hash in URL — loading 'market-holidays' tab by default"
+        );
+      showTab("market-holidays");
+      location.hash = "market-holidays";
+    } else {
+      console.warn("⚠️ showTab function not defined at DOMContentLoaded");
+    }
+  } else {
+    const tab = location.hash.replace("#", "");
+    if (window.DEBUG) console.log(`🔗 URL hash detected: ${tab}`);
+    if (typeof showTab === "function") showTab(tab);
+  }
 });
 
 // ✅ Market status display logic
@@ -50,9 +68,11 @@ function sanitizeInput(input) {
     : input;
 }
 
-// ✅ SINGLE showTab() function to rule them all
+// ✅ Tab logic
 function showTab(tabName) {
   const tabs = ["market-holidays", "api-keys", "user-management"];
+  if (window.DEBUG) console.log(`📂 Switching to tab: ${tabName}`);
+
   tabs.forEach((name) => {
     const section = document.getElementById(`${name}-section`);
     const button = document.querySelector(
@@ -63,7 +83,7 @@ function showTab(tabName) {
     if (button) button.classList.toggle("active", name === tabName);
   });
 
-  // Call data loaders (if defined)
+  // Load tab data
   if (
     tabName === "market-holidays" &&
     typeof loadMarketHolidays === "function"
@@ -75,11 +95,14 @@ function showTab(tabName) {
   }
   if (tabName === "user-management" && typeof loadAdminUsers === "function") {
     loadAdminUsers();
-    if (typeof loadTabAccess === "function") loadTabAccess(); // Optional
+    if (typeof loadTabAccess === "function") loadTabAccess();
   }
+
+  // Update hash
+  location.hash = tabName;
 }
 
-// 🔧 DEBUG & Global hooks
+// 🔧 DEBUG + Export
 window.DEBUG = true;
 window.showTab = showTab;
 window.sanitizeInput = sanitizeInput;
@@ -88,10 +111,3 @@ if (DEBUG)
   console.log(
     "🧭 main.js loaded — showTab and sanitizeInput exported globally"
   );
-
-// ✅ Default tab fallback
-if (!location.hash && typeof showTab === "function") {
-  if (window.DEBUG)
-    console.log("📌 No hash in URL — loading 'market-holidays' tab by default");
-  showTab("market-holidays");
-}
