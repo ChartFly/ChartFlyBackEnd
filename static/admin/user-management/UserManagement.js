@@ -1,6 +1,7 @@
 // static/admin/user-management/UserManagement.js
 
 async function loadAdminUsers() {
+  console.log("🔥 loadAdminUsers() has been called");
   try {
     const response = await fetch(
       "https://chartflybackend.onrender.com/api/users/"
@@ -44,18 +45,27 @@ async function loadAdminUsers() {
       }
     }, 50);
 
-    const toggle = document.getElementById("user-show-id-toggle");
-    if (toggle) {
-      toggle.addEventListener("change", () => {
-        document
-          .querySelectorAll("#user-management-section .line-id-col")
-          .forEach(
-            (cell) =>
-              (cell.style.display = toggle.checked ? "table-cell" : "none")
-          );
-      });
-      toggle.dispatchEvent(new Event("change"));
+    // Smart toggle hookup with fallback
+    function waitForIdToggle() {
+      const toggle = document.getElementById("user-show-id-toggle");
+      if (toggle) {
+        toggle.addEventListener("change", () => {
+          document
+            .querySelectorAll("#user-management-section .line-id-col")
+            .forEach(
+              (cell) =>
+                (cell.style.display = toggle.checked ? "table-cell" : "none")
+            );
+        });
+        toggle.dispatchEvent(new Event("change"));
+        console.log("✅ user-show-id-toggle wired successfully");
+      } else {
+        console.warn("⚠️ user-show-id-toggle still not found — retrying...");
+        setTimeout(waitForIdToggle, 100);
+      }
     }
+
+    requestAnimationFrame(waitForIdToggle);
   } catch (error) {
     console.error("❌ Failed to load admin users:", error);
     const table = document.getElementById("user-management-table");
@@ -78,4 +88,4 @@ async function loadAdminUsers() {
   window.handleUserAction = ButtonBoxRows.handleRowAction;
 })();
 
-window.addEventListener("DOMContentLoaded", loadAdminUsers);
+// Removed: window.addEventListener("DOMContentLoaded", loadAdminUsers);
