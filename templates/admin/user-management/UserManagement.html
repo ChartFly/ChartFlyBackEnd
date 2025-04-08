@@ -1,7 +1,10 @@
-<!-- static/admin/user-management/UserManagement.html -->
+<!-- templates/admin/user-management/UserManagement.html -->
 
-<section id="user-management-section" class="admin-tab-section" style="display: none;">
-
+<section
+  id="user-management-section"
+  class="admin-tab-section"
+  style="display: none"
+>
   <!-- 🔧 Section Title -->
   <h2>Manage Admin Users</h2>
 
@@ -18,11 +21,11 @@
 
   <!-- 📋 User Table -->
   <div class="table-wrapper">
-    <table class="admin-table">
+    <table id="users-table" class="admin-table">
       <thead>
         <tr>
           <th class="col-select">Select</th>
-          <th class="line-id-col" style="display: none;">ID</th>
+          <th class="line-id-col" style="display: none">ID</th>
           <th>First</th>
           <th>Last</th>
           <th>Email</th>
@@ -33,10 +36,11 @@
           <th>Last Login</th>
         </tr>
       </thead>
-      <tbody id="user-management-table">
-        <tr><td colspan="10">Loading users...</td></tr>
+      <tbody>
+        <tr>
+          <td colspan="10">Loading users...</td>
+        </tr>
       </tbody>
     </table>
   </div>
-
 </section>

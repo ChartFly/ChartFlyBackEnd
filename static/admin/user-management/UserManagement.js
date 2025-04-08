@@ -10,7 +10,7 @@ async function loadAdminUsers() {
     const users = await response.json();
     const table = document.getElementById("users-table");
     if (!table) throw new Error("❌ users-table element not found");
-    table.innerHTML = "";
+    table.querySelector("tbody").innerHTML = "";
 
     users.forEach((user, index) => {
       const row = document.createElement("tr");
@@ -24,11 +24,15 @@ async function loadAdminUsers() {
         <td class="line-id-col">${user.id}</td>
         <td>${sanitizeInput(user.first_name || "")}</td>
         <td>${sanitizeInput(user.last_name || "")}</td>
+        <td>${sanitizeInput(user.email || "")}</td>
         <td>${sanitizeInput(user.username || "")}</td>
         <td>${sanitizeInput(user.role || "")}</td>
+        <td>${sanitizeInput(user.is_2fa_enabled ? "Yes" : "No")}</td>
+        <td>${sanitizeInput(user.status || "")}</td>
+        <td>${sanitizeInput(user.last_login || "")}</td>
       `;
 
-      table.appendChild(row);
+      table.querySelector("tbody").appendChild(row);
     });
 
     ButtonBoxUserManagement.init();
@@ -39,10 +43,9 @@ async function loadAdminUsers() {
       const updateVisibility = () => {
         document
           .querySelectorAll("#user-management-section .line-id-col")
-          .forEach(
-            (cell) =>
-              (cell.style.display = toggle.checked ? "table-cell" : "none")
-          );
+          .forEach((cell) => {
+            cell.style.display = toggle.checked ? "table-cell" : "none";
+          });
       };
       toggle.addEventListener("change", updateVisibility);
       updateVisibility();
@@ -51,7 +54,9 @@ async function loadAdminUsers() {
     console.error("❌ Failed to load admin users:", error);
     const table = document.getElementById("users-table");
     if (table) {
-      table.innerHTML = `<tr><td colspan="6">Failed to load admin users. Please try again later.</td></tr>`;
+      table.querySelector(
+        "tbody"
+      ).innerHTML = `<tr><td colspan="10">Failed to load users. Please try again later.</td></tr>`;
     }
   }
 }
