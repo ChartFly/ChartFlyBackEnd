@@ -34,16 +34,23 @@ async function loadMarketHolidays() {
     });
 
     ButtonBoxMarketHolidays.init();
-    ButtonBox.wireCheckboxes("holiday");
+
+    const waitForButtonBox = setInterval(() => {
+      if (window.ButtonBox && ButtonBox.wireCheckboxes) {
+        clearInterval(waitForButtonBox);
+        ButtonBox.wireCheckboxes("holiday");
+      }
+    }, 50);
 
     const toggle = document.getElementById("holiday-show-id-toggle");
     if (toggle) {
       toggle.addEventListener("change", () => {
         document
           .querySelectorAll("#market-holidays-section .line-id-col")
-          .forEach((cell) => {
-            cell.style.display = toggle.checked ? "table-cell" : "none";
-          });
+          .forEach(
+            (cell) =>
+              (cell.style.display = toggle.checked ? "table-cell" : "none")
+          );
       });
       toggle.dispatchEvent(new Event("change"));
     }
@@ -77,12 +84,4 @@ async function loadMarketHolidays() {
   window.handleHolidayAction = ButtonBoxRows.handleRowAction;
 })();
 
-// ⏳ Wait until ButtonBox is available before initializing
-window.addEventListener("DOMContentLoaded", () => {
-  const waitForBox = setInterval(() => {
-    if (window.ButtonBox && window.ButtonBoxMarketHolidays) {
-      clearInterval(waitForBox);
-      loadMarketHolidays();
-    }
-  }, 50);
-});
+window.addEventListener("DOMContentLoaded", loadMarketHolidays);

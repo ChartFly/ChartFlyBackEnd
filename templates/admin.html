@@ -66,29 +66,42 @@
     </div>
 
     <!-- ✅ Tab Sections -->
-    {% include "admin/market-holidays/MarketHolidays.html" %} {% include
-    "admin/api-keys/ApiKeys.html" %} {% include
-    "admin/user-management/UserManagement.html" %}
+    <div
+      id="market-holidays-section"
+      class="admin-tab-section"
+      style="display: none"
+    >
+      {% include "admin/market-holidays/MarketHolidays.html" %}
+    </div>
+    <div id="api-keys-section" class="admin-tab-section" style="display: none">
+      {% include "admin/api-keys/ApiKeys.html" %}
+    </div>
+    <div
+      id="user-management-section"
+      class="admin-tab-section"
+      style="display: none"
+    >
+      {% include "admin/user-management/UserManagement.html" %}
+    </div>
 
-    <!-- ✅ Shared Core First (must be loaded in this order) -->
+    <!-- ✅ Shared Core Scripts -->
     <script src="/static/admin/shared/ButtonBoxMessages.js?v=5"></script>
     <script src="/static/admin/shared/ButtonBoxRows.js?v=5"></script>
     <script src="/static/admin/shared/ButtonBoxColumns.js?v=5"></script>
     <script src="/static/admin/shared/ButtonBoxDataBase.js?v=5"></script>
     <script src="/static/admin/shared/ButtonBox.js?v=5"></script>
-    <!-- ⬅️ Moved UP here -->
 
-    <!-- ✅ Section Adapters (require ButtonBox to be loaded first) -->
+    <!-- ✅ Section Adapters (ButtonBox must be loaded first) -->
     <script src="/static/admin/market-holidays/ButtonBoxMarketHolidays.js?v=5"></script>
     <script src="/static/admin/api-keys/ButtonBoxApiKeys.js?v=5"></script>
     <script src="/static/admin/user-management/ButtonBoxUserManagement.js?v=5"></script>
 
-    <!-- ✅ Section Logic (runs after adapter init) -->
+    <!-- ✅ Section Logic -->
     <script src="/static/admin/market-holidays/MarketHolidays.js?v=5"></script>
     <script src="/static/admin/api-keys/ApiKeys.js?v=5"></script>
     <script src="/static/admin/user-management/UserManagement.js?v=5"></script>
 
-    <!-- ✅ Global Frontend Logic (tabs, market status, etc.) -->
+    <!-- ✅ Global Logic -->
     <script src="/static/frontend/core/main.js?v=5"></script>
   </body>
 </html>

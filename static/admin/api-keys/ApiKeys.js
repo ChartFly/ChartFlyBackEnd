@@ -32,16 +32,23 @@ async function loadApiKeys() {
     });
 
     ButtonBoxApiKeys.init();
-    ButtonBox.wireCheckboxes("api");
+
+    const waitForButtonBox = setInterval(() => {
+      if (window.ButtonBox && ButtonBox.wireCheckboxes) {
+        clearInterval(waitForButtonBox);
+        ButtonBox.wireCheckboxes("api");
+      }
+    }, 50);
 
     const toggle = document.getElementById("api-show-id-toggle");
     if (toggle) {
       toggle.addEventListener("change", () => {
         document
           .querySelectorAll("#api-keys-section .line-id-col")
-          .forEach((cell) => {
-            cell.style.display = toggle.checked ? "table-cell" : "none";
-          });
+          .forEach(
+            (cell) =>
+              (cell.style.display = toggle.checked ? "table-cell" : "none")
+          );
       });
       toggle.dispatchEvent(new Event("change"));
     }
@@ -67,12 +74,4 @@ async function loadApiKeys() {
   window.handleApiKeyAction = ButtonBoxRows.handleRowAction;
 })();
 
-// ⏳ Wait for ButtonBox and adapter to be available
-window.addEventListener("DOMContentLoaded", () => {
-  const waitForBox = setInterval(() => {
-    if (window.ButtonBox && window.ButtonBoxApiKeys) {
-      clearInterval(waitForBox);
-      loadApiKeys();
-    }
-  }, 50);
-});
+window.addEventListener("DOMContentLoaded", loadApiKeys);
