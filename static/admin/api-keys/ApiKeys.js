@@ -36,16 +36,15 @@ async function loadApiKeys() {
 
     const toggle = document.getElementById("api-show-id-toggle");
     if (toggle) {
-      const updateVisibility = () => {
+      toggle.addEventListener("change", () => {
         document
           .querySelectorAll("#api-keys-section .line-id-col")
           .forEach(
             (cell) =>
               (cell.style.display = toggle.checked ? "table-cell" : "none")
           );
-      };
-      toggle.addEventListener("change", updateVisibility);
-      updateVisibility();
+      });
+      toggle.dispatchEvent(new Event("change"));
     }
   } catch (error) {
     console.error("❌ Failed to load API keys:", error);

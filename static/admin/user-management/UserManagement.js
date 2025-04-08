@@ -8,9 +8,9 @@ async function loadAdminUsers() {
     if (!response.ok) throw new Error("Failed to fetch admin users");
 
     const users = await response.json();
-    const table = document.getElementById("users-table");
-    if (!table) throw new Error("❌ users-table element not found");
-    table.querySelector("tbody").innerHTML = "";
+    const table = document.getElementById("user-management-table");
+    if (!table) throw new Error("❌ user-management-table element not found");
+    table.innerHTML = "";
 
     users.forEach((user, index) => {
       const row = document.createElement("tr");
@@ -32,7 +32,7 @@ async function loadAdminUsers() {
         <td>${sanitizeInput(user.last_login || "")}</td>
       `;
 
-      table.querySelector("tbody").appendChild(row);
+      table.appendChild(row);
     });
 
     ButtonBoxUserManagement.init();
@@ -40,23 +40,21 @@ async function loadAdminUsers() {
 
     const toggle = document.getElementById("user-show-id-toggle");
     if (toggle) {
-      const updateVisibility = () => {
+      toggle.addEventListener("change", () => {
         document
           .querySelectorAll("#user-management-section .line-id-col")
-          .forEach((cell) => {
-            cell.style.display = toggle.checked ? "table-cell" : "none";
-          });
-      };
-      toggle.addEventListener("change", updateVisibility);
-      updateVisibility();
+          .forEach(
+            (cell) =>
+              (cell.style.display = toggle.checked ? "table-cell" : "none")
+          );
+      });
+      toggle.dispatchEvent(new Event("change"));
     }
   } catch (error) {
     console.error("❌ Failed to load admin users:", error);
-    const table = document.getElementById("users-table");
+    const table = document.getElementById("user-management-table");
     if (table) {
-      table.querySelector(
-        "tbody"
-      ).innerHTML = `<tr><td colspan="10">Failed to load users. Please try again later.</td></tr>`;
+      table.innerHTML = `<tr><td colspan="10">Failed to load admin users. Please try again later.</td></tr>`;
     }
   }
 }

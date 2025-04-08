@@ -1,111 +1,157 @@
-// static/admin/shared/ButtonBox.js
+// static/admin/shared/ButtonBoxRows.js
 
-// Assume these are loaded globally (since we're in-browser, not using modules)
-if (typeof ButtonBoxRows === "undefined")
-  console.warn("⚠️ ButtonBoxRows is not defined.");
-
-window.ButtonBox = (() => {
-  const sectionStates = {};
-  const tipTimers = {};
-
-  function getState(section) {
-    if (!sectionStates[section]) {
-      sectionStates[section] = {
-        selectedRows: new Set(),
-        activeAction: null,
-        clipboard: null,
-        clipboardType: null,
-        undoStack: [],
-        maxUndo: 20,
-        domId: null,
-        tableId: null,
-        onAction: defaultHandler,
-        tipIndex: 0,
-      };
+window.ButtonBoxRows = (() => {
+  function wireCheckboxes(section) {
+    const table = document.getElementById(`${section}-table`);
+    if (!table) {
+      console.error(`❌ Table not found for section "${section}"`);
+      return;
     }
-    return sectionStates[section];
-  }
 
-  function getEditMode(section) {
-    const selected = document.querySelector(
-      `input[name="${section}-edit-mode"]:checked`
-    );
-    return selected ? selected.value : "row";
-  }
+    const checkboxes = table.querySelectorAll(`.${section}-select-checkbox`);
+    const state = ButtonBox.getState(section);
+    state.selectedRows.clear();
 
-  function init({ section, domId, tableId, onAction }) {
-    const state = getState(section);
-    Object.assign(state, { domId, tableId });
-    if (typeof onAction === "function") state.onAction = onAction;
-
-    console.log(`🚀 ButtonBox initialized for section: ${section}`);
-
-    ButtonBoxMessages.initTips(section, tipTimers, state.tipIndex);
-    ButtonBoxMessages.updateButtonColors(section);
-    ButtonBoxMessages.updateIdColumnVisibility(section);
-    ButtonBoxMessages.updateUndo(section);
-
-    const actions = ["edit", "copy", "paste", "add", "delete", "save", "undo"];
-    actions.forEach((action) => {
-      const btn = document.getElementById(`${section}-${action}-btn`);
-      if (!btn) return;
-      if (action === "paste") ButtonBoxMessages.disableButton(btn);
-
-      btn.addEventListener("click", () => {
-        console.log(`👉 [${section}] Button clicked: ${action}`);
-        state.activeAction = action;
-        ButtonBoxMessages.setStatus(section, action);
-        ButtonBoxMessages.clearWarning(section);
-        ButtonBoxMessages.resetButtons(section, btn);
-
-        const mode = getEditMode(section);
-        console.log(`✏️ Mode is: ${mode}`);
-
-        if (mode === "cell") {
-          ButtonBoxColumns.handleCellAction(section, action);
+    checkboxes.forEach((checkbox) => {
+      checkbox.addEventListener("change", () => {
+        const id = checkbox.dataset.id;
+        if (checkbox.checked) {
+          state.selectedRows.add(id);
         } else {
-          ButtonBoxRows.handleRowAction(section, action);
+          state.selectedRows.delete(id);
         }
       });
     });
-
-    const idToggle = document.getElementById(`${section}-show-id-toggle`);
-    if (idToggle) {
-      idToggle.addEventListener("change", () =>
-        ButtonBoxMessages.updateIdColumnVisibility(section)
-      );
-    }
-
-    const modeRadios = document.querySelectorAll(
-      `input[name="${section}-edit-mode"]`
-    );
-    modeRadios.forEach((radio) => {
-      radio.addEventListener("change", () =>
-        ButtonBoxMessages.updateButtonColors(section)
-      );
-    });
-
-    ButtonBoxMessages.setStatus(section, "none");
   }
 
-  function defaultHandler(action, selectedIds) {
-    console.warn(`⚠️ No handler for action "${action}".`, selectedIds);
-    ButtonBoxMessages.showTip("global", `Unhandled: ${action}`);
+  function handleRowAction(action, selectedIds, section) {
+    const table = document.getElementById(`${section}-table`);
+    if (!table) {
+      console.error(`❌ Table not found for section "${section}"`);
+      return;
+    }
+
+    if (action === "delete") {
+      selectedIds.forEach((id) => {
+        const row = table.querySelector(`tr[data-id="${id}"]`);
+        if (row) row.remove();
+      });
+      ButtonBox.wireCheckboxes(section);
+    }
+
+    if (action === "copy") {
+      if (selectedIds.length !== 1) {
+        ButtonBox.showWarning(
+          section,
+          "Please select exactly one row to copy."
+        );
+        return;
+      }
+
+      const sourceRow = table.querySelector(`tr[data-id="${selectedIds[0]}"]`);
+      if (!sourceRow) return;
+
+      const newId = `copy-${Date.now()}`;
+      const clone = sourceRow.cloneNode(true);
+      clone.setAttribute("data-id", newId);
+      clone.classList.add("editing");
+
+      const checkbox = clone.querySelector("input[type='checkbox']");
+      if (checkbox) {
+        checkbox.setAttribute("data-id", newId);
+        checkbox.checked = true;
+      }
+
+      const idCell = clone.querySelector(".line-id-col");
+      if (idCell) idCell.textContent = newId;
+
+      clone
+        .querySelectorAll("td:not(.col-select):not(.line-id-col)")
+        .forEach((cell) => {
+          cell.setAttribute("contenteditable", "true");
+          cell.classList.add("editable");
+        });
+
+      table.prepend(clone);
+      ButtonBox.wireCheckboxes(section);
+    }
+
+    if (action === "add") {
+      const newId = `new-${Date.now()}`;
+      const newRow = document.createElement("tr");
+      newRow.classList.add("editing");
+      newRow.setAttribute("data-id", newId);
+      newRow.setAttribute("data-index", "0");
+
+      newRow.innerHTML = `
+        <td class="col-select"><input type="checkbox" class="${section}-select-checkbox" data-id="${newId}" checked></td>
+        <td class="line-id-col">${newId}</td>
+        <td contenteditable="true" class="editable">Edit</td>
+        <td contenteditable="true" class="editable">YYYY-MM-DD</td>
+        <td contenteditable="true" class="editable">Upcoming</td>
+        <td contenteditable="true" class="editable"></td>
+      `;
+
+      newRow.querySelectorAll("td[contenteditable]").forEach((cell) => {
+        cell.addEventListener("input", () => newRow.classList.add("dirty"));
+      });
+
+      table.prepend(newRow);
+      ButtonBox.wireCheckboxes(section);
+    }
+
+    if (action === "edit") {
+      selectedIds.forEach((id) => {
+        const row = table.querySelector(`tr[data-id="${id}"]`);
+        if (!row) return;
+
+        row.classList.add("editing", "dirty");
+        row
+          .querySelectorAll("td:not(.col-select):not(.line-id-col)")
+          .forEach((cell) => {
+            cell.setAttribute("contenteditable", "true");
+            cell.classList.add("editable");
+          });
+      });
+    }
+
+    if (action === "save") {
+      const dirtyRows = table.querySelectorAll("tr.editing");
+
+      dirtyRows.forEach((row, i) => {
+        row.classList.remove("editing", "dirty");
+
+        row.querySelectorAll("td[contenteditable]").forEach((cell) => {
+          cell.removeAttribute("contenteditable");
+          cell.classList.remove("editable");
+        });
+
+        const finalId = `saved-${Date.now()}-${i}`;
+        row.setAttribute("data-id", finalId);
+
+        const checkbox = row.querySelector("input[type='checkbox']");
+        if (checkbox) {
+          checkbox.setAttribute("data-id", finalId);
+          checkbox.checked = false;
+        }
+
+        const idCell = row.querySelector(".line-id-col");
+        if (idCell) idCell.textContent = finalId;
+
+        row.classList.remove("selected-row");
+      });
+
+      ButtonBox.wireCheckboxes(section);
+      ButtonBox.showMessage(section, "Rows saved (frontend only).", "success");
+    }
+
+    if (action === "paste") {
+      ButtonBox.showWarning(section, "Paste is not implemented yet.");
+    }
   }
 
   return {
-    init,
-    getState,
-    getEditMode,
-    getSelectedIds: (section) => Array.from(getState(section).selectedRows),
-
-    // Delegated helpers
-    wireCheckboxes: ButtonBoxRows.wireCheckboxes,
-    showTip: ButtonBoxMessages.showTip,
-    showWarning: ButtonBoxMessages.showWarning,
-    clearWarning: ButtonBoxMessages.clearWarning,
-    updateButtonColors: ButtonBoxMessages.updateButtonColors,
-    updateIdColumnVisibility: ButtonBoxMessages.updateIdColumnVisibility,
-    setStatus: ButtonBoxMessages.setStatus,
+    handleRowAction,
+    wireCheckboxes,
   };
 })();

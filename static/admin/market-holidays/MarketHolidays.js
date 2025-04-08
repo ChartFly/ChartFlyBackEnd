@@ -21,37 +21,32 @@ async function loadMarketHolidays() {
       const readableTime = isEarlyClose ? formatTime(holiday.close_time) : "";
 
       row.innerHTML = `
-        <td class="col-select">
-          <input type="checkbox" class="holiday-select-checkbox" data-id="${
-            holiday.id
-          }">
-        </td>
+        <td class="col-select"><input type="checkbox" class="holiday-select-checkbox" data-id="${
+          holiday.id
+        }"></td>
         <td class="line-id-col">${holiday.id}</td>
         <td>${sanitizeInput(holiday.name || "N/A")}</td>
         <td>${sanitizeInput(holiday.date || "N/A")}</td>
         <td>${sanitizeInput(holiday.status || "Unknown")}</td>
         <td>${readableTime}</td>
       `;
-
       table.appendChild(row);
     });
 
-    // ✅ Safe to init and wire after rendering
     ButtonBoxMarketHolidays.init();
     ButtonBox.wireCheckboxes("holiday");
 
     const toggle = document.getElementById("holiday-show-id-toggle");
     if (toggle) {
-      const updateVisibility = () => {
+      toggle.addEventListener("change", () => {
         document
           .querySelectorAll("#market-holidays-section .line-id-col")
           .forEach(
             (cell) =>
               (cell.style.display = toggle.checked ? "table-cell" : "none")
           );
-      };
-      toggle.addEventListener("change", updateVisibility);
-      updateVisibility(); // apply initial state
+      });
+      toggle.dispatchEvent(new Event("change"));
     }
   } catch (error) {
     console.error("❌ Failed to load holidays:", error);
@@ -80,7 +75,6 @@ async function loadMarketHolidays() {
       : input ?? "—";
   };
 
-  // 🧠 Delegate to ButtonBoxRows
   window.handleHolidayAction = ButtonBoxRows.handleRowAction;
 })();
 
