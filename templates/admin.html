@@ -1,107 +1,79 @@
-<!-- templates/admin.html -->
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ChartFly Admin Panel</title>
-
-    <!-- ✅ Favicon -->
-    <link
-      rel="icon"
-      href="/static/images/ChartFly-Favicon.ico?v=5"
-      type="image/x-icon"
-    />
-
-    <!-- ✅ Global Styles -->
-    <link rel="stylesheet" href="/static/css/styles.css?v=5" />
-
-    <!-- ✅ Shared Styles -->
-    <link rel="stylesheet" href="/static/admin/shared/ButtonBox.css?v=5" />
-
-    <!-- ✅ Per-Tab Styles -->
     <link
       rel="stylesheet"
-      href="/static/admin/market-holidays/MarketHolidays.css?v=5"
+      href="{{ url_for('static', path='css/styles.css') }}"
     />
-    <link rel="stylesheet" href="/static/admin/api-keys/ApiKeys.css?v=5" />
     <link
       rel="stylesheet"
-      href="/static/admin/user-management/UserManagement.css?v=5"
+      href="{{ url_for('static', path='admin/market-holidays/MarketHolidays.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', path='admin/api-keys/ApiKeys.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', path='admin/user-management/UserManagement.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', path='admin/shared/ButtonBox.css') }}"
     />
   </head>
-
   <body>
-    <!-- ✅ Header -->
-    <header class="header">
-      <div class="header-left">
-        <div class="logo-container">
-          <img
-            src="/static/images/Chartfly-logo.png?v=5"
-            alt="ChartFly Logo"
-            class="logo"
-            width="144"
-            height="144"
-          />
-        </div>
+    <div class="admin-header">
+      <img
+        src="{{ url_for('static', path='images/Chartfly-logo.png') }}"
+        alt="ChartFly Logo"
+        class="admin-logo"
+      />
+      <h1 class="admin-title">ChartFly Admin Console</h1>
+      <div id="market-status-indicator">
+        Market Status: <span id="market-status-text">Checking...</span>
       </div>
-      <div class="header-center">
-        <h1 class="admin-title">ChartFly Admin Panel</h1>
-      </div>
-      <div class="header-right market-status-container">
-        <div class="market-status-label">Market Status:</div>
-        <div id="market-status-text" class="market-status-text">Loading...</div>
-      </div>
-    </header>
-
-    <!-- ✅ Tab Navigation -->
-    <div class="tabs">
-      <button class="tab-button" onclick="showTab('market-holidays')">
-        Market Holidays
-      </button>
-      <button class="tab-button" onclick="showTab('api-keys')">API Keys</button>
-      <button class="tab-button" onclick="showTab('user-management')">
-        User Management
-      </button>
     </div>
 
-    <!-- ✅ Tab Sections -->
-    <div
-      id="market-holidays-section"
-      class="admin-tab-section"
-      style="display: none"
-    >
+    <div class="tab-container">
+      <div class="tab" onclick="switchTab('market-holidays-section')">
+        Market Holidays
+      </div>
+      <div class="tab" onclick="switchTab('api-keys-section')">API Keys</div>
+      <div class="tab" onclick="switchTab('user-management-section')">
+        User Management
+      </div>
+    </div>
+
+    <!-- Market Holidays Section -->
+    <div id="market-holidays-section" class="tab-section">
       {% include "admin/market-holidays/MarketHolidays.html" %}
     </div>
-    <div id="api-keys-section" class="admin-tab-section" style="display: none">
+
+    <!-- API Keys Section -->
+    <div id="api-keys-section" class="tab-section" style="display: none">
       {% include "admin/api-keys/ApiKeys.html" %}
     </div>
-    <div
-      id="user-management-section"
-      class="admin-tab-section"
-      style="display: none"
-    >
+
+    <!-- User Management Section -->
+    <div id="user-management-section" class="tab-section" style="display: none">
       {% include "admin/user-management/UserManagement.html" %}
     </div>
 
-    <!-- ✅ Shared Core Scripts -->
-    <script src="/static/admin/shared/ButtonBoxMessages.js?v=5"></script>
-    <script src="/static/admin/shared/ButtonBoxRows.js?v=5"></script>
-    <script src="/static/admin/shared/ButtonBoxColumns.js?v=5"></script>
-    <script src="/static/admin/shared/ButtonBoxDataBase.js?v=5"></script>
-    <script src="/static/admin/shared/ButtonBox.js?v=5"></script>
+    <!-- Shared Scripts -->
+    <script src="{{ url_for('static', path='admin/shared/ButtonBox.js') }}"></script>
+    <script src="{{ url_for('static', path='admin/shared/ButtonBoxMessages.js') }}"></script>
+    <script src="{{ url_for('static', path='admin/shared/ButtonBoxRows.js') }}"></script>
+    <script src="{{ url_for('static', path='admin/shared/ButtonBoxColumns.js') }}"></script>
 
-    <!-- ✅ Section Adapters (ButtonBox must be loaded first) -->
-    <script src="/static/admin/market-holidays/ButtonBoxMarketHolidays.js?v=5"></script>
-    <script src="/static/admin/api-keys/ButtonBoxApiKeys.js?v=5"></script>
-    <script src="/static/admin/user-management/ButtonBoxUserManagement.js?v=5"></script>
+    <!-- Section Scripts -->
+    <script src="{{ url_for('static', path='admin/market-holidays/MarketHolidays.js') }}"></script>
+    <script src="{{ url_for('static', path='admin/api-keys/ApiKeys.js') }}"></script>
+    <script src="{{ url_for('static', path='admin/user-management/UserManagement.js') }}"></script>
 
-    <!-- ✅ Section Logic -->
-    <script src="/static/admin/market-holidays/MarketHolidays.js?v=5"></script>
-    <script src="/static/admin/api-keys/ApiKeys.js?v=5"></script>
-    <script src="/static/admin/user-management/UserManagement.js?v=5"></script>
-
-    <!-- ✅ Global Logic -->
-    <script src="/static/frontend/core/main.js?v=5"></script>
+    <!-- Core Script -->
+    <script src="{{ url_for('static', path='frontend/core/main.js') }}"></script>
   </body>
 </html>
