@@ -1,15 +1,17 @@
+// static/frontend/core/main.js
+
 document.addEventListener("DOMContentLoaded", function () {
   updateMarketStatus();
-  if (window.DEBUG) {
-    console.log("✅ main.js initialized and updateMarketStatus() called");
-  }
 
-  // 🔒 Force Market Holidays only
-  if (typeof showTab === "function") {
-    console.log("🔒 Forcing Market Holidays only — tabs disabled");
-    showTab("market-holidays");
+  // Set default tab if no hash
+  if (!location.hash) {
+    if (typeof showTab === "function") {
+      showTab("market-holidays");
+      location.hash = "market-holidays";
+    }
   } else {
-    console.warn("⚠️ showTab function not defined");
+    const tab = location.hash.replace("#", "");
+    if (typeof showTab === "function") showTab(tab);
   }
 });
 
@@ -59,37 +61,38 @@ function sanitizeInput(input) {
 // ✅ Tab logic
 function showTab(tabName) {
   const tabs = ["market-holidays", "api-keys", "user-management"];
-  if (window.DEBUG) console.log(`📂 Switching to tab: ${tabName}`);
 
   tabs.forEach((name) => {
     const section = document.getElementById(`${name}-section`);
     const button = document.querySelector(
       `button[onclick="showTab('${name}')"]`
     );
+    const isActive = name === tabName;
 
-    // 🔒 Only show market-holidays section
-    const shouldShow = name === "market-holidays";
-    if (section) section.style.display = shouldShow ? "block" : "none";
-    if (button) button.classList.toggle("active", shouldShow);
+    if (section) section.style.display = isActive ? "block" : "none";
+    if (button) button.classList.toggle("active", isActive);
   });
 
-  // 🔃 Load Market Holidays only
+  // Load tab-specific data
   if (
     tabName === "market-holidays" &&
     typeof loadMarketHolidays === "function"
   ) {
     loadMarketHolidays();
+  } else if (tabName === "api-keys" && typeof loadApiKeys === "function") {
+    loadApiKeys();
+  } else if (
+    tabName === "user-management" &&
+    typeof loadAdminUsers === "function"
+  ) {
+    loadAdminUsers();
+    if (typeof loadTabAccess === "function") loadTabAccess();
   }
 
-  location.hash = "market-holidays"; // Always reset hash to safe zone
+  location.hash = tabName;
 }
 
-// 🔧 DEBUG + Export
-window.DEBUG = true;
+// ✅ Export
+window.DEBUG = false;
 window.showTab = showTab;
 window.sanitizeInput = sanitizeInput;
-
-if (DEBUG)
-  console.log(
-    "🧭 main.js loaded — showTab and sanitizeInput exported globally"
-  );
