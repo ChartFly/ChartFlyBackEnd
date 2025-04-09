@@ -87,5 +87,24 @@
         🎉 Upcoming Holidays will scroll here...
       </div>
     </footer>
+    <script>
+      function switchTab(sectionId) {
+        document.querySelectorAll(".tab-section").forEach((section) => {
+          section.style.display = section.id === sectionId ? "block" : "none";
+        });
+
+        document.querySelectorAll(".tab").forEach((tab) => {
+          tab.classList.toggle(
+            "active",
+            tab.getAttribute("onclick").includes(sectionId)
+          );
+        });
+      }
+
+      // Optional: Set default visible tab on load
+      document.addEventListener("DOMContentLoaded", () => {
+        switchTab("market-holidays-section");
+      });
+    </script>
   </body>
 </html>
