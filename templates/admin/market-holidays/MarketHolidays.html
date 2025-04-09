@@ -12,16 +12,13 @@
   %}
 
   <!-- 📅 Holiday Table -->
-  <div
-    class="table-wrapper"
-    style="min-height: 200px; overflow: visible; border: 3px dashed red"
-  >
+  <div class="table-wrapper" style="min-height: 200px">
     <table
       id="holidays-table"
       class="admin-table"
-      style="width: 100%; border: 2px dashed blue; table-layout: fixed"
+      style="width: 100%; table-layout: fixed"
     >
-      <thead style="background-color: #ddd">
+      <thead>
         <tr>
           <th class="col-select">Select</th>
           <th class="line-id-col" style="display: table-cell">ID</th>
@@ -31,39 +28,11 @@
           <th>Close Time</th>
         </tr>
       </thead>
-      <tbody style="background-color: #ffe">
-        <!-- 🧪 Static test row -->
-        <tr style="border: 1px solid black">
-          <td class="col-select"><input type="checkbox" /></td>
-          <td class="line-id-col" style="display: table-cell">123</td>
-          <td>Test Holiday</td>
-          <td>2025-07-04</td>
-          <td>Upcoming</td>
-          <td>1:00 PM</td>
+      <tbody>
+        <tr>
+          <td colspan="6">Loading holidays...</td>
         </tr>
       </tbody>
     </table>
   </div>
-
-  <script>
-    // 🧪 Patch 5 DOM check
-    setTimeout(() => {
-      const section = document.querySelector("#market-holidays-section");
-      const table = document.querySelector("#holidays-table");
-      const tbody = table.querySelector("tbody");
-      const rows = tbody.querySelectorAll("tr");
-
-      console.log("📋 Tbody check (Patch 5)");
-      console.log("📦 Row count:", rows.length);
-      rows.forEach((row, i) => {
-        console.log(`🔍 Row ${i + 1} HTML:`, row.outerHTML);
-        row.style.border = "2px dotted green"; // Force visibility border
-        row.style.backgroundColor = "#dfd";
-      });
-
-      if (rows.length === 0) {
-        console.warn("⚠️ Tbody exists but contains no rows.");
-      }
-    }, 500);
-  </script>
 </section>
