@@ -8,7 +8,7 @@ async function loadMarketHolidays() {
     const holidays = await response.json();
     const table = document.getElementById("holidays-table");
     const tbody = table.querySelector("tbody");
-    if (!tbody) throw new Error("❌ <tbody> not found in holidays table");
+    if (!tbody) throw new Error("Missing <tbody> in holidays table");
 
     tbody.innerHTML = "";
 
@@ -29,15 +29,10 @@ async function loadMarketHolidays() {
       `;
 
       tbody.appendChild(row);
-
-      if (window.DEBUG)
-        console.log(`📦 Appended row for holiday: ${holiday.name}`);
     });
 
-    // Set up ButtonBox
     ButtonBoxMarketHolidays.init();
 
-    // Wire checkboxes
     const waitForButtonBox = setInterval(() => {
       if (window.ButtonBox && ButtonBox.wireCheckboxes) {
         clearInterval(waitForButtonBox);
@@ -45,7 +40,6 @@ async function loadMarketHolidays() {
       }
     }, 50);
 
-    // ID toggle logic
     const toggle = document.getElementById("holiday-show-id-toggle");
     if (toggle) {
       toggle.addEventListener("change", () => {
@@ -58,7 +52,6 @@ async function loadMarketHolidays() {
       toggle.dispatchEvent(new Event("change"));
     }
   } catch (err) {
-    console.error("❌ Error loading holidays:", err);
     const tbody = document.querySelector("#holidays-table tbody");
     if (tbody) {
       tbody.innerHTML = `<tr><td colspan="6">Failed to load holidays. Please try again later.</td></tr>`;
@@ -79,10 +72,4 @@ async function loadMarketHolidays() {
   window.handleHolidayAction = ButtonBoxRows.handleRowAction;
 })();
 
-// Debug mode: don't auto-run unless explicitly triggered
-if (window.DEBUG) {
-  console.log("🚧 DEBUG mode is ON — loadMarketHolidays() won't auto-run");
-  console.log("👉 Run it manually with: loadMarketHolidays()");
-} else {
-  window.addEventListener("DOMContentLoaded", loadMarketHolidays);
-}
+window.addEventListener("DOMContentLoaded", loadMarketHolidays);
