@@ -52,15 +52,19 @@
       {% include "admin/market-holidays/MarketHolidays.html" %}
     </div>
 
-    <!-- API Keys Section -->
+    <!-- API Keys Section (temporarily disabled) -->
+    {#
     <div id="api-keys-section" class="tab-section" style="display: none">
       {% include "admin/api-keys/ApiKeys.html" %}
     </div>
+    #}
 
-    <!-- User Management Section -->
+    <!-- User Management Section (temporarily disabled) -->
+    {#
     <div id="user-management-section" class="tab-section" style="display: none">
       {% include "admin/user-management/UserManagement.html" %}
     </div>
+    #}
 
     <!-- Shared Scripts -->
     <script src="{{ url_for('static', path='admin/shared/ButtonBox.js') }}"></script>
@@ -70,10 +74,10 @@
 
     <!-- Section Scripts -->
     <script src="{{ url_for('static', path='admin/market-holidays/MarketHolidays.js') }}"></script>
+    <!-- API Keys and User Management scripts temporarily disabled -->
+    <!--
     <script src="{{ url_for('static', path='admin/api-keys/ApiKeys.js') }}"></script>
     <script src="{{ url_for('static', path='admin/user-management/UserManagement.js') }}"></script>
-
-    <!-- Core Script -->
-    <script src="{{ url_for('static', path='frontend/core/main.js') }}"></script>
+    -->
   </body>
 </html>
