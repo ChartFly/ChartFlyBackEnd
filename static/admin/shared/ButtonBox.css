@@ -5,7 +5,7 @@
   padding: 6px 12px;
   margin: 0 5px;
   border-radius: 6px;
-  background-color: #006373; /* 🔵 New Default: Darker ChartFly Blue */
+  background-color: #006373; /* 🔵 Dark ChartFly Blue */
   border: 1px solid #006373;
   color: #fff;
   cursor: pointer;
@@ -151,7 +151,7 @@ input[type="checkbox"] {
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 6px;
   margin-top: 10px;
   width: 100%;
   max-width: 100%;
@@ -184,16 +184,16 @@ input[type="checkbox"] {
   width: 100%;
   max-width: 1100px;
   min-width: unset;
-  margin: 0 auto;
+  margin: 0;
   padding: 0 10px;
   box-sizing: border-box;
 }
 
 .button-toolbar {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 6px;
 }
 
 #holiday-info-box,

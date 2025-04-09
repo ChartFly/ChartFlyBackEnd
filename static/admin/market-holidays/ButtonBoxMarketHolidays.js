@@ -25,8 +25,26 @@ window.ButtonBoxMarketHolidays = (() => {
       if (window.ButtonBox && window.ButtonBoxRows) {
         clearInterval(waitForBox);
         ButtonBox.init(config);
+        wireIdToggle(); // ✅ Once ButtonBox is ready, wire up ID toggle
       }
     }, 50);
+  }
+
+  function wireIdToggle() {
+    const idToggle = document.getElementById("holiday-show-id-toggle");
+    if (!idToggle) return;
+
+    idToggle.addEventListener("change", () => {
+      const show = idToggle.checked;
+      document
+        .querySelectorAll("#market-holidays-section .line-id-col")
+        .forEach((cell) => {
+          cell.style.display = show ? "table-cell" : "none";
+        });
+    });
+
+    // Trigger once to apply initial state
+    idToggle.dispatchEvent(new Event("change"));
   }
 
   function handleHolidayAction(action, selectedIds) {
