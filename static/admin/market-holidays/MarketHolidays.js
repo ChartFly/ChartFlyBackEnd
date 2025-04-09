@@ -33,6 +33,9 @@ async function loadMarketHolidays() {
       tbody.appendChild(row);
     });
 
+    // ✅ Update the scrolling ticker content
+    updateHolidayTicker(holidays);
+
     ButtonBoxMarketHolidays.init();
 
     const waitForButtonBox = setInterval(() => {
@@ -75,6 +78,24 @@ function getHolidayStatus(dateStr) {
   } catch {
     return "—";
   }
+}
+
+function updateHolidayTicker(holidays) {
+  const ticker = document.getElementById("holiday-ticker");
+  if (!ticker) return;
+
+  const upcoming = holidays
+    .filter((h) => new Date(h.date) >= new Date())
+    .sort((a, b) => new Date(a.date) - new Date(b.date))
+    .slice(0, 10)
+    .map((h) => {
+      const date = new Date(h.date);
+      const options = { month: "short", day: "numeric" };
+      return `${h.name} – ${date.toLocaleDateString(undefined, options)}`;
+    })
+    .join("  |  ");
+
+  ticker.textContent = upcoming || "🎉 No upcoming holidays.";
 }
 
 (() => {

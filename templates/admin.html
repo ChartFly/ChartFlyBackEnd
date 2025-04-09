@@ -55,14 +55,14 @@
       {% include "admin/market-holidays/MarketHolidays.html" %}
     </div>
 
-    <!-- 🔒 API Keys Section (commented out) -->
+    <!-- 🔒 API Keys Section -->
     {#
     <div id="api-keys-section" class="tab-section" style="display: none">
       {% include "admin/api-keys/ApiKeys.html" %}
     </div>
     #}
 
-    <!-- 🔒 User Management Section (commented out) -->
+    <!-- 🔒 User Management Section -->
     {#
     <div id="user-management-section" class="tab-section" style="display: none">
       {% include "admin/user-management/UserManagement.html" %}
@@ -78,6 +78,14 @@
     <!-- ✅ Market Holidays Script -->
     <script src="{{ url_for('static', path='admin/market-holidays/MarketHolidays.js') }}"></script>
 
+    <!-- ✅ Global Frontend Logic -->
     <script src="{{ url_for('static', path='frontend/core/main.js') }}"></script>
+
+    <!-- ✅ Footer with Holiday Ticker -->
+    <footer class="admin-footer">
+      <div id="holiday-ticker" class="footer-ticker">
+        🎉 Upcoming Holidays will scroll here...
+      </div>
+    </footer>
   </body>
 </html>
