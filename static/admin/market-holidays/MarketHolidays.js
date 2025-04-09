@@ -36,15 +36,19 @@ async function loadMarketHolidays() {
     // ✅ Tell main.js to update the ticker if it's available
     window.updateHolidayTicker?.(holidays);
 
-    ButtonBoxMarketHolidays.init();
+    // 🔁 Wait for ButtonBoxMarketHolidays to be ready before calling init
+    const waitForInit = setInterval(() => {
+      if (window.ButtonBoxMarketHolidays && ButtonBoxMarketHolidays.init) {
+        clearInterval(waitForInit);
+        ButtonBoxMarketHolidays.init();
 
-    const waitForButtonBox = setInterval(() => {
-      if (window.ButtonBox && ButtonBox.wireCheckboxes) {
-        clearInterval(waitForButtonBox);
-        ButtonBox.wireCheckboxes("holiday");
+        if (window.ButtonBox && ButtonBox.wireCheckboxes) {
+          ButtonBox.wireCheckboxes("holiday");
+        }
       }
     }, 50);
 
+    // ✅ Show Line ID toggle logic
     const toggle = document.getElementById("holiday-show-id-toggle");
     if (toggle) {
       toggle.addEventListener("change", () => {
@@ -57,6 +61,7 @@ async function loadMarketHolidays() {
       toggle.dispatchEvent(new Event("change"));
     }
   } catch (err) {
+    console.error("❌ Error loading holidays:", err);
     const tbody = document.querySelector("#holidays-table tbody");
     if (tbody) {
       tbody.innerHTML = `<tr><td colspan="6">Failed to load holidays. Please try again later.</td></tr>`;
