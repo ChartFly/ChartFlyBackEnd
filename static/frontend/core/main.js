@@ -75,7 +75,7 @@ async function loadHolidayTicker() {
           options
         )}`;
       })
-      .join("            |            ");
+      .join("      |      ");
 
     const ticker = document.getElementById("holiday-ticker");
     if (ticker) ticker.textContent = `🎉 ${formatted}`;
@@ -127,6 +127,7 @@ function showTab(tabName) {
   location.hash = tabName;
 }
 
-// ✅ Export
+// ✅ Export to window
 window.showTab = showTab;
 window.sanitizeInput = sanitizeInput;
+window.updateHolidayTicker = loadHolidayTicker;
