@@ -120,7 +120,7 @@
 /* ✅ Admin Footer + Holiday Ticker */
 /* =============================== */
 .admin-footer {
-  background-color: #006373; /* Same darker turquoise as header */
+  background-color: #006373;
   color: white;
   font-size: 14px;
   font-family: Arial, sans-serif;
@@ -128,18 +128,19 @@
   box-sizing: border-box;
   position: fixed;
   bottom: 0;
-  width: 100%;
+  width: calc(100% - 100px); /* Equal white space left and right */
+  left: 50px; /* Shift footer to match header padding */
   z-index: 100;
   overflow: hidden;
 }
 
 .footer-ticker {
-  white-space: pre; /* ✅ preserve spacing for holiday text */
+  white-space: pre; /* ✅ preserve exact spaces */
+  font-family: monospace; /* ✅ ensures consistent spacing */
   overflow: hidden;
   width: 100%;
-  display: flex;
-  align-items: center;
-  position: relative;
+  display: inline-block;
+  animation: ticker-scroll 45s linear infinite;
 }
 
 .ticker-content {
