@@ -12,13 +12,16 @@
   %}
 
   <!-- 📅 Holiday Table -->
-  <div class="table-wrapper" style="min-height: 200px; overflow: visible">
+  <div
+    class="table-wrapper"
+    style="min-height: 200px; overflow: visible; border: 3px dashed red"
+  >
     <table
       id="holidays-table"
       class="admin-table"
-      style="display: table; width: 100%; table-layout: fixed"
+      style="width: 100%; border: 2px dashed blue; table-layout: fixed"
     >
-      <thead>
+      <thead style="background-color: #ddd">
         <tr>
           <th class="col-select">Select</th>
           <th class="line-id-col" style="display: table-cell">ID</th>
@@ -28,12 +31,12 @@
           <th>Close Time</th>
         </tr>
       </thead>
-      <tbody>
-        <!-- Temporary test row will auto-clear when JS appends real data -->
-        <tr>
+      <tbody style="background-color: #ffe">
+        <!-- 🧪 Static test row -->
+        <tr style="border: 1px solid black">
           <td class="col-select"><input type="checkbox" /></td>
           <td class="line-id-col" style="display: table-cell">123</td>
-          <td>Debug Test Row</td>
+          <td>Test Holiday</td>
           <td>2025-07-04</td>
           <td>Upcoming</td>
           <td>1:00 PM</td>
@@ -42,32 +45,25 @@
     </table>
   </div>
 
-  <!-- 🛠️ Inline debug script -->
   <script>
-    const table = document.querySelector("#holidays-table");
-    const tbody = table?.querySelector("tbody");
+    // 🧪 Patch 5 DOM check
+    setTimeout(() => {
+      const section = document.querySelector("#market-holidays-section");
+      const table = document.querySelector("#holidays-table");
+      const tbody = table.querySelector("tbody");
+      const rows = tbody.querySelectorAll("tr");
 
-    if (tbody) {
-      console.log("📋 Tbody ready. Initial children:", tbody.children.length);
-      const observer = new MutationObserver((mutations) => {
-        mutations.forEach((m) => {
-          if (m.type === "childList" && m.addedNodes.length > 0) {
-            m.addedNodes.forEach((node, i) => {
-              if (node.tagName === "TR") {
-                console.log(
-                  `📦 Row rendered [${i}]:`,
-                  node.innerHTML.slice(0, 80)
-                );
-              }
-            });
-            console.log(
-              "✅ Table render complete — total rows:",
-              tbody.querySelectorAll("tr").length
-            );
-          }
-        });
+      console.log("📋 Tbody check (Patch 5)");
+      console.log("📦 Row count:", rows.length);
+      rows.forEach((row, i) => {
+        console.log(`🔍 Row ${i + 1} HTML:`, row.outerHTML);
+        row.style.border = "2px dotted green"; // Force visibility border
+        row.style.backgroundColor = "#dfd";
       });
-      observer.observe(tbody, { childList: true });
-    }
+
+      if (rows.length === 0) {
+        console.warn("⚠️ Tbody exists but contains no rows.");
+      }
+    }, 500);
   </script>
 </section>
