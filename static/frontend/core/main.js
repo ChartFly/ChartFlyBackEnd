@@ -52,7 +52,7 @@ function updateMarketStatus() {
   statusElement.innerText = status;
 }
 
-// ✅ Holiday Ticker now GLOBAL 🎉
+// ✅ Holiday Ticker (now GLOBAL 🎉)
 async function loadHolidayTicker() {
   try {
     const res = await fetch("/api/holidays/year/2025");
@@ -69,16 +69,19 @@ async function loadHolidayTicker() {
     const formatted = upcoming
       .map((h) => {
         const date = new Date(h.date);
-        const options = { month: "short", day: "numeric" };
-        return `${h.name}      |      ${date.toLocaleDateString(
-          undefined,
-          options
-        )}`;
+        const formattedDate = date.toLocaleDateString(undefined, {
+          month: "short",
+          day: "2-digit",
+        });
+        return `${formattedDate}  -  ${h.name}`;
       })
-      .join("          |          ");
+      .join("       |       ");
 
     const ticker = document.getElementById("holiday-ticker");
     if (ticker) ticker.textContent = `🎉 ${formatted}`;
+
+    const dup = document.getElementById("holiday-ticker-duplicate");
+    if (dup) dup.textContent = `🎉 ${formatted}`;
   } catch (err) {
     console.error("Ticker failed:", err);
     const ticker = document.getElementById("holiday-ticker");

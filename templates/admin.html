@@ -1,3 +1,11 @@
+<!-- =================================================== -->
+<!-- ✅ ChartFly Admin Panel Layout (admin.html)         -->
+<!-- Main layout for the Admin Dashboard UI              -->
+<!-- Includes: Header, Tabs, Footer, Shared Scripts      -->
+<!-- Author: ChartFly Dev Team                           -->
+<!-- Last Updated: 2025-04-09                            -->
+<!-- =================================================== -->
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -83,10 +91,17 @@
 
     <!-- ✅ Footer with Holiday Ticker -->
     <footer class="admin-footer">
-      <div id="holiday-ticker" class="footer-ticker">
-        🎉 Upcoming Holidays will scroll here...
+      <div class="footer-ticker">
+        <span id="holiday-ticker" class="ticker-content">🎉 Loading...</span>
+        <span
+          id="holiday-ticker-duplicate"
+          class="ticker-content"
+          aria-hidden="true"
+          >🎉 Loading...</span
+        >
       </div>
     </footer>
+
     <script>
       function switchTab(sectionId) {
         document.querySelectorAll(".tab-section").forEach((section) => {
@@ -101,7 +116,6 @@
         });
       }
 
-      // Optional: Set default visible tab on load
       document.addEventListener("DOMContentLoaded", () => {
         switchTab("market-holidays-section");
       });

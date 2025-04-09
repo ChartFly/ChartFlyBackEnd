@@ -137,8 +137,16 @@
   white-space: pre; /* ✅ preserve spacing for holiday text */
   overflow: hidden;
   width: 100%;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.ticker-content {
   display: inline-block;
-  animation: ticker-scroll 45s linear infinite; /* 🐢 Slowed down */
+  padding-right: 100px; /* buffer for spacing */
+  animation: ticker-scroll 45s linear infinite;
+  white-space: nowrap;
 }
 
 @keyframes ticker-scroll {
