@@ -16,12 +16,7 @@
     <table
       id="holidays-table"
       class="admin-table"
-      style="
-        display: table;
-        width: 100%;
-        table-layout: fixed;
-        border: 2px dashed red;
-      "
+      style="display: table; width: 100%; table-layout: fixed"
     >
       <thead>
         <tr>
@@ -34,11 +29,11 @@
         </tr>
       </thead>
       <tbody>
-        <!-- Temporary row stays until final fix confirmed -->
+        <!-- Temporary test row will auto-clear when JS appends real data -->
         <tr>
           <td class="col-select"><input type="checkbox" /></td>
           <td class="line-id-col" style="display: table-cell">123</td>
-          <td>Test Holiday</td>
+          <td>Debug Test Row</td>
           <td>2025-07-04</td>
           <td>Upcoming</td>
           <td>1:00 PM</td>
@@ -46,4 +41,33 @@
       </tbody>
     </table>
   </div>
+
+  <!-- 🛠️ Inline debug script -->
+  <script>
+    const table = document.querySelector("#holidays-table");
+    const tbody = table?.querySelector("tbody");
+
+    if (tbody) {
+      console.log("📋 Tbody ready. Initial children:", tbody.children.length);
+      const observer = new MutationObserver((mutations) => {
+        mutations.forEach((m) => {
+          if (m.type === "childList" && m.addedNodes.length > 0) {
+            m.addedNodes.forEach((node, i) => {
+              if (node.tagName === "TR") {
+                console.log(
+                  `📦 Row rendered [${i}]:`,
+                  node.innerHTML.slice(0, 80)
+                );
+              }
+            });
+            console.log(
+              "✅ Table render complete — total rows:",
+              tbody.querySelectorAll("tr").length
+            );
+          }
+        });
+      });
+      observer.observe(tbody, { childList: true });
+    }
+  </script>
 </section>
