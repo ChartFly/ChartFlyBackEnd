@@ -5,7 +5,7 @@
 /* ✅ Header Layout */
 .admin-header {
   width: 100%;
-  background: #006373; /* Updated to darker turquoise */
+  background: #006373; /* ChartFly Dark Turquoise */
   padding: 20px 50px;
   display: flex;
   justify-content: space-between;
@@ -36,7 +36,7 @@
   font-size: 18px;
   font-weight: bold;
   color: white;
-  background-color: transparent; /* 🎯 Blends with header now */
+  background-color: transparent;
   padding: 5px 10px;
   border-radius: 5px;
 }
@@ -128,26 +128,20 @@
   box-sizing: border-box;
   position: fixed;
   bottom: 0;
-  width: calc(100% - 100px); /* Equal white space left and right */
-  left: 50px; /* Shift footer to match header padding */
+  left: 0;
+  right: 0;
+  width: 100%;
   z-index: 100;
   overflow: hidden;
+  height: 50px; /* 🔧 Consistent footer height */
 }
 
 .footer-ticker {
-  white-space: pre; /* ✅ preserve exact spaces */
-  font-family: monospace; /* ✅ ensures consistent spacing */
-  overflow: hidden;
-  width: 100%;
+  white-space: pre;
+  font-family: monospace;
   display: inline-block;
   animation: ticker-scroll 45s linear infinite;
-}
-
-.ticker-content {
-  display: inline-block;
-  padding-right: 100px; /* buffer for spacing */
-  animation: ticker-scroll 45s linear infinite;
-  white-space: nowrap;
+  min-width: 100%;
 }
 
 @keyframes ticker-scroll {
