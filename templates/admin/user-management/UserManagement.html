@@ -9,7 +9,7 @@
   <h2>Manage Admin Users</h2>
 
   <!-- 🧠 Modular ButtonBox Toolbar & Message Bars -->
-  {% include "shared/ButtonBox.html" with section="user-management" %}
+  {% set section = "user-management" %} {% include "shared/ButtonBox.html" %}
 
   <!-- 🆔 Show ID Toggle -->
   <div class="toggle-ids">
