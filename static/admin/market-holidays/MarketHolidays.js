@@ -2,10 +2,14 @@
 
 async function loadMarketHolidays() {
   try {
+    console.log("📥 MarketHolidays.js loaded — loading holidays...");
+
     const response = await fetch("/api/holidays/year/2025");
     if (!response.ok) throw new Error("Failed to fetch market holidays");
 
     const holidays = await response.json();
+    console.log(`📅 Fetched ${holidays.length} holidays`);
+
     const table = document.getElementById("holidays-table");
     const tbody = table.querySelector("tbody");
     if (!tbody) throw new Error("Missing <tbody> in holidays table");
@@ -33,22 +37,26 @@ async function loadMarketHolidays() {
       tbody.appendChild(row);
     });
 
-    // ✅ Tell main.js to update the ticker if it's available
+    // ✅ Tell main.js to update the ticker if available
     window.updateHolidayTicker?.(holidays);
 
-    // 🔁 Wait for ButtonBoxMarketHolidays to be ready before calling init
+    // 🧠 Wait for ButtonBox modules to be fully loaded before init
     const waitForInit = setInterval(() => {
       if (window.ButtonBoxMarketHolidays && ButtonBoxMarketHolidays.init) {
         clearInterval(waitForInit);
+        console.log("🚀 Initializing ButtonBoxMarketHolidays...");
         ButtonBoxMarketHolidays.init();
 
         if (window.ButtonBox && ButtonBox.wireCheckboxes) {
           ButtonBox.wireCheckboxes("holiday");
+          console.log("✅ Checkboxes wired for holidays");
+        } else {
+          console.warn("⚠️ ButtonBox.wireCheckboxes not available");
         }
       }
     }, 50);
 
-    // ✅ Show Line ID toggle logic
+    // 🆔 Show Line ID Toggle
     const toggle = document.getElementById("holiday-show-id-toggle");
     if (toggle) {
       toggle.addEventListener("change", () => {
@@ -59,6 +67,9 @@ async function loadMarketHolidays() {
           });
       });
       toggle.dispatchEvent(new Event("change"));
+      console.log("🆔 Show ID toggle wired");
+    } else {
+      console.warn("⚠️ holiday-show-id-toggle not found");
     }
   } catch (err) {
     console.error("❌ Error loading holidays:", err);
@@ -89,6 +100,7 @@ function getHolidayStatus(dateStr) {
 (() => {
   if (window.MARKET_HOLIDAYS_LOADED) return;
   window.MARKET_HOLIDAYS_LOADED = true;
+  console.log("📦 MARKET_HOLIDAYS_LOADED = true");
   window.handleHolidayAction = ButtonBoxRows.handleRowAction;
 })();
 
