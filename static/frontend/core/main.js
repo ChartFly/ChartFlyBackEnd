@@ -2,6 +2,7 @@
 
 document.addEventListener("DOMContentLoaded", function () {
   updateMarketStatus();
+  loadHolidayTicker(); // ✅ Ticker now loads globally
 
   // Set default tab if no hash
   if (!location.hash) {
@@ -51,6 +52,40 @@ function updateMarketStatus() {
   statusElement.innerText = status;
 }
 
+// ✅ Holiday Ticker now GLOBAL 🎉
+async function loadHolidayTicker() {
+  try {
+    const res = await fetch("/api/holidays/year/2025");
+    if (!res.ok) throw new Error("Holiday ticker fetch failed");
+
+    const data = await res.json();
+    const now = new Date();
+
+    const upcoming = data
+      .filter((h) => new Date(h.date) >= now)
+      .sort((a, b) => new Date(a.date) - new Date(b.date))
+      .slice(0, 10);
+
+    const formatted = upcoming
+      .map((h) => {
+        const date = new Date(h.date);
+        const options = { month: "short", day: "numeric" };
+        return `${h.name}      |      ${date.toLocaleDateString(
+          undefined,
+          options
+        )}`;
+      })
+      .join("      |      ");
+
+    const ticker = document.getElementById("holiday-ticker");
+    if (ticker) ticker.textContent = `🎉 ${formatted}`;
+  } catch (err) {
+    console.error("Ticker failed:", err);
+    const ticker = document.getElementById("holiday-ticker");
+    if (ticker) ticker.textContent = "⚠️ Failed to load holiday ticker.";
+  }
+}
+
 // ✅ Sanitizer
 function sanitizeInput(input) {
   return typeof input === "string"
@@ -93,6 +128,5 @@ function showTab(tabName) {
 }
 
 // ✅ Export
-window.DEBUG = false;
 window.showTab = showTab;
 window.sanitizeInput = sanitizeInput;

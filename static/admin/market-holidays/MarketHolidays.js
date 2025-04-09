@@ -33,9 +33,7 @@ async function loadMarketHolidays() {
       tbody.appendChild(row);
     });
 
-    // ✅ Update the scrolling ticker content //
     updateHolidayTicker(holidays);
-
     ButtonBoxMarketHolidays.init();
 
     const waitForButtonBox = setInterval(() => {
@@ -91,23 +89,20 @@ function updateHolidayTicker(holidays) {
     .map((h) => {
       const date = new Date(h.date);
       const options = { month: "short", day: "numeric" };
-      return `${h.name} – ${date.toLocaleDateString(undefined, options)}`;
+      return `${h.name}      |      ${date.toLocaleDateString(
+        undefined,
+        options
+      )}`;
     })
-    .join("  |  ");
+    .join(" ");
 
   ticker.textContent = upcoming || "🎉 No upcoming holidays.";
 }
 
+// ✅ Init
 (() => {
   if (window.MARKET_HOLIDAYS_LOADED) return;
   window.MARKET_HOLIDAYS_LOADED = true;
-
-  window.sanitizeInput = function (input) {
-    return typeof input === "string"
-      ? input.replace(/</g, "&lt;").replace(/>/g, "&gt;")
-      : input ?? "—";
-  };
-
   window.handleHolidayAction = ButtonBoxRows.handleRowAction;
 })();
 
