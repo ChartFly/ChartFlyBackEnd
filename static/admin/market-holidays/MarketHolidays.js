@@ -33,7 +33,7 @@ async function loadMarketHolidays() {
       tbody.appendChild(row);
     });
 
-    // ✅ Update the scrolling ticker content
+    // ✅ Update the scrolling ticker content //
     updateHolidayTicker(holidays);
 
     ButtonBoxMarketHolidays.init();
