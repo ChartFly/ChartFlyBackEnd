@@ -1,4 +1,4 @@
-// static/admin/shared/ButtonBoxColumns.js
+//  static/admin/shared/ButtonBoxColumns.js
 
 window.ButtonBoxColumns = (() => {
   function handleCellAction(section, action) {
@@ -13,7 +13,10 @@ window.ButtonBoxColumns = (() => {
 
       state.clipboard = selectedText;
       state.clipboardType = "cell";
-      ButtonBox.showTip(section, "Copying specific data. Use Paste to apply to another cell.");
+      ButtonBox.showTip(
+        section,
+        "Copying specific data. Use Paste to apply to another cell."
+      );
       lockButtonsExceptPaste(section);
       enablePaste(section);
       return;
@@ -25,7 +28,10 @@ window.ButtonBoxColumns = (() => {
     }
 
     if (!["save", "undo"].includes(action)) {
-      ButtonBox.showWarning(section, `Switch to 'Edit Lines' to use ${capitalize(action)}.`);
+      ButtonBox.showWarning(
+        section,
+        `Switch to 'Edit Lines' to use ${capitalize(action)}.`
+      );
       return;
     }
   }
@@ -34,40 +40,51 @@ window.ButtonBoxColumns = (() => {
     const state = ButtonBox.getState(section);
     const cells = document.querySelectorAll(`#${state.domId} td`);
 
-    cells.forEach(cell => {
+    cells.forEach((cell) => {
       cell.classList.add("cell-paste-ready");
-      cell.addEventListener("mousedown", function handler(e) {
-        if (state.clipboardType === "cell" && state.clipboard) {
-          e.preventDefault();
-          cell.textContent = state.clipboard;
-          cell.classList.add("flash-yellow");
-          setTimeout(() => cell.classList.remove("flash-yellow"), 500);
-          state.clipboard = null;
-          state.clipboardType = null;
-          ButtonBox.showTip(section, "Cell pasted. Copy again to paste more.");
-          unlockButtons(section);
-          disablePaste(section);
-          cells.forEach(c => c.replaceWith(c.cloneNode(true)));
-        }
-      }, { once: true });
+      cell.addEventListener(
+        "mousedown",
+        function handler(e) {
+          if (state.clipboardType === "cell" && state.clipboard) {
+            e.preventDefault();
+            cell.textContent = state.clipboard;
+            cell.classList.add("flash-yellow");
+            setTimeout(() => cell.classList.remove("flash-yellow"), 500);
+            state.clipboard = null;
+            state.clipboardType = null;
+            ButtonBox.showTip(
+              section,
+              "Cell pasted. Copy again to paste more."
+            );
+            unlockButtons(section);
+            disablePaste(section);
+            cells.forEach((c) => c.replaceWith(c.cloneNode(true)));
+          }
+        },
+        { once: true }
+      );
     });
   }
 
   function lockButtonsExceptPaste(section) {
-    document.querySelectorAll(`#${section}-toolbar .action-btn`).forEach(btn => {
-      const id = btn.id;
-      if (!id.endsWith("paste-btn")) {
-        btn.disabled = true;
-        btn.classList.add("disabled-btn");
-      }
-    });
+    document
+      .querySelectorAll(`#${section}-toolbar .action-btn`)
+      .forEach((btn) => {
+        const id = btn.id;
+        if (!id.endsWith("paste-btn")) {
+          btn.disabled = true;
+          btn.classList.add("disabled-btn");
+        }
+      });
   }
 
   function unlockButtons(section) {
-    document.querySelectorAll(`#${section}-toolbar .action-btn`).forEach(btn => {
-      btn.disabled = false;
-      btn.classList.remove("disabled-btn");
-    });
+    document
+      .querySelectorAll(`#${section}-toolbar .action-btn`)
+      .forEach((btn) => {
+        btn.disabled = false;
+        btn.classList.remove("disabled-btn");
+      });
   }
 
   function enablePaste(section) {
@@ -91,6 +108,6 @@ window.ButtonBoxColumns = (() => {
   }
 
   return {
-    handleCellAction
+    handleCellAction,
   };
 })();
