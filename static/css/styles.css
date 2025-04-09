@@ -1,11 +1,11 @@
-/* ============================== */
+/* ============================= */
 /* ✅ GLOBAL BACKEND STYLES (Header + Tabs Only) */
-/* ============================== */
+/* ============================= */
 
 /* ✅ Header Layout */
 .admin-header {
   width: 100%;
-  background: #007a8a;
+  background: #006373; /* Updated to darker turquoise */
   padding: 20px 50px;
   display: flex;
   justify-content: space-between;
@@ -36,7 +36,7 @@
   font-size: 18px;
   font-weight: bold;
   color: white;
-  background-color: gray;
+  background-color: transparent; /* 🎯 Blends with header now */
   padding: 5px 10px;
   border-radius: 5px;
 }
@@ -120,7 +120,7 @@
 /* ✅ Admin Footer + Holiday Ticker */
 /* =============================== */
 .admin-footer {
-  background-color: #006373; /* ChartFly darker turquoise */
+  background-color: #006373; /* Same darker turquoise as header */
   color: white;
   font-size: 14px;
   font-family: Arial, sans-serif;
@@ -138,7 +138,7 @@
   overflow: hidden;
   width: 100%;
   display: inline-block;
-  animation: ticker-scroll 25s linear infinite;
+  animation: ticker-scroll 45s linear infinite; /* 🐢 Slowed down */
 }
 
 @keyframes ticker-scroll {
