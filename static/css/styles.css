@@ -134,7 +134,7 @@
 }
 
 .footer-ticker {
-  white-space: nowrap;
+  white-space: pre; /* ✅ preserve spacing for holiday text */
   overflow: hidden;
   width: 100%;
   display: inline-block;
