@@ -1,6 +1,56 @@
-// static/admin/shared/ButtonBoxRows.js
+// static/admin/shared/ButtonBox.js
 
-window.ButtonBoxRows = (() => {
+window.ButtonBox = (() => {
+  const stateMap = new Map();
+
+  function init(config) {
+    const {
+      section,
+      tableId,
+      domId,
+      tipBoxId,
+      warningBoxId,
+      footerId,
+      enabledActions,
+      onAction,
+    } = config;
+
+    const state = {
+      section,
+      tableId,
+      domId,
+      tipBoxId,
+      warningBoxId,
+      footerId,
+      enabledActions,
+      selectedRows: new Set(),
+      onAction,
+    };
+
+    stateMap.set(section, state);
+    wireButtons(state);
+  }
+
+  function getState(section) {
+    return stateMap.get(section);
+  }
+
+  function wireButtons(state) {
+    const { section, enabledActions } = state;
+
+    enabledActions.forEach((action) => {
+      const btn = document.getElementById(`${section}-${action}-btn`);
+      if (!btn) return;
+
+      btn.addEventListener("click", () => {
+        const selectedIds = Array.from(state.selectedRows);
+        if (typeof state.onAction === "function") {
+          state.onAction(action, selectedIds);
+        }
+      });
+    });
+  }
+
   function wireCheckboxes(section) {
     const table = document.getElementById(`${section}-table`);
     if (!table) {
@@ -9,7 +59,7 @@ window.ButtonBoxRows = (() => {
     }
 
     const checkboxes = table.querySelectorAll(`.${section}-select-checkbox`);
-    const state = ButtonBox.getState(section);
+    const state = getState(section);
     state.selectedRows.clear();
 
     checkboxes.forEach((checkbox) => {
@@ -36,15 +86,12 @@ window.ButtonBoxRows = (() => {
         const row = table.querySelector(`tr[data-id="${id}"]`);
         if (row) row.remove();
       });
-      ButtonBox.wireCheckboxes(section);
+      wireCheckboxes(section);
     }
 
     if (action === "copy") {
       if (selectedIds.length !== 1) {
-        ButtonBox.showWarning(
-          section,
-          "Please select exactly one row to copy."
-        );
+        showWarning(section, "Please select exactly one row to copy.");
         return;
       }
 
@@ -73,7 +120,7 @@ window.ButtonBoxRows = (() => {
         });
 
       table.prepend(clone);
-      ButtonBox.wireCheckboxes(section);
+      wireCheckboxes(section);
     }
 
     if (action === "add") {
@@ -97,7 +144,7 @@ window.ButtonBoxRows = (() => {
       });
 
       table.prepend(newRow);
-      ButtonBox.wireCheckboxes(section);
+      wireCheckboxes(section);
     }
 
     if (action === "edit") {
@@ -141,17 +188,31 @@ window.ButtonBoxRows = (() => {
         row.classList.remove("selected-row");
       });
 
-      ButtonBox.wireCheckboxes(section);
-      ButtonBox.showMessage(section, "Rows saved (frontend only).", "success");
+      wireCheckboxes(section);
+      showMessage(section, "Rows saved (frontend only).", "success");
     }
 
     if (action === "paste") {
-      ButtonBox.showWarning(section, "Paste is not implemented yet.");
+      showWarning(section, "Paste is not implemented yet.");
     }
   }
 
+  function showWarning(section, message) {
+    console.warn(`[${section}] ⚠️ ${message}`);
+    // TODO: UI update
+  }
+
+  function showMessage(section, message) {
+    console.log(`[${section}] ✅ ${message}`);
+    // TODO: UI update
+  }
+
   return {
-    handleRowAction,
+    init,
+    getState,
     wireCheckboxes,
+    handleRowAction,
+    showWarning,
+    showMessage,
   };
 })();
