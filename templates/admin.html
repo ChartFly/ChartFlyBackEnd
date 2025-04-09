@@ -15,19 +15,12 @@
     />
     <link
       rel="stylesheet"
-      href="{{ url_for('static', path='admin/api-keys/ApiKeys.css') }}"
-    />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', path='admin/user-management/UserManagement.css') }}"
-    />
-    <link
-      rel="stylesheet"
       href="{{ url_for('static', path='admin/shared/ButtonBox.css') }}"
     />
   </head>
+
   <body>
-    <!-- ✅ Admin Header -->
+    <!-- ✅ Header -->
     <div class="admin-header">
       <img
         src="{{ url_for('static', path='images/Chartfly-logo.png') }}"
@@ -51,20 +44,24 @@
       </div>
     </div>
 
-    <!-- ✅ Section: Market Holidays -->
+    <!-- ✅ Market Holidays Section -->
     <div id="market-holidays-section" class="tab-section">
       {% include "admin/market-holidays/MarketHolidays.html" %}
     </div>
 
-    <!-- ✅ Section: API Keys -->
+    <!-- 🔒 API Keys Section (commented out) -->
+    {#
     <div id="api-keys-section" class="tab-section" style="display: none">
       {% include "admin/api-keys/ApiKeys.html" %}
     </div>
+    #}
 
-    <!-- ✅ Section: User Management -->
+    <!-- 🔒 User Management Section (commented out) -->
+    {#
     <div id="user-management-section" class="tab-section" style="display: none">
       {% include "admin/user-management/UserManagement.html" %}
     </div>
+    #}
 
     <!-- ✅ Shared Scripts -->
     <script src="{{ url_for('static', path='admin/shared/ButtonBox.js') }}"></script>
@@ -72,12 +69,7 @@
     <script src="{{ url_for('static', path='admin/shared/ButtonBoxRows.js') }}"></script>
     <script src="{{ url_for('static', path='admin/shared/ButtonBoxColumns.js') }}"></script>
 
-    <!-- ✅ Per Section Scripts -->
+    <!-- ✅ Market Holidays Script -->
     <script src="{{ url_for('static', path='admin/market-holidays/MarketHolidays.js') }}"></script>
-    <script src="{{ url_for('static', path='admin/api-keys/ApiKeys.js') }}"></script>
-    <script src="{{ url_for('static', path='admin/user-management/UserManagement.js') }}"></script>
-
-    <!-- ✅ Market Status + Tab Switching -->
-    <script src="{{ url_for('static', path='frontend/core/main.js') }}"></script>
   </body>
 </html>
