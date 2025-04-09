@@ -16,6 +16,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 from starlette.middleware import Middleware
 from starlette.status import HTTP_302_FOUND
+from jinja2 import Environment, FileSystemLoader, select_autoescape  # 🧼 Disable template caching
 
 # ✅ App Logging
 logging.basicConfig(level=logging.INFO)
@@ -54,7 +55,14 @@ app = FastAPI(
 
 # ✅ Mount Static Assets and Templates
 app.mount("/static", StaticFiles(directory="static"), name="static")
-templates = Jinja2Templates(directory="templates")
+
+# 🧯 Disable Jinja2 template caching
+env = Environment(
+    loader=FileSystemLoader("templates"),
+    autoescape=select_autoescape(["html", "xml"]),
+    cache_size=0
+)
+templates = Jinja2Templates(env=env)
 
 # ✅ Startup: Create DB Pool
 @app.on_event("startup")
@@ -111,5 +119,4 @@ app.include_router(dev_reset_router)
 
 # ✅ Main Server Entry
 if __name__ == "__main__":
-
     uvicorn.run(app, host="0.0.0.0", port=int(os.getenv("PORT", 8000)))
