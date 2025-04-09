@@ -1,6 +1,9 @@
 // static/admin/shared/ButtonBoxRows.js
 
 window.ButtonBoxRows = (() => {
+  const undoStacks = {}; // Holds up to 30 snapshots per section
+  const clipboards = {}; // Holds copied row HTML per section
+
   function wireCheckboxes(section) {
     const table = document.querySelector(`#${section}-section table`);
     const checkboxes = table.querySelectorAll(`.${section}-select-checkbox`);
@@ -20,14 +23,30 @@ window.ButtonBoxRows = (() => {
     });
   }
 
-  function handleRowAction(action, selectedIds, section) {
+  function pushUndo(section) {
     const state = ButtonBox.getState(section);
     const table = document.getElementById(state.tableId);
+    const snapshot = Array.from(table.querySelectorAll("tbody tr")).map(
+      (row) => row.outerHTML
+    );
+
+    if (!undoStacks[section]) undoStacks[section] = [];
+    undoStacks[section].push(snapshot);
+    if (undoStacks[section].length > 30) undoStacks[section].shift(); // cap at 30
+  }
+
+  function handleRowAction(action, selectedIds, { section, tableId }) {
+    const state = ButtonBox.getState(section);
+    const table = document.getElementById(tableId);
     if (!table) {
       console.error(
-        `❌ Table not found for section "${section}" using ID "${state.tableId}"`
+        `❌ Table not found for section "${section}" using ID "${tableId}"`
       );
       return;
+    }
+
+    if (["add", "edit", "delete", "copy"].includes(action)) {
+      pushUndo(section);
     }
 
     if (action === "delete") {
@@ -50,8 +69,23 @@ window.ButtonBoxRows = (() => {
       const sourceRow = table.querySelector(`tr[data-id="${selectedIds[0]}"]`);
       if (!sourceRow) return;
 
-      const newId = `copy-${Date.now()}`;
-      const clone = sourceRow.cloneNode(true);
+      clipboards[section] = sourceRow.outerHTML;
+      ButtonBox.showMessage(section, "Row copied. Click Paste to duplicate.");
+    }
+
+    if (action === "paste") {
+      const html = clipboards[section];
+      if (!html) {
+        ButtonBox.showWarning(section, "Clipboard is empty. Copy a row first.");
+        return;
+      }
+
+      const newId = `paste-${Date.now()}`;
+      const wrapper = document.createElement("tbody");
+      wrapper.innerHTML = html;
+      const clone = wrapper.firstElementChild;
+
+      if (!clone) return;
       clone.setAttribute("data-id", newId);
       clone.classList.add("editing");
 
@@ -59,9 +93,11 @@ window.ButtonBoxRows = (() => {
       if (checkbox) {
         checkbox.setAttribute("data-id", newId);
         checkbox.checked = true;
+        checkbox.className = `${section}-select-checkbox`;
       }
 
-      clone.querySelector(".line-id-col").textContent = newId;
+      const idCell = clone.querySelector(".line-id-col");
+      if (idCell) idCell.textContent = newId;
 
       clone
         .querySelectorAll("td:not(.col-select):not(.line-id-col)")
@@ -143,8 +179,22 @@ window.ButtonBoxRows = (() => {
       ButtonBox.showMessage(section, "Rows saved (frontend only).", "success");
     }
 
-    if (action === "paste") {
-      ButtonBox.showWarning(section, "Paste is not implemented yet.");
+    if (action === "undo") {
+      const stack = undoStacks[section];
+      if (!stack || stack.length === 0) {
+        ButtonBox.showWarning(section, "Nothing to undo.");
+        return;
+      }
+
+      const last = stack.pop();
+      const tbody = table.querySelector("tbody");
+      tbody.innerHTML = "";
+      last.forEach((rowHTML) => {
+        tbody.insertAdjacentHTML("beforeend", rowHTML);
+      });
+
+      ButtonBox.wireCheckboxes(section);
+      ButtonBox.showMessage(section, "Undo successful.");
     }
   }
 

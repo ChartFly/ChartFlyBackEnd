@@ -1,34 +1,36 @@
 <section id="market-holidays-section" class="admin-tab-section">
   <h2>Manage Market Holidays</h2>
 
-  <!-- ✅ Modular ButtonBox -->
-  {% set section = "market-holidays" %} {% include "shared/ButtonBox.html" %}
+  <div class="table-container">
+    <!-- ✅ Modular ButtonBox -->
+    {% set section = "market-holidays" %} {% include "shared/ButtonBox.html" %}
 
-  <!-- 🆔 Show ID Toggle -->
-  <div class="toggle-ids">
-    <label>
-      <input type="checkbox" id="holiday-show-id-toggle" />
-      Show Database IDs
-    </label>
-  </div>
+    <!-- 🆔 Show ID Toggle -->
+    <div class="toggle-ids">
+      <label>
+        <input type="checkbox" id="holiday-show-id-toggle" />
+        Show Database IDs
+      </label>
+    </div>
 
-  <!-- 📅 Holidays Table -->
-  <div class="table-wrapper">
-    <table id="holidays-table" class="admin-table">
-      <thead>
-        <tr>
-          <th class="col-select">Select</th>
-          <th class="line-id-col" style="display: none">ID</th>
-          <th class="col-name">Name</th>
-          <th class="col-date">Date</th>
-          <th class="col-close-time">Close Time</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td colspan="5">Loading holidays...</td>
-        </tr>
-      </tbody>
-    </table>
+    <!-- 📅 Holidays Table -->
+    <div class="table-wrapper">
+      <table id="holidays-table" class="admin-table">
+        <thead>
+          <tr>
+            <th class="col-select">Select</th>
+            <th class="line-id-col" style="display: none">ID</th>
+            <th class="col-name">Name</th>
+            <th class="col-date">Date</th>
+            <th class="col-close-time">Close Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td colspan="5">Loading holidays...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </section>

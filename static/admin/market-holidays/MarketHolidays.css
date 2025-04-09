@@ -124,3 +124,10 @@
   background-color: #ffe5e5;
   border: 1px solid #ff4d4d;
 }
+
+/* ✅ Layout container for table and ButtonBox module */
+#market-holidays-section .table-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 10px;
+}
