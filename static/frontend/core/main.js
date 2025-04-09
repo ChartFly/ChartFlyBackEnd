@@ -75,7 +75,7 @@ async function loadHolidayTicker() {
           options
         )}`;
       })
-      .join("      |      ");
+      .join("            |            ");
 
     const ticker = document.getElementById("holiday-ticker");
     if (ticker) ticker.textContent = `🎉 ${formatted}`;
