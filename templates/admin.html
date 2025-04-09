@@ -1,119 +1,83 @@
-<!-- Market Holidays Section -->
-<div id="market-holidays-section" class="tab-section">
-  <section class="admin-tab-section">
-    <h2>Manage Market Holidays</h2>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>ChartFly Admin Panel</title>
 
-    <!-- ✅ Modular ButtonBox -->
-    <div class="button-box">
-      <!-- 💬 Shared Tip/Warning Box -->
-      <div class="info-box" id="market-holidays-info-box">
-        <strong id="market-holidays-info-label">Tip:</strong>
-        <span id="market-holidays-info-message"
-          >Click a button to begin an action.</span
-        >
-      </div>
-
-      <!-- 🛠️ Action Buttons Toolbar -->
-      <div class="button-toolbar" id="market-holidays-toolbar">
-        <button id="market-holidays-edit-btn" class="action-btn">Edit</button>
-        <button id="market-holidays-copy-btn" class="action-btn">Copy</button>
-        <button
-          id="market-holidays-paste-btn"
-          class="action-btn disabled-btn"
-          disabled
-        >
-          Paste
-        </button>
-        <button id="market-holidays-add-btn" class="action-btn">Add</button>
-        <button id="market-holidays-delete-btn" class="action-btn">
-          Delete
-        </button>
-        <button id="market-holidays-save-btn" class="action-btn">Save</button>
-        <button
-          id="market-holidays-undo-btn"
-          class="action-btn disabled-btn"
-          disabled
-        >
-          Undo
-        </button>
-      </div>
-
-      <!-- ✅ Confirm Button + Mode Switches -->
-      <div class="button-footer-row">
-        <div class="edit-mode-controls">
-          <label
-            ><input
-              type="radio"
-              name="market-holidays-edit-mode"
-              value="row"
-              checked
-            />
-            Edit Lines</label
-          >
-          <label
-            ><input
-              type="radio"
-              name="market-holidays-edit-mode"
-              value="cell"
-            />
-            Edit Cells & Columns</label
-          >
-          <label
-            ><input type="checkbox" id="market-holidays-show-id-toggle" /> Show
-            Line ID</label
-          >
-        </div>
-        <div class="confirm-button-container">
-          <button
-            id="market-holidays-confirm-btn"
-            class="confirm-btn gray"
-            disabled
-          >
-            Confirm
-          </button>
-        </div>
-      </div>
-
-      <!-- 📊 Footer: Action and Row Selection -->
-      <div class="status-footer">
-        <span
-          ><strong>Action:</strong>
-          <span id="market-holidays-current-action">None</span></span
-        >
-        &nbsp;&nbsp;&nbsp;
-        <span
-          ><strong>Selected Rows:</strong>
-          <span id="market-holidays-selected-count">0</span></span
-        >
+    <!-- ✅ Stylesheets -->
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', path='css/styles.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', path='admin/market-holidays/MarketHolidays.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', path='admin/api-keys/ApiKeys.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', path='admin/user-management/UserManagement.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', path='admin/shared/ButtonBox.css') }}"
+    />
+  </head>
+  <body>
+    <!-- ✅ Admin Header -->
+    <div class="admin-header">
+      <img
+        src="{{ url_for('static', path='images/Chartfly-logo.png') }}"
+        alt="ChartFly Logo"
+        class="admin-logo"
+      />
+      <h1 class="admin-title">ChartFly Admin Console</h1>
+      <div id="market-status-indicator">
+        Market Status: <span id="market-status-text">Checking...</span>
       </div>
     </div>
 
-    <!-- 🆔 Show ID Toggle -->
-    <div class="toggle-ids">
-      <label>
-        <input type="checkbox" id="holiday-show-id-toggle" />
-        Show Database IDs
-      </label>
+    <!-- ✅ Tabs -->
+    <div class="tab-container">
+      <div class="tab" onclick="switchTab('market-holidays-section')">
+        Market Holidays
+      </div>
+      <div class="tab" onclick="switchTab('api-keys-section')">API Keys</div>
+      <div class="tab" onclick="switchTab('user-management-section')">
+        User Management
+      </div>
     </div>
 
-    <!-- 📅 Holidays Table -->
-    <div class="table-wrapper">
-      <table id="holidays-table" class="admin-table">
-        <thead>
-          <tr>
-            <th class="col-select">Select</th>
-            <th class="line-id-col" style="display: none">ID</th>
-            <th class="col-name">Name</th>
-            <th class="col-date">Date</th>
-            <th class="col-close-time">Close Time</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td colspan="5">Loading holidays...</td>
-          </tr>
-        </tbody>
-      </table>
+    <!-- ✅ Section: Market Holidays -->
+    <div id="market-holidays-section" class="tab-section">
+      {% include "admin/market-holidays/MarketHolidays.html" %}
     </div>
-  </section>
-</div>
+
+    <!-- ✅ Section: API Keys -->
+    <div id="api-keys-section" class="tab-section" style="display: none">
+      {% include "admin/api-keys/ApiKeys.html" %}
+    </div>
+
+    <!-- ✅ Section: User Management -->
+    <div id="user-management-section" class="tab-section" style="display: none">
+      {% include "admin/user-management/UserManagement.html" %}
+    </div>
+
+    <!-- ✅ Shared Scripts -->
+    <script src="{{ url_for('static', path='admin/shared/ButtonBox.js') }}"></script>
+    <script src="{{ url_for('static', path='admin/shared/ButtonBoxMessages.js') }}"></script>
+    <script src="{{ url_for('static', path='admin/shared/ButtonBoxRows.js') }}"></script>
+    <script src="{{ url_for('static', path='admin/shared/ButtonBoxColumns.js') }}"></script>
+
+    <!-- ✅ Per Section Scripts -->
+    <script src="{{ url_for('static', path='admin/market-holidays/MarketHolidays.js') }}"></script>
+    <script src="{{ url_for('static', path='admin/api-keys/ApiKeys.js') }}"></script>
+    <script src="{{ url_for('static', path='admin/user-management/UserManagement.js') }}"></script>
+
+    <!-- ✅ Market Status + Tab Switching -->
+    <script src="{{ url_for('static', path='frontend/core/main.js') }}"></script>
+  </body>
+</html>
