@@ -120,11 +120,12 @@
 /* ✅ Admin Footer + Holiday Ticker */
 /* ============================== */
 .admin-footer {
-  background-color: #006373; /* ChartFly Darker Blue */
+  background-color: #006373; /* ChartFly darker turquoise */
   color: white;
-  padding: 8px 20px;
   font-size: 14px;
   font-family: Arial, sans-serif;
+  padding: 10px 50px;
+  box-sizing: border-box;
   position: fixed;
   bottom: 0;
   width: 100%;
@@ -132,45 +133,11 @@
   overflow: hidden;
 }
 
-.ticker-container {
-  white-space: nowrap;
-  overflow: hidden;
-  box-sizing: border-box;
-}
-
-#holiday-ticker {
-  display: inline-block;
-  padding-left: 100%;
-  animation: ticker-scroll 30s linear infinite;
-}
-
-@keyframes ticker-scroll {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-100%);
-  }
-}
-
-/* ============================== */
-/* ✅ Footer Ticker Styles */
-/* ============================== */
-.admin-footer {
-  background-color: #006373; /* ChartFly darker turquoise */
-  color: white;
-  font-size: 14px;
-  font-family: Arial, sans-serif;
-  padding: 10px 50px;
-  box-sizing: border-box;
-  position: relative;
-  overflow: hidden;
-}
-
 .footer-ticker {
   white-space: nowrap;
   overflow: hidden;
   width: 100%;
+  display: inline-block;
   animation: ticker-scroll 25s linear infinite;
 }
 
