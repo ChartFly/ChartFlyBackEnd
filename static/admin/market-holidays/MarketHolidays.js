@@ -42,22 +42,20 @@ async function loadMarketHolidays() {
 
     // 🧠 Wait for ButtonBox modules to be fully loaded before init
     const waitForInit = setInterval(() => {
-      if (window.ButtonBoxMarketHolidays && ButtonBoxMarketHolidays.init) {
+      if (
+        window.ButtonBoxMarketHolidays?.init &&
+        window.ButtonBox?.wireCheckboxes
+      ) {
         clearInterval(waitForInit);
         console.log("🚀 Initializing ButtonBoxMarketHolidays...");
         ButtonBoxMarketHolidays.init();
-
-        if (window.ButtonBox && ButtonBox.wireCheckboxes) {
-          ButtonBox.wireCheckboxes("holiday");
-          console.log("✅ Checkboxes wired for holidays");
-        } else {
-          console.warn("⚠️ ButtonBox.wireCheckboxes not available");
-        }
+        ButtonBox.wireCheckboxes("holiday");
+        console.log("✅ Checkboxes wired for holidays");
       }
     }, 50);
 
-    // 🆔 Show Line ID Toggle
-    const toggle = document.getElementById("holiday-show-id-toggle");
+    // 🆔 Show Line ID Toggle (from ButtonBox)
+    const toggle = document.getElementById("market-holidays-show-id-toggle");
     if (toggle) {
       toggle.addEventListener("change", () => {
         document
@@ -69,7 +67,7 @@ async function loadMarketHolidays() {
       toggle.dispatchEvent(new Event("change"));
       console.log("🆔 Show ID toggle wired");
     } else {
-      console.warn("⚠️ holiday-show-id-toggle not found");
+      console.warn("⚠️ market-holidays-show-id-toggle not found");
     }
   } catch (err) {
     console.error("❌ Error loading holidays:", err);
