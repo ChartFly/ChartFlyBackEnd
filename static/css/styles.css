@@ -39,9 +39,9 @@
   background-color: gray;
   padding: 5px 10px;
   border-radius: 5px;
-  display: inline-block;
 }
 
+/* ✅ Market status color cues */
 .market-open {
   background-color: green;
 }
@@ -54,7 +54,7 @@
 }
 
 /* ============================== */
-/* ✅ Tabs + Action Toolbar */
+/* ✅ Tabs */
 /* ============================== */
 .tab-container {
   display: flex;
@@ -79,7 +79,9 @@
   color: white;
 }
 
-/* ✅ Buttons shared across sections */
+/* ============================== */
+/* ✅ Shared Action Buttons */
+/* ============================== */
 .action-btn {
   padding: 8px 14px;
   border: none;
@@ -97,7 +99,8 @@
   color: white;
 }
 
-/* ✅ Compact Toggle */
+/* ============================== */
+/* ✅ Compact Mode Toggle Button */
 .compact-toggle {
   margin-bottom: 12px;
   padding: 6px 10px;
