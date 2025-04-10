@@ -1,3 +1,8 @@
+// =====================================================
+// 🧠 wireCheckboxes(section)  ButtonBox.js
+// Wires up all checkboxes in the given section, updates
+// state.selectedRows, and logs changes in the console.
+// =====================================================
 function wireCheckboxes(section) {
   const state = getState(section);
   if (!state) {
@@ -22,18 +27,24 @@ function wireCheckboxes(section) {
   state.selectedRows.clear();
 
   checkboxes.forEach((checkbox) => {
-    console.log(
-      `[${section}] ✅ Found checkbox with ID: ${checkbox.dataset.id}`
+    const id = checkbox.dataset.id;
+    console.log(`[${section}] ✅ Found checkbox with ID: ${id}`);
+
+    // Clear old listeners first (in case of rewire)
+    checkbox.replaceWith(checkbox.cloneNode(true));
+    const newCheckbox = table.querySelector(
+      `.${section}-select-checkbox[data-id="${id}"]`
     );
-    checkbox.addEventListener("change", () => {
-      const id = checkbox.dataset.id;
-      if (checkbox.checked) {
+
+    newCheckbox.addEventListener("change", () => {
+      if (newCheckbox.checked) {
         state.selectedRows.add(id);
         console.log(`[${section}] ➕ Row selected: ${id}`);
       } else {
         state.selectedRows.delete(id);
         console.log(`[${section}] ➖ Row deselected: ${id}`);
       }
+
       console.log(
         `[${section}] 📋 selectedRows now:`,
         Array.from(state.selectedRows)
