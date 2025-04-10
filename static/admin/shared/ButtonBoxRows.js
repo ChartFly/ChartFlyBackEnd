@@ -36,6 +36,8 @@ window.ButtonBoxRows = (() => {
       selected: Array.from(state.selectedRows),
     });
     if (undoStacks[section].length > 30) undoStacks[section].shift();
+
+    ButtonBoxMessages.updateUndo(section);
   }
 
   function handleRowAction(action, selectedIds, { section, tableId }) {
@@ -206,6 +208,7 @@ window.ButtonBoxRows = (() => {
       state.selectedRows = new Set(last.selected);
       ButtonBox.wireCheckboxes(section);
       ButtonBoxMessages.updateSelectedCount(section);
+      ButtonBoxMessages.updateUndo(section);
       ButtonBox.showMessage(section, "Undo successful.");
     }
   }
