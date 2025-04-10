@@ -209,15 +209,13 @@ window.ButtonBoxRows = (() => {
       const tbody = table.querySelector("tbody");
       tbody.innerHTML = "";
 
+      const parser = new DOMParser();
       last.rows.forEach((rowHTML, i) => {
-        const temp = document.createElement("tbody");
-        temp.innerHTML = rowHTML.trim();
-        const row = temp.firstElementChild;
+        const doc = parser.parseFromString(rowHTML, "text/html");
+        const row = doc.querySelector("tr");
         if (row) {
           tbody.appendChild(row);
           console.log(`[UNDO] Inserted row ${i + 1}`);
-        } else {
-          console.warn(`[UNDO] Skipped invalid row at index ${i}`);
         }
       });
 
@@ -231,6 +229,6 @@ window.ButtonBoxRows = (() => {
   return {
     handleRowAction,
     wireCheckboxes,
-    undoStacks, // Exposed for debugging
+    undoStacks,
   };
 })();
