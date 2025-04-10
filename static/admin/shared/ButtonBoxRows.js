@@ -1,19 +1,18 @@
 // static/admin/shared/ButtonBoxRows.js
 
 window.ButtonBoxRows = (() => {
-  const undoStacks = {}; // Holds up to 30 snapshots per section
+  const undoStacks = {}; // Holds up to 30 snapshots per section (rows + selectedRows)
   const clipboards = {}; // Holds copied row HTML per section
 
   function wireCheckboxes(section) {
     const table = document.querySelector(`#${section}-section table`);
     const checkboxes = table.querySelectorAll(`.${section}-select-checkbox`);
-
-    ButtonBox.getState(section).selectedRows.clear();
+    const state = ButtonBox.getState(section);
+    if (!state) return;
 
     checkboxes.forEach((checkbox) => {
       checkbox.addEventListener("change", () => {
         const id = checkbox.dataset.id;
-        const state = ButtonBox.getState(section);
         if (checkbox.checked) {
           state.selectedRows.add(id);
         } else {
@@ -32,8 +31,11 @@ window.ButtonBoxRows = (() => {
     );
 
     if (!undoStacks[section]) undoStacks[section] = [];
-    undoStacks[section].push(snapshot);
-    if (undoStacks[section].length > 30) undoStacks[section].shift(); // cap at 30
+    undoStacks[section].push({
+      rows: snapshot,
+      selected: Array.from(state.selectedRows),
+    });
+    if (undoStacks[section].length > 30) undoStacks[section].shift();
   }
 
   function handleRowAction(action, selectedIds, { section, tableId }) {
@@ -54,7 +56,9 @@ window.ButtonBoxRows = (() => {
       selectedIds.forEach((id) => {
         const row = table.querySelector(`tr[data-id="${id}"]`);
         if (row) row.remove();
+        state.selectedRows.delete(id);
       });
+      ButtonBoxMessages.updateSelectedCount(section);
       ButtonBox.wireCheckboxes(section);
     }
 
@@ -172,7 +176,7 @@ window.ButtonBoxRows = (() => {
         row.classList.remove("selected-row");
       });
 
-      ButtonBox.getState(section).selectedRows.clear();
+      state.selectedRows.clear();
       ButtonBoxMessages.updateSelectedCount(section);
       ButtonBox.wireCheckboxes(section);
       ButtonBox.showMessage(section, "Rows saved (frontend only).", "success");
@@ -195,11 +199,13 @@ window.ButtonBoxRows = (() => {
       const last = stack.pop();
       const tbody = table.querySelector("tbody");
       tbody.innerHTML = "";
-      last.forEach((rowHTML) => {
+      last.rows.forEach((rowHTML) => {
         tbody.insertAdjacentHTML("beforeend", rowHTML);
       });
 
+      state.selectedRows = new Set(last.selected);
       ButtonBox.wireCheckboxes(section);
+      ButtonBoxMessages.updateSelectedCount(section);
       ButtonBox.showMessage(section, "Undo successful.");
     }
   }
