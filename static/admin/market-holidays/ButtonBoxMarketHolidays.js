@@ -24,39 +24,43 @@ window.ButtonBoxMarketHolidays = (() => {
     const waitForBox = setInterval(() => {
       if (window.ButtonBox && window.ButtonBoxRows) {
         clearInterval(waitForBox);
+        console.log("📦 ButtonBoxMarketHolidays: Initializing ButtonBox");
         ButtonBox.init(config);
-        wireIdToggle(); // ✅ Once ButtonBox is ready, wire up ID toggle
+        wireIdToggle(); // ✅ Wire once Box is ready
       }
     }, 50);
   }
 
   function wireIdToggle() {
-    const idToggle = document.getElementById("holiday-show-id-toggle");
-    if (!idToggle) return;
+    const toggle = document.getElementById("holiday-show-id-toggle");
+    if (!toggle) {
+      console.warn("⚠️ ID toggle not found: #holiday-show-id-toggle");
+      return;
+    }
 
-    idToggle.addEventListener("change", () => {
-      const show = idToggle.checked;
+    toggle.addEventListener("change", () => {
+      const visible = toggle.checked;
       document
-        .querySelectorAll("#market-holidays-section .line-id-col")
-        .forEach((cell) => {
-          cell.style.display = show ? "table-cell" : "none";
+        .querySelectorAll(
+          "#market-holidays-section .line-id-col, #market-holidays-section th.line-id-col"
+        )
+        .forEach((el) => {
+          el.style.display = visible ? "table-cell" : "none";
         });
     });
 
-    // Trigger once to apply initial state
-    idToggle.dispatchEvent(new Event("change"));
+    toggle.dispatchEvent(new Event("change")); // Trigger on load
+    console.log("🆔 ButtonBoxMarketHolidays: ID toggle wired");
   }
 
   function handleHolidayAction(action, selectedIds) {
     console.log(`⚙️ [holiday] handleHolidayAction: ${action}`, selectedIds);
 
-    // Delegate to shared row logic (edit, copy, paste, etc)
     ButtonBoxRows.handleRowAction(action, selectedIds, {
       section: "holiday",
       tableId: "holidays-table",
     });
 
-    // Special hook for saving
     if (action === "save") {
       ButtonBoxDataBase?.saveToDatabase?.("holiday", selectedIds);
     }

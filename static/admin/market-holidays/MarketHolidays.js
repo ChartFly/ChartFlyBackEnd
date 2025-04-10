@@ -54,8 +54,8 @@ async function loadMarketHolidays() {
       }
     }, 50);
 
-    // 🆔 Show Line ID Toggle (from ButtonBox)
-    const toggle = document.getElementById("market-holidays-show-id-toggle");
+    // 🆔 Show Line ID Toggle — FIXED the ID to match HTML!
+    const toggle = document.getElementById("holiday-show-id-toggle");
     if (toggle) {
       toggle.addEventListener("change", () => {
         document
@@ -67,7 +67,7 @@ async function loadMarketHolidays() {
       toggle.dispatchEvent(new Event("change"));
       console.log("🆔 Show ID toggle wired");
     } else {
-      console.warn("⚠️ market-holidays-show-id-toggle not found");
+      console.warn("⚠️ holiday-show-id-toggle not found");
     }
   } catch (err) {
     console.error("❌ Error loading holidays:", err);
@@ -84,11 +84,14 @@ function getHolidayStatus(dateStr) {
     const date = new Date(dateStr);
     if (isNaN(date)) return "—";
 
-    const d1 = today.toISOString().slice(0, 10);
-    const d2 = date.toISOString().slice(0, 10);
+    const todayStr = today.toISOString().slice(0, 10);
+    const dateStrClean = date.toISOString().slice(0, 10);
 
-    if (d1 === d2) return "Today";
-    return date < today ? "Passed" : "Upcoming";
+    return todayStr === dateStrClean
+      ? "Today"
+      : date < today
+      ? "Passed"
+      : "Upcoming";
   } catch {
     return "—";
   }
