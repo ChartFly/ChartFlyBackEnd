@@ -9,12 +9,17 @@ window.ButtonBoxMessages = (() => {
     "You can copy/paste individual cell text!",
   ];
 
-  const tipTimers = {}; // ✅ FIXED: Defined internally
+  const tipTimers = {};
 
   function initTips(section, tipIndex = 0) {
+    const state = ButtonBox.getState(section);
+    if (!state) {
+      console.warn(`⚠️ ButtonBoxMessages: No state found for ${section}`);
+      return;
+    }
+
     showTip(section, rotatingTips[tipIndex]);
     tipTimers[section] = setInterval(() => {
-      const state = ButtonBox.getState(section);
       state.tipIndex = (state.tipIndex + 1) % rotatingTips.length;
       showTip(section, rotatingTips[state.tipIndex]);
     }, 60000);
@@ -44,6 +49,12 @@ window.ButtonBoxMessages = (() => {
 
   function clearWarning(section) {
     const state = ButtonBox.getState(section);
+    if (!state) {
+      console.warn(
+        `⚠️ ButtonBoxMessages: No state found for ${section} in clearWarning`
+      );
+      return;
+    }
     state.tipIndex = 0;
     showTip(section, rotatingTips[0]);
   }
@@ -67,6 +78,13 @@ window.ButtonBoxMessages = (() => {
     btn.textContent = labels[action] || `Confirm ${capitalize(action)}`;
 
     const state = ButtonBox.getState(section);
+    if (!state) {
+      console.warn(
+        `⚠️ ButtonBoxMessages: No state found for ${section} in enableConfirm`
+      );
+      return;
+    }
+
     btn.onclick = () => {
       if (typeof state.onAction === "function") {
         state.onAction(action, Array.from(state.selectedRows));
@@ -97,6 +115,7 @@ window.ButtonBoxMessages = (() => {
 
   function updateIdColumnVisibility(section) {
     const state = ButtonBox.getState(section);
+    if (!state) return;
     const idToggle = document.getElementById(`${section}-show-id-toggle`);
     if (!idToggle) return;
 
@@ -120,7 +139,8 @@ window.ButtonBoxMessages = (() => {
 
   function updateUndo(section) {
     const btn = document.getElementById(`${section}-undo-btn`);
-    const hasUndo = ButtonBox.getState(section).undoStack.length > 0;
+    const state = ButtonBox.getState(section);
+    const hasUndo = state?.undoStack?.length > 0;
     if (btn) {
       btn.disabled = !hasUndo;
       btn.classList.toggle("disabled-btn", !hasUndo);
