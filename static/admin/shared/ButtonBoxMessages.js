@@ -13,10 +13,7 @@ window.ButtonBoxMessages = (() => {
 
   function initTips(section, tipIndex = 0) {
     const state = ButtonBox.getState(section);
-    if (!state) {
-      console.warn(`⚠️ ButtonBoxMessages: No state found for ${section}`);
-      return;
-    }
+    if (!state) return;
 
     showTip(section, rotatingTips[tipIndex]);
     tipTimers[section] = setInterval(() => {
@@ -49,12 +46,7 @@ window.ButtonBoxMessages = (() => {
 
   function clearWarning(section) {
     const state = ButtonBox.getState(section);
-    if (!state) {
-      console.warn(
-        `⚠️ ButtonBoxMessages: No state found for ${section} in clearWarning`
-      );
-      return;
-    }
+    if (!state) return;
     state.tipIndex = 0;
     showTip(section, rotatingTips[0]);
   }
@@ -64,13 +56,10 @@ window.ButtonBoxMessages = (() => {
     if (!btn) return;
 
     const labels = {
-      add: "Confirm and Make Editable",
-      copy: "Confirm and Make Editable",
-      edit: "Confirm and Make Editable",
       delete: "Confirm and Delete",
+      save: "Confirm and Save",
       paste: "Confirm and Paste",
       undo: "Confirm and Undo",
-      save: "Confirm and Save",
     };
 
     btn.disabled = false;
@@ -78,37 +67,23 @@ window.ButtonBoxMessages = (() => {
     btn.textContent = labels[action] || `Confirm ${capitalize(action)}`;
 
     const state = ButtonBox.getState(section);
-    if (!state) {
-      console.warn(
-        `⚠️ ButtonBoxMessages: No state found for ${section} in enableConfirm`
-      );
-      return;
-    }
+    if (!state) return;
 
     btn.onclick = () => {
       if (typeof state.onAction === "function") {
         state.onAction(action, Array.from(state.selectedRows));
-        resetConfirmButton(section); // 🟡 Reset after action
+        resetConfirm(section);
       }
     };
   }
 
-  function resetConfirmButton(section) {
+  function resetConfirm(section) {
     const btn = document.getElementById(`${section}-confirm-btn`);
-    if (!btn) return;
-    btn.disabled = true;
-    btn.className = "confirm-btn gray";
-    btn.textContent = "Confirm";
-  }
-
-  function toggleConfirmButton(section, action) {
-    const confirmBtn = document.getElementById(`${section}-confirm-btn`);
-    if (!confirmBtn) return;
-
-    const showActions = ["edit", "delete", "save"];
-    confirmBtn.style.visibility = showActions.includes(action)
-      ? "visible"
-      : "hidden";
+    if (btn) {
+      btn.disabled = true;
+      btn.className = "confirm-btn gray";
+      btn.textContent = "Confirm";
+    }
   }
 
   function disableButton(btn) {
@@ -175,13 +150,12 @@ window.ButtonBoxMessages = (() => {
     showWarning,
     clearWarning,
     enableConfirm,
+    resetConfirm,
     disableButton,
     updateUndo,
     resetButtons,
     setStatus,
     updateIdColumnVisibility,
     updateButtonColors,
-    toggleConfirmButton,
-    resetConfirmButton,
   };
 })();

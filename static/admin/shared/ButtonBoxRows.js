@@ -7,19 +7,31 @@ window.ButtonBoxRows = (() => {
   function wireCheckboxes(section) {
     const table = document.querySelector(`#${section}-section table`);
     const checkboxes = table.querySelectorAll(`.${section}-select-checkbox`);
-    ButtonBox.getState(section).selectedRows.clear();
+
+    const state = ButtonBox.getState(section);
+    state.selectedRows.clear();
 
     checkboxes.forEach((checkbox) => {
       checkbox.addEventListener("change", () => {
         const id = checkbox.dataset.id;
-        const state = ButtonBox.getState(section);
         if (checkbox.checked) {
           state.selectedRows.add(id);
         } else {
           state.selectedRows.delete(id);
         }
+        updateSelectedCount(section);
       });
     });
+
+    updateSelectedCount(section);
+  }
+
+  function updateSelectedCount(section) {
+    const state = ButtonBox.getState(section);
+    const span = document.getElementById(`${section}-selected-count`);
+    if (span) {
+      span.textContent = state.selectedRows.size;
+    }
   }
 
   function pushUndo(section) {
@@ -28,6 +40,7 @@ window.ButtonBoxRows = (() => {
     const snapshot = Array.from(table.querySelectorAll("tbody tr")).map(
       (row) => row.outerHTML
     );
+
     if (!undoStacks[section]) undoStacks[section] = [];
     undoStacks[section].push(snapshot);
     if (undoStacks[section].length > 30) undoStacks[section].shift();
@@ -36,9 +49,14 @@ window.ButtonBoxRows = (() => {
   function handleRowAction(action, selectedIds, { section, tableId }) {
     const state = ButtonBox.getState(section);
     const table = document.getElementById(tableId);
-    if (!table) return console.error(`❌ Table not found for "${section}"`);
+    if (!table) {
+      console.error(`❌ Table not found for ${section}`);
+      return;
+    }
 
-    if (["add", "edit", "delete", "copy"].includes(action)) pushUndo(section);
+    if (["add", "edit", "delete", "copy"].includes(action)) {
+      pushUndo(section);
+    }
 
     if (action === "delete") {
       selectedIds.forEach((id) => {
@@ -46,7 +64,6 @@ window.ButtonBoxRows = (() => {
         if (row) row.remove();
       });
       ButtonBox.wireCheckboxes(section);
-      return;
     }
 
     if (action === "copy") {
@@ -58,16 +75,16 @@ window.ButtonBoxRows = (() => {
         return;
       }
 
-      const sourceRow = table.querySelector(`tr[data-id="${selectedIds[0]}"]`);
-      if (!sourceRow) return;
+      const src = table.querySelector(`tr[data-id="${selectedIds[0]}"]`);
+      if (!src) return;
 
-      clipboards[section] = sourceRow.outerHTML;
-      ButtonBox.showMessage(section, "Row copied. Inserted as editable.");
+      clipboards[section] = src.outerHTML;
 
-      const newId = `paste-${Date.now()}`;
+      const newId = `copy-${Date.now()}`;
       const wrapper = document.createElement("tbody");
       wrapper.innerHTML = clipboards[section];
       const clone = wrapper.firstElementChild;
+
       if (!clone) return;
 
       clone.setAttribute("data-id", newId);
@@ -90,9 +107,8 @@ window.ButtonBoxRows = (() => {
           cell.classList.add("editable");
         });
 
-      table.prepend(clone);
+      table.querySelector("tbody").prepend(clone);
       ButtonBox.wireCheckboxes(section);
-      return;
     }
 
     if (action === "add") {
@@ -115,15 +131,15 @@ window.ButtonBoxRows = (() => {
         cell.addEventListener("input", () => newRow.classList.add("dirty"));
       });
 
-      table.prepend(newRow);
+      table.querySelector("tbody").prepend(newRow);
       ButtonBox.wireCheckboxes(section);
-      return;
     }
 
     if (action === "edit") {
       selectedIds.forEach((id) => {
         const row = table.querySelector(`tr[data-id="${id}"]`);
         if (!row) return;
+
         row.classList.add("editing", "dirty");
         row
           .querySelectorAll("td:not(.col-select):not(.line-id-col)")
@@ -132,7 +148,6 @@ window.ButtonBoxRows = (() => {
             cell.classList.add("editable");
           });
       });
-      return;
     }
 
     if (action === "save") {
@@ -170,8 +185,6 @@ window.ButtonBoxRows = (() => {
         confirmBtn.className = "confirm-btn gray";
         confirmBtn.textContent = "Confirm";
       }
-
-      return;
     }
 
     if (action === "undo") {

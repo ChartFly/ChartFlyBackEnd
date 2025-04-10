@@ -69,6 +69,7 @@ window.ButtonBox = (() => {
     if (confirmBtn) {
       confirmBtn.disabled = true;
       confirmBtn.className = "confirm-btn gray";
+      confirmBtn.textContent = "Confirm";
     }
 
     const idToggle = document.getElementById(`${section}-show-id-toggle`);
@@ -134,8 +135,18 @@ window.ButtonBox = (() => {
           `[${section}] 📋 selectedRows now:`,
           Array.from(state.selectedRows)
         );
+
+        const counter = document.getElementById(`${section}-selected-count`);
+        if (counter) {
+          counter.textContent = state.selectedRows.size;
+        }
       });
     });
+
+    const counter = document.getElementById(`${section}-selected-count`);
+    if (counter) {
+      counter.textContent = state.selectedRows.size;
+    }
   }
 
   function showWarning(section, message) {
