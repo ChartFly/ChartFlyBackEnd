@@ -18,7 +18,7 @@
       href="{{ url_for('static', path='images/ChartFly-Favicon.ico') }}"
     />
 
-    <!--- ✅ Stylesheets --->
+    <!-- ✅ Stylesheets -->
     <link
       rel="stylesheet"
       href="{{ url_for('static', path='css/styles.css') }}"
@@ -83,12 +83,12 @@
     <script src="{{ url_for('static', path='admin/shared/ButtonBoxRows.js') }}"></script>
     <script src="{{ url_for('static', path='admin/shared/ButtonBoxColumns.js') }}"></script>
 
-    <!-- ✅ Market Holidays Script -->
-    <script src="{{ url_for('static', path='admin/market-holidays/ButtonBoxMarketHolidays.js') }}"></script>
-    <script src="{{ url_for('static', path='admin/market-holidays/MarketHolidays.js') }}"></script>
-
     <!-- ✅ Global Frontend Logic -->
     <script src="{{ url_for('static', path='frontend/core/main.js') }}"></script>
+
+    <!-- ✅ Market Holidays Scripts (moved last to ensure dependencies load first) -->
+    <script src="{{ url_for('static', path='admin/market-holidays/MarketHolidays.js') }}"></script>
+    <script src="{{ url_for('static', path='admin/market-holidays/ButtonBoxMarketHolidays.js') }}"></script>
 
     <!-- ✅ Footer with Holiday Ticker -->
     <footer class="admin-footer">
