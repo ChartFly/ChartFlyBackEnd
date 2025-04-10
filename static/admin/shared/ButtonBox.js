@@ -1,4 +1,4 @@
-// static/admin/shared/ButtonBox.js
+//static/admin/shared/ButtonBox.js  //
 window.ButtonBox = (() => {
   const stateMap = new Map();
 
