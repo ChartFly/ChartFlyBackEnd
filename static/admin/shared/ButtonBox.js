@@ -99,47 +99,25 @@ window.ButtonBox = (() => {
 
   function wireCheckboxes(section) {
     const state = getState(section);
-    if (!state) {
-      console.error(`❌ State not found for section "${section}"`);
-      return;
-    }
+    if (!state) return;
 
     const table = document.getElementById(state.tableId);
-    if (!table) {
-      console.error(
-        `❌ Table not found for section "${section}" using ID "${state.tableId}"`
-      );
-      return;
-    }
+    if (!table) return;
 
     const checkboxes = table.querySelectorAll(`.${section}-select-checkbox`);
-    if (checkboxes.length === 0) {
-      console.warn(`⚠️ No checkboxes found for section "${section}"`);
-    }
-
-    console.log(`[${section}] 🔄 Rewiring ${checkboxes.length} checkboxes...`);
     state.selectedRows.clear();
 
     checkboxes.forEach((checkbox) => {
       const id = checkbox.dataset.id;
-      console.log(`[${section}] ✅ Found checkbox with ID: ${id}`);
-
       const newCheckbox = checkbox.cloneNode(true);
       checkbox.replaceWith(newCheckbox);
 
       newCheckbox.addEventListener("change", () => {
         if (newCheckbox.checked) {
           state.selectedRows.add(id);
-          console.log(`[${section}] ➕ Row selected: ${id}`);
         } else {
           state.selectedRows.delete(id);
-          console.log(`[${section}] ➖ Row deselected: ${id}`);
         }
-
-        console.log(
-          `[${section}] 📋 selectedRows now:`,
-          Array.from(state.selectedRows)
-        );
 
         ButtonBoxMessages.updateSelectedCount(section);
       });
@@ -149,12 +127,10 @@ window.ButtonBox = (() => {
   }
 
   function showWarning(section, message) {
-    console.warn(`[${section}] ⚠️ ${message}`);
     ButtonBoxMessages.showWarning(section, message);
   }
 
   function showMessage(section, message, type = "info") {
-    console.log(`[${section}] ✅ ${message}`);
     if (type === "success") {
       ButtonBoxMessages.clearWarning(section);
     }
