@@ -1,8 +1,8 @@
 // static/admin/shared/ButtonBoxRows.js
 
 window.ButtonBoxRows = (() => {
-  const undoStacks = {};
-  const clipboards = {};
+  const undoStacks = {}; // Holds up to 30 snapshots per section (rows + selectedRows)
+  const clipboards = {}; // Holds copied row HTML per section
 
   function wireCheckboxes(section) {
     const table = document.querySelector(`#${section}-section table`);
@@ -26,8 +26,8 @@ window.ButtonBoxRows = (() => {
   function pushUndo(section) {
     const state = ButtonBox.getState(section);
     const table = document.getElementById(state.tableId);
-    const snapshot = Array.from(table.querySelectorAll("tbody tr")).map((row) =>
-      row.cloneNode(true)
+    const snapshot = Array.from(table.querySelectorAll("tbody tr")).map(
+      (row) => row.outerHTML
     );
 
     if (!undoStacks[section]) {
@@ -209,10 +209,16 @@ window.ButtonBoxRows = (() => {
       const tbody = table.querySelector("tbody");
       tbody.innerHTML = "";
 
-      last.rows.forEach((rowNode, index) => {
-        const clone = rowNode.cloneNode(true);
-        tbody.appendChild(clone);
-        console.log(`[UNDO] Inserted row ${index + 1}`);
+      last.rows.forEach((rowHTML, i) => {
+        const temp = document.createElement("tbody");
+        temp.innerHTML = rowHTML.trim();
+        const row = temp.firstElementChild;
+        if (row) {
+          tbody.appendChild(row);
+          console.log(`[UNDO] Inserted row ${i + 1}`);
+        } else {
+          console.warn(`[UNDO] Skipped invalid row at index ${i}`);
+        }
       });
 
       state.selectedRows = new Set(last.selected);
@@ -225,6 +231,6 @@ window.ButtonBoxRows = (() => {
   return {
     handleRowAction,
     wireCheckboxes,
-    undoStacks,
+    undoStacks, // Exposed for debugging
   };
 })();
