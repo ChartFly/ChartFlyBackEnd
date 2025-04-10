@@ -1,37 +1,27 @@
 // static/admin/shared/ButtonBoxRows.js
 
 window.ButtonBoxRows = (() => {
-  const undoStacks = {};
-  const clipboards = {};
+  const undoStacks = {}; // Holds up to 30 snapshots per section
+  const clipboards = {}; // Holds copied row HTML per section
 
   function wireCheckboxes(section) {
     const table = document.querySelector(`#${section}-section table`);
     const checkboxes = table.querySelectorAll(`.${section}-select-checkbox`);
 
-    const state = ButtonBox.getState(section);
-    state.selectedRows.clear();
+    ButtonBox.getState(section).selectedRows.clear();
 
     checkboxes.forEach((checkbox) => {
       checkbox.addEventListener("change", () => {
         const id = checkbox.dataset.id;
+        const state = ButtonBox.getState(section);
         if (checkbox.checked) {
           state.selectedRows.add(id);
         } else {
           state.selectedRows.delete(id);
         }
-        updateSelectedCount(section);
+        ButtonBoxMessages.updateSelectedCount(section);
       });
     });
-
-    updateSelectedCount(section);
-  }
-
-  function updateSelectedCount(section) {
-    const state = ButtonBox.getState(section);
-    const span = document.getElementById(`${section}-selected-count`);
-    if (span) {
-      span.textContent = state.selectedRows.size;
-    }
   }
 
   function pushUndo(section) {
@@ -43,14 +33,16 @@ window.ButtonBoxRows = (() => {
 
     if (!undoStacks[section]) undoStacks[section] = [];
     undoStacks[section].push(snapshot);
-    if (undoStacks[section].length > 30) undoStacks[section].shift();
+    if (undoStacks[section].length > 30) undoStacks[section].shift(); // cap at 30
   }
 
   function handleRowAction(action, selectedIds, { section, tableId }) {
     const state = ButtonBox.getState(section);
     const table = document.getElementById(tableId);
     if (!table) {
-      console.error(`❌ Table not found for ${section}`);
+      console.error(
+        `❌ Table not found for section "${section}" using ID "${tableId}"`
+      );
       return;
     }
 
@@ -75,18 +67,26 @@ window.ButtonBoxRows = (() => {
         return;
       }
 
-      const src = table.querySelector(`tr[data-id="${selectedIds[0]}"]`);
-      if (!src) return;
+      const sourceRow = table.querySelector(`tr[data-id="${selectedIds[0]}"]`);
+      if (!sourceRow) return;
 
-      clipboards[section] = src.outerHTML;
+      clipboards[section] = sourceRow.outerHTML;
+      ButtonBox.showMessage(section, "Row copied. Click Paste to duplicate.");
+    }
 
-      const newId = `copy-${Date.now()}`;
+    if (action === "paste") {
+      const html = clipboards[section];
+      if (!html) {
+        ButtonBox.showWarning(section, "Clipboard is empty. Copy a row first.");
+        return;
+      }
+
+      const newId = `S${Date.now()}`;
       const wrapper = document.createElement("tbody");
-      wrapper.innerHTML = clipboards[section];
+      wrapper.innerHTML = html;
       const clone = wrapper.firstElementChild;
 
       if (!clone) return;
-
       clone.setAttribute("data-id", newId);
       clone.classList.add("editing");
 
@@ -107,12 +107,12 @@ window.ButtonBoxRows = (() => {
           cell.classList.add("editable");
         });
 
-      table.querySelector("tbody").prepend(clone);
+      table.prepend(clone);
       ButtonBox.wireCheckboxes(section);
     }
 
     if (action === "add") {
-      const newId = `new-${Date.now()}`;
+      const newId = `S${Date.now()}`;
       const newRow = document.createElement("tr");
       newRow.classList.add("editing");
       newRow.setAttribute("data-id", newId);
@@ -131,7 +131,7 @@ window.ButtonBoxRows = (() => {
         cell.addEventListener("input", () => newRow.classList.add("dirty"));
       });
 
-      table.querySelector("tbody").prepend(newRow);
+      table.prepend(newRow);
       ButtonBox.wireCheckboxes(section);
     }
 
@@ -161,7 +161,7 @@ window.ButtonBoxRows = (() => {
           cell.classList.remove("editable");
         });
 
-        const finalId = `saved-${Date.now()}-${i}`;
+        const finalId = `S${Date.now()}${i}`;
         row.setAttribute("data-id", finalId);
 
         const checkbox = row.querySelector("input[type='checkbox']");
@@ -176,15 +176,10 @@ window.ButtonBoxRows = (() => {
         row.classList.remove("selected-row");
       });
 
+      ButtonBox.getState(section).selectedRows.clear();
+      ButtonBoxMessages.updateSelectedCount(section);
       ButtonBox.wireCheckboxes(section);
       ButtonBox.showMessage(section, "Rows saved (frontend only).", "success");
-
-      const confirmBtn = document.getElementById(`${section}-confirm-btn`);
-      if (confirmBtn) {
-        confirmBtn.disabled = true;
-        confirmBtn.className = "confirm-btn gray";
-        confirmBtn.textContent = "Confirm";
-      }
     }
 
     if (action === "undo") {
