@@ -1,23 +1,27 @@
 // static/admin/market-holidays/ButtonBoxMarketHolidays.js
+
 window.ButtonBoxMarketHolidays = (() => {
   let initialized = false;
 
   function handleHolidayAction(action, selectedIds) {
+    // Skip selection warning for these actions
+    const skipSelectionCheck = ["add", "undo", "save", "edit", "copy"];
     if (
-      !["add", "undo", "save"].includes(action) &&
+      !skipSelectionCheck.includes(action) &&
       (!selectedIds || selectedIds.length === 0)
     ) {
       ButtonBox.showWarning("holiday", "No rows selected.");
       return;
     }
 
+    // Delegate to row logic
     ButtonBoxRows.handleRowAction(action, selectedIds, {
       section: "holiday",
       tableId: "holidays-table",
     });
 
+    // Optional backend call (disabled for now)
     if (action === "save") {
-      // 🔧 Disabled backend call to avoid crash
       // ButtonBoxDataBase?.saveToDatabase?.("holiday", selectedIds);
     }
   }
@@ -75,4 +79,5 @@ window.ButtonBoxMarketHolidays = (() => {
   return { init };
 })();
 
+// Auto-run the init
 window.ButtonBoxMarketHolidays.init();

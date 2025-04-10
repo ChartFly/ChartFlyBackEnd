@@ -51,7 +51,7 @@ window.ButtonBoxMessages = (() => {
     showTip(section, rotatingTips[0]);
   }
 
-  function enableConfirm(section, action, onConfirm) {
+  function enableConfirm(section, action, onClickHandler) {
     const btn = document.getElementById(`${section}-confirm-btn`);
     if (!btn) return;
 
@@ -65,11 +65,7 @@ window.ButtonBoxMessages = (() => {
     btn.disabled = false;
     btn.className = "confirm-btn yellow";
     btn.textContent = labels[action] || `Confirm ${capitalize(action)}`;
-
-    btn.onclick = () => {
-      onConfirm?.();
-      resetConfirm(section);
-    };
+    btn.onclick = onClickHandler;
   }
 
   function resetConfirm(section) {
@@ -78,18 +74,22 @@ window.ButtonBoxMessages = (() => {
       btn.disabled = true;
       btn.className = "confirm-btn gray";
       btn.textContent = "Confirm";
+      btn.onclick = null;
     }
-  }
-
-  function disableButton(btn) {
-    if (!btn) return;
-    btn.disabled = true;
-    btn.classList.add("disabled-btn");
   }
 
   function setStatus(section, action) {
     const box = document.getElementById(`${section}-current-action`);
     if (box) box.textContent = capitalize(action);
+  }
+
+  function resetButtons(section, activeBtn) {
+    const actions = ["edit", "copy", "paste", "add", "delete", "save", "undo"];
+    actions.forEach((action) => {
+      const btn = document.getElementById(`${section}-${action}-btn`);
+      if (btn) btn.classList.remove("active");
+    });
+    if (activeBtn) activeBtn.classList.add("active");
   }
 
   function updateIdColumnVisibility(section) {
@@ -117,32 +117,11 @@ window.ButtonBoxMessages = (() => {
   }
 
   function updateSelectedCount(section) {
-    const count = ButtonBox.getState(section)?.selectedRows?.size || 0;
-    const el = document.getElementById(`${section}-selected-count`);
-    if (el) el.textContent = count;
-  }
-
-  function updateUndo(section) {
-    const btn = document.getElementById(`${section}-undo-btn`);
     const state = ButtonBox.getState(section);
-    const hasUndo = state?.undoStack?.length > 0;
-    if (btn) {
-      btn.disabled = !hasUndo;
-      btn.classList.toggle("disabled-btn", !hasUndo);
+    const box = document.getElementById(`${section}-selected-count`);
+    if (box && state) {
+      box.textContent = state.selectedRows.size;
     }
-  }
-
-  function resetButtons(section, activeBtn) {
-    const actions = ["edit", "copy", "paste", "add", "delete", "save", "undo"];
-    actions.forEach((action) => {
-      const otherBtn = document.getElementById(`${section}-${action}-btn`);
-      if (otherBtn) otherBtn.classList.remove("active");
-    });
-    if (activeBtn) activeBtn.classList.add("active");
-  }
-
-  function capitalize(word) {
-    return word.charAt(0).toUpperCase() + word.slice(1);
   }
 
   return {
@@ -152,8 +131,6 @@ window.ButtonBoxMessages = (() => {
     clearWarning,
     enableConfirm,
     resetConfirm,
-    disableButton,
-    updateUndo,
     resetButtons,
     setStatus,
     updateIdColumnVisibility,
