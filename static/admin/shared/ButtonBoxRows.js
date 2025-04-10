@@ -28,7 +28,6 @@ window.ButtonBoxRows = (() => {
     const snapshot = Array.from(table.querySelectorAll("tbody tr")).map(
       (row) => row.outerHTML
     );
-
     if (!undoStacks[section]) undoStacks[section] = [];
     undoStacks[section].push(snapshot);
     if (undoStacks[section].length > 30) undoStacks[section].shift();
@@ -37,14 +36,9 @@ window.ButtonBoxRows = (() => {
   function handleRowAction(action, selectedIds, { section, tableId }) {
     const state = ButtonBox.getState(section);
     const table = document.getElementById(tableId);
-    if (!table) {
-      console.error(`❌ Table not found for section "${section}"`);
-      return;
-    }
+    if (!table) return console.error(`❌ Table not found for "${section}"`);
 
-    if (["add", "edit", "delete", "copy"].includes(action)) {
-      pushUndo(section);
-    }
+    if (["add", "edit", "delete", "copy"].includes(action)) pushUndo(section);
 
     if (action === "delete") {
       selectedIds.forEach((id) => {
@@ -52,6 +46,7 @@ window.ButtonBoxRows = (() => {
         if (row) row.remove();
       });
       ButtonBox.wireCheckboxes(section);
+      return;
     }
 
     if (action === "copy") {
@@ -66,50 +61,15 @@ window.ButtonBoxRows = (() => {
       const sourceRow = table.querySelector(`tr[data-id="${selectedIds[0]}"]`);
       if (!sourceRow) return;
 
-      const newId = `copy-${Date.now()}`;
-      const wrapper = document.createElement("tbody");
-      wrapper.innerHTML = sourceRow.outerHTML;
-      const clone = wrapper.firstElementChild;
-
-      if (!clone) return;
-      clone.setAttribute("data-id", newId);
-      clone.classList.add("editing");
-
-      const checkbox = clone.querySelector("input[type='checkbox']");
-      if (checkbox) {
-        checkbox.setAttribute("data-id", newId);
-        checkbox.checked = true;
-        checkbox.className = `${section}-select-checkbox`;
-      }
-
-      const idCell = clone.querySelector(".line-id-col");
-      if (idCell) idCell.textContent = newId;
-
-      clone
-        .querySelectorAll("td:not(.col-select):not(.line-id-col)")
-        .forEach((cell) => {
-          cell.setAttribute("contenteditable", "true");
-          cell.classList.add("editable");
-        });
-
-      table.prepend(clone);
-      ButtonBox.wireCheckboxes(section);
-      ButtonBox.showMessage(section, "Row copied and editable.");
-    }
-
-    if (action === "paste") {
-      const html = clipboards[section];
-      if (!html) {
-        ButtonBox.showWarning(section, "Clipboard is empty. Copy a row first.");
-        return;
-      }
+      clipboards[section] = sourceRow.outerHTML;
+      ButtonBox.showMessage(section, "Row copied. Inserted as editable.");
 
       const newId = `paste-${Date.now()}`;
       const wrapper = document.createElement("tbody");
-      wrapper.innerHTML = html;
+      wrapper.innerHTML = clipboards[section];
       const clone = wrapper.firstElementChild;
-
       if (!clone) return;
+
       clone.setAttribute("data-id", newId);
       clone.classList.add("editing");
 
@@ -132,6 +92,7 @@ window.ButtonBoxRows = (() => {
 
       table.prepend(clone);
       ButtonBox.wireCheckboxes(section);
+      return;
     }
 
     if (action === "add") {
@@ -156,13 +117,13 @@ window.ButtonBoxRows = (() => {
 
       table.prepend(newRow);
       ButtonBox.wireCheckboxes(section);
+      return;
     }
 
     if (action === "edit") {
       selectedIds.forEach((id) => {
         const row = table.querySelector(`tr[data-id="${id}"]`);
         if (!row) return;
-
         row.classList.add("editing", "dirty");
         row
           .querySelectorAll("td:not(.col-select):not(.line-id-col)")
@@ -171,6 +132,7 @@ window.ButtonBoxRows = (() => {
             cell.classList.add("editable");
           });
       });
+      return;
     }
 
     if (action === "save") {
@@ -201,6 +163,15 @@ window.ButtonBoxRows = (() => {
 
       ButtonBox.wireCheckboxes(section);
       ButtonBox.showMessage(section, "Rows saved (frontend only).", "success");
+
+      const confirmBtn = document.getElementById(`${section}-confirm-btn`);
+      if (confirmBtn) {
+        confirmBtn.disabled = true;
+        confirmBtn.className = "confirm-btn gray";
+        confirmBtn.textContent = "Confirm";
+      }
+
+      return;
     }
 
     if (action === "undo") {

@@ -1,16 +1,19 @@
 // static/admin/market-holidays/ButtonBoxMarketHolidays.js
 
 window.ButtonBoxMarketHolidays = (() => {
-  // ✅ Moved handleHolidayAction ABOVE config so it's guaranteed to exist
   function handleHolidayAction(action, selectedIds) {
     console.log(`⚙️ [holiday] handleHolidayAction: ${action}`, selectedIds);
 
-    if (!selectedIds || selectedIds.length === 0) {
+    // ⛔ Skip selection check for 'add'
+    if (
+      ["delete", "copy", "edit"].includes(action) &&
+      (!selectedIds || selectedIds.length === 0)
+    ) {
       ButtonBox.showWarning("holiday", "No rows selected.");
       return;
     }
 
-    // 🚀 Delegate to shared row logic
+    // 🔄 Delegate to shared row logic
     ButtonBoxRows.handleRowAction(action, selectedIds, {
       section: "holiday",
       tableId: "holidays-table",
@@ -71,7 +74,7 @@ window.ButtonBoxMarketHolidays = (() => {
         });
     });
 
-    toggle.dispatchEvent(new Event("change")); // Trigger once on init
+    toggle.dispatchEvent(new Event("change"));
     console.log("🆔 ButtonBoxMarketHolidays: ID toggle wired");
   }
 
