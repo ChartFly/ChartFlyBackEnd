@@ -1,43 +1,78 @@
 <!-- templates/shared/ButtonBox.html -->
 
-<!-- 📦 Modular ButtonBox Container -->
 <div class="button-box">
-
   <!-- 💬 Shared Tip/Warning Box -->
   <div class="info-box" id="{{ section }}-info-box">
     <strong id="{{ section }}-info-label">Tip:</strong>
-    <span id="{{ section }}-info-message">Click a button to begin an action.</span>
+    <span id="{{ section }}-info-message"
+      >Click a button to begin an action.</span
+    >
   </div>
 
   <!-- 🛠️ Action Buttons Toolbar -->
   <div class="button-toolbar" id="{{ section }}-toolbar">
     <button id="{{ section }}-edit-btn" class="action-btn">Edit</button>
     <button id="{{ section }}-copy-btn" class="action-btn">Copy</button>
-    <button id="{{ section }}-paste-btn" class="action-btn disabled-btn" disabled>Paste</button>
+    <button
+      id="{{ section }}-paste-btn"
+      class="action-btn disabled-btn"
+      disabled
+    >
+      Paste
+    </button>
     <button id="{{ section }}-add-btn" class="action-btn">Add</button>
     <button id="{{ section }}-delete-btn" class="action-btn">Delete</button>
     <button id="{{ section }}-save-btn" class="action-btn">Save</button>
-    <button id="{{ section }}-undo-btn" class="action-btn disabled-btn" disabled>Undo</button>
+    <button
+      id="{{ section }}-undo-btn"
+      class="action-btn disabled-btn"
+      disabled
+    >
+      Undo
+    </button>
   </div>
 
-  <!-- ✅ Confirm Button + Mode Switches (grouped together) -->
+  <!-- ✅ Edit Mode Switches + Confirm Button (grouped left-to-right) -->
   <div class="button-footer-row">
     <div class="edit-mode-controls">
-      <label><input type="radio" name="{{ section }}-edit-mode" value="row" checked> Edit Lines</label>
-      <label><input type="radio" name="{{ section }}-edit-mode" value="cell"> Edit Cells & Columns</label>
-      <label><input type="checkbox" id="{{ section }}-show-id-toggle"> Show Line ID</label>
-    </div>
-
-    <div class="confirm-button-container">
-      <button id="{{ section }}-confirm-btn" class="confirm-btn gray" disabled>Confirm</button>
+      <label
+        ><input
+          type="radio"
+          name="{{ section }}-edit-mode"
+          value="row"
+          checked
+        />
+        Edit Lines</label
+      >
+      <label
+        ><input type="radio" name="{{ section }}-edit-mode" value="cell" /> Edit
+        Cells & Columns</label
+      >
+      <label
+        ><input type="checkbox" id="{{ section }}-show-id-toggle" /> Show Line
+        ID</label
+      >
+      <div class="confirm-button-container">
+        <button
+          id="{{ section }}-confirm-btn"
+          class="confirm-btn gray"
+          disabled
+        >
+          Confirm
+        </button>
+      </div>
     </div>
   </div>
 
   <!-- 📊 Footer: Action and Row Selection -->
   <div class="status-footer">
-    <span><strong>Action:</strong> <span id="{{ section }}-current-action">None</span></span>
-    &nbsp;&nbsp;&nbsp;
-    <span><strong>Selected Rows:</strong> <span id="{{ section }}-selected-count">0</span></span>
+    <span
+      ><strong>Action:</strong>
+      <span id="{{ section }}-current-action">None</span></span
+    >
+    <span
+      ><strong>Selected Rows:</strong>
+      <span id="{{ section }}-selected-count">0</span></span
+    >
   </div>
-
 </div>

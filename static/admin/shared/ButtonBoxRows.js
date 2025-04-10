@@ -135,6 +135,27 @@ window.ButtonBoxRows = (() => {
     }
 
     if (action === "edit") {
+      if (selectedIds.length === 0) {
+        ButtonBox.showWarning(
+          section,
+          "Please select one or more rows to edit."
+        );
+        return;
+      }
+
+      const mode = ButtonBox.getEditMode(section);
+      if (mode !== "row") {
+        ButtonBox.showWarning(
+          section,
+          "Switch to Edit Lines to edit entire rows."
+        );
+        return;
+      }
+
+      console.log(
+        `[${section}] ✏️ Making ${selectedIds.length} row(s) editable...`
+      );
+
       selectedIds.forEach((id) => {
         const row = table.querySelector(`tr[data-id="${id}"]`);
         if (!row) return;

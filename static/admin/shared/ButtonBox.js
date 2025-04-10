@@ -2,7 +2,7 @@
 // ✅ ButtonBox.js — Modular Button Controller System
 // Shared logic for handling UI button actions in admin tabs
 // Author: ChartFly Dev Team
-// Last Updated: 2025-04-09
+// Last Updated: 2025-04-10
 // =====================================================
 
 window.ButtonBox = (() => {
@@ -57,9 +57,19 @@ window.ButtonBox = (() => {
       if (!btn) return;
 
       btn.addEventListener("click", () => {
-        ButtonBoxMessages.setStatus(section, action);
-        ButtonBoxMessages.enableConfirm(section, action);
         ButtonBoxMessages.resetButtons(section, btn);
+        ButtonBoxMessages.setStatus(section, action);
+
+        const mode = getEditMode(section);
+        const selectedIds = Array.from(state.selectedRows);
+
+        if (action === "edit" && mode === "row") {
+          if (typeof state.onAction === "function") {
+            state.onAction("edit", selectedIds);
+          }
+        } else {
+          ButtonBoxMessages.enableConfirm(section, action);
+        }
       });
     });
 
@@ -89,10 +99,6 @@ window.ButtonBox = (() => {
     ButtonBoxMessages.updateButtonColors(section);
   }
 
-  // =====================================================
-  // 🧠 wireCheckboxes(section)
-  // Wires all checkboxes in a section, tracks selected rows
-  // =====================================================
   function wireCheckboxes(section) {
     const state = getState(section);
     if (!state) {
