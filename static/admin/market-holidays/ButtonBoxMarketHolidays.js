@@ -3,13 +3,13 @@
 window.ButtonBoxMarketHolidays = (() => {
   let initialized = false;
 
-  // ✅ Moved handleHolidayAction ABOVE config so it's guaranteed to exist
   function handleHolidayAction(action, selectedIds) {
     console.log(`⚙️ [holiday] handleHolidayAction: ${action}`, selectedIds);
 
-    // Skip selected check for actions that don't need it
+    // Skip "no selection" warning for these actions
+    const skipSelectionCheck = ["add", "undo", "save", "edit", "copy"];
     if (
-      !["add", "undo", "save"].includes(action) &&
+      !skipSelectionCheck.includes(action) &&
       (!selectedIds || selectedIds.length === 0)
     ) {
       ButtonBox.showWarning("holiday", "No rows selected.");
@@ -22,6 +22,7 @@ window.ButtonBoxMarketHolidays = (() => {
       tableId: "holidays-table",
     });
 
+    // Placeholder: call backend save logic if needed
     if (action === "save") {
       ButtonBoxDataBase?.saveToDatabase?.("holiday", selectedIds);
     }

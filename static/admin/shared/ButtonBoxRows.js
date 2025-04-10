@@ -70,35 +70,20 @@ window.ButtonBoxRows = (() => {
       const sourceRow = table.querySelector(`tr[data-id="${selectedIds[0]}"]`);
       if (!sourceRow) return;
 
-      clipboards[section] = sourceRow.outerHTML;
-      ButtonBox.showMessage(section, "Row copied. Click Paste to duplicate.");
-    }
-
-    if (action === "paste") {
-      const html = clipboards[section];
-      if (!html) {
-        ButtonBox.showWarning(section, "Clipboard is empty. Copy a row first.");
-        return;
-      }
-
-      const newId = `S${Date.now()}`;
-      const wrapper = document.createElement("tbody");
-      wrapper.innerHTML = html;
-      const clone = wrapper.firstElementChild;
-
-      if (!clone) return;
-      clone.setAttribute("data-id", newId);
+      const clonedId = `S${Date.now()}`;
+      const clone = sourceRow.cloneNode(true);
+      clone.setAttribute("data-id", clonedId);
       clone.classList.add("editing");
 
       const checkbox = clone.querySelector("input[type='checkbox']");
       if (checkbox) {
-        checkbox.setAttribute("data-id", newId);
+        checkbox.setAttribute("data-id", clonedId);
         checkbox.checked = true;
         checkbox.className = `${section}-select-checkbox`;
       }
 
       const idCell = clone.querySelector(".line-id-col");
-      if (idCell) idCell.textContent = newId;
+      if (idCell) idCell.textContent = clonedId;
 
       clone
         .querySelectorAll("td:not(.col-select):not(.line-id-col)")
@@ -107,7 +92,15 @@ window.ButtonBoxRows = (() => {
           cell.classList.add("editable");
         });
 
+      const originalCheckbox = sourceRow.querySelector(
+        "input[type='checkbox']"
+      );
+      if (originalCheckbox) originalCheckbox.checked = false;
+      state.selectedRows.delete(selectedIds[0]);
+
       table.prepend(clone);
+      state.selectedRows.add(clonedId);
+      ButtonBoxMessages.updateSelectedCount(section);
       ButtonBox.wireCheckboxes(section);
     }
 
@@ -132,6 +125,8 @@ window.ButtonBoxRows = (() => {
       });
 
       table.prepend(newRow);
+      state.selectedRows.add(newId);
+      ButtonBoxMessages.updateSelectedCount(section);
       ButtonBox.wireCheckboxes(section);
     }
 
@@ -168,6 +163,7 @@ window.ButtonBoxRows = (() => {
         if (checkbox) {
           checkbox.setAttribute("data-id", finalId);
           checkbox.checked = false;
+          checkbox.className = `${section}-select-checkbox`;
         }
 
         const idCell = row.querySelector(".line-id-col");
@@ -181,7 +177,6 @@ window.ButtonBoxRows = (() => {
       ButtonBox.wireCheckboxes(section);
       ButtonBox.showMessage(section, "Rows saved (frontend only).", "success");
 
-      // 💤 Put confirm button back to sleep
       const confirmBtn = document.getElementById(`${section}-confirm-btn`);
       if (confirmBtn) {
         confirmBtn.disabled = true;

@@ -60,7 +60,12 @@ window.ButtonBox = (() => {
             state.onAction(action, Array.from(state.selectedRows));
           }
         } else {
-          ButtonBoxMessages.enableConfirm(section, action);
+          ButtonBoxMessages.enableConfirm(section, action, () => {
+            if (typeof state.onAction === "function") {
+              state.onAction(action, Array.from(state.selectedRows));
+            }
+            ButtonBoxMessages.resetConfirm(section);
+          });
         }
       });
     });
@@ -136,17 +141,11 @@ window.ButtonBox = (() => {
           Array.from(state.selectedRows)
         );
 
-        const counter = document.getElementById(`${section}-selected-count`);
-        if (counter) {
-          counter.textContent = state.selectedRows.size;
-        }
+        ButtonBoxMessages.updateSelectedCount(section);
       });
     });
 
-    const counter = document.getElementById(`${section}-selected-count`);
-    if (counter) {
-      counter.textContent = state.selectedRows.size;
-    }
+    ButtonBoxMessages.updateSelectedCount(section);
   }
 
   function showWarning(section, message) {

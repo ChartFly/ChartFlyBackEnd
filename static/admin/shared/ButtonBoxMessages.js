@@ -51,7 +51,7 @@ window.ButtonBoxMessages = (() => {
     showTip(section, rotatingTips[0]);
   }
 
-  function enableConfirm(section, action) {
+  function enableConfirm(section, action, onConfirm) {
     const btn = document.getElementById(`${section}-confirm-btn`);
     if (!btn) return;
 
@@ -66,14 +66,9 @@ window.ButtonBoxMessages = (() => {
     btn.className = "confirm-btn yellow";
     btn.textContent = labels[action] || `Confirm ${capitalize(action)}`;
 
-    const state = ButtonBox.getState(section);
-    if (!state) return;
-
     btn.onclick = () => {
-      if (typeof state.onAction === "function") {
-        state.onAction(action, Array.from(state.selectedRows));
-        resetConfirm(section);
-      }
+      onConfirm?.();
+      resetConfirm(section);
     };
   }
 
@@ -121,6 +116,12 @@ window.ButtonBoxMessages = (() => {
       });
   }
 
+  function updateSelectedCount(section) {
+    const count = ButtonBox.getState(section)?.selectedRows?.size || 0;
+    const el = document.getElementById(`${section}-selected-count`);
+    if (el) el.textContent = count;
+  }
+
   function updateUndo(section) {
     const btn = document.getElementById(`${section}-undo-btn`);
     const state = ButtonBox.getState(section);
@@ -157,5 +158,6 @@ window.ButtonBoxMessages = (() => {
     setStatus,
     updateIdColumnVisibility,
     updateButtonColors,
+    updateSelectedCount,
   };
 })();
