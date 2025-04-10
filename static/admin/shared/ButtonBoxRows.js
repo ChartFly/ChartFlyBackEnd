@@ -2,7 +2,6 @@
 
 window.ButtonBoxRows = (() => {
   const undoStacks = {}; // Holds up to 30 snapshots per section (rows + selectedRows)
-  const clipboards = {}; // Holds copied row HTML per section
 
   function wireCheckboxes(section) {
     const table = document.querySelector(`#${section}-section table`);
@@ -23,6 +22,20 @@ window.ButtonBoxRows = (() => {
     });
   }
 
+  function updateUndoButton(section) {
+    const btn = document.getElementById(`${section}-undo-btn`);
+    if (!btn) return;
+    const stack = undoStacks[section] || [];
+    if (stack.length === 0) {
+      btn.disabled = true;
+      btn.classList.add("disabled-btn");
+    } else {
+      btn.disabled = false;
+      btn.classList.remove("disabled-btn");
+      console.log(`[${section}] ✅ Undo button explicitly enabled`);
+    }
+  }
+
   function pushUndo(section) {
     const state = ButtonBox.getState(section);
     const table = document.getElementById(state.tableId);
@@ -41,10 +54,10 @@ window.ButtonBoxRows = (() => {
     });
 
     if (undoStacks[section].length > 30) undoStacks[section].shift();
-
     console.log(
       `[UNDO] Pushed snapshot. Stack size: ${undoStacks[section].length}`
     );
+    updateUndoButton(section);
   }
 
   function handleRowAction(action, selectedIds, { section, tableId }) {
@@ -212,19 +225,17 @@ window.ButtonBoxRows = (() => {
         tbody.insertAdjacentHTML("beforeend", rowHTML);
       });
 
-      // ✅ Restore selection state
-      state.selectedRows.clear();
-      last.selected.forEach((id) => state.selectedRows.add(id));
-
+      state.selectedRows = new Set(last.selected);
       ButtonBox.wireCheckboxes(section);
       ButtonBoxMessages.updateSelectedCount(section);
-      ButtonBox.showMessage(section, "Undo successful.", "success");
+      ButtonBox.showMessage(section, "Undo successful.");
+      updateUndoButton(section);
     }
   }
 
   return {
     handleRowAction,
     wireCheckboxes,
-    undoStacks, // Expose for testing
+    undoStacks,
   };
 })();
