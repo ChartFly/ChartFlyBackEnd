@@ -6,10 +6,12 @@ window.ButtonBoxMessages = (() => {
     "Select rows before editing or deleting.",
     "Paste only works after you Copy.",
     "Undo will reverse your last change.",
-    "You can copy/paste individual cell text!"
+    "You can copy/paste individual cell text!",
   ];
 
-  function initTips(section, tipTimers, tipIndex = 0) {
+  const tipTimers = {}; // ✅ FIXED: Defined internally
+
+  function initTips(section, tipIndex = 0) {
     showTip(section, rotatingTips[tipIndex]);
     tipTimers[section] = setInterval(() => {
       const state = ButtonBox.getState(section);
@@ -57,7 +59,7 @@ window.ButtonBoxMessages = (() => {
       delete: "Confirm and Delete",
       paste: "Confirm and Paste",
       undo: "Confirm and Undo",
-      save: "Confirm and Save"
+      save: "Confirm and Save",
     };
 
     btn.disabled = false;
@@ -77,7 +79,9 @@ window.ButtonBoxMessages = (() => {
     if (!confirmBtn) return;
 
     const showActions = ["edit", "delete", "save"];
-    confirmBtn.style.visibility = showActions.includes(action) ? "visible" : "hidden";
+    confirmBtn.style.visibility = showActions.includes(action)
+      ? "visible"
+      : "hidden";
   }
 
   function disableButton(btn) {
@@ -96,16 +100,22 @@ window.ButtonBoxMessages = (() => {
     const idToggle = document.getElementById(`${section}-show-id-toggle`);
     if (!idToggle) return;
 
-    document.querySelectorAll(`#${state.domId} .line-id-col, #${state.domId} th.line-id-col`).forEach(cell => {
-      cell.style.display = idToggle.checked ? "table-cell" : "none";
-    });
+    document
+      .querySelectorAll(
+        `#${state.domId} .line-id-col, #${state.domId} th.line-id-col`
+      )
+      .forEach((cell) => {
+        cell.style.display = idToggle.checked ? "table-cell" : "none";
+      });
   }
 
   function updateButtonColors(section) {
     const isCell = ButtonBox.getEditMode(section) === "cell";
-    document.querySelectorAll(`#${section}-toolbar .action-btn`).forEach(btn => {
-      btn.classList.toggle("cell-mode", isCell);
-    });
+    document
+      .querySelectorAll(`#${section}-toolbar .action-btn`)
+      .forEach((btn) => {
+        btn.classList.toggle("cell-mode", isCell);
+      });
   }
 
   function updateUndo(section) {
@@ -119,7 +129,7 @@ window.ButtonBoxMessages = (() => {
 
   function resetButtons(section, activeBtn) {
     const actions = ["edit", "copy", "paste", "add", "delete", "save", "undo"];
-    actions.forEach(action => {
+    actions.forEach((action) => {
       const otherBtn = document.getElementById(`${section}-${action}-btn`);
       if (otherBtn) otherBtn.classList.remove("active");
     });
@@ -142,6 +152,6 @@ window.ButtonBoxMessages = (() => {
     setStatus,
     updateIdColumnVisibility,
     updateButtonColors,
-    toggleConfirmButton
+    toggleConfirmButton,
   };
 })();
