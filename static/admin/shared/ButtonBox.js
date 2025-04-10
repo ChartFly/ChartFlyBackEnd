@@ -1,10 +1,4 @@
-// =====================================================
-// ✅ ButtonBox.js — Modular Button Controller System
-// Shared logic for handling UI button actions in admin tabs
-// Author: ChartFly Dev Team
-// Last Updated: 2025-04-10
-// =====================================================
-
+// static/admin/shared/ButtonBox.js
 window.ButtonBox = (() => {
   const stateMap = new Map();
 
@@ -57,15 +51,13 @@ window.ButtonBox = (() => {
       if (!btn) return;
 
       btn.addEventListener("click", () => {
-        ButtonBoxMessages.resetButtons(section, btn);
+        const skipConfirm = ["add", "copy", "edit"].includes(action);
         ButtonBoxMessages.setStatus(section, action);
+        ButtonBoxMessages.resetButtons(section, btn);
 
-        const mode = getEditMode(section);
-        const selectedIds = Array.from(state.selectedRows);
-
-        if (action === "edit" && mode === "row") {
+        if (skipConfirm) {
           if (typeof state.onAction === "function") {
-            state.onAction("edit", selectedIds);
+            state.onAction(action, Array.from(state.selectedRows));
           }
         } else {
           ButtonBoxMessages.enableConfirm(section, action);

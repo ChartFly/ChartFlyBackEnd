@@ -88,8 +88,17 @@ window.ButtonBoxMessages = (() => {
     btn.onclick = () => {
       if (typeof state.onAction === "function") {
         state.onAction(action, Array.from(state.selectedRows));
+        resetConfirmButton(section); // 🟡 Reset after action
       }
     };
+  }
+
+  function resetConfirmButton(section) {
+    const btn = document.getElementById(`${section}-confirm-btn`);
+    if (!btn) return;
+    btn.disabled = true;
+    btn.className = "confirm-btn gray";
+    btn.textContent = "Confirm";
   }
 
   function toggleConfirmButton(section, action) {
@@ -173,5 +182,6 @@ window.ButtonBoxMessages = (() => {
     updateIdColumnVisibility,
     updateButtonColors,
     toggleConfirmButton,
+    resetConfirmButton,
   };
 })();

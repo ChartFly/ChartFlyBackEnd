@@ -1,13 +1,12 @@
 // static/admin/shared/ButtonBoxRows.js
 
 window.ButtonBoxRows = (() => {
-  const undoStacks = {}; // Holds up to 30 snapshots per section
-  const clipboards = {}; // Holds copied row HTML per section
+  const undoStacks = {};
+  const clipboards = {};
 
   function wireCheckboxes(section) {
     const table = document.querySelector(`#${section}-section table`);
     const checkboxes = table.querySelectorAll(`.${section}-select-checkbox`);
-
     ButtonBox.getState(section).selectedRows.clear();
 
     checkboxes.forEach((checkbox) => {
@@ -32,16 +31,14 @@ window.ButtonBoxRows = (() => {
 
     if (!undoStacks[section]) undoStacks[section] = [];
     undoStacks[section].push(snapshot);
-    if (undoStacks[section].length > 30) undoStacks[section].shift(); // cap at 30
+    if (undoStacks[section].length > 30) undoStacks[section].shift();
   }
 
   function handleRowAction(action, selectedIds, { section, tableId }) {
     const state = ButtonBox.getState(section);
     const table = document.getElementById(tableId);
     if (!table) {
-      console.error(
-        `❌ Table not found for section "${section}" using ID "${tableId}"`
-      );
+      console.error(`❌ Table not found for section "${section}"`);
       return;
     }
 
@@ -69,8 +66,35 @@ window.ButtonBoxRows = (() => {
       const sourceRow = table.querySelector(`tr[data-id="${selectedIds[0]}"]`);
       if (!sourceRow) return;
 
-      clipboards[section] = sourceRow.outerHTML;
-      ButtonBox.showMessage(section, "Row copied. Click Paste to duplicate.");
+      const newId = `copy-${Date.now()}`;
+      const wrapper = document.createElement("tbody");
+      wrapper.innerHTML = sourceRow.outerHTML;
+      const clone = wrapper.firstElementChild;
+
+      if (!clone) return;
+      clone.setAttribute("data-id", newId);
+      clone.classList.add("editing");
+
+      const checkbox = clone.querySelector("input[type='checkbox']");
+      if (checkbox) {
+        checkbox.setAttribute("data-id", newId);
+        checkbox.checked = true;
+        checkbox.className = `${section}-select-checkbox`;
+      }
+
+      const idCell = clone.querySelector(".line-id-col");
+      if (idCell) idCell.textContent = newId;
+
+      clone
+        .querySelectorAll("td:not(.col-select):not(.line-id-col)")
+        .forEach((cell) => {
+          cell.setAttribute("contenteditable", "true");
+          cell.classList.add("editable");
+        });
+
+      table.prepend(clone);
+      ButtonBox.wireCheckboxes(section);
+      ButtonBox.showMessage(section, "Row copied and editable.");
     }
 
     if (action === "paste") {
@@ -135,27 +159,6 @@ window.ButtonBoxRows = (() => {
     }
 
     if (action === "edit") {
-      if (selectedIds.length === 0) {
-        ButtonBox.showWarning(
-          section,
-          "Please select one or more rows to edit."
-        );
-        return;
-      }
-
-      const mode = ButtonBox.getEditMode(section);
-      if (mode !== "row") {
-        ButtonBox.showWarning(
-          section,
-          "Switch to Edit Lines to edit entire rows."
-        );
-        return;
-      }
-
-      console.log(
-        `[${section}] ✏️ Making ${selectedIds.length} row(s) editable...`
-      );
-
       selectedIds.forEach((id) => {
         const row = table.querySelector(`tr[data-id="${id}"]`);
         if (!row) return;
