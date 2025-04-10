@@ -120,7 +120,6 @@ window.ButtonBox = (() => {
       const id = checkbox.dataset.id;
       console.log(`[${section}] ✅ Found checkbox with ID: ${id}`);
 
-      // Replace with a clone to clear old listeners
       const newCheckbox = checkbox.cloneNode(true);
       checkbox.replaceWith(newCheckbox);
 
