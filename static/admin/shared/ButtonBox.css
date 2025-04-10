@@ -1,4 +1,4 @@
-/* static/admin/shared/ButtonBox.css */
+/*  static/admin/shared/ButtonBox.css */
 
 /* Button states */
 .action-btn {
@@ -13,7 +13,7 @@
 }
 
 .action-btn:hover:not(:disabled):not(.disabled-btn) {
-  background-color: #cdebf0; /* Hover: Soft turquoise */
+  background-color: #cdebf0; /* Hover: Soft turquoise color */
   border-color: #cdebf0;
   color: #000;
 }
