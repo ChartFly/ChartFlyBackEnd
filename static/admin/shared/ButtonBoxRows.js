@@ -212,16 +212,19 @@ window.ButtonBoxRows = (() => {
         tbody.insertAdjacentHTML("beforeend", rowHTML);
       });
 
-      state.selectedRows = new Set(last.selected);
+      // ✅ Restore selection state
+      state.selectedRows.clear();
+      last.selected.forEach((id) => state.selectedRows.add(id));
+
       ButtonBox.wireCheckboxes(section);
       ButtonBoxMessages.updateSelectedCount(section);
-      ButtonBox.showMessage(section, "Undo successful.");
+      ButtonBox.showMessage(section, "Undo successful.", "success");
     }
   }
 
   return {
     handleRowAction,
     wireCheckboxes,
-    undoStacks, // 👈 Now visible in DevTools
+    undoStacks, // Expose for testing
   };
 })();
