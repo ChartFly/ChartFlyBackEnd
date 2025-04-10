@@ -1,7 +1,8 @@
 // static/admin/shared/ButtonBoxRows.js
 
 window.ButtonBoxRows = (() => {
-  const undoStacks = {}; // Holds up to 30 snapshots per section (rows + selectedRows)
+  const undoStacks = {};
+  const clipboards = {};
 
   function wireCheckboxes(section) {
     const table = document.querySelector(`#${section}-section table`);
@@ -22,25 +23,11 @@ window.ButtonBoxRows = (() => {
     });
   }
 
-  function updateUndoButton(section) {
-    const btn = document.getElementById(`${section}-undo-btn`);
-    if (!btn) return;
-    const stack = undoStacks[section] || [];
-    if (stack.length === 0) {
-      btn.disabled = true;
-      btn.classList.add("disabled-btn");
-    } else {
-      btn.disabled = false;
-      btn.classList.remove("disabled-btn");
-      console.log(`[${section}] ✅ Undo button explicitly enabled`);
-    }
-  }
-
   function pushUndo(section) {
     const state = ButtonBox.getState(section);
     const table = document.getElementById(state.tableId);
-    const snapshot = Array.from(table.querySelectorAll("tbody tr")).map(
-      (row) => row.outerHTML
+    const snapshot = Array.from(table.querySelectorAll("tbody tr")).map((row) =>
+      row.cloneNode(true)
     );
 
     if (!undoStacks[section]) {
@@ -54,10 +41,10 @@ window.ButtonBoxRows = (() => {
     });
 
     if (undoStacks[section].length > 30) undoStacks[section].shift();
+
     console.log(
       `[UNDO] Pushed snapshot. Stack size: ${undoStacks[section].length}`
     );
-    updateUndoButton(section);
   }
 
   function handleRowAction(action, selectedIds, { section, tableId }) {
@@ -221,15 +208,17 @@ window.ButtonBoxRows = (() => {
       const last = stack.pop();
       const tbody = table.querySelector("tbody");
       tbody.innerHTML = "";
-      last.rows.forEach((rowHTML) => {
-        tbody.insertAdjacentHTML("beforeend", rowHTML);
+
+      last.rows.forEach((rowNode, index) => {
+        const clone = rowNode.cloneNode(true);
+        tbody.appendChild(clone);
+        console.log(`[UNDO] Inserted row ${index + 1}`);
       });
 
       state.selectedRows = new Set(last.selected);
       ButtonBox.wireCheckboxes(section);
       ButtonBoxMessages.updateSelectedCount(section);
       ButtonBox.showMessage(section, "Undo successful.");
-      updateUndoButton(section);
     }
   }
 
