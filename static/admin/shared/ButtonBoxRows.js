@@ -2,7 +2,6 @@
 
 window.ButtonBoxRows = (() => {
   const undoStacks = {}; // Holds up to 30 snapshots per section (rows + selectedRows)
-  const clipboards = {}; // Holds copied row HTML per section
 
   function wireCheckboxes(section) {
     const table = document.querySelector(`#${section}-section table`);
@@ -209,18 +208,37 @@ window.ButtonBoxRows = (() => {
       const tbody = table.querySelector("tbody");
       tbody.innerHTML = "";
 
-      const parser = new DOMParser();
       last.rows.forEach((rowHTML, i) => {
-        const doc = parser.parseFromString(rowHTML, "text/html");
-        const row = doc.querySelector("tr");
-        if (row) {
-          tbody.appendChild(row);
-          console.log(`[UNDO] Inserted row ${i + 1}`);
+        const tempDiv = document.createElement("div");
+        tempDiv.innerHTML = rowHTML.trim();
+        const restoredRow = tempDiv.querySelector("tr");
+        if (!restoredRow) return;
+
+        // Clean any leftover junk
+        restoredRow.classList.remove("editing", "dirty");
+
+        // Rewire checkbox
+        const checkbox = restoredRow.querySelector("input[type='checkbox']");
+        if (checkbox) {
+          checkbox.className = `${section}-select-checkbox`;
+          checkbox.addEventListener("change", () => {
+            const id = checkbox.dataset.id;
+            if (checkbox.checked) {
+              state.selectedRows.add(id);
+            } else {
+              state.selectedRows.delete(id);
+            }
+            ButtonBoxMessages.updateSelectedCount(section);
+          });
         }
+
+        // Reattach
+        tbody.appendChild(restoredRow);
+        console.log(`[UNDO] Inserted row ${i + 1}`);
       });
 
+      // Restore selected row state
       state.selectedRows = new Set(last.selected);
-      ButtonBox.wireCheckboxes(section);
       ButtonBoxMessages.updateSelectedCount(section);
       ButtonBox.showMessage(section, "Undo successful.");
     }
@@ -229,6 +247,6 @@ window.ButtonBoxRows = (() => {
   return {
     handleRowAction,
     wireCheckboxes,
-    undoStacks,
+    undoStacks, // 👀 Still inspectable
   };
 })();
