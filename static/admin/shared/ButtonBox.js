@@ -51,9 +51,10 @@ window.ButtonBox = (() => {
       if (!btn) return;
 
       btn.addEventListener("click", () => {
-        const skipConfirm = ["add", "copy", "edit", "undo"].includes(action);
         ButtonBoxMessages.setStatus(section, action);
         ButtonBoxMessages.resetButtons(section, btn);
+
+        const skipConfirm = ["add", "copy", "edit", "undo"].includes(action);
 
         if (skipConfirm) {
           if (typeof state.onAction === "function") {
