@@ -49,10 +49,16 @@ async function loadMarketHolidays() {
         clearInterval(waitForInit);
         console.log("🚀 Initializing ButtonBoxMarketHolidays...");
         ButtonBoxMarketHolidays.init();
+
+        // ✅ Wire checkboxes after DOM is updated
+        setTimeout(() => {
+          console.log("🔧 Rewiring holiday checkboxes...");
+          ButtonBox.wireCheckboxes("holiday");
+        }, 100);
       }
     }, 50);
 
-    // 🆔 Show Line ID Toggle — FIXED the ID to match HTML!
+    // 🆔 Show Line ID Toggle
     const toggle = document.getElementById("holiday-show-id-toggle");
     if (toggle) {
       toggle.addEventListener("change", () => {
