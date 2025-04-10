@@ -1,7 +1,29 @@
 // static/admin/market-holidays/ButtonBoxMarketHolidays.js
 
 window.ButtonBoxMarketHolidays = (() => {
+  // ✅ Moved handleHolidayAction ABOVE config so it's guaranteed to exist
+  function handleHolidayAction(action, selectedIds) {
+    console.log(`⚙️ [holiday] handleHolidayAction: ${action}`, selectedIds);
+
+    if (!selectedIds || selectedIds.length === 0) {
+      ButtonBox.showWarning("holiday", "No rows selected.");
+      return;
+    }
+
+    // 🚀 Delegate to shared row logic
+    ButtonBoxRows.handleRowAction(action, selectedIds, {
+      section: "holiday",
+      tableId: "holidays-table",
+    });
+
+    if (action === "save") {
+      ButtonBoxDataBase?.saveToDatabase?.("holiday", selectedIds);
+    }
+  }
+
   function init() {
+    console.log("📦 ButtonBoxMarketHolidays: Preparing to initialize...");
+
     const config = {
       section: "holiday",
       domId: "market-holidays-section",
@@ -24,9 +46,9 @@ window.ButtonBoxMarketHolidays = (() => {
     const waitForBox = setInterval(() => {
       if (window.ButtonBox && window.ButtonBoxRows) {
         clearInterval(waitForBox);
-        console.log("📦 ButtonBoxMarketHolidays: Initializing ButtonBox");
+        console.log("✅ ButtonBoxMarketHolidays: Initializing ButtonBox");
         ButtonBox.init(config);
-        wireIdToggle(); // ✅ Wire once Box is ready
+        wireIdToggle();
       }
     }, 50);
   }
@@ -49,21 +71,8 @@ window.ButtonBoxMarketHolidays = (() => {
         });
     });
 
-    toggle.dispatchEvent(new Event("change")); // Trigger on load
+    toggle.dispatchEvent(new Event("change")); // Trigger once on init
     console.log("🆔 ButtonBoxMarketHolidays: ID toggle wired");
-  }
-
-  function handleHolidayAction(action, selectedIds) {
-    console.log(`⚙️ [holiday] handleHolidayAction: ${action}`, selectedIds);
-
-    ButtonBoxRows.handleRowAction(action, selectedIds, {
-      section: "holiday",
-      tableId: "holidays-table",
-    });
-
-    if (action === "save") {
-      ButtonBoxDataBase?.saveToDatabase?.("holiday", selectedIds);
-    }
   }
 
   return { init };
