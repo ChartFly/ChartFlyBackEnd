@@ -1,7 +1,8 @@
 // static/admin/shared/ButtonBoxRows.js
+
 window.ButtonBoxRows = (() => {
   const undoStacks = {}; // Holds up to 30 snapshots per section (rows + selectedRows)
-  const clipboards = {};
+  const clipboards = {}; // Holds copied row HTML per section
 
   function wireCheckboxes(section) {
     const table = document.querySelector(`#${section}-section table`);
@@ -25,25 +26,36 @@ window.ButtonBoxRows = (() => {
   function pushUndo(section) {
     const state = ButtonBox.getState(section);
     const table = document.getElementById(state.tableId);
-    if (!state || !table) return;
-
     const snapshot = Array.from(table.querySelectorAll("tbody tr")).map(
       (row) => row.outerHTML
     );
 
-    if (!undoStacks[section]) undoStacks[section] = [];
+    if (!undoStacks[section]) {
+      undoStacks[section] = [];
+      console.log(`[UNDO] Initialized undo stack for: ${section}`);
+    }
+
     undoStacks[section].push({
       rows: snapshot,
       selected: Array.from(state.selectedRows),
     });
 
     if (undoStacks[section].length > 30) undoStacks[section].shift();
+
+    console.log(
+      `[UNDO] Pushed snapshot. Stack size: ${undoStacks[section].length}`
+    );
   }
 
   function handleRowAction(action, selectedIds, { section, tableId }) {
     const state = ButtonBox.getState(section);
     const table = document.getElementById(tableId);
-    if (!table || !state) return;
+    if (!table) {
+      console.error(
+        `❌ Table not found for section "${section}" using ID "${tableId}"`
+      );
+      return;
+    }
 
     if (["add", "edit", "delete", "copy"].includes(action)) {
       pushUndo(section);
@@ -97,11 +109,10 @@ window.ButtonBoxRows = (() => {
         "input[type='checkbox']"
       );
       if (originalCheckbox) originalCheckbox.checked = false;
-
       state.selectedRows.delete(selectedIds[0]);
+
       table.prepend(clone);
       state.selectedRows.add(clonedId);
-
       ButtonBoxMessages.updateSelectedCount(section);
       ButtonBox.wireCheckboxes(section);
     }
@@ -211,5 +222,6 @@ window.ButtonBoxRows = (() => {
   return {
     handleRowAction,
     wireCheckboxes,
+    undoStacks, // 👈 Now visible in DevTools
   };
 })();
