@@ -49,8 +49,6 @@ async function loadMarketHolidays() {
         clearInterval(waitForInit);
         console.log("🚀 Initializing ButtonBoxMarketHolidays...");
         ButtonBoxMarketHolidays.init();
-        ButtonBox.wireCheckboxes("holiday");
-        console.log("✅ Checkboxes wired for holidays");
       }
     }, 50);
 
