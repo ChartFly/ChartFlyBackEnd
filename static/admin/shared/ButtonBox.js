@@ -48,27 +48,40 @@ window.ButtonBox = (() => {
 
     enabledActions.forEach((action) => {
       const btn = document.getElementById(`${section}-${action}-btn`);
-      if (!btn) return;
+      if (!btn) {
+        console.warn(`[${section}] ❌ Missing button: ${action}`);
+        return;
+      }
 
       btn.addEventListener("click", () => {
+        console.log(`[${section}] 🔘 Clicked: ${action}`);
+
         ButtonBoxMessages.setStatus(section, action);
         ButtonBoxMessages.resetButtons(section, btn);
 
         const skipConfirm = ["add", "copy", "edit", "undo"].includes(action);
 
+        if (typeof state.onAction !== "function") {
+          console.warn(`[${section}] ⚠️ No onAction handler defined!`);
+          return;
+        }
+
         if (skipConfirm) {
-          if (typeof state.onAction === "function") {
-            state.onAction(action, Array.from(state.selectedRows));
-          }
+          state.onAction(action, Array.from(state.selectedRows));
         } else {
           ButtonBoxMessages.enableConfirm(section, action, () => {
-            if (typeof state.onAction === "function") {
-              state.onAction(action, Array.from(state.selectedRows));
-            }
+            state.onAction(action, Array.from(state.selectedRows));
             ButtonBoxMessages.resetConfirm(section);
           });
         }
       });
+
+      // Make sure Undo button is always active if present
+      if (action === "undo") {
+        btn.disabled = false;
+        btn.classList.remove("disabled-btn");
+        console.log(`[${section}] ✅ Undo button explicitly enabled`);
+      }
     });
 
     const confirmBtn = document.getElementById(`${section}-confirm-btn`);
