@@ -180,6 +180,14 @@ window.ButtonBoxRows = (() => {
       ButtonBoxMessages.updateSelectedCount(section);
       ButtonBox.wireCheckboxes(section);
       ButtonBox.showMessage(section, "Rows saved (frontend only).", "success");
+
+      // 💤 Put confirm button back to sleep
+      const confirmBtn = document.getElementById(`${section}-confirm-btn`);
+      if (confirmBtn) {
+        confirmBtn.disabled = true;
+        confirmBtn.className = "confirm-btn gray";
+        confirmBtn.textContent = "Confirm";
+      }
     }
 
     if (action === "undo") {
