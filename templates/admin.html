@@ -111,6 +111,14 @@
           );
         });
 
+        if (
+          sectionId === "market-holidays-section" &&
+          !window.MARKET_TAB_LOADED
+        ) {
+          window.MARKET_TAB_LOADED = true;
+          loadMarketHolidays(); // ✅ FIXED: Ensure Market Holidays script loads once
+        }
+
         if (sectionId === "api-keys-section" && !window.API_TAB_LOADED) {
           window.API_TAB_LOADED = true;
           loadApiKeys();
@@ -131,4 +139,3 @@
     </script>
   </body>
 </html>
-s
