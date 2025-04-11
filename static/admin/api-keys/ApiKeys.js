@@ -9,11 +9,10 @@ async function loadApiKeys() {
     if (!response.ok) throw new Error("Failed to fetch API keys");
 
     const keys = await response.json();
-    console.log(`✅ API Keys Fetched: (${keys.length})`, keys);
+    console.log("✅ API Keys Fetched:", keys);
 
     const tbody = document.querySelector("#api-keys-table tbody");
-    if (!tbody)
-      throw new Error("❌ <tbody> element not found in API Keys table");
+    if (!tbody) throw new Error("❌ <tbody> not found in API Keys table");
     tbody.innerHTML = "";
 
     keys.forEach((key, index) => {
@@ -22,11 +21,9 @@ async function loadApiKeys() {
       row.setAttribute("data-index", index + 1);
 
       row.innerHTML = `
-        <td class="col-select">
-          <input type="checkbox" class="api-select-checkbox" data-id="${
-            key.id
-          }">
-        </td>
+        <td class="col-select"><input type="checkbox" class="api-select-checkbox" data-id="${
+          key.id
+        }"></td>
         <td class="line-id-col">${key.id}</td>
         <td>${sanitizeInput(key.name || "—")}</td>
         <td>${sanitizeInput(key.provider || "—")}</td>
@@ -51,9 +48,10 @@ async function loadApiKeys() {
       toggle.addEventListener("change", () => {
         document
           .querySelectorAll("#api-keys-section .line-id-col")
-          .forEach((cell) => {
-            cell.style.display = toggle.checked ? "table-cell" : "none";
-          });
+          .forEach(
+            (cell) =>
+              (cell.style.display = toggle.checked ? "table-cell" : "none")
+          );
       });
       toggle.dispatchEvent(new Event("change"));
       console.log("✅ api-show-id-toggle wired successfully");
