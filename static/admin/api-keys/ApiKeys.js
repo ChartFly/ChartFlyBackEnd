@@ -3,17 +3,15 @@
 async function loadApiKeys() {
   console.log("📥 loadApiKeys() has been called");
   try {
-    const response = await fetch(
-      "https://chartflybackend.onrender.com/api/api-keys/"
-    );
+    const response = await fetch("/api/api-keys/");
     if (!response.ok) throw new Error("Failed to fetch API keys");
 
     const keys = await response.json();
     console.log("✅ API Keys Fetched:", keys);
 
     const table = document.getElementById("api-keys-table");
-    const tbody = table.querySelector("tbody");
-    if (!tbody) throw new Error("Missing <tbody> in api-keys table");
+    const tbody = table?.querySelector("tbody");
+    if (!tbody) throw new Error("❌ Missing <tbody> in api-keys-table");
 
     tbody.innerHTML = "";
 
@@ -38,12 +36,12 @@ async function loadApiKeys() {
       tbody.appendChild(row);
     });
 
-    // Re-init ButtonBox and checkboxes
-    const waitForInit = setInterval(() => {
-      if (window.ButtonBoxApiKeys?.init && window.ButtonBox?.wireCheckboxes) {
-        clearInterval(waitForInit);
-        ButtonBoxApiKeys.init();
-        setTimeout(() => ButtonBox.wireCheckboxes("api"), 100);
+    ButtonBoxApiKeys.init();
+
+    const waitForButtonBox = setInterval(() => {
+      if (window.ButtonBox?.wireCheckboxes) {
+        clearInterval(waitForButtonBox);
+        ButtonBox.wireCheckboxes("api");
       }
     }, 50);
 
@@ -68,7 +66,7 @@ async function loadApiKeys() {
   }
 }
 
-// Init flag
+// ✅ Add fallback load trigger (parity with MarketHolidays.js)
 (() => {
   if (window.API_KEYS_LOADED) return;
   window.API_KEYS_LOADED = true;
@@ -80,4 +78,11 @@ async function loadApiKeys() {
   };
 
   window.handleApiKeyAction = ButtonBoxRows.handleRowAction;
+
+  // ✅ Trigger load even if tab is slow
+  window.addEventListener("DOMContentLoaded", () => {
+    const isApiTabVisible =
+      document.getElementById("api-keys-section")?.style.display !== "none";
+    if (isApiTabVisible) loadApiKeys();
+  });
 })();
