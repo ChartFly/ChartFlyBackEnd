@@ -1,24 +1,16 @@
-/* -------------------------------------------------------------
-  📁 FILE: ApiKeys.css
-  📍 LOCATION: static/admin/api-keys/ApiKeys.css
-  🌟 SCOPE: Styles exclusive to #api-keys-section
-  ❌ No global bleed — all selectors are scoped to this tab only
- ------------------------------------------------------------- */
+/* 📁 FILE: ApiKeys.css */
+/* 📍 LOCATION: static/admin/api-keys/ApiKeys.css */
+/* 🎯 SCOPE: Styles exclusive to #api-keys-section */
 
-/* 🔷  ayout Containers*/
 #api-keys-section {
   margin-top: 2rem;
 }
 
-#api-keys-section #api-actions {
-  margin-bottom: 1rem;
-  display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-}
-
-#api-keys-section #api-confirm {
-  margin-bottom: 1rem;
+/* 🧭 Table + ButtonBox Container */
+#api-keys-section .table-container {
+  max-width: 1100px;
+  margin: 0;
+  padding: 6px 10px;
 }
 
 #api-keys-section .table-wrapper {
@@ -29,18 +21,19 @@
   max-width: 100%;
   border: 1px solid #ccc;
   border-radius: 6px;
+  min-height: 200px;
 }
 
-/* 📊 Admin Table Styles */
+/* 📊 Table Styles */
 #api-keys-section .admin-table {
-  width: 100%; /* ✅ Fixed */
-  min-width: 800px; /* ✅ Optional safety net */
+  width: 100%;
+  min-width: 800px;
   border-collapse: collapse;
   table-layout: fixed;
   font-size: 0.95rem;
 }
 
-/* 📀 Column Resizing Defaults (except .col-select) */
+/* 📐 Force cell layout */
 #api-keys-section .admin-table th:not(.col-select),
 #api-keys-section .admin-table td:not(.col-select) {
   min-width: 8ch;
@@ -64,12 +57,19 @@
   z-index: 10;
 }
 
-/* 📅 Body Cell Base Styling */
+/* 🔢 Body Cell Styling */
 #api-keys-section .admin-table td {
   border: 1px solid #ccc;
   padding: 6px 10px;
   text-align: left;
   vertical-align: top;
+  min-height: 24px;
+}
+
+/* 🫥 Prevent collapse on empty cells */
+#api-keys-section .admin-table td:empty::after {
+  content: " "; /* non-breaking space */
+  visibility: hidden;
 }
 
 /* ✅ Select Column */
@@ -92,15 +92,17 @@
   color: black;
 }
 
-/* 🆔 API Key Identifier Column */
-#api-keys-section .admin-table th.col-id-tag,
-#api-keys-section .admin-table td.col-id-tag {
-  min-width: 6ch;
+/* 🔠 Line ID Column */
+#api-keys-section .line-id-col {
+  width: 4ch;
+  min-width: 2ch;
   max-width: 8ch;
   text-align: center;
+  white-space: nowrap;
+  display: none;
 }
 
-/* 📓 Zebra Striping + Row Highlight */
+/* 🦓 Row Striping */
 #api-keys-section .admin-table tbody tr:nth-child(even) {
   background-color: #f9f9f9;
 }
@@ -111,63 +113,21 @@
   background-color: #d0f0ff !important;
 }
 
-/* 📏 Compact Mode */
-body.compact-mode #api-keys-section .admin-table th,
-body.compact-mode #api-keys-section .admin-table td {
-  padding: 4px 6px;
-  font-size: 0.85rem;
+/* ✏️ Editable Cell Styling */
+#api-keys-section .editable {
+  background-color: #fff8dc;
+  border: 1px dashed #ccc;
+  outline: none;
 }
-
-/* 📱 Responsive Font Tweaks */
-@media (max-width: 768px) {
-  #api-keys-section .admin-table th,
-  #api-keys-section .admin-table td {
-    font-size: 0.85rem;
-  }
+#api-keys-section tr.editing {
+  box-shadow: inset 0 0 0 2px #007a8a;
+  background-color: #e9f7f9;
 }
-
-/* ✅ Confirm Box Styles */
-#api-keys-section .confirm-box {
-  display: block;
-  padding: 8px;
-  border-radius: 4px;
-  font-weight: bold;
+#api-keys-section tr[data-id^="paste-"],
+#api-keys-section tr[data-id^="new-"] {
+  background-color: #f2fff4;
 }
-#api-keys-section .confirm-box.info {
-  background-color: #007a8a;
-  color: white;
-}
-#api-keys-section .confirm-box.warn {
-  background-color: #fff4e5;
-  color: #cc7700;
-}
-#api-keys-section .confirm-box.success {
-  background-color: #e6f9ed;
-  color: #00aa55;
-}
-
-/* ✅ Confirm Buttons */
-#api-keys-section .confirm-btn.green {
-  background-color: #00aa55;
-  border: none;
-  color: black;
-  padding: 5px 10px;
-  margin-top: 5px;
-  cursor: pointer;
-  border-radius: 4px;
-}
-#api-keys-section .confirm-btn.yellow {
-  background-color: #ffff00;
-  color: black;
-  font-weight: bold;
-  border: none;
-  padding: 5px 10px;
-  margin-top: 5px;
-  cursor: pointer;
-  border-radius: 4px;
-}
-
-/* ✅ Checkbox Accent */
-#api-keys-section .admin-table td.col-select input[type="checkbox"]:checked {
-  accent-color: #00aa55;
+#api-keys-section .invalid {
+  background-color: #ffe5e5;
+  border: 1px solid #ff4d4d;
 }
