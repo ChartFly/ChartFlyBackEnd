@@ -141,9 +141,9 @@
   display: inline-block;
   animation: ticker-scroll 90s linear infinite;
   min-width: 100%;
-  line-height: 52px; /* Slightly taller than footer height */
-  padding-top: 2px; /* Minimal lift */
-  transform: translateY(-1px); /* Nudge upward for better vertical centering */
+  line-height: 48px; /* Match just under footer height */
+  padding-top: 4px; /* Gently lifts text into perfect visual center */
+  transform: none; /* Remove previous vertical nudge */
 }
 
 @keyframes ticker-scroll {
