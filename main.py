@@ -81,7 +81,7 @@ async def db_middleware(request: Request, call_next):
 @app.get("/")
 async def admin_ui(request: Request):
     try:
-        return templates.TemplateResponse("admin/admin.html", {"request": request})
+        return templates.TemplateResponse("admin.html", {"request": request})  # 🔧 Fixed path
     except Exception as e:
         logging.error(f"🔥 Template rendering failed: {e}")
         return Response("❌ Template failed to load. Check logs.", status_code=500)
