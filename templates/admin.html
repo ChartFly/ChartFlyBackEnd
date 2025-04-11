@@ -63,19 +63,15 @@
       {% include "admin/market-holidays/MarketHolidays.html" %}
     </div>
 
-    <!-- 🔒 API Keys Section -->
-    {#
+    <!-- ✅ API Keys Section -->
     <div id="api-keys-section" class="tab-section" style="display: none">
       {% include "admin/api-keys/ApiKeys.html" %}
     </div>
-    #}
 
-    <!-- 🔒 User Management Section -->
-    {#
+    <!-- ✅ User Management Section -->
     <div id="user-management-section" class="tab-section" style="display: none">
       {% include "admin/user-management/UserManagement.html" %}
     </div>
-    #}
 
     <!-- ✅ Shared Scripts -->
     <script src="{{ url_for('static', path='admin/shared/ButtonBox.js') }}"></script>
@@ -89,6 +85,14 @@
     <!-- ✅ Market Holidays Scripts (moved last to ensure dependencies load first) -->
     <script src="{{ url_for('static', path='admin/market-holidays/MarketHolidays.js') }}"></script>
     <script src="{{ url_for('static', path='admin/market-holidays/ButtonBoxMarketHolidays.js') }}"></script>
+
+    <!-- ✅ API Keys Scripts -->
+    <script src="{{ url_for('static', path='admin/api-keys/ApiKeys.js') }}"></script>
+    <script src="{{ url_for('static', path='admin/api-keys/ButtonBoxApiKeys.js') }}"></script>
+
+    <!-- ✅ User Management Scripts -->
+    <script src="{{ url_for('static', path='admin/user-management/UserManagement.js') }}"></script>
+    <script src="{{ url_for('static', path='admin/user-management/ButtonBoxUserManagement.js') }}"></script>
 
     <!-- ✅ Footer with Holiday Ticker -->
     <footer class="admin-footer">
