@@ -1,18 +1,24 @@
-// static/admin/shared/ButtonBoxRows.js
-
 window.ButtonBoxRows = (() => {
-  const undoStacks = {}; // Holds up to 30 snapshots per section (rows + selectedRows)
+  const undoStacks = {}; // Holds up to 30 snapshots per section (DOM clones)
+  const clipboards = {}; // Holds copied row HTML per section
 
   function wireCheckboxes(section) {
-    const table = document.querySelector(`#${section}-section table`);
-    const checkboxes = table.querySelectorAll(`.${section}-select-checkbox`);
     const state = ButtonBox.getState(section);
     if (!state) return;
 
+    const table = document.getElementById(state.tableId);
+    if (!table) return;
+
+    const checkboxes = table.querySelectorAll(`.${section}-select-checkbox`);
+    state.selectedRows.clear();
+
     checkboxes.forEach((checkbox) => {
-      checkbox.addEventListener("change", () => {
-        const id = checkbox.dataset.id;
-        if (checkbox.checked) {
+      const id = checkbox.dataset.id;
+      const newCheckbox = checkbox.cloneNode(true);
+      checkbox.replaceWith(newCheckbox);
+
+      newCheckbox.addEventListener("change", () => {
+        if (newCheckbox.checked) {
           state.selectedRows.add(id);
         } else {
           state.selectedRows.delete(id);
@@ -20,13 +26,17 @@ window.ButtonBoxRows = (() => {
         ButtonBoxMessages.updateSelectedCount(section);
       });
     });
+
+    ButtonBoxMessages.updateSelectedCount(section);
   }
 
   function pushUndo(section) {
     const state = ButtonBox.getState(section);
     const table = document.getElementById(state.tableId);
-    const snapshot = Array.from(table.querySelectorAll("tbody tr")).map(
-      (row) => row.outerHTML
+    if (!table) return;
+
+    const snapshot = Array.from(table.querySelectorAll("tbody tr")).map((row) =>
+      row.cloneNode(true)
     );
 
     if (!undoStacks[section]) {
@@ -110,7 +120,7 @@ window.ButtonBoxRows = (() => {
       if (originalCheckbox) originalCheckbox.checked = false;
       state.selectedRows.delete(selectedIds[0]);
 
-      table.prepend(clone);
+      table.querySelector("tbody").prepend(clone);
       state.selectedRows.add(clonedId);
       ButtonBoxMessages.updateSelectedCount(section);
       ButtonBox.wireCheckboxes(section);
@@ -136,7 +146,7 @@ window.ButtonBoxRows = (() => {
         cell.addEventListener("input", () => newRow.classList.add("dirty"));
       });
 
-      table.prepend(newRow);
+      table.querySelector("tbody").prepend(newRow);
       state.selectedRows.add(newId);
       ButtonBoxMessages.updateSelectedCount(section);
       ButtonBox.wireCheckboxes(section);
@@ -208,37 +218,13 @@ window.ButtonBoxRows = (() => {
       const tbody = table.querySelector("tbody");
       tbody.innerHTML = "";
 
-      last.rows.forEach((rowHTML, i) => {
-        const tempDiv = document.createElement("div");
-        tempDiv.innerHTML = rowHTML.trim();
-        const restoredRow = tempDiv.querySelector("tr");
-        if (!restoredRow) return;
-
-        // Clean any leftover junk
-        restoredRow.classList.remove("editing", "dirty");
-
-        // Rewire checkbox
-        const checkbox = restoredRow.querySelector("input[type='checkbox']");
-        if (checkbox) {
-          checkbox.className = `${section}-select-checkbox`;
-          checkbox.addEventListener("change", () => {
-            const id = checkbox.dataset.id;
-            if (checkbox.checked) {
-              state.selectedRows.add(id);
-            } else {
-              state.selectedRows.delete(id);
-            }
-            ButtonBoxMessages.updateSelectedCount(section);
-          });
-        }
-
-        // Reattach
-        tbody.appendChild(restoredRow);
+      last.rows.forEach((rowNode, i) => {
+        tbody.appendChild(rowNode.cloneNode(true));
         console.log(`[UNDO] Inserted row ${i + 1}`);
       });
 
-      // Restore selected row state
       state.selectedRows = new Set(last.selected);
+      ButtonBox.wireCheckboxes(section);
       ButtonBoxMessages.updateSelectedCount(section);
       ButtonBox.showMessage(section, "Undo successful.");
     }
@@ -247,6 +233,6 @@ window.ButtonBoxRows = (() => {
   return {
     handleRowAction,
     wireCheckboxes,
-    undoStacks, // 👀 Still inspectable
+    undoStacks,
   };
 })();
