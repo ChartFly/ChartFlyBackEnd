@@ -116,12 +116,16 @@
           !window.MARKET_TAB_LOADED
         ) {
           window.MARKET_TAB_LOADED = true;
-          loadMarketHolidays(); // ✅ Market Holidays loads immediately
+          loadMarketHolidays();
         }
 
-        if (sectionId === "api-keys-section" && !window.API_TAB_LOADED) {
-          window.API_TAB_LOADED = true;
-          setTimeout(loadApiKeys, 50); // ⏱ Let DOM settle
+        if (sectionId === "api-keys-section") {
+          if (!window.API_TAB_LOADED) {
+            window.API_TAB_LOADED = true;
+            setTimeout(loadApiKeys, 100);
+          } else {
+            setTimeout(loadApiKeys, 100); // Re-render to fix visibility
+          }
         }
 
         if (
@@ -129,7 +133,7 @@
           !window.USER_TAB_LOADED
         ) {
           window.USER_TAB_LOADED = true;
-          setTimeout(loadAdminUsers, 50); // ⏱ Let DOM settle
+          setTimeout(loadAdminUsers, 50);
         }
       }
 
