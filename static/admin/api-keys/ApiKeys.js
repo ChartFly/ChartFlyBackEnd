@@ -9,9 +9,15 @@ async function loadApiKeys() {
     if (!response.ok) throw new Error("Failed to fetch API keys");
 
     const keys = await response.json();
+    console.log("✅ API Keys Fetched:", keys); // 👈 Debug log right here!
+
     const table = document.getElementById("api-keys-table");
     if (!table) throw new Error("❌ api-keys-table element not found");
-    table.innerHTML = "";
+
+    const tbody = table.querySelector("tbody");
+    if (!tbody) throw new Error("❌ <tbody> not found in api-keys-table");
+
+    tbody.innerHTML = ""; // Clear previous content
 
     keys.forEach((key, index) => {
       const row = document.createElement("tr");
@@ -29,7 +35,7 @@ async function loadApiKeys() {
         <td>${sanitizeInput(key.status || "Unknown")}</td>
       `;
 
-      table.appendChild(row);
+      tbody.appendChild(row);
     });
 
     ButtonBoxApiKeys.init();
@@ -58,7 +64,10 @@ async function loadApiKeys() {
     console.error("❌ Failed to load API keys:", error);
     const table = document.getElementById("api-keys-table");
     if (table) {
-      table.innerHTML = `<tr><td colspan="6">Failed to load API keys. Please try again later.</td></tr>`;
+      const tbody = table.querySelector("tbody");
+      if (tbody) {
+        tbody.innerHTML = `<tr><td colspan="6">Failed to load API keys. Please try again later.</td></tr>`;
+      }
     }
   }
 }
