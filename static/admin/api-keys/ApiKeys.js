@@ -84,7 +84,7 @@ async function loadApiKeys() {
   }
 }
 
-// ✅ Fallback loader (like MarketHolidays)
+// ✅ Setup global API key handlers
 (() => {
   if (window.API_KEYS_LOADED) return;
   window.API_KEYS_LOADED = true;
@@ -96,11 +96,4 @@ async function loadApiKeys() {
   };
 
   window.handleApiKeyAction = ButtonBoxRows.handleRowAction;
-
-  window.addEventListener("DOMContentLoaded", () => {
-    const visible =
-      document.getElementById("api-keys-section")?.style.display !== "none";
-    console.log(`📦 DOMContentLoaded — api-keys-section visible: ${visible}`);
-    if (visible) loadApiKeys();
-  });
 })();
