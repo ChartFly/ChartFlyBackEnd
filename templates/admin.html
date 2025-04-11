@@ -43,23 +43,27 @@
 
     <!-- ✅ Tabs -->
     <div class="tab-container">
-      <div class="tab" onclick="showTab('market-holidays')">
+      <div class="tab" onclick="switchTab('market-holidays-section')">
         Market Holidays
       </div>
-      <div class="tab" onclick="showTab('api-keys')">API Keys</div>
-      <div class="tab" onclick="showTab('user-management')">
+      <div class="tab" onclick="switchTab('api-keys-section')">API Keys</div>
+      <div class="tab" onclick="switchTab('user-management-section')">
         User Management
       </div>
     </div>
 
     <!-- ✅ Tab Sections -->
-    <div id="market-holidays-section" class="tab-section">
+    <div id="market-holidays-section" class="admin-tab-section">
       {% include "admin/market-holidays/MarketHolidays.html" %}
     </div>
-    <div id="api-keys-section" class="tab-section" style="display: none">
+    <div id="api-keys-section" class="admin-tab-section" style="display: none">
       {% include "admin/api-keys/ApiKeys.html" %}
     </div>
-    <div id="user-management-section" class="tab-section" style="display: none">
+    <div
+      id="user-management-section"
+      class="admin-tab-section"
+      style="display: none"
+    >
       {% include "admin/user-management/UserManagement.html" %}
     </div>
 
@@ -97,44 +101,43 @@
       </div>
     </footer>
 
-    <!-- ✅ Updated Tab Switching Logic -->
+    <!-- ✅ Tab Switching + Loaders -->
     <script>
-      function showTab(tabName) {
-        const tabMap = {
-          "market-holidays": "market-holidays-section",
-          "api-keys": "api-keys-section",
-          "user-management": "user-management-section",
-        };
+      function switchTab(sectionId) {
+        document.querySelectorAll(".admin-tab-section").forEach((section) => {
+          section.style.display = section.id === sectionId ? "block" : "none";
+        });
 
-        for (const [key, sectionId] of Object.entries(tabMap)) {
-          const section = document.getElementById(sectionId);
-          if (section)
-            section.style.display = key === tabName ? "block" : "none";
+        document.querySelectorAll(".tab").forEach((tab) => {
+          const tabTarget = tab.getAttribute("onclick") || "";
+          const isActive = tabTarget.includes(sectionId);
+          tab.classList.toggle("active", isActive);
+        });
 
-          const tab = document.querySelector(`.tab[onclick*="${key}"]`);
-          if (tab) tab.classList.toggle("active", key === tabName);
-        }
-
-        if (tabName === "api-keys" && typeof loadApiKeys === "function") {
-          loadApiKeys();
-        } else if (
-          tabName === "user-management" &&
-          typeof loadAdminUsers === "function"
+        if (
+          sectionId === "market-holidays-section" &&
+          !window.MARKET_TAB_LOADED
         ) {
-          loadAdminUsers();
-        } else if (
-          tabName === "market-holidays" &&
-          typeof loadMarketHolidays === "function"
-        ) {
+          window.MARKET_TAB_LOADED = true;
           loadMarketHolidays();
         }
 
-        location.hash = tabName;
+        if (sectionId === "api-keys-section" && !window.API_TAB_LOADED) {
+          window.API_TAB_LOADED = true;
+          loadApiKeys();
+        }
+
+        if (
+          sectionId === "user-management-section" &&
+          !window.USER_TAB_LOADED
+        ) {
+          window.USER_TAB_LOADED = true;
+          loadAdminUsers();
+        }
       }
 
       document.addEventListener("DOMContentLoaded", () => {
-        const tab = location.hash.replace("#", "") || "market-holidays";
-        showTab(tab);
+        switchTab("market-holidays-section");
       });
     </script>
   </body>
