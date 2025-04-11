@@ -77,19 +77,14 @@ async def db_middleware(request: Request, call_next):
         response = await call_next(request)
         return response
 
-# ✅ Admin Entry Route
+# ✅ Admin Entry Route (TEMP: Direct admin.html for debugging)
 @app.get("/")
 async def admin_ui(request: Request):
-    return templates.TemplateResponse("admin/admin.html", {"request": request})
-
-
-    if user_count == 0:
-        return RedirectResponse(url="/auth/register", status_code=HTTP_302_FOUND)
-
-    if request.session.get("user_id"):
-        return templates.TemplateResponse("admin.html", {"request": request})
-
-    return RedirectResponse(url="/auth/login", status_code=HTTP_302_FOUND)
+    try:
+        return templates.TemplateResponse("admin/admin.html", {"request": request})
+    except Exception as e:
+        logging.error(f"🔥 Template rendering failed: {e}")
+        return Response("❌ Template failed to load. Check logs.", status_code=500)
 
 # ✅ Health Checks
 @app.head("/")
