@@ -100,8 +100,14 @@
     <!-- ✅ Tab Switching + Loaders -->
     <script>
       function switchTab(sectionId) {
+        console.log(`🧭 Switching tab to: ${sectionId}`);
+
         document.querySelectorAll(".tab-section").forEach((section) => {
-          section.style.display = section.id === sectionId ? "block" : "none";
+          const isActive = section.id === sectionId;
+          section.style.display = isActive ? "block" : "none";
+          console.log(
+            `📦 ${section.id} display set to: ${section.style.display}`
+          );
         });
 
         document.querySelectorAll(".tab").forEach((tab) => {
@@ -116,15 +122,18 @@
           !window.MARKET_TAB_LOADED
         ) {
           window.MARKET_TAB_LOADED = true;
+          console.log("⏩ Loading Market Holidays...");
           loadMarketHolidays();
         }
 
         if (sectionId === "api-keys-section") {
           if (!window.API_TAB_LOADED) {
             window.API_TAB_LOADED = true;
+            console.log("⏩ Initial loadApiKeys()");
             setTimeout(loadApiKeys, 100);
           } else {
-            setTimeout(loadApiKeys, 100); // Re-render to fix visibility
+            console.log("🔁 Re-running loadApiKeys() to refresh");
+            setTimeout(loadApiKeys, 100);
           }
         }
 
@@ -133,11 +142,13 @@
           !window.USER_TAB_LOADED
         ) {
           window.USER_TAB_LOADED = true;
+          console.log("⏩ Loading Admin Users...");
           setTimeout(loadAdminUsers, 50);
         }
       }
 
       document.addEventListener("DOMContentLoaded", () => {
+        console.log("📥 DOM loaded, triggering initial tab...");
         switchTab("market-holidays-section");
       });
     </script>
