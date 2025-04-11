@@ -1,4 +1,5 @@
-//static/admin/shared/ButtonBox.js  //
+// static/admin/shared/ButtonBox.js
+
 window.ButtonBox = (() => {
   const stateMap = new Map();
 
@@ -48,23 +49,15 @@ window.ButtonBox = (() => {
 
     enabledActions.forEach((action) => {
       const btn = document.getElementById(`${section}-${action}-btn`);
-      if (!btn) {
-        console.warn(`[${section}] ❌ Missing button: ${action}`);
-        return;
-      }
+      if (!btn) return;
 
       btn.addEventListener("click", () => {
-        console.log(`[${section}] 🔘 Clicked: ${action}`);
-
         ButtonBoxMessages.setStatus(section, action);
         ButtonBoxMessages.resetButtons(section, btn);
 
         const skipConfirm = ["add", "copy", "edit", "undo"].includes(action);
 
-        if (typeof state.onAction !== "function") {
-          console.warn(`[${section}] ⚠️ No onAction handler defined!`);
-          return;
-        }
+        if (typeof state.onAction !== "function") return;
 
         if (skipConfirm) {
           state.onAction(action, Array.from(state.selectedRows));
@@ -76,11 +69,9 @@ window.ButtonBox = (() => {
         }
       });
 
-      // Make sure Undo button is always active if present
       if (action === "undo") {
         btn.disabled = false;
         btn.classList.remove("disabled-btn");
-        console.log(`[${section}] ✅ Undo button explicitly enabled`);
       }
     });
 
