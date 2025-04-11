@@ -1,129 +1,40 @@
-<!-- =================================================== -->
-<!-- ✅ ChartFly Admin Panel Layout   (admin.html)         -->
-<!-- Main layout for the Admin Dashboard UI              -->
-<!-- Includes: Header, Tabs, Footer, Shared Scripts      -->
-<!-- Author: ChartFly Dev Team                           -->
-<!-- Last Updated: 2025-04-09                            -->
-<!-- =================================================== -->
+<!-- ✅ Footer with Holiday Ticker -->
+<footer class="admin-footer">
+  <div class="footer-ticker">
+    <span id="holiday-ticker" class="ticker-content">🎉 Loading...</span>
+    <span id="holiday-ticker-duplicate" class="ticker-content" aria-hidden="true">🎉 Loading...</span>
+  </div>
+</footer>
 
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>ChartFly Admin Panel</title>
+<!-- ✅ Tab Switching + Tab-Specific Loaders -->
+<script>
+  function switchTab(sectionId) {
+    document.querySelectorAll(".tab-section").forEach((section) => {
+      section.style.display = section.id === sectionId ? "block" : "none";
+    });
 
-    <link
-      rel="icon"
-      type="image/x-icon"
-      href="{{ url_for('static', path='images/ChartFly-Favicon.ico') }}"
-    />
+    document.querySelectorAll(".tab").forEach((tab) => {
+      tab.classList.toggle(
+        "active",
+        tab.getAttribute("onclick").includes(sectionId)
+      );
+    });
 
-    <!-- ✅ Stylesheets -->
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', path='css/styles.css') }}"
-    />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', path='admin/market-holidays/MarketHolidays.css') }}"
-    />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', path='admin/shared/ButtonBox.css') }}"
-    />
-  </head>
+    // ✅ Fire tab-specific loaders once
+    if (sectionId === "api-keys-section" && !window.API_TAB_LOADED) {
+      window.API_TAB_LOADED = true;
+      loadApiKeys();
+    }
+    if (sectionId === "user-management-section" && !window.USER_TAB_LOADED) {
+      window.USER_TAB_LOADED = true;
+      loadAdminUsers();
+    }
+  }
 
-  <body>
-    <!-- ✅ Header -->
-    <div class="admin-header">
-      <img
-        src="{{ url_for('static', path='images/Chartfly-logo.png') }}"
-        alt="ChartFly Logo"
-        class="admin-logo"
-      />
-      <h1 class="admin-title">ChartFly Admin Console</h1>
-      <div id="market-status-indicator">
-        Market Status: <span id="market-status-text">Checking...</span>
-      </div>
-    </div>
+  document.addEventListener("DOMContentLoaded", () => {
+    switchTab("market-holidays-section"); // Default tab
+  });
+</script>
 
-    <!-- ✅ Tabs -->
-    <div class="tab-container">
-      <div class="tab" onclick="switchTab('market-holidays-section')">
-        Market Holidays
-      </div>
-      <div class="tab" onclick="switchTab('api-keys-section')">API Keys</div>
-      <div class="tab" onclick="switchTab('user-management-section')">
-        User Management
-      </div>
-    </div>
-
-    <!-- ✅ Market Holidays Section -->
-    <div id="market-holidays-section" class="tab-section">
-      {% include "admin/market-holidays/MarketHolidays.html" %}
-    </div>
-
-    <!-- ✅ API Keys Section -->
-    <div id="api-keys-section" class="tab-section" style="display: none">
-      {% include "admin/api-keys/ApiKeys.html" %}
-    </div>
-
-    <!-- ✅ User Management Section -->
-    <div id="user-management-section" class="tab-section" style="display: none">
-      {% include "admin/user-management/UserManagement.html" %}
-    </div>
-
-    <!-- ✅ Shared Scripts -->
-    <script src="{{ url_for('static', path='admin/shared/ButtonBox.js') }}"></script>
-    <script src="{{ url_for('static', path='admin/shared/ButtonBoxMessages.js') }}"></script>
-    <script src="{{ url_for('static', path='admin/shared/ButtonBoxRows.js') }}"></script>
-    <script src="{{ url_for('static', path='admin/shared/ButtonBoxColumns.js') }}"></script>
-
-    <!-- ✅ Global Frontend Logic -->
-    <script src="{{ url_for('static', path='frontend/core/main.js') }}"></script>
-
-    <!-- ✅ Market Holidays Scripts (moved last to ensure dependencies load first) -->
-    <script src="{{ url_for('static', path='admin/market-holidays/MarketHolidays.js') }}"></script>
-    <script src="{{ url_for('static', path='admin/market-holidays/ButtonBoxMarketHolidays.js') }}"></script>
-
-    <!-- ✅ API Keys Scripts -->
-    <script src="{{ url_for('static', path='admin/api-keys/ApiKeys.js') }}"></script>
-    <script src="{{ url_for('static', path='admin/api-keys/ButtonBoxApiKeys.js') }}"></script>
-
-    <!-- ✅ User Management Scripts -->
-    <script src="{{ url_for('static', path='admin/user-management/UserManagement.js') }}"></script>
-    <script src="{{ url_for('static', path='admin/user-management/ButtonBoxUserManagement.js') }}"></script>
-
-    <!-- ✅ Footer with Holiday Ticker -->
-    <footer class="admin-footer">
-      <div class="footer-ticker">
-        <span id="holiday-ticker" class="ticker-content">🎉 Loading...</span>
-        <span
-          id="holiday-ticker-duplicate"
-          class="ticker-content"
-          aria-hidden="true"
-          >🎉 Loading...</span
-        >
-      </div>
-    </footer>
-
-    <script>
-      function switchTab(sectionId) {
-        document.querySelectorAll(".tab-section").forEach((section) => {
-          section.style.display = section.id === sectionId ? "block" : "none";
-        });
-
-        document.querySelectorAll(".tab").forEach((tab) => {
-          tab.classList.toggle(
-            "active",
-            tab.getAttribute("onclick").includes(sectionId)
-          );
-        });
-      }
-
-      document.addEventListener("DOMContentLoaded", () => {
-        switchTab("market-holidays-section");
-      });
-    </script>
-  </body>
+</body>
 </html>

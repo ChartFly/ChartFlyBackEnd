@@ -2,12 +2,12 @@
   <h2>Manage API Keys</h2>
 
   <!-- ✅ Modular ButtonBox -->
-  {% set section = "api-keys" %} {% include "shared/ButtonBox.html" %}
+  {% set section = "api" %} {% include "shared/ButtonBox.html" %}
 
   <!-- 🆔 Show ID Toggle -->
   <div class="toggle-ids">
     <label>
-      <input type="checkbox" id="toggle-id-column" />
+      <input type="checkbox" id="api-show-id-toggle" />
       Show Database IDs
     </label>
   </div>
@@ -18,27 +18,16 @@
       <thead>
         <tr>
           <th class="col-select">Select</th>
-          <th class="id-col" style="display: none">ID</th>
-          <th class="col-name">Label</th>
-          <th class="col-id-tag">ID Tag</th>
-          <th class="col-provider">Provider</th>
-          <th class="col-priority">Priority</th>
-          <th class="col-status">Status</th>
-          <th class="col-sec">Sec</th>
-          <th class="col-min">Min</th>
-          <th class="col-5min">5Min</th>
-          <th class="col-10min">10Min</th>
-          <th class="col-15min">15Min</th>
-          <th class="col-hour">Hour</th>
-          <th class="col-day">Day</th>
-          <th class="col-cost">Cost/Month</th>
-          <th class="col-billing">Billing</th>
-          <th class="col-type">Type</th>
+          <th class="line-id-col">ID</th>
+          <th>Name</th>
+          <th>Provider</th>
+          <th>Key Label</th>
+          <th>Status</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td colspan="17">Loading API keys...</td>
+          <td colspan="6">Loading API keys...</td>
         </tr>
       </tbody>
     </table>

@@ -45,7 +45,6 @@ async function loadAdminUsers() {
       }
     }, 50);
 
-    // Smart toggle hookup with fallback
     function waitForIdToggle() {
       const toggle = document.getElementById("user-show-id-toggle");
       if (toggle) {
@@ -87,5 +86,3 @@ async function loadAdminUsers() {
 
   window.handleUserAction = ButtonBoxRows.handleRowAction;
 })();
-
-// Removed: window.addEventListener("DOMContentLoaded", loadAdminUsers);
