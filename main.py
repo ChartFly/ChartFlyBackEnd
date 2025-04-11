@@ -77,14 +77,23 @@ async def db_middleware(request: Request, call_next):
         response = await call_next(request)
         return response
 
-# ✅ Admin Entry Route (TEMP: Direct admin.html for debugging)
+# ✅ Admin Entry Route (Restored login + session logic)
 @app.get("/")
 async def admin_ui(request: Request):
     try:
-        return templates.TemplateResponse("admin.html", {"request": request})  # 🔧 Fixed path
+        user_count = await request.state.db.fetchval("SELECT COUNT(*) FROM admin_users;")
+        user_count = user_count if user_count is not None else 0
     except Exception as e:
-        logging.error(f"🔥 Template rendering failed: {e}")
-        return Response("❌ Template failed to load. Check logs.", status_code=500)
+        logging.error(f"🚨 Database error in admin_ui route: {e}")
+        return templates.TemplateResponse("login.html", {"request": request, "error": "Database connection failed."})
+
+    if user_count == 0:
+        return RedirectResponse(url="/auth/register", status_code=HTTP_302_FOUND)
+
+    if request.session.get("user_id"):
+        return templates.TemplateResponse("admin.html", {"request": request})
+
+    return RedirectResponse(url="/auth/login", status_code=HTTP_302_FOUND)
 
 # ✅ Health Checks
 @app.head("/")
