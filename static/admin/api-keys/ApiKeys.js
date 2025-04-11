@@ -11,31 +11,40 @@ async function loadApiKeys() {
     const keys = await response.json();
     console.log("✅ API Keys Fetched:", keys);
 
-    const tbody = document.querySelector("#api-keys-table tbody");
-    if (!tbody) throw new Error("❌ <tbody> not found in API Keys table");
-    tbody.innerHTML = "";
+    const table = document.getElementById("api-keys-table");
+    if (!table) throw new Error("❌ api-keys-table element not found");
+
+    let tbody = table.querySelector("tbody");
+    if (!tbody) {
+      console.warn("⚠️ <tbody> not found, creating one...");
+      tbody = document.createElement("tbody");
+      table.appendChild(tbody);
+    }
+    tbody.innerHTML = ""; // Clear previous rows
 
     keys.forEach((key, index) => {
       const row = document.createElement("tr");
       row.setAttribute("data-id", key.id);
       row.setAttribute("data-index", index + 1);
-
       row.innerHTML = `
-        <td class="col-select"><input type="checkbox" class="api-select-checkbox" data-id="${
-          key.id
-        }"></td>
+        <td class="col-select">
+          <input type="checkbox" class="api-select-checkbox" data-id="${
+            key.id
+          }">
+        </td>
         <td class="line-id-col">${key.id}</td>
         <td>${sanitizeInput(key.name || "—")}</td>
         <td>${sanitizeInput(key.provider || "—")}</td>
         <td>${sanitizeInput(key.key_label || "—")}</td>
         <td>${sanitizeInput(key.status || "Unknown")}</td>
       `;
-
       tbody.appendChild(row);
     });
 
+    // ✅ Init button logic
     ButtonBoxApiKeys.init();
 
+    // ✅ Rewire checkboxes after DOM update
     const waitForButtonBox = setInterval(() => {
       if (window.ButtonBox && ButtonBox.wireCheckboxes) {
         clearInterval(waitForButtonBox);
@@ -43,6 +52,7 @@ async function loadApiKeys() {
       }
     }, 50);
 
+    // ✅ ID toggle
     const toggle = document.getElementById("api-show-id-toggle");
     if (toggle) {
       toggle.addEventListener("change", () => {
@@ -58,8 +68,9 @@ async function loadApiKeys() {
     }
   } catch (error) {
     console.error("❌ Failed to load API keys:", error);
-    const tbody = document.querySelector("#api-keys-table tbody");
-    if (tbody) {
+    const table = document.getElementById("api-keys-table");
+    if (table) {
+      let tbody = table.querySelector("tbody") || table;
       tbody.innerHTML = `<tr><td colspan="6">Failed to load API keys. Please try again later.</td></tr>`;
     }
   }
