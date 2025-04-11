@@ -1,15 +1,39 @@
 // static/admin/api-keys/ButtonBoxApiKeys.js
 
 window.ButtonBoxApiKeys = (() => {
+  let initialized = false;
+
+  function handleApiAction(action, selectedIds) {
+    const skipSelectionCheck = ["add", "undo", "save", "edit", "copy"];
+    if (
+      !skipSelectionCheck.includes(action) &&
+      (!selectedIds || selectedIds.length === 0)
+    ) {
+      ButtonBox.showWarning("api", "No rows selected.");
+      return;
+    }
+
+    ButtonBoxRows.handleRowAction(action, selectedIds, {
+      section: "api",
+      tableId: "api-keys-table",
+    });
+
+    if (action === "save") {
+      // ButtonBoxDataBase.saveToDatabase("api", selectedIds);
+    }
+  }
+
   function init() {
+    if (initialized) return;
+    initialized = true;
+
     const config = {
       section: "api",
+      domId: "api-keys-section",
       tableId: "api-keys-table",
       tipBoxId: "api-tips",
       warningBoxId: "api-warning",
-      confirmButtonId: "api-confirm-button",
-      actionLabelId: "api-action-label",
-      selectedCountId: "api-selected-count",
+      footerId: "api-action-footer",
       enabledActions: [
         "edit",
         "copy",
@@ -19,13 +43,12 @@ window.ButtonBoxApiKeys = (() => {
         "save",
         "undo",
       ],
-      handleAction: window.handleApiKeyAction,
+      onAction: handleApiAction,
     };
 
     const waitForBox = setInterval(() => {
-      if (window.ButtonBox) {
+      if (window.ButtonBox && window.ButtonBoxRows) {
         clearInterval(waitForBox);
-        console.log("🚀 ButtonBox initialized for section: api");
         ButtonBox.init(config);
       }
     }, 50);
@@ -34,5 +57,5 @@ window.ButtonBoxApiKeys = (() => {
   return { init };
 })();
 
-// ✅ Add this line to actually run it!
+// ✅ Run on load
 window.ButtonBoxApiKeys.init();

@@ -1,15 +1,39 @@
 // static/admin/user-management/ButtonBoxUserManagement.js
 
 window.ButtonBoxUserManagement = (() => {
+  let initialized = false;
+
+  function handleUserAction(action, selectedIds) {
+    const skipSelectionCheck = ["add", "undo", "save", "edit", "copy"];
+    if (
+      !skipSelectionCheck.includes(action) &&
+      (!selectedIds || selectedIds.length === 0)
+    ) {
+      ButtonBox.showWarning("user", "No rows selected.");
+      return;
+    }
+
+    ButtonBoxRows.handleRowAction(action, selectedIds, {
+      section: "user",
+      tableId: "user-management-table",
+    });
+
+    if (action === "save") {
+      // ButtonBoxDataBase.saveToDatabase("user", selectedIds);
+    }
+  }
+
   function init() {
+    if (initialized) return;
+    initialized = true;
+
     const config = {
       section: "user",
+      domId: "user-management-section",
       tableId: "user-management-table",
       tipBoxId: "user-tips",
       warningBoxId: "user-warning",
-      confirmButtonId: "user-confirm-button",
-      actionLabelId: "user-action-label",
-      selectedCountId: "user-selected-count",
+      footerId: "user-action-footer",
       enabledActions: [
         "edit",
         "copy",
@@ -19,13 +43,12 @@ window.ButtonBoxUserManagement = (() => {
         "save",
         "undo",
       ],
-      handleAction: window.handleUserAction,
+      onAction: handleUserAction,
     };
 
     const waitForBox = setInterval(() => {
-      if (window.ButtonBox) {
+      if (window.ButtonBox && window.ButtonBoxRows) {
         clearInterval(waitForBox);
-        console.log("🚀 ButtonBox initialized for section: user");
         ButtonBox.init(config);
       }
     }, 50);
@@ -33,3 +56,6 @@ window.ButtonBoxUserManagement = (() => {
 
   return { init };
 })();
+
+// ✅ Run on load
+window.ButtonBoxUserManagement.init();
