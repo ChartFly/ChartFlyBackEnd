@@ -13,7 +13,7 @@ async function loadApiKeys() {
 
     const table = document.getElementById("api-keys-table");
     const tbody = table.querySelector("tbody");
-    if (!tbody) throw new Error("Missing <tbody> in API keys table");
+    if (!tbody) throw new Error("Missing <tbody> in API Keys table");
 
     tbody.innerHTML = "";
 
@@ -23,11 +23,9 @@ async function loadApiKeys() {
       row.setAttribute("data-index", index + 1);
 
       row.innerHTML = `
-        <td class="col-select">
-          <input type="checkbox" class="api-select-checkbox" data-id="${
-            key.id
-          }">
-        </td>
+        <td class="col-select"><input type="checkbox" class="api-select-checkbox" data-id="${
+          key.id
+        }"></td>
         <td class="line-id-col">${key.id}</td>
         <td>${sanitizeInput(key.name || "—")}</td>
         <td>${sanitizeInput(key.provider || "—")}</td>
@@ -38,23 +36,27 @@ async function loadApiKeys() {
       tbody.appendChild(row);
     });
 
-    const waitForButtonBox = setInterval(() => {
-      if (window.ButtonBox && ButtonBox.wireCheckboxes) {
-        clearInterval(waitForButtonBox);
+    // ✅ Initialize ButtonBox
+    const waitForInit = setInterval(() => {
+      if (window.ButtonBoxApiKeys?.init && window.ButtonBox?.wireCheckboxes) {
+        clearInterval(waitForInit);
         ButtonBoxApiKeys.init();
-        ButtonBox.wireCheckboxes("api");
+
+        setTimeout(() => {
+          ButtonBox.wireCheckboxes("api");
+        }, 100);
       }
     }, 50);
 
+    // ✅ ID toggle behavior
     const toggle = document.getElementById("api-show-id-toggle");
     if (toggle) {
       toggle.addEventListener("change", () => {
         document
           .querySelectorAll("#api-keys-section .line-id-col")
-          .forEach(
-            (cell) =>
-              (cell.style.display = toggle.checked ? "table-cell" : "none")
-          );
+          .forEach((cell) => {
+            cell.style.display = toggle.checked ? "table-cell" : "none";
+          });
       });
       toggle.dispatchEvent(new Event("change"));
       console.log("✅ api-show-id-toggle wired successfully");
@@ -68,15 +70,19 @@ async function loadApiKeys() {
   }
 }
 
+function sanitizeInput(input) {
+  return typeof input === "string"
+    ? input.replace(/</g, "&lt;").replace(/>/g, "&gt;")
+    : input ?? "—";
+}
+
 (() => {
   if (window.API_KEYS_LOADED) return;
   window.API_KEYS_LOADED = true;
 
-  window.sanitizeInput = function (input) {
-    return typeof input === "string"
-      ? input.replace(/</g, "&lt;").replace(/>/g, "&gt;")
-      : input ?? "—";
-  };
-
+  window.sanitizeInput = sanitizeInput;
   window.handleApiKeyAction = ButtonBoxRows.handleRowAction;
+
+  // ✅ NEW: Ensure we wait for DOM before running
+  window.addEventListener("DOMContentLoaded", loadApiKeys);
 })();

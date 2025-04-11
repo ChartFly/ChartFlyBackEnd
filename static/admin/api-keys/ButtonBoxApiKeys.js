@@ -18,8 +18,9 @@ window.ButtonBoxApiKeys = (() => {
       tableId: "api-keys-table",
     });
 
+    // Optional backend call (disabled)
     if (action === "save") {
-      // ButtonBoxDataBase.saveToDatabase("api", selectedIds);
+      // ButtonBoxDataBase?.saveToDatabase?.("api", selectedIds);
     }
   }
 
@@ -31,8 +32,8 @@ window.ButtonBoxApiKeys = (() => {
       section: "api",
       domId: "api-keys-section",
       tableId: "api-keys-table",
-      tipBoxId: "api-tips",
-      warningBoxId: "api-warning",
+      tipBoxId: "api-info-box",
+      warningBoxId: "api-info-box",
       footerId: "api-action-footer",
       enabledActions: [
         "edit",
@@ -50,12 +51,31 @@ window.ButtonBoxApiKeys = (() => {
       if (window.ButtonBox && window.ButtonBoxRows) {
         clearInterval(waitForBox);
         ButtonBox.init(config);
+        wireIdToggle();
       }
     }, 50);
+  }
+
+  function wireIdToggle() {
+    const toggle = document.getElementById("api-show-id-toggle");
+    if (!toggle) return;
+
+    toggle.addEventListener("change", () => {
+      const visible = toggle.checked;
+      document
+        .querySelectorAll(
+          "#api-keys-section .line-id-col, #api-keys-section th.line-id-col"
+        )
+        .forEach((el) => {
+          el.style.display = visible ? "table-cell" : "none";
+        });
+    });
+
+    toggle.dispatchEvent(new Event("change"));
   }
 
   return { init };
 })();
 
-// ✅ Run on load
+// ✅ Auto-init
 window.ButtonBoxApiKeys.init();
