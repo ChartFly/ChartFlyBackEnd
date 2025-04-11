@@ -5,7 +5,7 @@
   padding: 6px 12px;
   margin: 0 5px;
   border-radius: 6px;
-  background-color: #006373; /* 🔵 Dark ChartFly Blue */
+  background-color: #006373;
   border: 1px solid #006373;
   color: #fff;
   cursor: pointer;
@@ -82,7 +82,7 @@
 .info-box {
   border-radius: 6px;
   padding: 8px 12px;
-  margin: 16px 0; /* 📦 Balanced top/bottom spacing */
+  margin: 24px 0; /* 📦 Increased spacing above/below tips */
   font-size: 16px;
   border: 1px solid #aaa;
   white-space: normal;
@@ -195,10 +195,4 @@ input[type="checkbox"] {
   justify-content: flex-start;
   flex-wrap: wrap;
   gap: 6px;
-}
-
-#holiday-info-box,
-#holiday-action-footer {
-  max-width: 1100px;
-  margin: auto;
 }
