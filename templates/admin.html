@@ -53,17 +53,13 @@
     </div>
 
     <!-- ✅ Tab Sections -->
-    <div id="market-holidays-section" class="admin-tab-section">
+    <div id="market-holidays-section" class="tab-section">
       {% include "admin/market-holidays/MarketHolidays.html" %}
     </div>
-    <div id="api-keys-section" class="admin-tab-section" style="display: none">
+    <div id="api-keys-section" class="tab-section" style="display: none">
       {% include "admin/api-keys/ApiKeys.html" %}
     </div>
-    <div
-      id="user-management-section"
-      class="admin-tab-section"
-      style="display: none"
-    >
+    <div id="user-management-section" class="tab-section" style="display: none">
       {% include "admin/user-management/UserManagement.html" %}
     </div>
 
@@ -104,14 +100,15 @@
     <!-- ✅ Tab Switching + Loaders -->
     <script>
       function switchTab(sectionId) {
-        document.querySelectorAll(".admin-tab-section").forEach((section) => {
+        document.querySelectorAll(".tab-section").forEach((section) => {
           section.style.display = section.id === sectionId ? "block" : "none";
         });
 
         document.querySelectorAll(".tab").forEach((tab) => {
-          const tabTarget = tab.getAttribute("onclick") || "";
-          const isActive = tabTarget.includes(sectionId);
-          tab.classList.toggle("active", isActive);
+          tab.classList.toggle(
+            "active",
+            tab.getAttribute("onclick").includes(sectionId)
+          );
         });
 
         if (
@@ -119,12 +116,12 @@
           !window.MARKET_TAB_LOADED
         ) {
           window.MARKET_TAB_LOADED = true;
-          loadMarketHolidays();
+          loadMarketHolidays(); // ✅ Market Holidays loads immediately
         }
 
         if (sectionId === "api-keys-section" && !window.API_TAB_LOADED) {
           window.API_TAB_LOADED = true;
-          loadApiKeys();
+          setTimeout(loadApiKeys, 50); // ⏱ Let DOM settle
         }
 
         if (
@@ -132,7 +129,7 @@
           !window.USER_TAB_LOADED
         ) {
           window.USER_TAB_LOADED = true;
-          loadAdminUsers();
+          setTimeout(loadAdminUsers, 50); // ⏱ Let DOM settle
         }
       }
 
