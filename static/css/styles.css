@@ -141,10 +141,9 @@
   display: inline-block;
   animation: ticker-scroll 90s linear infinite;
   min-width: 100%;
-  line-height: 50px;         /* Matches .admin-footer height */
-  padding-top: 3px;          /* Slight lift for legibility */
-  vertical-align: middle;    /* Optional: better cross-browser handling */
-}
+  line-height: 52px; /* Slightly taller than footer height */
+  padding-top: 2px; /* Minimal lift */
+  transform: translateY(-1px); /* Nudge upward for better vertical centering */
 }
 
 @keyframes ticker-scroll {

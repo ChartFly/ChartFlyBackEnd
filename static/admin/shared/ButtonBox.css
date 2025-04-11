@@ -13,13 +13,13 @@
 }
 
 .action-btn:hover:not(:disabled):not(.disabled-btn) {
-  background-color: #cdebf0; /* Hover: Soft turquoise color */
+  background-color: #cdebf0;
   border-color: #cdebf0;
   color: #000;
 }
 
 .action-btn:active {
-  background-color: #007a8a; /* Clicked: Original ChartFly Blue */
+  background-color: #007a8a;
   border-color: #007a8a;
   color: #fff;
 }
@@ -82,7 +82,7 @@
 .info-box {
   border-radius: 6px;
   padding: 8px 12px;
-  margin: 10px 0;
+  margin: 16px 0; /* 📦 Balanced top/bottom spacing */
   font-size: 16px;
   border: 1px solid #aaa;
   white-space: normal;
