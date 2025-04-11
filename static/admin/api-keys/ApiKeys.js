@@ -12,20 +12,16 @@ async function loadApiKeys() {
     console.log("✅ API Keys Fetched:", keys);
 
     const table = document.getElementById("api-keys-table");
-    if (!table) throw new Error("❌ api-keys-table element not found");
+    const tbody = table.querySelector("tbody");
+    if (!tbody) throw new Error("Missing <tbody> in API keys table");
 
-    let tbody = table.querySelector("tbody");
-    if (!tbody) {
-      console.warn("⚠️ <tbody> not found, creating one...");
-      tbody = document.createElement("tbody");
-      table.appendChild(tbody);
-    }
-    tbody.innerHTML = ""; // Clear previous rows
+    tbody.innerHTML = "";
 
     keys.forEach((key, index) => {
       const row = document.createElement("tr");
       row.setAttribute("data-id", key.id);
       row.setAttribute("data-index", index + 1);
+
       row.innerHTML = `
         <td class="col-select">
           <input type="checkbox" class="api-select-checkbox" data-id="${
@@ -38,21 +34,18 @@ async function loadApiKeys() {
         <td>${sanitizeInput(key.key_label || "—")}</td>
         <td>${sanitizeInput(key.status || "Unknown")}</td>
       `;
+
       tbody.appendChild(row);
     });
 
-    // ✅ Init button logic
-    ButtonBoxApiKeys.init();
-
-    // ✅ Rewire checkboxes after DOM update
     const waitForButtonBox = setInterval(() => {
       if (window.ButtonBox && ButtonBox.wireCheckboxes) {
         clearInterval(waitForButtonBox);
+        ButtonBoxApiKeys.init();
         ButtonBox.wireCheckboxes("api");
       }
     }, 50);
 
-    // ✅ ID toggle
     const toggle = document.getElementById("api-show-id-toggle");
     if (toggle) {
       toggle.addEventListener("change", () => {
@@ -68,9 +61,8 @@ async function loadApiKeys() {
     }
   } catch (error) {
     console.error("❌ Failed to load API keys:", error);
-    const table = document.getElementById("api-keys-table");
-    if (table) {
-      let tbody = table.querySelector("tbody") || table;
+    const tbody = document.querySelector("#api-keys-table tbody");
+    if (tbody) {
       tbody.innerHTML = `<tr><td colspan="6">Failed to load API keys. Please try again later.</td></tr>`;
     }
   }
