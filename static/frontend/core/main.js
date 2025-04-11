@@ -4,15 +4,21 @@ document.addEventListener("DOMContentLoaded", function () {
   updateMarketStatus();
   loadHolidayTicker(); // ✅ Ticker now loads globally
 
-  // Set default tab if no hash
+  // ✅ Use admin.html's switchTab logic (no showTab override!)
   if (!location.hash) {
-    if (typeof showTab === "function") {
-      showTab("market-holidays");
-      location.hash = "market-holidays";
-    }
+    switchTab("market-holidays-section");
+    location.hash = "market-holidays-section";
   } else {
-    const tab = location.hash.replace("#", "");
-    if (typeof showTab === "function") showTab(tab);
+    const tabId = location.hash.replace("#", "");
+    if (
+      [
+        "market-holidays-section",
+        "api-keys-section",
+        "user-management-section",
+      ].includes(tabId)
+    ) {
+      switchTab(tabId);
+    }
   }
 });
 
@@ -88,49 +94,3 @@ async function loadHolidayTicker() {
     if (ticker) ticker.textContent = "⚠️ Failed to load holiday ticker.";
   }
 }
-
-// ✅ Sanitizer
-function sanitizeInput(input) {
-  return typeof input === "string"
-    ? input.replace(/</g, "&lt;").replace(/>/g, "&gt;")
-    : input;
-}
-
-// ✅ Tab logic
-function showTab(tabName) {
-  const tabs = ["market-holidays", "api-keys", "user-management"];
-
-  tabs.forEach((name) => {
-    const section = document.getElementById(`${name}-section`);
-    const button = document.querySelector(
-      `button[onclick="showTab('${name}')"]`
-    );
-    const isActive = name === tabName;
-
-    if (section) section.style.display = isActive ? "block" : "none";
-    if (button) button.classList.toggle("active", isActive);
-  });
-
-  // Load tab-specific data
-  if (
-    tabName === "market-holidays" &&
-    typeof loadMarketHolidays === "function"
-  ) {
-    loadMarketHolidays();
-  } else if (tabName === "api-keys" && typeof loadApiKeys === "function") {
-    loadApiKeys();
-  } else if (
-    tabName === "user-management" &&
-    typeof loadAdminUsers === "function"
-  ) {
-    loadAdminUsers();
-    if (typeof loadTabAccess === "function") loadTabAccess();
-  }
-
-  location.hash = tabName;
-}
-
-// ✅ Export to window
-window.showTab = showTab;
-window.sanitizeInput = sanitizeInput;
-window.updateHolidayTicker = loadHolidayTicker;
