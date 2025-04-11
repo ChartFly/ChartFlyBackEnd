@@ -1,11 +1,18 @@
 <!-- templates/admin/api-keys/ApiKeys.html -->
-
 <section id="api-keys-section" class="admin-tab-section" style="display: none">
   <h2>Manage API Keys</h2>
 
   <div class="table-container">
     <!-- ✅ Modular ButtonBox -->
     {% set section = "api" %} {% include "shared/ButtonBox.html" %}
+
+    <!-- 🆔 Show ID Toggle -->
+    <div class="toggle-ids">
+      <label>
+        <input type="checkbox" id="api-show-id-toggle" />
+        Show Database IDs
+      </label>
+    </div>
 
     <!-- 📊 API Keys Table -->
     <div class="table-wrapper">
