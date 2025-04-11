@@ -16,7 +16,8 @@ async function loadApiKeys() {
       return;
     }
 
-    const tbody = table.querySelector("tbody");
+    let tbody =
+      table.querySelector("tbody") || table.getElementsByTagName("tbody")[0];
     if (!tbody) {
       console.error("❌ <tbody> not found inside api-keys-table");
       return;
@@ -84,7 +85,7 @@ async function loadApiKeys() {
   }
 }
 
-// ✅ Setup global API key handlers
+// ✅ Setup global API key handlers with deferred loader
 (() => {
   if (window.API_KEYS_LOADED) return;
   window.API_KEYS_LOADED = true;
@@ -96,4 +97,19 @@ async function loadApiKeys() {
   };
 
   window.handleApiKeyAction = ButtonBoxRows.handleRowAction;
+
+  // ✅ Wait for visibility before loading
+  window.addEventListener("DOMContentLoaded", () => {
+    const waitUntilVisible = setInterval(() => {
+      const section = document.getElementById("api-keys-section");
+      const isVisible = section && getComputedStyle(section).display !== "none";
+
+      console.log("📦 DOMContentLoaded — api-keys-section visible:", isVisible);
+
+      if (isVisible) {
+        clearInterval(waitUntilVisible);
+        loadApiKeys();
+      }
+    }, 100);
+  });
 })();
