@@ -3,7 +3,7 @@
 <!-- Main layout for the Admin Dashboard UI              -->
 <!-- Includes: Header, Tabs, Footer, Shared Scripts      -->
 <!-- Author: ChartFly Dev Team                           -->
-<!-- Last Updated: 2025-04-10                            -->
+<!-- Last Updated: 2025-04-11                            -->
 <!-- =================================================== -->
 
 <!DOCTYPE html>
@@ -43,11 +43,11 @@
 
     <!-- ✅ Tabs -->
     <div class="tab-container">
-      <div class="tab" onclick="switchTab('market-holidays-section')">
+      <div class="tab" onclick="showTab('market-holidays')">
         Market Holidays
       </div>
-      <div class="tab" onclick="switchTab('api-keys-section')">API Keys</div>
-      <div class="tab" onclick="switchTab('user-management-section')">
+      <div class="tab" onclick="showTab('api-keys')">API Keys</div>
+      <div class="tab" onclick="showTab('user-management')">
         User Management
       </div>
     </div>
@@ -97,44 +97,44 @@
       </div>
     </footer>
 
-    <!-- ✅ Tab Switching + Loaders -->
+    <!-- ✅ Updated Tab Switching Logic -->
     <script>
-      function switchTab(sectionId) {
-        document.querySelectorAll(".tab-section").forEach((section) => {
-          section.style.display = section.id === sectionId ? "block" : "none";
-        });
+      function showTab(tabName) {
+        const tabMap = {
+          "market-holidays": "market-holidays-section",
+          "api-keys": "api-keys-section",
+          "user-management": "user-management-section",
+        };
 
-        document.querySelectorAll(".tab").forEach((tab) => {
-          tab.classList.toggle(
-            "active",
-            tab.getAttribute("onclick").includes(sectionId)
-          );
-        });
+        for (const [key, sectionId] of Object.entries(tabMap)) {
+          const section = document.getElementById(sectionId);
+          if (section)
+            section.style.display = key === tabName ? "block" : "none";
 
-        if (
-          sectionId === "market-holidays-section" &&
-          !window.MARKET_TAB_LOADED
-        ) {
-          window.MARKET_TAB_LOADED = true;
-          loadMarketHolidays(); // ✅ FIXED: Ensure Market Holidays script loads once
+          const tab = document.querySelector(`.tab[onclick*="${key}"]`);
+          if (tab) tab.classList.toggle("active", key === tabName);
         }
 
-        if (sectionId === "api-keys-section" && !window.API_TAB_LOADED) {
-          window.API_TAB_LOADED = true;
+        if (tabName === "api-keys" && typeof loadApiKeys === "function") {
           loadApiKeys();
+        } else if (
+          tabName === "user-management" &&
+          typeof loadAdminUsers === "function"
+        ) {
+          loadAdminUsers();
+        } else if (
+          tabName === "market-holidays" &&
+          typeof loadMarketHolidays === "function"
+        ) {
+          loadMarketHolidays();
         }
 
-        if (
-          sectionId === "user-management-section" &&
-          !window.USER_TAB_LOADED
-        ) {
-          window.USER_TAB_LOADED = true;
-          loadAdminUsers();
-        }
+        location.hash = tabName;
       }
 
       document.addEventListener("DOMContentLoaded", () => {
-        switchTab("market-holidays-section");
+        const tab = location.hash.replace("#", "") || "market-holidays";
+        showTab(tab);
       });
     </script>
   </body>
