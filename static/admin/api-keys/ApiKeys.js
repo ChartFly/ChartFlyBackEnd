@@ -2,6 +2,7 @@
 
 async function loadApiKeys() {
   console.log("📥 loadApiKeys() has been called");
+
   try {
     const response = await fetch("/api/api-keys/");
     if (!response.ok) throw new Error("Failed to fetch API keys");
@@ -10,12 +11,22 @@ async function loadApiKeys() {
     console.log("✅ API Keys Fetched:", keys);
 
     const table = document.getElementById("api-keys-table");
-    const tbody = table?.querySelector("tbody");
-    if (!tbody) throw new Error("❌ Missing <tbody> in api-keys-table");
+    if (!table) {
+      console.error("❌ api-keys-table not found");
+      return;
+    }
 
+    const tbody = table.querySelector("tbody");
+    if (!tbody) {
+      console.error("❌ <tbody> not found inside api-keys-table");
+      return;
+    }
+
+    console.log("🧹 Clearing existing rows");
     tbody.innerHTML = "";
 
     keys.forEach((key, index) => {
+      console.log(`🔧 Rendering row ${index + 1}:`, key);
       const row = document.createElement("tr");
       row.setAttribute("data-id", key.id);
       row.setAttribute("data-index", index + 1);
@@ -36,10 +47,13 @@ async function loadApiKeys() {
       tbody.appendChild(row);
     });
 
+    console.log(`✅ Rendered ${keys.length} API key rows`);
+
     ButtonBoxApiKeys.init();
 
     const waitForButtonBox = setInterval(() => {
       if (window.ButtonBox?.wireCheckboxes) {
+        console.log("✅ ButtonBox.wireCheckboxes is available, wiring...");
         clearInterval(waitForButtonBox);
         ButtonBox.wireCheckboxes("api");
       }
@@ -47,26 +61,30 @@ async function loadApiKeys() {
 
     const toggle = document.getElementById("api-show-id-toggle");
     if (toggle) {
+      console.log("✅ Found api-show-id-toggle, adding event listener");
       toggle.addEventListener("change", () => {
+        const visible = toggle.checked;
+        console.log(`🔁 Toggling ID column visibility: ${visible}`);
         document
           .querySelectorAll("#api-keys-section .line-id-col")
           .forEach((cell) => {
-            cell.style.display = toggle.checked ? "table-cell" : "none";
+            cell.style.display = visible ? "table-cell" : "none";
           });
       });
       toggle.dispatchEvent(new Event("change"));
-      console.log("✅ api-show-id-toggle wired successfully");
+    } else {
+      console.warn("⚠️ api-show-id-toggle not found");
     }
   } catch (error) {
-    console.error("❌ Failed to load API keys:", error);
-    const tbody = document.querySelector("#api-keys-table tbody");
-    if (tbody) {
-      tbody.innerHTML = `<tr><td colspan="6">Failed to load API keys. Please try again later.</td></tr>`;
+    console.error("❌ loadApiKeys failed:", error);
+    const fallback = document.querySelector("#api-keys-table tbody");
+    if (fallback) {
+      fallback.innerHTML = `<tr><td colspan="6">Failed to load API keys. Please try again later.</td></tr>`;
     }
   }
 }
 
-// ✅ Add fallback load trigger (parity with MarketHolidays.js)
+// ✅ Fallback loader (like MarketHolidays)
 (() => {
   if (window.API_KEYS_LOADED) return;
   window.API_KEYS_LOADED = true;
@@ -79,10 +97,10 @@ async function loadApiKeys() {
 
   window.handleApiKeyAction = ButtonBoxRows.handleRowAction;
 
-  // ✅ Trigger load even if tab is slow
   window.addEventListener("DOMContentLoaded", () => {
-    const isApiTabVisible =
+    const visible =
       document.getElementById("api-keys-section")?.style.display !== "none";
-    if (isApiTabVisible) loadApiKeys();
+    console.log(`📦 DOMContentLoaded — api-keys-section visible: ${visible}`);
+    if (visible) loadApiKeys();
   });
 })();
