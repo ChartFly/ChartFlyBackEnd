@@ -1,3 +1,9 @@
+# ===================================================
+# ✅ USER MANAGEMENT ROUTER (routes.py)
+# Handles admin user CRUD operations and permissions
+# Mounted at: /api/users in main.py or admin.py
+# ===================================================
+
 from fastapi import APIRouter, HTTPException, Request
 from passlib.hash import bcrypt
 from uuid import uuid4

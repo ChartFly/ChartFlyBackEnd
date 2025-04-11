@@ -1,4 +1,11 @@
+# ===================================================
+# ✅ HOLIDAYS ROUTER (holidays.py)
+# Handles Market Holiday retrieval and saving
+# ===================================================
+
 from fastapi import APIRouter, HTTPException, Path, Request
+from pydantic import BaseModel
+from typing import List
 import logging
 import traceback
 from datetime import datetime
@@ -35,13 +42,11 @@ async def get_holidays_by_year(
             holiday = dict(row)
             holiday_date = holiday["date"]
 
-            # ⏰ Format close_time if present
             if holiday.get("close_time"):
                 holiday["close_time"] = holiday["close_time"].strftime("%H:%M")
             else:
                 holiday["close_time"] = None
 
-            # 📆 Status logic
             if holiday_date == today:
                 status = "Closed Today"
             elif holiday_date > today:
@@ -59,3 +64,36 @@ async def get_holidays_by_year(
         logging.error(f"❌ Database error: {e}")
         logging.error(traceback.format_exc())
         raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
+
+
+# ✅ POST Save Edited Holidays (Frontend → DB)
+class HolidayUpdate(BaseModel):
+    id: int
+    name: str
+    date: str
+    close_time: str
+
+@router.post("/save", tags=["holidays"])
+async def save_holidays(request: Request, holidays: List[HolidayUpdate]):
+    try:
+        db = request.state.db
+        async with db.transaction():
+            for h in holidays:
+                await db.execute(
+                    """
+                    UPDATE market_holidays
+                    SET name = $1, date = $2, close_time = $3
+                    WHERE id = $4
+                    """,
+                    h.name,
+                    h.date,
+                    h.close_time,
+                    h.id,
+                )
+
+        return {"message": f"{len(holidays)} holidays updated successfully."}
+
+    except Exception as e:
+        logging.error(f"❌ Save error: {e}")
+        logging.error(traceback.format_exc())
+        raise HTTPException(status_code=500, detail="Failed to save holidays.")
