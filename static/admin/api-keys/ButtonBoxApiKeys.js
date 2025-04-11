@@ -18,9 +18,8 @@ window.ButtonBoxApiKeys = (() => {
       tableId: "api-keys-table",
     });
 
-    // Optional backend call (disabled)
     if (action === "save") {
-      // ButtonBoxDataBase?.saveToDatabase?.("api", selectedIds);
+      // ButtonBoxDataBase.saveToDatabase("api", selectedIds);
     }
   }
 
@@ -48,7 +47,8 @@ window.ButtonBoxApiKeys = (() => {
     };
 
     const waitForBox = setInterval(() => {
-      if (window.ButtonBox && window.ButtonBoxRows) {
+      const table = document.getElementById("api-keys-table");
+      if (window.ButtonBox && window.ButtonBoxRows && table) {
         clearInterval(waitForBox);
         ButtonBox.init(config);
         wireIdToggle();
@@ -77,5 +77,5 @@ window.ButtonBoxApiKeys = (() => {
   return { init };
 })();
 
-// ✅ Auto-init
+// ✅ Auto-run like a good soldier
 window.ButtonBoxApiKeys.init();
