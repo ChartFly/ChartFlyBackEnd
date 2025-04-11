@@ -16,7 +16,7 @@ async function loadApiKeys() {
       return;
     }
 
-    let tbody =
+    const tbody =
       table.querySelector("tbody") || table.getElementsByTagName("tbody")[0];
     if (!tbody) {
       console.error("❌ <tbody> not found inside api-keys-table");
@@ -49,7 +49,6 @@ async function loadApiKeys() {
     });
 
     console.log(`✅ Rendered ${keys.length} API key rows`);
-
     ButtonBoxApiKeys.init();
 
     const waitForButtonBox = setInterval(() => {
@@ -85,10 +84,10 @@ async function loadApiKeys() {
   }
 }
 
-// ✅ Setup global API key handlers with deferred loader
+// ✅ Init logic with tab visibility guard
 (() => {
-  if (window.API_KEYS_LOADED) return;
-  window.API_KEYS_LOADED = true;
+  if (window.API_KEYS_SCRIPT_LOADED) return;
+  window.API_KEYS_SCRIPT_LOADED = true;
 
   window.sanitizeInput = function (input) {
     return typeof input === "string"
@@ -98,18 +97,11 @@ async function loadApiKeys() {
 
   window.handleApiKeyAction = ButtonBoxRows.handleRowAction;
 
-  // ✅ Wait for visibility before loading
+  // Load only if already visible (e.g. tab clicked before init)
   window.addEventListener("DOMContentLoaded", () => {
-    const waitUntilVisible = setInterval(() => {
-      const section = document.getElementById("api-keys-section");
-      const isVisible = section && getComputedStyle(section).display !== "none";
-
-      console.log("📦 DOMContentLoaded — api-keys-section visible:", isVisible);
-
-      if (isVisible) {
-        clearInterval(waitUntilVisible);
-        loadApiKeys();
-      }
-    }, 100);
+    const section = document.getElementById("api-keys-section");
+    const isVisible = section && getComputedStyle(section).display !== "none";
+    console.log("📦 DOMContentLoaded — api-keys-section visible:", isVisible);
+    if (isVisible) loadApiKeys();
   });
 })();
