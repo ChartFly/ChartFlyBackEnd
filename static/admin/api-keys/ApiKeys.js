@@ -2,9 +2,10 @@
 
 async function loadApiKeys() {
   console.log("📥 loadApiKeys() has been called");
-
   try {
-    const response = await fetch("/api/api-keys/");
+    const response = await fetch(
+      "https://chartflybackend.onrender.com/api/api-keys/"
+    );
     if (!response.ok) throw new Error("Failed to fetch API keys");
 
     const keys = await response.json();
@@ -12,7 +13,7 @@ async function loadApiKeys() {
 
     const table = document.getElementById("api-keys-table");
     const tbody = table.querySelector("tbody");
-    if (!tbody) throw new Error("❌ Missing <tbody> in API keys table");
+    if (!tbody) throw new Error("Missing <tbody> in api-keys table");
 
     tbody.innerHTML = "";
 
@@ -22,10 +23,12 @@ async function loadApiKeys() {
       row.setAttribute("data-index", index + 1);
 
       row.innerHTML = `
-        <td class="col-select"><input type="checkbox" class="api-select-checkbox" data-id="${
-          key.id
-        }"></td>
-        <td class="line-id-col">${sanitizeInput(key.id)}</td>
+        <td class="col-select">
+          <input type="checkbox" class="api-select-checkbox" data-id="${
+            key.id
+          }">
+        </td>
+        <td class="line-id-col">${key.id}</td>
         <td>${sanitizeInput(key.name || "—")}</td>
         <td>${sanitizeInput(key.provider || "—")}</td>
         <td>${sanitizeInput(key.key_label || "—")}</td>
@@ -35,14 +38,12 @@ async function loadApiKeys() {
       tbody.appendChild(row);
     });
 
+    // Re-init ButtonBox and checkboxes
     const waitForInit = setInterval(() => {
       if (window.ButtonBoxApiKeys?.init && window.ButtonBox?.wireCheckboxes) {
         clearInterval(waitForInit);
         ButtonBoxApiKeys.init();
-
-        setTimeout(() => {
-          ButtonBox.wireCheckboxes("api");
-        }, 100);
+        setTimeout(() => ButtonBox.wireCheckboxes("api"), 100);
       }
     }, 50);
 
@@ -67,6 +68,7 @@ async function loadApiKeys() {
   }
 }
 
+// Init flag
 (() => {
   if (window.API_KEYS_LOADED) return;
   window.API_KEYS_LOADED = true;
@@ -78,6 +80,4 @@ async function loadApiKeys() {
   };
 
   window.handleApiKeyAction = ButtonBoxRows.handleRowAction;
-
-  window.addEventListener("DOMContentLoaded", loadApiKeys);
 })();
