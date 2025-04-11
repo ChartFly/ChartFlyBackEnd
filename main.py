@@ -80,12 +80,8 @@ async def db_middleware(request: Request, call_next):
 # ✅ Admin Entry Route
 @app.get("/")
 async def admin_ui(request: Request):
-    try:
-        user_count = await request.state.db.fetchval("SELECT COUNT(*) FROM admin_users;")
-        user_count = user_count if user_count is not None else 0
-    except Exception as e:
-        logging.error(f"🚨 Database error in admin_ui route: {e}")
-        return templates.TemplateResponse("login.html", {"request": request, "error": "Database connection failed."})
+    return templates.TemplateResponse("admin/admin.html", {"request": request})
+
 
     if user_count == 0:
         return RedirectResponse(url="/auth/register", status_code=HTTP_302_FOUND)
