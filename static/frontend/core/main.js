@@ -1,27 +1,23 @@
 // static/frontend/core/main.js
 
 document.addEventListener("DOMContentLoaded", function () {
+  console.log("🚦 DOM fully loaded");
+
   updateMarketStatus();
   loadHolidayTicker(); // ✅ Ticker now loads globally
 
-  console.log("🚦 DOM fully loaded");
-
-  // Print section contents for debugging
+  // 🔍 TEMP: Log display state of all admin sections
+  console.log("🧼 Initial DOM Display States:");
   [
     "market-holidays-section",
     "api-keys-section",
     "user-management-section",
   ].forEach((id) => {
-    const section = document.getElementById(id);
-    if (section) {
-      console.log(`🔎 Section: ${id}`);
-      console.log(section.innerHTML.slice(0, 500)); // print a snippet of the HTML
-    } else {
-      console.warn(`⚠️ Section missing: ${id}`);
-    }
+    const el = document.getElementById(id);
+    if (el) console.log(`📦 ${id} = display: ${getComputedStyle(el).display}`);
   });
 
-  // Track tab loading flow
+  // ✅ Use admin.html's switchTab logic (no showTab override!)
   console.log("📍 Initial tab logic starting...");
   if (!location.hash) {
     console.log("🔁 No hash, defaulting to market-holidays-section");
@@ -29,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function () {
     location.hash = "market-holidays-section";
   } else {
     const tabId = location.hash.replace("#", "");
-    console.log(`🔁 Hash detected: ${tabId}`);
+    console.log(`🔁 Hash present, loading section: ${tabId}`);
     if (
       [
         "market-holidays-section",
@@ -38,8 +34,6 @@ document.addEventListener("DOMContentLoaded", function () {
       ].includes(tabId)
     ) {
       switchTab(tabId);
-    } else {
-      console.warn(`⚠️ Unknown tab hash: ${tabId}`);
     }
   }
 });
