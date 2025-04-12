@@ -4,6 +4,7 @@ console.log("🧭 ApiKeys.js loaded");
 
 async function loadApiKeys() {
   console.log("📥 loadApiKeys() has been called");
+  console.log("📍 ApiKeys call stack:", new Error().stack);
 
   try {
     const response = await fetch("/api/api-keys/");
@@ -54,7 +55,6 @@ async function loadApiKeys() {
 
     console.log(`✅ Rendered ${keys.length} API key rows`);
 
-    console.log("🔧 Calling ButtonBoxApiKeys.init()");
     ButtonBoxApiKeys.init();
 
     const waitForButtonBox = setInterval(() => {
@@ -62,15 +62,12 @@ async function loadApiKeys() {
         console.log("✅ ButtonBox.wireCheckboxes is available, wiring...");
         clearInterval(waitForButtonBox);
         ButtonBox.wireCheckboxes("api");
-      } else {
-        console.log("⏳ Waiting for ButtonBox.wireCheckboxes...");
       }
     }, 50);
 
     const toggle = document.getElementById("api-show-id-toggle");
     console.log("🔍 api-show-id-toggle element:", toggle);
     if (toggle) {
-      console.log("✅ Found api-show-id-toggle, adding event listener");
       toggle.addEventListener("change", () => {
         const visible = toggle.checked;
         console.log(`🔁 Toggling ID column visibility: ${visible}`);
@@ -93,7 +90,6 @@ async function loadApiKeys() {
   }
 }
 
-// ✅ Init logic with tab visibility guard
 (() => {
   console.log("🧪 ApiKeys IIFE script init running...");
   if (window.API_KEYS_SCRIPT_LOADED) {
@@ -109,6 +105,4 @@ async function loadApiKeys() {
   };
 
   window.handleApiKeyAction = ButtonBoxRows.handleRowAction;
-
-  console.log("🧪 API_KEYS_SCRIPT_LOADED set = true");
 })();

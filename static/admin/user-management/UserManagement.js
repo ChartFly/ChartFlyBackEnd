@@ -4,6 +4,8 @@ console.log("🧭 UserManagement.js loaded");
 
 async function loadAdminUsers() {
   console.log("🔥 loadAdminUsers() has been called");
+  console.log("📍 UserManagement call stack:", new Error().stack);
+
   try {
     const response = await fetch(
       "https://chartflybackend.onrender.com/api/users/"
@@ -53,15 +55,11 @@ async function loadAdminUsers() {
     console.log(`✅ Rendered ${users.length} admin user rows`);
 
     if (window.ButtonBoxUserManagement?.init) {
-      console.log("✅ ButtonBoxUserManagement.init available, calling...");
       ButtonBoxUserManagement.init();
-    } else {
-      console.warn("⚠️ ButtonBoxUserManagement.init not found!");
     }
 
     const waitForButtonBox = setInterval(() => {
       if (window.ButtonBox?.wireCheckboxes) {
-        console.log("✅ ButtonBox.wireCheckboxes is available, wiring...");
         clearInterval(waitForButtonBox);
         ButtonBox.wireCheckboxes("user");
       }
@@ -74,7 +72,6 @@ async function loadAdminUsers() {
       if (toggle) {
         toggle.addEventListener("change", () => {
           const visible = toggle.checked;
-          console.log(`🔁 Toggling ID column visibility: ${visible}`);
           document
             .querySelectorAll("#user-management-section .line-id-col")
             .forEach((cell) => {
@@ -82,9 +79,7 @@ async function loadAdminUsers() {
             });
         });
         toggle.dispatchEvent(new Event("change"));
-        console.log("✅ user-show-id-toggle wired successfully");
       } else {
-        console.warn("⚠️ user-show-id-toggle still not found — retrying...");
         setTimeout(waitForIdToggle, 100);
       }
     }
