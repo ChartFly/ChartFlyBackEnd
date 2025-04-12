@@ -1,114 +1,123 @@
-// static/admin/user-management/UserManagement.js
+// static/admin/market-holidays/MarketHolidays.js
 
-console.log("🧭 UserManagement.js loaded");
+console.log("🧭 MarketHolidays.js loaded");
 
-async function loadAdminUsers() {
-  console.log("🔥 loadAdminUsers() has been called");
-  console.log("📍 UserManagement call stack:", new Error().stack);
+async function loadMarketHolidays() {
+  console.log("📥 loadMarketHolidays() called");
+  console.log("📍 MarketHolidays call stack:", new Error().stack);
 
   try {
-    const response = await fetch(
-      "https://chartflybackend.onrender.com/api/users/"
-    );
-    if (!response.ok) throw new Error("Failed to fetch admin users");
+    const response = await fetch("/api/holidays/year/2025");
+    if (!response.ok) throw new Error("Failed to fetch market holidays");
 
-    const users = await response.json();
-    console.log("✅ Admin users fetched:", users);
+    const holidays = await response.json();
+    console.log("✅ Holidays fetched:", holidays);
 
-    const table = document.getElementById("user-management-table");
-    if (!table) throw new Error("❌ user-management-table element not found");
+    const table = document.getElementById("holidays-table");
+    console.log("🔍 holidays-table:", table);
+    const tbody = table?.querySelector("tbody");
+    console.log("🔍 tbody:", tbody);
+    if (!tbody) throw new Error("Missing <tbody> in holidays table");
 
-    let tbody =
-      table.querySelector("tbody") || table.getElementsByTagName("tbody")[0];
-    if (!tbody) {
-      console.error("❌ <tbody> not found inside user-management-table");
-      return;
-    }
-
-    console.log("🧹 Clearing existing rows");
     tbody.innerHTML = "";
 
-    users.forEach((user, index) => {
-      console.log(`🔧 Rendering user row ${index + 1}:`, user);
+    holidays.forEach((holiday, index) => {
+      console.log(`🔧 Rendering holiday row ${index + 1}:`, holiday);
       const row = document.createElement("tr");
-      row.setAttribute("data-id", user.id);
+      row.setAttribute("data-id", holiday.id);
       row.setAttribute("data-index", index + 1);
 
+      const status = getHolidayStatus(holiday.date);
+
       row.innerHTML = `
-        <td class="col-select"><input type="checkbox" class="user-select-checkbox" data-id="${
-          user.id
+        <td class="col-select"><input type="checkbox" class="holiday-select-checkbox" data-id="${
+          holiday.id
         }"></td>
-        <td class="line-id-col">${user.id}</td>
-        <td>${sanitizeInput(user.first_name || "")}</td>
-        <td>${sanitizeInput(user.last_name || "")}</td>
-        <td>${sanitizeInput(user.email || "")}</td>
-        <td>${sanitizeInput(user.username || "")}</td>
-        <td>${sanitizeInput(user.role || "")}</td>
-        <td>${sanitizeInput(user.is_2fa_enabled ? "Yes" : "No")}</td>
-        <td>${sanitizeInput(user.status || "")}</td>
-        <td>${sanitizeInput(user.last_login || "")}</td>
+        <td class="line-id-col">${holiday.id}</td>
+        <td>${sanitizeInput(holiday.name || "")}</td>
+        <td>${sanitizeInput(holiday.date || "")}</td>
+        <td>${status}</td>
+        <td>${sanitizeInput(holiday.close_time || "")}</td>
       `;
 
       tbody.appendChild(row);
     });
 
-    console.log(`✅ Rendered ${users.length} admin user rows`);
+    console.log(`✅ Rendered ${holidays.length} holidays`);
+    window.updateHolidayTicker?.(holidays);
 
-    if (window.ButtonBoxUserManagement?.init) {
-      ButtonBoxUserManagement.init();
-    }
+    const waitForInit = setInterval(() => {
+      const ready =
+        window.ButtonBoxMarketHolidays?.init &&
+        window.ButtonBox?.wireCheckboxes;
 
-    const waitForButtonBox = setInterval(() => {
-      if (window.ButtonBox?.wireCheckboxes) {
-        clearInterval(waitForButtonBox);
-        ButtonBox.wireCheckboxes("user");
+      if (ready) {
+        console.log("✅ ButtonBox and MarketHolidays init functions available");
+        clearInterval(waitForInit);
+        ButtonBoxMarketHolidays.init();
+        setTimeout(() => {
+          console.log("✅ Calling wireCheckboxes for 'holiday'");
+          ButtonBox.wireCheckboxes("holiday");
+        }, 100);
+      } else {
+        console.log("⏳ Waiting for ButtonBox to initialize...");
       }
     }, 50);
 
-    function waitForIdToggle() {
-      const toggle = document.getElementById("user-show-id-toggle");
-      console.log("🔍 user-show-id-toggle:", toggle);
-
-      if (toggle) {
-        toggle.addEventListener("change", () => {
-          const visible = toggle.checked;
-          document
-            .querySelectorAll("#user-management-section .line-id-col")
-            .forEach((cell) => {
-              cell.style.display = visible ? "table-cell" : "none";
-            });
-        });
-        toggle.dispatchEvent(new Event("change"));
-      } else {
-        setTimeout(waitForIdToggle, 100);
-      }
+    const toggle = document.getElementById("holiday-show-id-toggle");
+    console.log("🔍 holiday-show-id-toggle:", toggle);
+    if (toggle) {
+      toggle.addEventListener("change", () => {
+        const visible = toggle.checked;
+        console.log(`🔁 Toggling holiday ID column visibility: ${visible}`);
+        document
+          .querySelectorAll("#market-holidays-section .line-id-col")
+          .forEach((cell) => {
+            cell.style.display = visible ? "table-cell" : "none";
+          });
+      });
+      toggle.dispatchEvent(new Event("change"));
+    } else {
+      console.warn("⚠️ holiday-show-id-toggle not found");
     }
-
-    requestAnimationFrame(waitForIdToggle);
-  } catch (error) {
-    console.error("❌ Failed to load admin users:", error);
-    const tbody = document.querySelector("#user-management-table tbody");
-    if (tbody) {
-      tbody.innerHTML = `<tr><td colspan="10">Failed to load admin users. Please try again later.</td></tr>`;
+  } catch (err) {
+    console.error("❌ loadMarketHolidays() error:", err);
+    const fallback = document.querySelector("#holidays-table tbody");
+    if (fallback) {
+      fallback.innerHTML = `<tr><td colspan="6">Failed to load holidays. Please try again later.</td></tr>`;
     }
   }
 }
 
+function getHolidayStatus(dateStr) {
+  try {
+    const today = new Date();
+    const date = new Date(dateStr);
+    if (isNaN(date)) return "—";
+
+    const todayStr = today.toISOString().slice(0, 10);
+    const dateStrClean = date.toISOString().slice(0, 10);
+
+    return todayStr === dateStrClean
+      ? "Today"
+      : date < today
+      ? "Passed"
+      : "Upcoming";
+  } catch {
+    return "—";
+  }
+}
+
 (() => {
-  console.log("🧪 UserManagement IIFE initializing...");
-  if (window.ADMIN_USERS_LOADED) {
-    console.log("⚠️ ADMIN_USERS_LOADED already true, skipping...");
+  console.log("🧪 MarketHolidays IIFE initializing...");
+  if (window.MARKET_HOLIDAYS_LOADED) {
+    console.log("⚠️ MARKET_HOLIDAYS_LOADED already true, skipping...");
     return;
   }
 
-  console.log("✅ ADMIN_USERS_LOADED now set to true");
-  window.ADMIN_USERS_LOADED = true;
-
-  window.sanitizeInput = function (input) {
-    return typeof input === "string"
-      ? input.replace(/</g, "&lt;").replace(/>/g, "&gt;")
-      : input ?? "—";
-  };
-
-  window.handleUserAction = ButtonBoxRows.handleRowAction;
+  console.log("✅ MARKET_HOLIDAYS_LOADED now set to true");
+  window.MARKET_HOLIDAYS_LOADED = true;
+  window.handleHolidayAction = ButtonBoxRows.handleRowAction;
 })();
+
+window.addEventListener("DOMContentLoaded", loadMarketHolidays);
