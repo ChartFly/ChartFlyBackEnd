@@ -22,6 +22,8 @@
   border: 1px solid #ccc;
   border-radius: 6px;
   min-height: 200px;
+  height: auto; /* ✅ Prevent collapse */
+  visibility: visible; /* ✅ Force render */
 }
 
 /* 📊 Table Styles */
@@ -31,6 +33,9 @@
   border-collapse: collapse;
   table-layout: fixed;
   font-size: 0.95rem;
+  display: table; /* ✅ Required to show table */
+  height: auto; /* ✅ Prevent zero height */
+  visibility: visible;
 }
 
 /* 📐 Force cell layout */
@@ -132,17 +137,10 @@
   border: 1px solid #ff4d4d;
 }
 
-/* 🛠️ Emergency Fix for Table Visibility */
-#api-keys-section .table-wrapper {
+/* 🧪 Optional DEBUG Safeguards */
+#api-keys-section {
+  min-height: 300px;
   display: block !important;
-  min-height: 200px !important;
-  height: auto !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-}
-
-#api-keys-section .admin-table {
-  display: table !important;
   visibility: visible !important;
   opacity: 1 !important;
 }
