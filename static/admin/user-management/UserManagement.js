@@ -11,7 +11,16 @@ async function loadAdminUsers() {
     const users = await response.json();
     const table = document.getElementById("user-management-table");
     if (!table) throw new Error("❌ user-management-table element not found");
-    table.innerHTML = "";
+
+    let tbody =
+      table.querySelector("tbody") || table.getElementsByTagName("tbody")[0];
+    if (!tbody) {
+      console.error("❌ <tbody> not found inside user-management-table");
+      return;
+    }
+
+    console.log("🧹 Clearing existing rows");
+    tbody.innerHTML = "";
 
     users.forEach((user, index) => {
       const row = document.createElement("tr");
@@ -33,9 +42,10 @@ async function loadAdminUsers() {
         <td>${sanitizeInput(user.last_login || "")}</td>
       `;
 
-      table.appendChild(row);
+      tbody.appendChild(row);
     });
 
+    console.log(`✅ Rendered ${users.length} admin user rows`);
     ButtonBoxUserManagement.init();
 
     const waitForButtonBox = setInterval(() => {
@@ -51,10 +61,9 @@ async function loadAdminUsers() {
         toggle.addEventListener("change", () => {
           document
             .querySelectorAll("#user-management-section .line-id-col")
-            .forEach(
-              (cell) =>
-                (cell.style.display = toggle.checked ? "table-cell" : "none")
-            );
+            .forEach((cell) => {
+              cell.style.display = toggle.checked ? "table-cell" : "none";
+            });
         });
         toggle.dispatchEvent(new Event("change"));
         console.log("✅ user-show-id-toggle wired successfully");
@@ -67,9 +76,9 @@ async function loadAdminUsers() {
     requestAnimationFrame(waitForIdToggle);
   } catch (error) {
     console.error("❌ Failed to load admin users:", error);
-    const table = document.getElementById("user-management-table");
-    if (table) {
-      table.innerHTML = `<tr><td colspan="10">Failed to load admin users. Please try again later.</td></tr>`;
+    const tbody = document.querySelector("#user-management-table tbody");
+    if (tbody) {
+      tbody.innerHTML = `<tr><td colspan="10">Failed to load admin users. Please try again later.</td></tr>`;
     }
   }
 }

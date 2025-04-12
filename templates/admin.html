@@ -1,11 +1,4 @@
-<!-- =================================================== -->
-<!-- ✅ ChartFly Admin Panel Layout (admin.html)         -->
-<!-- Main layout for the Admin Dashboard UI              -->
-<!-- Includes: Header, Tabs, Footer, Shared Scripts      -->
-<!-- Author: ChartFly Dev Team                           -->
-<!-- Last Updated: 2025-04-11                            -->
-<!-- =================================================== -->
-
+<!-- templates/admin/admin.html -->
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -57,8 +50,8 @@
       </div>
     </div>
 
-    <!-- ✅ Tab Sections -->
-    <div id="market-holidays-section" class="tab-section">
+    <!-- ✅ Tab Content Sections -->
+    <div id="market-holidays-section" class="tab-section" style="display: none">
       {% include "admin/market-holidays/MarketHolidays.html" %}
     </div>
     <div id="api-keys-section" class="tab-section" style="display: none">
@@ -74,22 +67,16 @@
     <script src="/static/admin/shared/ButtonBoxRows.js"></script>
     <script src="/static/admin/shared/ButtonBoxColumns.js"></script>
 
-    <!-- ✅ Frontend Core -->
+    <!-- ✅ Core + Sections -->
     <script src="/static/frontend/core/main.js"></script>
-
-    <!-- ✅ Market Holidays -->
     <script src="/static/admin/market-holidays/MarketHolidays.js"></script>
     <script src="/static/admin/market-holidays/ButtonBoxMarketHolidays.js"></script>
-
-    <!-- ✅ API Keys -->
     <script src="/static/admin/api-keys/ApiKeys.js"></script>
     <script src="/static/admin/api-keys/ButtonBoxApiKeys.js"></script>
-
-    <!-- ✅ User Management -->
     <script src="/static/admin/user-management/UserManagement.js"></script>
     <script src="/static/admin/user-management/ButtonBoxUserManagement.js"></script>
 
-    <!-- ✅ Footer with Holiday Ticker -->
+    <!-- ✅ Footer -->
     <footer class="admin-footer">
       <div class="footer-ticker">
         <span id="holiday-ticker" class="ticker-content">🎉 Loading...</span>
@@ -102,7 +89,7 @@
       </div>
     </footer>
 
-    <!-- ✅ Tab Switching + Loaders -->
+    <!-- ✅ Tab Logic -->
     <script>
       function switchTab(sectionId) {
         document.querySelectorAll(".tab-section").forEach((section) => {
@@ -129,7 +116,7 @@
             window.API_TAB_LOADED = true;
             setTimeout(loadApiKeys, 100);
           } else {
-            setTimeout(loadApiKeys, 100); // Re-render to fix visibility
+            setTimeout(loadApiKeys, 100);
           }
         }
 
