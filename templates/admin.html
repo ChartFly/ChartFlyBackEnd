@@ -1,17 +1,13 @@
 <!-- templates/admin/admin.html -->
+<!-- 🚨 Isolation Mode – Comment/Uncomment sections below to debug layout issues -->
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <title>ChartFly Admin Panel</title>
 
-    <link
-      rel="icon"
-      type="image/x-icon"
-      href="/static/images/ChartFly-Favicon.ico"
-    />
-
-    <!-- ✅ Stylesheets -->
+    <!-- 🔗 Styles -->
     <link rel="stylesheet" href="/static/css/styles.css?v=2" />
     <link
       rel="stylesheet"
@@ -26,7 +22,6 @@
   </head>
 
   <body>
-    <!-- ✅ Header -->
     <div class="admin-header">
       <img
         src="/static/images/Chartfly-logo.png"
@@ -39,7 +34,7 @@
       </div>
     </div>
 
-    <!-- ✅ Tabs -->
+    <!-- 🔘 Tab Buttons (Leave Active) -->
     <div class="tab-container">
       <div class="tab" onclick="switchTab('market-holidays-section')">
         Market Holidays
@@ -50,7 +45,9 @@
       </div>
     </div>
 
-    <!-- ✅ Tab Content Sections -->
+    <!-- 🔍 Toggle Each Section Below for Testing -->
+
+    <!-- ✅ Market Holidays -->
     <section
       id="market-holidays-section"
       class="admin-tab-section"
@@ -59,29 +56,27 @@
       {% include "admin/market-holidays/MarketHolidays.html" %}
     </section>
 
-    <section
-      id="api-keys-section"
-      class="admin-tab-section"
-      style="display: none"
-    >
+    <!-- ✅ API Keys -->
+    <!--
+    <section id="api-keys-section" class="admin-tab-section" style="display: none;">
       {% include "admin/api-keys/ApiKeys.html" %}
     </section>
+    -->
 
-    <section
-      id="user-management-section"
-      class="admin-tab-section"
-      style="display: none"
-    >
+    <!-- ✅ User Management -->
+    <!--
+    <section id="user-management-section" class="admin-tab-section" style="display: none;">
       {% include "admin/user-management/UserManagement.html" %}
     </section>
+    -->
 
-    <!-- ✅ Shared Modules -->
+    <!-- 📦 Shared Modules -->
     <script src="/static/admin/shared/ButtonBox.js"></script>
     <script src="/static/admin/shared/ButtonBoxMessages.js"></script>
     <script src="/static/admin/shared/ButtonBoxRows.js"></script>
     <script src="/static/admin/shared/ButtonBoxColumns.js"></script>
 
-    <!-- ✅ Core Scripts -->
+    <!-- 🧠 Core Logic -->
     <script src="/static/frontend/core/main.js"></script>
     <script src="/static/admin/market-holidays/MarketHolidays.js"></script>
     <script src="/static/admin/market-holidays/ButtonBoxMarketHolidays.js"></script>
@@ -90,7 +85,7 @@
     <script src="/static/admin/user-management/UserManagement.js"></script>
     <script src="/static/admin/user-management/ButtonBoxUserManagement.js"></script>
 
-    <!-- ✅ Footer -->
+    <!-- 🦶 Footer -->
     <footer class="admin-footer">
       <div class="footer-ticker">
         <span id="holiday-ticker" class="ticker-content">🎉 Loading...</span>
@@ -103,7 +98,7 @@
       </div>
     </footer>
 
-    <!-- ✅ Tab Switch Logic -->
+    <!-- 🧠 Tab Control -->
     <script>
       function switchTab(sectionId) {
         document.querySelectorAll(".admin-tab-section").forEach((section) => {
