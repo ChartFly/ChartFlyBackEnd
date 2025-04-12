@@ -102,10 +102,12 @@
     <!-- ✅ Tab Logic -->
     <script>
       function switchTab(sectionId) {
+        // Show the correct section
         document.querySelectorAll(".admin-tab-section").forEach((section) => {
           section.style.display = section.id === sectionId ? "block" : "none";
         });
 
+        // Highlight the active tab
         document.querySelectorAll(".tab").forEach((tab) => {
           tab.classList.toggle(
             "active",
@@ -113,6 +115,7 @@
           );
         });
 
+        // Load each section's data once
         if (
           sectionId === "market-holidays-section" &&
           !window.MARKET_TAB_LOADED
@@ -121,13 +124,9 @@
           loadMarketHolidays();
         }
 
-        if (sectionId === "api-keys-section") {
-          if (!window.API_TAB_LOADED) {
-            window.API_TAB_LOADED = true;
-            setTimeout(loadApiKeys, 100);
-          } else {
-            setTimeout(loadApiKeys, 100);
-          }
+        if (sectionId === "api-keys-section" && !window.API_TAB_LOADED) {
+          window.API_TAB_LOADED = true;
+          loadApiKeys();
         }
 
         if (
@@ -136,7 +135,7 @@
         ) {
           window.USER_TAB_LOADED = true;
           loadAdminUsers();
-          ButtonBoxUserManagement.init(); // ✅ manually initialize here
+          ButtonBoxUserManagement.init();
         }
       }
 
