@@ -1,6 +1,6 @@
 // static/admin/user-management/UserManagement.js
 
-console.log("🧭 UserManagement.js loaded");
+console.log("🌭 UserManagement.js loaded");
 
 async function loadAdminUsers() {
   console.log("🔥 loadAdminUsers() has been called");
@@ -95,7 +95,7 @@ async function loadAdminUsers() {
 }
 
 (() => {
-  console.log("🧪 UserManagement IIFE initializing...");
+  console.log("🤪 UserManagement IIFE initializing...");
   if (window.ADMIN_USERS_LOADED) {
     console.log("⚠️ ADMIN_USERS_LOADED already true, skipping...");
     return;
