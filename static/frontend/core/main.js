@@ -19,23 +19,32 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // ✅ Use admin.html's switchTab logic (no showTab override!)
   console.log("📍 Initial tab logic starting...");
+  let tabId;
   if (!location.hash) {
     console.log("🔁 No hash, defaulting to market-holidays-section");
-    switchTab("market-holidays-section");
-    location.hash = "market-holidays-section";
+    tabId = "market-holidays-section";
+    location.hash = tabId;
   } else {
-    const tabId = location.hash.replace("#", "");
+    tabId = location.hash.replace("#", "");
     console.log(`🔁 Hash present, loading section: ${tabId}`);
     if (
-      [
+      ![
         "market-holidays-section",
         "api-keys-section",
         "user-management-section",
       ].includes(tabId)
     ) {
-      switchTab(tabId);
+      tabId = "market-holidays-section";
+      location.hash = tabId;
     }
   }
+
+  switchTab(tabId);
+
+  // 🔨 RADICAL FIX: Force-hide all other sections again
+  document.querySelectorAll(".admin-tab-section").forEach((el) => {
+    el.style.display = el.id === tabId ? "block" : "none";
+  });
 });
 
 // ✅ Market status display logic
