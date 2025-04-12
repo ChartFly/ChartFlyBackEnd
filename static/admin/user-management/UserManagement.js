@@ -15,13 +15,13 @@ async function loadAdminUsers() {
     const users = await response.json();
     console.log("✅ Admin users fetched:", users);
 
-    const table = document.getElementById("user-management-table");
-    if (!table) throw new Error("❌ user-management-table element not found");
+    const table = document.getElementById("user-table");
+    if (!table) throw new Error("❌ user-table element not found");
 
     let tbody =
       table.querySelector("tbody") || table.getElementsByTagName("tbody")[0];
     if (!tbody) {
-      console.error("❌ <tbody> not found inside user-management-table");
+      console.error("❌ <tbody> not found inside user-table");
       return;
     }
 
@@ -87,7 +87,7 @@ async function loadAdminUsers() {
     requestAnimationFrame(waitForIdToggle);
   } catch (error) {
     console.error("❌ Failed to load admin users:", error);
-    const tbody = document.querySelector("#user-management-table tbody");
+    const tbody = document.querySelector("#user-table tbody");
     if (tbody) {
       tbody.innerHTML = `<tr><td colspan="10">Failed to load admin users. Please try again later.</td></tr>`;
     }
