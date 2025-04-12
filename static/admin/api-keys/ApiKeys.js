@@ -97,11 +97,6 @@ async function loadApiKeys() {
 
   window.handleApiKeyAction = ButtonBoxRows.handleRowAction;
 
-  // Load only if already visible (e.g. tab clicked before init)
-  window.addEventListener("DOMContentLoaded", () => {
-    const section = document.getElementById("api-keys-section");
-    const isVisible = section && getComputedStyle(section).display !== "none";
-    console.log("📦 DOMContentLoaded — api-keys-section visible:", isVisible);
-    if (isVisible) loadApiKeys();
-  });
+  // 🧪 TEMP FIX: DO NOT AUTO-RUN on DOMContentLoaded
+  // We'll let switchTab() handle it explicitly
 })();
