@@ -2,29 +2,26 @@
 <section id="api-keys-section" class="admin-tab-section" style="display: none">
   <h2>Manage API Keys</h2>
 
-  <div class="table-container">
-    <!-- ✅ Modular ButtonBox -->
-    {% set section = "api" %} {% include "shared/ButtonBox.html" %}
+  <!-- ✅ Modular ButtonBox -->
+  {% set section = "api" %} {% include "shared/ButtonBox.html" %}
 
-    <!-- 📊 API Keys Table -->
-    <div class="table-wrapper">
-      <table id="api-keys-table" class="admin-table">
-        <thead>
-          <tr>
-            <th class="col-select">Select</th>
-            <th class="line-id-col" style="display: none">ID</th>
-            <th>Name</th>
-            <th>Provider</th>
-            <th>Key Label</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td colspan="6">Loading API keys...</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+  <div class="table-wrapper">
+    <table id="api-keys-table" class="admin-table">
+      <thead>
+        <tr>
+          <th class="col-select">Select</th>
+          <th class="line-id-col" style="display: none">ID</th>
+          <th>Name</th>
+          <th>Provider</th>
+          <th>Key Label</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td colspan="6">Loading API keys...</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </section>
