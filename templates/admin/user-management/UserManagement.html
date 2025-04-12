@@ -4,29 +4,24 @@
   class="admin-tab-section"
   style="display: none"
 >
-  <h2>🟥 Manage Admin Users</h2>
+  <h2>Manage Admin Users 👤</h2>
 
   {% set section = "user" %} {% include "shared/ButtonBox.html" with context %}
 
   <div class="table-wrapper">
-    <table id="user-management-table" class="admin-table">
+    <table id="user-table" class="admin-table">
       <thead>
         <tr>
           <th class="col-select">Select</th>
           <th class="line-id-col" style="display: none">ID</th>
-          <th>First</th>
-          <th>Last</th>
+          <th>Name</th>
           <th>Email</th>
-          <th>Username</th>
-          <th>Role</th>
-          <th>2FA</th>
-          <th>Status</th>
-          <th>Last Login</th>
+          <th>Phone</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td colspan="10">Loading users...</td>
+          <td colspan="5">Loading admin users...</td>
         </tr>
       </tbody>
     </table>
