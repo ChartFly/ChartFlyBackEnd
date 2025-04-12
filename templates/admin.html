@@ -50,10 +50,30 @@
       </div>
     </div>
 
-    <!-- ✅ Tab Content Sections -->
-    {% include "admin/market-holidays/MarketHolidays.html" %} {% include
-    "admin/api-keys/ApiKeys.html" %} {% include
-    "admin/user-management/UserManagement.html" %}
+    <!-- ✅ Tab Content Sections (all hidden by default) -->
+    <section
+      id="market-holidays-section"
+      class="admin-tab-section"
+      style="display: none"
+    >
+      {% include "admin/market-holidays/MarketHolidays.html" %}
+    </section>
+
+    <section
+      id="api-keys-section"
+      class="admin-tab-section"
+      style="display: none"
+    >
+      {% include "admin/api-keys/ApiKeys.html" %}
+    </section>
+
+    <section
+      id="user-management-section"
+      class="admin-tab-section"
+      style="display: none"
+    >
+      {% include "admin/user-management/UserManagement.html" %}
+    </section>
 
     <!-- ✅ Shared Modules -->
     <script src="/static/admin/shared/ButtonBox.js"></script>
