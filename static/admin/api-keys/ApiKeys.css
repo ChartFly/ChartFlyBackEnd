@@ -131,3 +131,18 @@
   background-color: #ffe5e5;
   border: 1px solid #ff4d4d;
 }
+
+/* 🛠️ Emergency Fix for Table Visibility */
+#api-keys-section .table-wrapper {
+  display: block !important;
+  min-height: 200px !important;
+  height: auto !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+#api-keys-section .admin-table {
+  display: table !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
