@@ -1,45 +1,39 @@
 <!-- templates/admin/user-management/UserManagement.html -->
 
-<section
-  id="user-management-section"
-  class="admin-tab-section"
-  style="display: none"
->
-  <h2>Manage Admin Users</h2>
+<h2>Manage Admin Users</h2>
 
-  <!-- ✅ Modular ButtonBox -->
-  {% set section = "user" %} {% include "shared/ButtonBox.html" %}
+<!-- ✅ Modular ButtonBox -->
+{% set section = "user" %} {% include "shared/ButtonBox.html" %}
 
-  <!-- 🆔 Show ID Toggle -->
-  <div class="toggle-ids">
-    <label>
-      <input type="checkbox" id="user-show-id-toggle" />
-      Show Database IDs
-    </label>
-  </div>
+<!-- 🆔 Show ID Toggle -->
+<div class="toggle-ids">
+  <label>
+    <input type="checkbox" id="user-show-id-toggle" />
+    Show Database IDs
+  </label>
+</div>
 
-  <!-- 📋 User Table -->
-  <div class="table-wrapper">
-    <table id="user-management-table" class="admin-table">
-      <thead>
-        <tr>
-          <th class="col-select">Select</th>
-          <th class="line-id-col" style="display: none">ID</th>
-          <th>First</th>
-          <th>Last</th>
-          <th>Email</th>
-          <th>Username</th>
-          <th>Role</th>
-          <th>2FA</th>
-          <th>Status</th>
-          <th>Last Login</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td colspan="10">Loading users...</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</section>
+<!-- 📋 User Table -->
+<div class="table-wrapper">
+  <table id="user-management-table" class="admin-table">
+    <thead>
+      <tr>
+        <th class="col-select">Select</th>
+        <th class="line-id-col" style="display: none">ID</th>
+        <th>First</th>
+        <th>Last</th>
+        <th>Email</th>
+        <th>Username</th>
+        <th>Role</th>
+        <th>2FA</th>
+        <th>Status</th>
+        <th>Last Login</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td colspan="10">Loading users...</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

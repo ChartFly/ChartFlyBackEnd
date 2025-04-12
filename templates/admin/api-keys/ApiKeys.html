@@ -1,37 +1,35 @@
-<!--- templates/admin/api-keys/ApiKeys.html --->
+<!-- templates/admin/api-keys/ApiKeys.html -->
 
-<section id="api-keys-section" class="admin-tab-section" style="display: none">
-  <h2>Manage API Keys</h2>
+<h2>Manage API Keys</h2>
 
-  <!-- ✅ Modular ButtonBox -->
-  {% set section = "api" %} {% include "shared/ButtonBox.html" %}
+<!-- ✅ Modular ButtonBox -->
+{% set section = "api" %} {% include "shared/ButtonBox.html" %}
 
-  <!-- 🆔 Show ID Toggle -->
-  <div class="toggle-ids">
-    <label>
-      <input type="checkbox" id="api-show-id-toggle" />
-      Show Database IDs
-    </label>
-  </div>
+<!-- 🆔 Show ID Toggle -->
+<div class="toggle-ids">
+  <label>
+    <input type="checkbox" id="api-show-id-toggle" />
+    Show Database IDs
+  </label>
+</div>
 
-  <!-- 📊 API Keys Table -->
-  <div class="table-wrapper">
-    <table id="api-keys-table" class="admin-table">
-      <thead>
-        <tr>
-          <th class="col-select">Select</th>
-          <th class="line-id-col" style="display: none">ID</th>
-          <th>Name</th>
-          <th>Provider</th>
-          <th>Key Label</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td colspan="6">Loading API keys...</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</section>
+<!-- 📊 API Keys Table -->
+<div class="table-wrapper">
+  <table id="api-keys-table" class="admin-table">
+    <thead>
+      <tr>
+        <th class="col-select">Select</th>
+        <th class="line-id-col" style="display: none">ID</th>
+        <th>Name</th>
+        <th>Provider</th>
+        <th>Key Label</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td colspan="6">Loading API keys...</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
