@@ -106,17 +106,30 @@
     <!-- ✅ Tab Switch Logic -->
     <script>
       function switchTab(sectionId) {
-        document.querySelectorAll(".admin-tab-section").forEach((section) => {
-          section.style.display = section.id === sectionId ? "block" : "none";
-        });
+        console.log("🧭 switchTab called with:", sectionId);
 
+        // 💣 Forcefully hide ALL tab sections
+        const sections = document.querySelectorAll(".admin-tab-section");
+        for (let section of sections) {
+          section.style.display = "none";
+        }
+
+        // ✅ Show only the desired tab
+        const target = document.getElementById(sectionId);
+        if (target) {
+          target.style.display = "block";
+          console.log("✅ Now displaying:", sectionId);
+        } else {
+          console.warn("⚠️ Could not find target section:", sectionId);
+        }
+
+        // 🖱️ Update tab active classes
         document.querySelectorAll(".tab").forEach((tab) => {
-          tab.classList.toggle(
-            "active",
-            tab.getAttribute("onclick").includes(sectionId)
-          );
+          const isActive = tab.getAttribute("onclick")?.includes(sectionId);
+          tab.classList.toggle("active", isActive);
         });
 
+        // 🧠 Load tab content only once
         if (
           sectionId === "market-holidays-section" &&
           !window.MARKET_TAB_LOADED
@@ -141,6 +154,7 @@
       }
 
       document.addEventListener("DOMContentLoaded", () => {
+        console.log("🚀 DOMContentLoaded → Forcing tab switch to default");
         switchTab("market-holidays-section");
       });
     </script>
