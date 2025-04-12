@@ -1,26 +1,30 @@
 <!-- templates/admin/market-holidays/MarketHolidays.html -->
+<section
+  id="market-holidays-section"
+  class="admin-tab-section"
+  style="display: none"
+>
+  <h2>Manage Market Holidays</h2>
 
-<h2>Manage Market Holidays</h2>
+  {% set section = "holiday" %} {% include "shared/ButtonBox.html" with context
+  %}
 
-<!-- ✅ Modular ButtonBox -->
-{% set section = "holiday" %} {% include "shared/ButtonBox.html" with context %}
-
-<!-- 📅 Holidays Table -->
-<div class="table-wrapper">
-  <table id="holidays-table" class="admin-table">
-    <thead>
-      <tr>
-        <th class="col-select">Select</th>
-        <th class="line-id-col" style="display: none">ID</th>
-        <th>Name</th>
-        <th>Date</th>
-        <th>Close Time</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td colspan="5">Loading holidays...</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+  <div class="table-wrapper">
+    <table id="holidays-table" class="admin-table">
+      <thead>
+        <tr>
+          <th class="col-select">Select</th>
+          <th class="line-id-col" style="display: none">ID</th>
+          <th>Name</th>
+          <th>Date</th>
+          <th>Close Time</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td colspan="5">Loading holidays...</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
