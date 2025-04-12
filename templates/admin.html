@@ -19,12 +19,17 @@
     />
 
     <!-- ✅ Stylesheets -->
-    <link rel="stylesheet" href="/static/css/styles.css" />
+    <link rel="stylesheet" href="/static/css/styles.css?v=2" />
     <link
       rel="stylesheet"
-      href="/static/admin/market-holidays/MarketHolidays.css"
+      href="/static/admin/market-holidays/MarketHolidays.css?v=2"
     />
-    <link rel="stylesheet" href="/static/admin/shared/ButtonBox.css" />
+    <link rel="stylesheet" href="/static/admin/api-keys/ApiKeys.css?v=2" />
+    <link
+      rel="stylesheet"
+      href="/static/admin/user-management/UserManagement.css?v=2"
+    />
+    <link rel="stylesheet" href="/static/admin/shared/ButtonBox.css?v=2" />
   </head>
 
   <body>
@@ -100,14 +105,8 @@
     <!-- ✅ Tab Switching + Loaders -->
     <script>
       function switchTab(sectionId) {
-        console.log(`🧭 Switching tab to: ${sectionId}`);
-
         document.querySelectorAll(".tab-section").forEach((section) => {
-          const isActive = section.id === sectionId;
-          section.style.display = isActive ? "block" : "none";
-          console.log(
-            `📦 ${section.id} display set to: ${section.style.display}`
-          );
+          section.style.display = section.id === sectionId ? "block" : "none";
         });
 
         document.querySelectorAll(".tab").forEach((tab) => {
@@ -122,18 +121,15 @@
           !window.MARKET_TAB_LOADED
         ) {
           window.MARKET_TAB_LOADED = true;
-          console.log("⏩ Loading Market Holidays...");
           loadMarketHolidays();
         }
 
         if (sectionId === "api-keys-section") {
           if (!window.API_TAB_LOADED) {
             window.API_TAB_LOADED = true;
-            console.log("⏩ Initial loadApiKeys()");
             setTimeout(loadApiKeys, 100);
           } else {
-            console.log("🔁 Re-running loadApiKeys() to refresh");
-            setTimeout(loadApiKeys, 100);
+            setTimeout(loadApiKeys, 100); // Re-render to fix visibility
           }
         }
 
@@ -142,13 +138,11 @@
           !window.USER_TAB_LOADED
         ) {
           window.USER_TAB_LOADED = true;
-          console.log("⏩ Loading Admin Users...");
           setTimeout(loadAdminUsers, 50);
         }
       }
 
       document.addEventListener("DOMContentLoaded", () => {
-        console.log("📥 DOM loaded, triggering initial tab...");
         switchTab("market-holidays-section");
       });
     </script>
