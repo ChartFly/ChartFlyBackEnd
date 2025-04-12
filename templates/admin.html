@@ -1,4 +1,3 @@
-<!-- templates/admin/admin.html -->
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -50,89 +49,29 @@
       </div>
     </div>
 
-    <!-- ✅ Market Holidays Section -->
+    <!-- ✅ Tab Content Sections (Clean Includes) -->
     <section
       id="market-holidays-section"
       class="admin-tab-section"
       style="display: none"
     >
-      <h2>📅 Manage Market Holidays</h2>
-      <div data-section="holiday">{% include 'shared/ButtonBox.html' %}</div>
-      <div class="table-wrapper">
-        <table id="holidays-table" class="admin-table">
-          <thead>
-            <tr>
-              <th class="col-select">Select</th>
-              <th class="line-id-col" style="display: none">ID</th>
-              <th>Name</th>
-              <th>Date</th>
-              <th>Close Time</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td colspan="5">Loading holidays...</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      {% include "admin/market-holidays/MarketHolidays.html" %}
     </section>
 
-    <!-- ✅ API Keys Section -->
     <section
       id="api-keys-section"
       class="admin-tab-section"
       style="display: none"
     >
-      <h2>🔷 Manage API Keys</h2>
-      <div data-section="api">{% include 'shared/ButtonBox.html' %}</div>
-      <div class="table-wrapper">
-        <table id="api-keys-table" class="admin-table">
-          <thead>
-            <tr>
-              <th class="col-select">Select</th>
-              <th class="line-id-col" style="display: none">ID</th>
-              <th>Name</th>
-              <th>Provider</th>
-              <th>Label</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td colspan="6">Loading API keys...</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      {% include "admin/api-keys/ApiKeys.html" %}
     </section>
 
-    <!-- ✅ User Management Section -->
     <section
       id="user-management-section"
       class="admin-tab-section"
       style="display: none"
     >
-      <h2>👤 Manage Admin Users</h2>
-      <div data-section="user">{% include 'shared/ButtonBox.html' %}</div>
-      <div class="table-wrapper">
-        <table id="user-table" class="admin-table">
-          <thead>
-            <tr>
-              <th class="col-select">Select</th>
-              <th class="line-id-col" style="display: none">ID</th>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Phone</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td colspan="5">Loading admin users...</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      {% include "admin/user-management/UserManagement.html" %}
     </section>
 
     <!-- ✅ Shared Scripts -->
@@ -171,10 +110,8 @@
         });
 
         document.querySelectorAll(".tab").forEach((tab) => {
-          tab.classList.toggle(
-            "active",
-            tab.getAttribute("onclick").includes(sectionId)
-          );
+          const isActive = tab.getAttribute("onclick")?.includes(sectionId);
+          tab.classList.toggle("active", isActive);
         });
 
         if (
