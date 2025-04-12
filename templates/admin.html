@@ -125,7 +125,8 @@
           !window.USER_TAB_LOADED
         ) {
           window.USER_TAB_LOADED = true;
-          setTimeout(loadAdminUsers, 50);
+          loadAdminUsers();
+          ButtonBoxUserManagement.init(); // ✅ manually initialize here
         }
       }
 

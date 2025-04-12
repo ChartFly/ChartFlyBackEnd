@@ -56,6 +56,3 @@ window.ButtonBoxUserManagement = (() => {
 
   return { init };
 })();
-
-// ✅ Run on load
-window.ButtonBoxUserManagement.init();
