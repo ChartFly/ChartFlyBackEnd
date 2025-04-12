@@ -1,8 +1,8 @@
 <!-- templates/admin/api-keys/ApiKeys.html -->
 <section id="api-keys-section" class="admin-tab-section" style="display: none">
-  <h2>Manage API Keys</h2>
+  <h2>🔷 Manage API Keys</h2>
 
-  {% set section = "api" %} {% include "shared/ButtonBox.html" %}
+  {% set section = "api" %} {% include "shared/ButtonBox.html" with context %}
 
   <div class="table-wrapper">
     <table id="api-keys-table" class="admin-table">
@@ -12,7 +12,7 @@
           <th class="line-id-col" style="display: none">ID</th>
           <th>Name</th>
           <th>Provider</th>
-          <th>Key Label</th>
+          <th>Label</th>
           <th>Status</th>
         </tr>
       </thead>
