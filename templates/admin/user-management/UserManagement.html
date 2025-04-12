@@ -1,32 +1,22 @@
-<!-- templates/admin/user-management/UserManagement.html -->
-<section
-  id="user-management-section"
-  class="admin-tab-section"
-  style="display: none"
->
-  <h2>👤 Manage Admin Users</h2>
-  <div style="font-weight: bold; color: goldenrod">
-    🔥 THIS IS USER MANAGEMENT
-  </div>
+<h2>👤 Manage Admin Users</h2>
 
-  {% set section = "user" %} {% include "shared/ButtonBox.html" with context %}
+{% set section = "user" %} {% include "shared/ButtonBox.html" with context %}
 
-  <div class="table-wrapper">
-    <table id="user-table" class="admin-table">
-      <thead>
-        <tr>
-          <th class="col-select">Select</th>
-          <th class="line-id-col" style="display: none">ID</th>
-          <th>Name</th>
-          <th>Email</th>
-          <th>Phone</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td colspan="5">Loading admin users...</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</section>
+<div class="table-wrapper">
+  <table id="user-table" class="admin-table">
+    <thead>
+      <tr>
+        <th class="col-select">Select</th>
+        <th class="line-id-col" style="display: none">ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Phone</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td colspan="5">Loading admin users...</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
