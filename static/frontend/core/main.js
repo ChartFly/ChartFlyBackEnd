@@ -4,12 +4,32 @@ document.addEventListener("DOMContentLoaded", function () {
   updateMarketStatus();
   loadHolidayTicker(); // ✅ Ticker now loads globally
 
-  // ✅ Use admin.html's switchTab logic (no showTab override!)
+  console.log("🚦 DOM fully loaded");
+
+  // Print section contents for debugging
+  [
+    "market-holidays-section",
+    "api-keys-section",
+    "user-management-section",
+  ].forEach((id) => {
+    const section = document.getElementById(id);
+    if (section) {
+      console.log(`🔎 Section: ${id}`);
+      console.log(section.innerHTML.slice(0, 500)); // print a snippet of the HTML
+    } else {
+      console.warn(`⚠️ Section missing: ${id}`);
+    }
+  });
+
+  // Track tab loading flow
+  console.log("📍 Initial tab logic starting...");
   if (!location.hash) {
+    console.log("🔁 No hash, defaulting to market-holidays-section");
     switchTab("market-holidays-section");
     location.hash = "market-holidays-section";
   } else {
     const tabId = location.hash.replace("#", "");
+    console.log(`🔁 Hash detected: ${tabId}`);
     if (
       [
         "market-holidays-section",
@@ -18,6 +38,8 @@ document.addEventListener("DOMContentLoaded", function () {
       ].includes(tabId)
     ) {
       switchTab(tabId);
+    } else {
+      console.warn(`⚠️ Unknown tab hash: ${tabId}`);
     }
   }
 });
