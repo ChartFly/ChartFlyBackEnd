@@ -1,5 +1,7 @@
 // static/admin/user-management/UserManagement.js
 
+console.log("🧭 UserManagement.js loaded");
+
 async function loadAdminUsers() {
   console.log("🔥 loadAdminUsers() has been called");
   try {
@@ -9,6 +11,8 @@ async function loadAdminUsers() {
     if (!response.ok) throw new Error("Failed to fetch admin users");
 
     const users = await response.json();
+    console.log("✅ Admin users fetched:", users);
+
     const table = document.getElementById("user-management-table");
     if (!table) throw new Error("❌ user-management-table element not found");
 
@@ -23,6 +27,7 @@ async function loadAdminUsers() {
     tbody.innerHTML = "";
 
     users.forEach((user, index) => {
+      console.log(`🔧 Rendering user row ${index + 1}:`, user);
       const row = document.createElement("tr");
       row.setAttribute("data-id", user.id);
       row.setAttribute("data-index", index + 1);
@@ -46,10 +51,17 @@ async function loadAdminUsers() {
     });
 
     console.log(`✅ Rendered ${users.length} admin user rows`);
-    ButtonBoxUserManagement.init();
+
+    if (window.ButtonBoxUserManagement?.init) {
+      console.log("✅ ButtonBoxUserManagement.init available, calling...");
+      ButtonBoxUserManagement.init();
+    } else {
+      console.warn("⚠️ ButtonBoxUserManagement.init not found!");
+    }
 
     const waitForButtonBox = setInterval(() => {
-      if (window.ButtonBox && ButtonBox.wireCheckboxes) {
+      if (window.ButtonBox?.wireCheckboxes) {
+        console.log("✅ ButtonBox.wireCheckboxes is available, wiring...");
         clearInterval(waitForButtonBox);
         ButtonBox.wireCheckboxes("user");
       }
@@ -57,12 +69,16 @@ async function loadAdminUsers() {
 
     function waitForIdToggle() {
       const toggle = document.getElementById("user-show-id-toggle");
+      console.log("🔍 user-show-id-toggle:", toggle);
+
       if (toggle) {
         toggle.addEventListener("change", () => {
+          const visible = toggle.checked;
+          console.log(`🔁 Toggling ID column visibility: ${visible}`);
           document
             .querySelectorAll("#user-management-section .line-id-col")
             .forEach((cell) => {
-              cell.style.display = toggle.checked ? "table-cell" : "none";
+              cell.style.display = visible ? "table-cell" : "none";
             });
         });
         toggle.dispatchEvent(new Event("change"));
@@ -84,7 +100,13 @@ async function loadAdminUsers() {
 }
 
 (() => {
-  if (window.ADMIN_USERS_LOADED) return;
+  console.log("🧪 UserManagement IIFE initializing...");
+  if (window.ADMIN_USERS_LOADED) {
+    console.log("⚠️ ADMIN_USERS_LOADED already true, skipping...");
+    return;
+  }
+
+  console.log("✅ ADMIN_USERS_LOADED now set to true");
   window.ADMIN_USERS_LOADED = true;
 
   window.sanitizeInput = function (input) {
