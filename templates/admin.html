@@ -10,6 +10,8 @@
       type="image/x-icon"
       href="/static/images/ChartFly-Favicon.ico"
     />
+
+    <!-- ✅ Stylesheets -->
     <link rel="stylesheet" href="/static/css/styles.css?v=2" />
     <link
       rel="stylesheet"
@@ -48,14 +50,24 @@
       </div>
     </div>
 
-    <!-- ✅ Tab Sections (Correctly scoped and hidden) -->
-    <div id="market-holidays-section" class="tab-section" style="display: none">
+    <!-- ✅ Tab Content Sections (proper wrappers) -->
+    <div
+      id="market-holidays-section"
+      class="admin-tab-section"
+      style="display: none"
+    >
       {% include "admin/market-holidays/MarketHolidays.html" %}
     </div>
-    <div id="api-keys-section" class="tab-section" style="display: none">
+
+    <div id="api-keys-section" class="admin-tab-section" style="display: none">
       {% include "admin/api-keys/ApiKeys.html" %}
     </div>
-    <div id="user-management-section" class="tab-section" style="display: none">
+
+    <div
+      id="user-management-section"
+      class="admin-tab-section"
+      style="display: none"
+    >
       {% include "admin/user-management/UserManagement.html" %}
     </div>
 
@@ -90,7 +102,7 @@
     <!-- ✅ Tab Logic -->
     <script>
       function switchTab(sectionId) {
-        document.querySelectorAll(".tab-section").forEach((section) => {
+        document.querySelectorAll(".admin-tab-section").forEach((section) => {
           section.style.display = section.id === sectionId ? "block" : "none";
         });
 
@@ -124,7 +136,7 @@
         ) {
           window.USER_TAB_LOADED = true;
           loadAdminUsers();
-          ButtonBoxUserManagement.init();
+          ButtonBoxUserManagement.init(); // ✅ manually initialize here
         }
       }
 
