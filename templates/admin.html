@@ -12,17 +12,17 @@
     />
 
     <!-- ✅ Stylesheets -->
-    <link rel="stylesheet" href="/static/css/styles.css?v=2" />
+    <link rel="stylesheet" href="/static/css/styles.css?v=3" />
+    <link rel="stylesheet" href="/static/admin/shared/ButtonBox.css?v=3" />
     <link
       rel="stylesheet"
-      href="/static/admin/market-holidays/MarketHolidays.css?v=2"
+      href="/static/admin/market-holidays/MarketHolidays.css?v=3"
     />
-    <link rel="stylesheet" href="/static/admin/api-keys/ApiKeys.css?v=2" />
+    <link rel="stylesheet" href="/static/admin/api-keys/ApiKeys.css?v=3" />
     <link
       rel="stylesheet"
-      href="/static/admin/user-management/UserManagement.css?v=2"
+      href="/static/admin/user-management/UserManagement.css?v=3"
     />
-    <link rel="stylesheet" href="/static/admin/shared/ButtonBox.css?v=2" />
   </head>
 
   <body>
@@ -50,38 +50,98 @@
       </div>
     </div>
 
-    <!-- ✅ Tab Content Sections -->
+    <!-- ✅ Market Holidays Section -->
     <section
       id="market-holidays-section"
       class="admin-tab-section"
       style="display: none"
     >
-      {% include "admin/market-holidays/MarketHolidays.html" %}
+      <h2>📅 Manage Market Holidays</h2>
+      <div data-section="holiday">{% include 'shared/ButtonBox.html' %}</div>
+      <div class="table-wrapper">
+        <table id="holidays-table" class="admin-table">
+          <thead>
+            <tr>
+              <th class="col-select">Select</th>
+              <th class="line-id-col" style="display: none">ID</th>
+              <th>Name</th>
+              <th>Date</th>
+              <th>Close Time</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan="5">Loading holidays...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </section>
 
+    <!-- ✅ API Keys Section -->
     <section
       id="api-keys-section"
       class="admin-tab-section"
       style="display: none"
     >
-      {% include "admin/api-keys/ApiKeys.html" %}
+      <h2>🔷 Manage API Keys</h2>
+      <div data-section="api">{% include 'shared/ButtonBox.html' %}</div>
+      <div class="table-wrapper">
+        <table id="api-keys-table" class="admin-table">
+          <thead>
+            <tr>
+              <th class="col-select">Select</th>
+              <th class="line-id-col" style="display: none">ID</th>
+              <th>Name</th>
+              <th>Provider</th>
+              <th>Label</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan="6">Loading API keys...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </section>
 
+    <!-- ✅ User Management Section -->
     <section
       id="user-management-section"
       class="admin-tab-section"
       style="display: none"
     >
-      {% include "admin/user-management/UserManagement.html" %}
+      <h2>👤 Manage Admin Users</h2>
+      <div data-section="user">{% include 'shared/ButtonBox.html' %}</div>
+      <div class="table-wrapper">
+        <table id="user-table" class="admin-table">
+          <thead>
+            <tr>
+              <th class="col-select">Select</th>
+              <th class="line-id-col" style="display: none">ID</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Phone</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan="5">Loading admin users...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </section>
 
-    <!-- ✅ Shared Modules -->
+    <!-- ✅ Shared Scripts -->
     <script src="/static/admin/shared/ButtonBox.js"></script>
     <script src="/static/admin/shared/ButtonBoxMessages.js"></script>
     <script src="/static/admin/shared/ButtonBoxRows.js"></script>
     <script src="/static/admin/shared/ButtonBoxColumns.js"></script>
 
-    <!-- ✅ Core Scripts -->
+    <!-- ✅ Section Scripts -->
     <script src="/static/frontend/core/main.js"></script>
     <script src="/static/admin/market-holidays/MarketHolidays.js"></script>
     <script src="/static/admin/market-holidays/ButtonBoxMarketHolidays.js"></script>
@@ -90,7 +150,7 @@
     <script src="/static/admin/user-management/UserManagement.js"></script>
     <script src="/static/admin/user-management/ButtonBoxUserManagement.js"></script>
 
-    <!-- ✅ Footer -->
+    <!-- ✅ Footer Ticker -->
     <footer class="admin-footer">
       <div class="footer-ticker">
         <span id="holiday-ticker" class="ticker-content">🎉 Loading...</span>
@@ -103,33 +163,20 @@
       </div>
     </footer>
 
-    <!-- ✅ Tab Switch Logic -->
+    <!-- ✅ Tab Switcher -->
     <script>
       function switchTab(sectionId) {
-        console.log("🧭 switchTab called with:", sectionId);
-
-        // 💣 Forcefully hide ALL tab sections
-        const sections = document.querySelectorAll(".admin-tab-section");
-        for (let section of sections) {
-          section.style.display = "none";
-        }
-
-        // ✅ Show only the desired tab
-        const target = document.getElementById(sectionId);
-        if (target) {
-          target.style.display = "block";
-          console.log("✅ Now displaying:", sectionId);
-        } else {
-          console.warn("⚠️ Could not find target section:", sectionId);
-        }
-
-        // 🖱️ Update tab active classes
-        document.querySelectorAll(".tab").forEach((tab) => {
-          const isActive = tab.getAttribute("onclick")?.includes(sectionId);
-          tab.classList.toggle("active", isActive);
+        document.querySelectorAll(".admin-tab-section").forEach((section) => {
+          section.style.display = section.id === sectionId ? "block" : "none";
         });
 
-        // 🧠 Load tab content only once
+        document.querySelectorAll(".tab").forEach((tab) => {
+          tab.classList.toggle(
+            "active",
+            tab.getAttribute("onclick").includes(sectionId)
+          );
+        });
+
         if (
           sectionId === "market-holidays-section" &&
           !window.MARKET_TAB_LOADED
@@ -149,12 +196,10 @@
         ) {
           window.USER_TAB_LOADED = true;
           loadAdminUsers();
-          ButtonBoxUserManagement.init();
         }
       }
 
       document.addEventListener("DOMContentLoaded", () => {
-        console.log("🚀 DOMContentLoaded → Forcing tab switch to default");
         switchTab("market-holidays-section");
       });
     </script>
