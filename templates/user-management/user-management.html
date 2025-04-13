@@ -1,13 +1,12 @@
 <!--
   ===========================================
-  ✅ user-management.html
+  ✅ ChartFly Admin Panel - user-management.html
   -------------------------------------------
-  Standalone MPA Page for User Management Admin Section
+  Standalone MPA Page for Admin User Management
   Author: Captain & Chatman
-  Version: MPA Phase I (User Management - Refactored)
+  Version: MPA Phase I (Modular MPA Layout)
   ===========================================
 -->
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -20,12 +19,17 @@
       type="image/x-icon"
     />
     <link rel="stylesheet" href="/static/css/styles.css?v=999" />
+    <link
+      rel="stylesheet"
+      href="/static/admin/shared/navbar/navbar.css?v=999"
+    />
     <link rel="stylesheet" href="/static/admin/shared/button-box.css?v=999" />
     <link
       rel="stylesheet"
-      href="/static/admin/user-management/user-management.css?v=999"
+      href="/static/admin/user-management/UserManagement.css?v=999"
     />
   </head>
+
   <body>
     <!-- ✅ Header -->
     <div class="admin-header">
@@ -40,17 +44,13 @@
       </div>
     </div>
 
-    <!-- ✅ NavBar Placeholder (modular add later) -->
-    <nav class="admin-navbar">
-      <a href="/admin/market-holidays" class="nav-link">Market Holidays</a>
-      <a href="/admin/api-keys" class="nav-link">API Keys</a>
-      <a href="/admin/user-management" class="nav-link active">Admin Users</a>
-    </nav>
+    <!-- ✅ Modular NavBar -->
+    {% include "shared/navbar/navbar.html" %}
 
-    <!-- ✅ User Management Table + ButtonBox -->
+    <!-- ✅ Admin Users Table + ButtonBox -->
     <section id="user-management-section" class="admin-tab-section">
       {% include "shared/button-box.html" %} {% include
-      "user-management/user-management.html" %}
+      "user-management/user-management-table.html" %}
     </section>
 
     <!-- ✅ Footer -->
@@ -67,6 +67,7 @@
     </footer>
 
     <!-- ✅ Scripts -->
+    <script src="/static/admin/shared/navbar/navbar.js?v=999" defer></script>
     <script src="/static/admin/shared/button-box.js?v=999" defer></script>
     <script
       src="/static/admin/shared/button-box-messages.js?v=999"
@@ -77,7 +78,6 @@
       src="/static/admin/shared/button-box-columns.js?v=999"
       defer
     ></script>
-
     <script src="/static/frontend/core/main.js?v=999" defer></script>
     <script
       src="/static/admin/user-management/user-management.js?v=999"

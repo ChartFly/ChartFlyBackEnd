@@ -38,6 +38,8 @@ from control_console.api_keys import router as api_keys_router
 from control_console.admin_users.routes import router as admin_users_router
 from control_console.auth_login_register import router as login_register_router
 from control_console.auth_password_reset import router as password_reset_router
+from control_console.api_keys_page import router as api_keys_page_router
+from control_console.user_management_page import router as user_management_page_router
 
 # ✅ Local Imports: DB + Config
 from control_console.database import create_db_pool
@@ -130,6 +132,8 @@ app.include_router(admin_router, prefix="/api/admin")
 app.include_router(api_keys_router, prefix="/api/api-keys")
 app.include_router(admin_users_router, prefix="/api/users")
 app.include_router(dev_reset_router)
+app.include_router(api_keys_page_router)
+app.include_router(user_management_page_router)
 
 # ✅ Launch the app with Uvicorn if run directly
 if __name__ == "__main__":
