@@ -193,7 +193,11 @@
       }
 
       document.addEventListener("DOMContentLoaded", () => {
-        switchTab("market-holidays-section");
+        console.log("🕒 Waiting for JS files to settle...");
+        setTimeout(() => {
+          console.log("🔁 Calling switchTab after delay...");
+          switchTab("market-holidays-section");
+        }, 100);
       });
     </script>
   </body>
