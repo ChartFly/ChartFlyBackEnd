@@ -8,6 +8,9 @@
 # ============================================================
 
 import os
+from dotenv import load_dotenv  # ✅ Load from .env file
+load_dotenv()
+
 import requests
 import logging
 

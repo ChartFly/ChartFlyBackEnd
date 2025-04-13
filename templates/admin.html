@@ -8,7 +8,6 @@
   Version: MPA Phase I (Admin Dashboard - Refactored)
   ===========================================
 -->
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -21,6 +20,8 @@
       type="image/x-icon"
     />
     <link rel="stylesheet" href="/static/css/styles.css?v=999" />
+    <link rel="stylesheet" href="/static/admin/shared/navbar/navbar.css" />
+    <script src="/static/admin/shared/navbar/navbar.js" defer></script>
   </head>
 
   <body>
@@ -37,12 +38,8 @@
       </div>
     </div>
 
-    <!-- ✅ NavBar -->
-    <nav class="admin-navbar">
-      <a href="/admin/market-holidays" class="nav-link">Market Holidays</a>
-      <a href="/admin/api-keys" class="nav-link">API Keys</a>
-      <a href="/admin/user-management" class="nav-link">Admin Users</a>
-    </nav>
+    <!-- ✅ NavBar (modular include) -->
+    {% include "shared/navbar.html" %}
 
     <!-- ✅ Main Admin Dashboard -->
     <main class="admin-dashboard">
