@@ -1,69 +1,114 @@
+<!--
+  ===========================================
+  ✅ login.html
+  -------------------------------------------
+  User login form with error handling, tips, and password toggle
+  Author: Captain & Chatman
+  Location: templates/login.html
+  ===========================================
+-->
+
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Login to ChartFly</title>
-    <link rel="stylesheet" href="/static/css/auth.css">
-</head>
-<body>
+    <link rel="stylesheet" href="/static/css/auth.css" />
+  </head>
+  <body>
     <div class="auth-container">
-        <img src="/static/images/Chartfly-logo.png" alt="ChartFly Logo" class="auth-logo">
-        <h1>ChartFly Trading Tools</h1>
-        <h2>🚀 Login</h2>
+      <img
+        src="/static/images/Chartfly-logo.png"
+        alt="ChartFly Logo"
+        class="auth-logo"
+      />
+      <h1>ChartFly Trading Tools</h1>
+      <h2>🚀 Login</h2>
 
-        {% if error %}
-        <div class="auth-error">
-            <p>❌ {{ error }}</p>
-            <p class="redirect-options">
-                <a href="/auth/forgot-password" class="forgot-link">Reset your password</a> or
-                <a href="/auth/login" class="forgot-link">Try again</a>
-            </p>
-        </div>
-        {% endif %}
+      {% if error %}
+      <div class="auth-error">
+        <p>❌ {{ error }}</p>
+        <p class="redirect-options">
+          <a href="/auth/forgot-password" class="forgot-link"
+            >Reset your password</a
+          >
+          or
+          <a href="/auth/login" class="forgot-link">Try again</a>
+        </p>
+      </div>
+      {% endif %}
 
-        <form method="post" action="/auth/login">
-            <div class="input-group">
-                <input type="text" name="username" placeholder="Username" required>
-            </div>
-
-            <div class="input-group">
-                <input type="password" name="password" placeholder="Password or Temporary Code" id="password" required>
-                <span class="toggle-password" onclick="togglePassword('password')">👁️</span>
-            </div>
-
-            <button type="submit" class="auth-button">Login</button>
-        </form>
-
-        <div class="form-notes">
-            <p class="note-header">🛠️ <strong>Login Instructions:</strong></p>
-            <ul class="instructions">
-                <li>Enter your <strong>username</strong> and <strong>password</strong> to log in.</li>
-                <li>If you're using a <strong>temporary reset code</strong>, enter it in the password field.</li>
-                <li>You’ll be asked to create a new permanent password after logging in with a reset code.</li>
-            </ul>
-
-            <p class="note-header">🔐 <strong>Password Requirements (when resetting):</strong></p>
-            <ul class="requirements">
-                <li>At least 6 characters</li>
-                <li>Includes a letter (A–Z)</li>
-                <li>Includes a number (0–9)</li>
-                <li>Includes a symbol: <strong>! @ # $ % ^ & * ( ) _ - + =</strong></li>
-            </ul>
-
-            <p class="save-tip">💾 Save your credentials in a secure place to avoid future reset delays.</p>
-            <p><a href="/auth/forgot-password" class="forgot-link">Forgot your password?</a></p>
+      <form method="post" action="/auth/login">
+        <div class="input-group">
+          <input type="text" name="username" placeholder="Username" required />
         </div>
 
-        <footer class="auth-footer">
-            <p>ChartFly Trading Tools. All Rights Reserved</p>
-        </footer>
+        <div class="input-group">
+          <input
+            type="password"
+            name="password"
+            placeholder="Password or Temporary Code"
+            id="password"
+            required
+          />
+          <span class="toggle-password" onclick="togglePassword('password')"
+            >👁️</span
+          >
+        </div>
+
+        <button type="submit" class="auth-button">Login</button>
+      </form>
+
+      <div class="form-notes">
+        <p class="note-header">🛠️ <strong>Login Instructions:</strong></p>
+        <ul class="instructions">
+          <li>
+            Enter your <strong>username</strong> and
+            <strong>password</strong> to log in.
+          </li>
+          <li>
+            If you're using a <strong>temporary reset code</strong>, enter it in
+            the password field.
+          </li>
+          <li>
+            You’ll be asked to create a new permanent password after logging in
+            with a reset code.
+          </li>
+        </ul>
+
+        <p class="note-header">
+          🔐 <strong>Password Requirements (when resetting):</strong>
+        </p>
+        <ul class="requirements">
+          <li>At least 6 characters</li>
+          <li>Includes a letter (A–Z)</li>
+          <li>Includes a number (0–9)</li>
+          <li>
+            Includes a symbol: <strong>! @ # $ % ^ & * ( ) _ - + =</strong>
+          </li>
+        </ul>
+
+        <p class="save-tip">
+          💾 Save your credentials in a secure place to avoid future reset
+          delays.
+        </p>
+        <p>
+          <a href="/auth/forgot-password" class="forgot-link"
+            >Forgot your password?</a
+          >
+        </p>
+      </div>
+
+      <footer class="auth-footer">
+        <p>ChartFly Trading Tools. All Rights Reserved</p>
+      </footer>
     </div>
 
     <script>
-        function togglePassword(id) {
-            const input = document.getElementById(id);
-            input.type = input.type === "password" ? "text" : "password";
-        }
+      function togglePassword(id) {
+        const input = document.getElementById(id);
+        input.type = input.type === "password" ? "text" : "password";
+      }
     </script>
-</body>
+  </body>
 </html>

@@ -1,3 +1,9 @@
+# ==========================================================
+# ✅ FILE: control_console/admin_user_controller.py
+# 📌 PURPOSE: Admin user CRUD operations for ChartFly backend
+# 🛠️ STATUS: Refactored (MPA Phase I) — Author: Captain & Chatman
+# ==========================================================
+
 from fastapi import APIRouter, Request, HTTPException
 from pydantic import BaseModel
 import logging

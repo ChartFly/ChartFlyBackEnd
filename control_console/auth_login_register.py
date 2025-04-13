@@ -1,3 +1,9 @@
+# ==========================================================
+# ✅ FILE: control_console/auth_login_register.py
+# 📌 PURPOSE: Login, registration, password reset, and session control
+# 🛠️ STATUS: Refactored (MPA Phase I) — Author: Captain & Chatman
+# ==========================================================
+
 from fastapi import APIRouter, Request, Form
 from fastapi.responses import RedirectResponse, HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
@@ -154,7 +160,7 @@ async def register(
     hashed_pw = bcrypt.hash(password)
 
     await db.execute("""
-        INSERT INTO admin_users 
+        INSERT INTO admin_users
         (first_name, last_name, phone_number, email, username, password_hash, access_code, is_2fa_enabled)
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
     """,
@@ -163,7 +169,6 @@ async def register(
     )
 
     return RedirectResponse(url="/auth/login", status_code=HTTP_302_FOUND)
-
 
 # ✅ Logout
 @router.get("/logout")
@@ -190,7 +195,7 @@ async def dev_reset(request: Request, token: str):
 
     hashed_pw = bcrypt.hash(default_pass)
     await db.execute("""
-        INSERT INTO admin_users 
+        INSERT INTO admin_users
         (first_name, last_name, phone_number, email, username, password_hash, access_code, role, is_2fa_enabled)
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
     """,

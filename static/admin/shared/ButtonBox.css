@@ -1,6 +1,14 @@
-/*  static/admin/shared/ButtonBox.css */
+/*
+  ===========================================
+  ✅ button-box.css
+  -------------------------------------------
+  Shared styles for all ButtonBox components
+  Author: Captain & Chatman
+  Version: MPA Phase I (Finalized Stylesheet)
+  ===========================================
+*/
 
-/* Button states */
+/* 🔵 Default Action Button */
 .action-btn {
   padding: 6px 12px;
   margin: 0 5px;
@@ -34,14 +42,14 @@
   background-color: #ff8000 !important;
 }
 
-/* Disabled button state */
+/* ❌ Disabled Button */
 .disabled-btn {
   background-color: #ccc !important;
   color: #666 !important;
   cursor: not-allowed;
 }
 
-/* Confirm button */
+/* 🟨 Confirm Button */
 .confirm-btn {
   padding: 6px 14px;
   margin: 5px 0;
@@ -54,53 +62,49 @@
   opacity: 1;
   visibility: visible;
 }
-
 .confirm-btn.gray {
   background-color: #bbb;
   color: #444;
 }
-
 .confirm-btn.yellow {
   background-color: #ffcf40;
   color: #000;
 }
-
 .confirm-btn:disabled {
   background-color: #ccc;
   color: #666;
   cursor: not-allowed;
 }
 
-/* Confirm button wrapper */
+/* 🔘 Confirm Button Wrapper */
 .confirm-button-container {
   display: flex;
   align-items: center;
   padding-left: 8px;
 }
 
-/* Info box (tips and warnings) */
+/* 🗨️ Info / Tip / Warning Box */
 .info-box {
   border-radius: 6px;
   padding: 8px 12px;
-  margin: 24px 0; /* 📦 Increased spacing above/below tips */
+  margin: 24px 0;
   font-size: 16px;
   border: 1px solid #aaa;
   white-space: normal;
   word-wrap: break-word;
 }
-
 .info-box.tip {
   background-color: #e9faff;
   border-color: #55b5c3;
   color: #007a8a;
 }
-
 .info-box.warn {
   background-color: #fff4e5;
   border-color: #ffa726;
   color: #e65100;
 }
 
+/* 🧾 Current Action Tracker */
 #global-current-action,
 [id$="-current-action"] {
   font-weight: bold;
@@ -109,7 +113,7 @@
   margin-top: 5px;
 }
 
-/* Status footer box for Action + Selected Rows */
+/* 📊 Action Footer for Status and Selection */
 .status-footer {
   display: flex;
   justify-content: space-between;
@@ -126,7 +130,7 @@
   box-sizing: border-box;
 }
 
-/* Cell paste hover visual */
+/* 📋 Cell Paste Hover */
 .cell-paste-ready {
   cursor: cell;
   outline: 2px dashed transparent;
@@ -135,17 +139,18 @@
   outline-color: #ffcf40;
 }
 
-/* Row selection style */
+/* ✅ Row Selection Highlight */
 .selected-row {
   background-color: #f0faff;
 }
 
+/* ☑️ Checkbox Scaling */
 input[type="checkbox"] {
   transform: scale(1.3);
   cursor: pointer;
 }
 
-/* Edit mode + confirm area */
+/* 🧰 Footer with Edit Mode + Confirm */
 .button-footer-row {
   display: flex;
   align-items: center;
@@ -159,7 +164,7 @@ input[type="checkbox"] {
   box-sizing: border-box;
 }
 
-/* Radio and checkbox controls */
+/* 🔘 Edit Mode Controls (Radios + Checkbox) */
 .edit-mode-controls {
   font-size: 16px;
   display: flex;
@@ -167,19 +172,18 @@ input[type="checkbox"] {
   align-items: center;
   flex-wrap: wrap;
 }
-
 .edit-mode-controls input[type="radio"],
 .edit-mode-controls input[type="checkbox"] {
   margin-right: 6px;
   transform: scale(1.1);
 }
 
-/* Default hidden ID column */
+/* 🆔 Hidden ID Column */
 .line-id-col {
   display: none;
 }
 
-/* ✅ Layout alignment + container control */
+/* 📦 ButtonBox Container */
 .button-box {
   width: 100%;
   max-width: 1100px;
@@ -190,6 +194,7 @@ input[type="checkbox"] {
   margin-bottom: 6px;
 }
 
+/* 🔳 Toolbar Layout */
 .button-toolbar {
   display: flex;
   justify-content: flex-start;

@@ -1,6 +1,15 @@
+# ============================================================
+# ✅ main.py
+# 📍 Entry point for the ChartFly backend application
+# 🔧 Sets up FastAPI app, static mounting, DB middleware, routing
+# Author: Captain & Chatman
+# Version: MPA Phase I — Backend Ready Edition
+# ============================================================
+
 # ✅ Load environment variables early
 import os
 from dotenv import load_dotenv
+
 load_dotenv()
 
 # ✅ Standard Lib Imports
@@ -56,7 +65,7 @@ app = FastAPI(
 # ✅ Mount Static Assets and Templates
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-# 🧯 Disable Jinja2 template caching
+# 🧯 Disable Jinja2 template caching (during dev)
 env = Environment(
     loader=FileSystemLoader("templates"),
     autoescape=select_autoescape(["html", "xml"]),
@@ -69,7 +78,7 @@ templates = Jinja2Templates(env=env)
 async def startup():
     app.state.db_pool = await create_db_pool()
 
-# ✅ DB Connection Middleware
+# ✅ Middleware: Attach DB connection to each request
 @app.middleware("http")
 async def db_middleware(request: Request, call_next):
     async with app.state.db_pool.acquire() as connection:
@@ -77,7 +86,7 @@ async def db_middleware(request: Request, call_next):
         response = await call_next(request)
         return response
 
-# ✅ Admin Entry Route (Restored login + session logic)
+# ✅ Admin UI Entry — Handles login, register, or dashboard routing
 @app.get("/")
 async def admin_ui(request: Request):
     try:
@@ -95,7 +104,7 @@ async def admin_ui(request: Request):
 
     return RedirectResponse(url="/auth/login", status_code=HTTP_302_FOUND)
 
-# ✅ Health Checks
+# ✅ Healthcheck Endpoints
 @app.head("/")
 async def root_head():
     return Response(status_code=200)
@@ -117,6 +126,6 @@ app.include_router(api_keys_router, prefix="/api/api-keys")
 app.include_router(admin_users_router, prefix="/api/users")
 app.include_router(dev_reset_router)
 
-# ✅ Main Server Entry
+# ✅ Launch the app with Uvicorn if run directly
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=int(os.getenv("PORT", 8000)))

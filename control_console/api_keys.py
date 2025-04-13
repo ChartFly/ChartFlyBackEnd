@@ -1,3 +1,9 @@
+# ==========================================================
+# ✅ FILE: control_console/api_keys.py
+# 📌 PURPOSE: CRUD endpoints for managing API key records
+# 🛠️ STATUS: Refactored (MPA Phase I) — Author: Captain & Chatman
+# ==========================================================
+
 from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel
 import logging

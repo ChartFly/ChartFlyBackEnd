@@ -1,3 +1,9 @@
+# ==========================================================
+# ✅ FILE: control_console/dev_reset.py
+# 📌 PURPOSE: Emergency developer reset route
+# 🛠️ STATUS: Active (MPA Phase I) — Author: Captain & Chatman
+# ==========================================================
+
 from fastapi import APIRouter, Request, HTTPException
 from fastapi.responses import JSONResponse
 from passlib.hash import bcrypt
@@ -40,7 +46,7 @@ async def developer_emergency_reset(request: Request):
         hashed_pw = bcrypt.hash(DEFAULT_ADMIN_PASS)
 
         await db.execute("""
-            INSERT INTO admin_users 
+            INSERT INTO admin_users
             (first_name, last_name, phone_number, email, username, password_hash, access_code, role)
             VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
         """, ("Default", "Admin", "000-000-0000", DEFAULT_ADMIN_EMAIL, DEFAULT_ADMIN_USER, hashed_pw, DEFAULT_ADMIN_CODE, DEFAULT_ADMIN_ROLE))

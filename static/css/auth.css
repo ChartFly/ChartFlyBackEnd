@@ -1,176 +1,174 @@
+/* ============================================================================
+  📁 FILE: auth.css
+  📍 LOCATION: static/css/auth.css
+  🎯 PURPOSE: Styles for all login, register, and password reset pages
+  ✍️ AUTHOR: Captain & Chatman
+  🔖 VERSION: Auth UI v1.0 (Polished)
+============================================================================ */
+
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
-    color: #fff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
 }
 
 .auth-container {
-    background-color: #1e1e2f;
-    padding: 30px 40px;
-    border-radius: 10px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-    max-width: 400px;
-    width: 100%;
-    text-align: center;
-    position: relative;
+  background-color: #1e1e2f;
+  padding: 30px 40px;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+  position: relative;
 }
 
 .auth-logo {
-    width: 80px;
-    margin-bottom: 10px;
+  width: 80px;
+  margin-bottom: 10px;
 }
 
 .auth-container h1 {
-    font-size: 22px;
-    margin-bottom: 5px;
-    color: #ffffff;
+  font-size: 22px;
+  margin-bottom: 5px;
+  color: #ffffff;
 }
 
 .auth-container h2 {
-    margin-bottom: 20px;
-    font-size: 20px;
-    color: #00d4ff;
+  margin-bottom: 20px;
+  font-size: 20px;
+  color: #00d4ff;
 }
 
 input[type="text"],
 input[type="password"],
 input[type="email"],
 input[type="tel"] {
-    width: 100%;
-    padding: 10px;
-    margin: 8px 0 12px 0;
-    border: none;
-    border-radius: 5px;
-    background-color: #333;
-    color: #fff;
-    font-size: 14px;
-    position: relative;
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0 12px 0;
+  border: none;
+  border-radius: 5px;
+  background-color: #333;
+  color: #fff;
+  font-size: 14px;
+  position: relative;
 }
 
 input::placeholder {
-    color: #aaa;
+  color: #aaa;
 }
 
 .input-group {
-    position: relative;
+  position: relative;
 }
 
 .toggle-password {
-    position: absolute;
-    right: 10px;
-    top: 32%;
-    transform: translateY(-50%);
-    cursor: pointer;
-    font-size: 16px;
-    color: #ccc;
+  position: absolute;
+  right: 10px;
+  top: 32%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 16px;
+  color: #ccc;
 }
 
 button {
-    width: 100%;
-    padding: 12px;
-    background-color: #00d4ff;
-    border: none;
-    border-radius: 5px;
-    color: #000;
-    font-weight: bold;
-    font-size: 14px;
-    cursor: pointer;
-    transition: all 0.2s ease;
+  width: 100%;
+  padding: 12px;
+  background-color: #00d4ff;
+  border: none;
+  border-radius: 5px;
+  color: #000;
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 button:hover {
-    background-color: #00b5e2;
-    transform: scale(1.03);
+  background-color: #00b5e2;
+  transform: scale(1.03);
 }
 
 button:active {
-    transform: scale(0.98);
+  transform: scale(0.98);
 }
 
 .form-notes {
-    text-align: left;
-    margin-top: 20px;
-    font-size: 0.85em;
+  text-align: left;
+  margin-top: 20px;
+  font-size: 0.85em;
 }
 
 .note-header {
-    margin-bottom: 6px;
+  margin-bottom: 6px;
 }
 
 .requirements {
-    margin: 0;
-    padding-left: 20px;
-    list-style-type: disc;
-    color: #ccc;
-    font-size: 0.85em;
+  margin: 0;
+  padding-left: 20px;
+  list-style-type: disc;
+  color: #ccc;
+  font-size: 0.85em;
 }
 
 .save-tip {
-    color: #aaa;
-    margin-top: 10px;
-    font-size: 0.85em;
+  color: #aaa;
+  margin-top: 10px;
+  font-size: 0.85em;
 }
 
 .forgot-link {
-    display: block;
-    margin-top: 12px;
-    text-align: left;
-    color: #00d4ff;
+  display: block;
+  margin-top: 12px;
+  text-align: left;
+  color: #00d4ff;
 }
 
 .forgot-link:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
 .auth-footer {
-    margin-top: 30px;
-    font-size: 0.75em;
-    color: #888;
+  margin-top: 30px;
+  font-size: 0.75em;
+  color: #888;
 }
 
 .auth-error {
-    background-color: #ffe5e5;
-    color: #a80000;
-    padding: 10px 15px;
-    margin-bottom: 20px;
-    border: 1px solid #ffcccc;
-    border-radius: 8px;
-    font-weight: bold;
+  background-color: #ffe5e5;
+  color: #a80000;
+  padding: 10px 15px;
+  margin-bottom: 20px;
+  border: 1px solid #ffcccc;
+  border-radius: 8px;
+  font-weight: bold;
 }
 
 .auth-error .redirect-options {
-    font-weight: normal;
-    font-size: 0.95em;
-    margin-top: 5px;
-}
-
-.auth-error {
-    background-color: #ffe5e5;
-    color: #a80000;
-    padding: 10px 15px;
-    margin-bottom: 20px;
-    border: 1px solid #ffcccc;
-    border-radius: 8px;
-    font-weight: bold;
+  font-weight: normal;
+  font-size: 0.95em;
+  margin-top: 5px;
 }
 
 .auth-success {
-    background-color: #e6ffe6;
-    color: #006600;
-    padding: 10px 15px;
-    margin-bottom: 20px;
-    border: 1px solid #b3ffb3;
-    border-radius: 8px;
-    font-weight: bold;
+  background-color: #e6ffe6;
+  color: #006600;
+  padding: 10px 15px;
+  margin-bottom: 20px;
+  border: 1px solid #b3ffb3;
+  border-radius: 8px;
+  font-weight: bold;
 }
 
 .redirect-options {
-    font-weight: normal;
-    font-size: 0.95em;
-    margin-top: 8px;
+  font-weight: normal;
+  font-size: 0.95em;
+  margin-top: 8px;
 }

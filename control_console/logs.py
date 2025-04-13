@@ -1,3 +1,9 @@
+# ===================================================
+# ✅ FILE: control_console/logs.py
+# 📌 PURPOSE: Handles viewing, inserting, and cleaning admin logs
+# 🛠️ STATUS: Active (MPA Phase I) — Author: Captain & Chatman
+# ===================================================
+
 from fastapi import APIRouter, HTTPException, Request, Query
 from pydantic import BaseModel
 from datetime import datetime, timedelta

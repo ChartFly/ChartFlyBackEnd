@@ -1,4 +1,10 @@
-// static/admin/user-management/ButtonBoxUserManagement.js
+// ===========================================================
+// ✅ button-box-user-management.js
+// -----------------------------------------------------------
+// ButtonBox Integration Logic for User Management Admin Tab
+// Author: Captain & Chatman
+// Version: MPA Phase I (User Management)
+// ===========================================================
 
 window.ButtonBoxUserManagement = (() => {
   let initialized = false;

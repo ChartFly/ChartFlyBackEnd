@@ -1,9 +1,11 @@
-/* -------------------------------------------------------------
-  📁 FILE: UserManagement.css
-  📍 LOCATION: static/admin/user-management/UserManagement.css
-  🌟 SCOPE: Styles exclusive to #user-management-section
-   ❌ No global bleed — all selectors are scoped to this tab only
-------------------------------------------------------------- */
+/* =============================================================
+📁 FILE: user-management.css
+📍 LOCATION: static/admin/user-management/user-management.css
+🎯 PURPOSE: Styles exclusive to the User Management section
+🔒 SCOPED TO: #user-management-section only (no global bleed)
+👥 Author: Captain & Chatman
+🔖 Version: MPA Phase I (User Management Styles)
+============================================================= */
 
 /* 🔷 Layout Containers */
 #user-management-section {
@@ -33,8 +35,8 @@
 
 /* 📊 Admin Table Styles */
 #user-management-section .admin-table {
-  width: 100%; /* 🔧 FIXED: was max-content */
-  min-width: 800px; /* ✅ Optional for layout stability */
+  width: 100%;
+  min-width: 800px;
   border-collapse: collapse;
   table-layout: fixed;
   font-size: 0.95rem;

@@ -1,4 +1,8 @@
-# control_console/__init__.py
+# ==========================================================
+# ✅ FILE: control_console/__init__.py
+# 📌 PURPOSE: Re-export routers for external use
+# 🛠️ STATUS: Refactored (MPA Phase I) — Author: Captain & Chatman
+# ==========================================================
 
 # ✅ Initialize routers for import
 from .admin_user_controller import router as admin_users_router

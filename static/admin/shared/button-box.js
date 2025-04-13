@@ -1,4 +1,11 @@
-// static/admin/shared/ButtonBox.js
+// ============================================
+// ✅ button-box.js
+// --------------------------------------------
+// Core ButtonBox controller: manages state,
+// button logic, event wiring, and UI updates.
+// Author: Captain & Chatman
+// Version: MPA Phase I (Finalized Core Engine)
+// ============================================
 
 window.ButtonBox = (() => {
   const stateMap = new Map();

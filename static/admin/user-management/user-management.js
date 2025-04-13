@@ -1,4 +1,12 @@
-// static/admin/user-management/UserManagement.js
+// ===========================================================
+// ✅ user-management.js
+// -----------------------------------------------------------
+// Loads and renders Admin User data into User Management table
+// Integrates with ButtonBox system
+// Author: Captain & Chatman
+// Version: MPA Phase I (User Management)
+// ===========================================================
+
 (() => {
   if (window.ADMIN_USERS_LOADED) return;
   window.ADMIN_USERS_LOADED = true;

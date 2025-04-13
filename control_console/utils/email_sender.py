@@ -1,13 +1,19 @@
+# ===================================================
+# ✅ FILE: email_sender.py
+# 🧠 Author: Captain & Chatman
+# 📬 Purpose: Sends password reset emails securely via SMTP
+# ===================================================
+
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import logging
 
-# Setup logging
+# ✅ Setup logging
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
-# Load SMTP config from environment
+# ✅ Load SMTP config from environment
 from control_console.config import (
     SMTP_HOST,
     SMTP_PORT,
@@ -16,10 +22,11 @@ from control_console.config import (
     EMAIL_FROM,
 )
 
-# Validate config
+# ✅ Validate config
 if not all([SMTP_HOST, SMTP_PORT, SMTP_USERNAME, SMTP_PASSWORD, EMAIL_FROM]):
     raise EnvironmentError("❌ Missing one or more required SMTP environment variables.")
 
+# ✅ Send Reset Email
 def send_reset_email(to_email: str, temp_password: str):
     subject = "🔐 ChartFly Temporary Password Reset"
     body = f"""
@@ -41,7 +48,6 @@ Follow these simple steps to reset your password:
 ChartFly Trading Tools. All Rights Reserved.
 """.strip()
 
-    # Compose email
     msg = MIMEMultipart()
     msg["From"] = EMAIL_FROM
     msg["To"] = to_email

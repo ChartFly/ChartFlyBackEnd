@@ -1,3 +1,9 @@
+# ==========================================================
+# ✅ FILE: control_console/auth_password_reset.py
+# 📌 PURPOSE: Handles "Forgot Password" logic and reset via email
+# 🛠️ STATUS: Refactored (MPA Phase I) — Author: Captain & Chatman
+# ==========================================================
+
 from fastapi import APIRouter, Request, Form
 from fastapi.responses import RedirectResponse, HTMLResponse
 from fastapi.templating import Jinja2Templates
@@ -13,12 +19,10 @@ from control_console.utils.email_sender import send_reset_email
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
 
-
 # ✅ Forgot Password Page (GET)
 @router.get("/forgot-password", response_class=HTMLResponse)
 async def forgot_password_form(request: Request):
     return templates.TemplateResponse("forgot-password.html", {"request": request})
-
 
 # ✅ Forgot Password Submission (POST)
 @router.post("/forgot-password")

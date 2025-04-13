@@ -1,4 +1,11 @@
-//  static/admin/shared/ButtonBoxColumns.js
+// ============================================
+// ✅ button-box-columns.js
+// --------------------------------------------
+// Handles cell-level Copy/Paste logic for
+// Edit Cells & Columns mode in ButtonBox
+// Author: Captain & Chatman
+// Version: MPA Phase I (Modular Refactor)
+// ============================================
 
 window.ButtonBoxColumns = (() => {
   function handleCellAction(section, action) {

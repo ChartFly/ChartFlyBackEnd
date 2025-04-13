@@ -1,4 +1,11 @@
-// static/admin/shared/ButtonBoxMessages.js
+// ============================================
+// ✅ button-box-messages.js
+// --------------------------------------------
+// Shared Tip/Warning logic, Confirm button state,
+// status footer updates, and button visual toggles.
+// Author: Captain & Chatman
+// Version: MPA Phase I (Button Messaging Finalized)
+// ============================================
 
 window.ButtonBoxMessages = (() => {
   const rotatingTips = [
@@ -124,7 +131,6 @@ window.ButtonBoxMessages = (() => {
     }
   }
 
-  // 🔠 Capitalize first letter
   function capitalize(word) {
     return word.charAt(0).toUpperCase() + word.slice(1);
   }

@@ -1,4 +1,8 @@
-# control_console/config.py
+# ==========================================================
+# ✅ FILE: control_console/config.py
+# 📌 PURPOSE: Centralized environment configuration values
+# 🛠️ STATUS: Active (MPA Phase I) — Author: Captain & Chatman
+# ==========================================================
 
 import os
 

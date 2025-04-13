@@ -1,7 +1,13 @@
-<!-- templates/shared/ButtonBox.html -->
+<!-- templates/shared/button-box.html -->
+
+<!-- ============================================
+✅ ButtonBox Component (Modular)
+Shared button system used in admin sections
+Author: Captain & Chatman
+============================================ -->
 
 <div class="button-box">
-  <!-- 💬 Shared Tip/Warning Box -->
+  <!-- 💬 Tip / Warning Box -->
   <div class="info-box" id="{{ section }}-info-box">
     <strong id="{{ section }}-info-label">Tip:</strong>
     <span id="{{ section }}-info-message"
@@ -9,7 +15,7 @@
     >
   </div>
 
-  <!-- 🛠️ Action Buttons Toolbar -->
+  <!-- 🛠️ Action Buttons -->
   <div class="button-toolbar" id="{{ section }}-toolbar">
     <button id="{{ section }}-edit-btn" class="action-btn">Edit</button>
     <button id="{{ section }}-copy-btn" class="action-btn">Copy</button>
@@ -32,26 +38,27 @@
     </button>
   </div>
 
-  <!-- ✅ Edit Mode Switches + Confirm Button (grouped left-to-right) -->
+  <!-- 🧭 Edit Mode + Confirm -->
   <div class="button-footer-row">
     <div class="edit-mode-controls">
-      <label
-        ><input
+      <label>
+        <input
           type="radio"
           name="{{ section }}-edit-mode"
           value="row"
           checked
         />
-        Edit Lines</label
-      >
-      <label
-        ><input type="radio" name="{{ section }}-edit-mode" value="cell" /> Edit
-        Cells & Columns</label
-      >
-      <label
-        ><input type="checkbox" id="{{ section }}-show-id-toggle" /> Show Line
-        ID</label
-      >
+        Edit Lines
+      </label>
+      <label>
+        <input type="radio" name="{{ section }}-edit-mode" value="cell" />
+        Edit Cells & Columns
+      </label>
+      <label>
+        <input type="checkbox" id="{{ section }}-show-id-toggle" />
+        Show Line ID
+      </label>
+
       <div class="confirm-button-container">
         <button
           id="{{ section }}-confirm-btn"
@@ -64,7 +71,7 @@
     </div>
   </div>
 
-  <!-- 📊 Footer: Action and Row Selection -->
+  <!-- 📊 Action + Selection Footer -->
   <div class="status-footer">
     <span
       ><strong>Action:</strong>

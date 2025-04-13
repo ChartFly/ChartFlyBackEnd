@@ -1,4 +1,12 @@
-// static/admin/market-holidays/MarketHolidays.js
+// =============================================================
+// 📁 FILE: market-holidays.js
+// 📍 LOCATION: static/admin/market-holidays/market-holidays.js
+// 🎯 PURPOSE: Load and render holiday data into the holidays table
+// 🧩 DEPENDENCIES: ButtonBox, ButtonBoxMarketHolidays
+// 👥 Author: Captain & Chatman
+// 🔖 Version: MPA Phase I (Market Holidays Script Refactor)
+// =============================================================
+
 (() => {
   if (window.MARKET_HOLIDAYS_LOADED) return;
   window.MARKET_HOLIDAYS_LOADED = true;

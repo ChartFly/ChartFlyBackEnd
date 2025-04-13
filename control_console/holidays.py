@@ -1,6 +1,7 @@
 # ===================================================
-# ✅ HOLIDAYS ROUTER (holidays.py)
-# Handles Market Holiday retrieval and saving
+# ✅ FILE: control_console/holidays.py
+# 📌 PURPOSE: Handles Market Holiday retrieval and saving
+# 🛠️ STATUS: Active (MPA Phase I) — Author: Captain & Chatman
 # ===================================================
 
 from fastapi import APIRouter, HTTPException, Path, Request

@@ -1,3 +1,9 @@
+# ===================================================
+# ✅ FILE: rate_limiter.py
+# 🧠 Author: Captain & Chatman
+# 🛡️ Purpose: Track and enforce login attempt rate limits
+# ===================================================
+
 from datetime import datetime, timedelta
 from typing import Tuple
 

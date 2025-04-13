@@ -1,3 +1,9 @@
+# ==========================================================
+# ✅ FILE: control_console/admin.py
+# 📌 PURPOSE: General admin routes including user CRUD and login
+# 🛠️ STATUS: Refactored (MPA Phase I) — Author: Captain & Chatman
+# ==========================================================
+
 from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel
 import bcrypt

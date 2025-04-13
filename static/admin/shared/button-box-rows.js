@@ -1,3 +1,12 @@
+// ============================================
+// ✅ button-box-rows.js
+// --------------------------------------------
+// Handles row-level actions (add, edit, copy,
+// delete, save, undo) and checkbox logic.
+// Author: Captain & Chatman
+// Version: MPA Phase I (Row Logic Finalized)
+// ============================================
+
 window.ButtonBoxRows = (() => {
   const undoStacks = {}; // Holds up to 30 snapshots per section (DOM clones)
   const clipboards = {}; // Holds copied row HTML per section
@@ -236,5 +245,3 @@ window.ButtonBoxRows = (() => {
     undoStacks,
   };
 })();
-
-// ?? Force rebuild

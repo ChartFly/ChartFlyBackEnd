@@ -1,3 +1,9 @@
+# ==========================================================
+# ✅ FILE: control_console/database.py
+# 📌 PURPOSE: Establish asyncpg DB connection pool
+# 🛠️ STATUS: Active (MPA Phase I) — Author: Captain & Chatman
+# ==========================================================
+
 import os
 import asyncpg
 import logging

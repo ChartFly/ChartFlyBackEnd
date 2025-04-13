@@ -1,3 +1,9 @@
+# ==========================================================
+# ✅ FILE: control_console/business.py
+# 📌 PURPOSE: Business logic for API key management, access control, market status, logging
+# 🛠️ STATUS: Active (MPA Phase I) — Author: Captain & Chatman
+# ==========================================================
+
 from datetime import datetime
 from fastapi import Request
 import logging
@@ -14,7 +20,6 @@ async def get_active_api_key(db):
     row = await db.fetchrow(query)
     return row["api_secret"] if row else None
 
-
 # ✅ Mark API Key as Failed
 async def mark_api_key_failed(db, api_key: str):
     query = """
@@ -23,7 +28,6 @@ async def mark_api_key_failed(db, api_key: str):
         WHERE api_secret = $1
     """
     await db.execute(query, api_key)
-
 
 # ✅ Check Role-Based Access
 async def user_has_access(db, admin_id: int, tab_name: str) -> bool:
@@ -34,7 +38,6 @@ async def user_has_access(db, admin_id: int, tab_name: str) -> bool:
     """
     row = await db.fetchrow(query, admin_id, tab_name)
     return row["has_access"] if row else False
-
 
 # ✅ Market Status Helper
 async def get_market_status(db):
@@ -62,7 +65,6 @@ async def get_market_status(db):
         return "After-Market Trading"
     else:
         return "Market Closed"
-
 
 # ✅ Log Admin Actions
 async def log_admin_action(db, admin_id: int, action: str, details: str = ""):

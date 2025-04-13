@@ -1,6 +1,10 @@
-/* 📁 FILE: MarketHolidays.css */
-/* 📍 LOCATION: static/admin/market-holidays/MarketHolidays.css */
-/* 🎯 SCOPE: Styles exclusive to #market-holidays-section */
+/* ============================================================================
+📁 FILE: market-holidays.css
+📍 LOCATION: static/admin/market-holidays/market-holidays.css
+🎯 SCOPE: Styles exclusive to #market-holidays-section
+🧩 AUTHOR: Captain & Chatman
+🔖 VERSION: MPA Phase I (Market Holidays Styles Refactor)
+=========================================================================== */
 
 #market-holidays-section {
   margin-top: 2rem;
@@ -119,14 +123,17 @@
   border: 1px dashed #ccc;
   outline: none;
 }
+
 #market-holidays-section tr.editing {
   box-shadow: inset 0 0 0 2px #007a8a;
   background-color: #e9f7f9;
 }
+
 #market-holidays-section tr[data-id^="paste-"],
 #market-holidays-section tr[data-id^="new-"] {
   background-color: #f2fff4;
 }
+
 #market-holidays-section .invalid {
   background-color: #ffe5e5;
   border: 1px solid #ff4d4d;

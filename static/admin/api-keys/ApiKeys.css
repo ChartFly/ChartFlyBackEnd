@@ -1,6 +1,10 @@
-/* 📁 FILE: ApiKeys.css */
-/* 📍 LOCATION: static/admin/api-keys/ApiKeys.css */
-/* 🎯 SCOPE: Styles exclusive to #api-keys-section */
+/* ============================================================================
+📁 FILE: api-keys.css
+📍 LOCATION: static/admin/api-keys/api-keys.css
+🎯 SCOPE: Styles exclusive to #api-keys-section
+🧩 AUTHOR: Captain & Chatman
+🔖 VERSION: MPA Phase I (API Keys Table Styling)
+=========================================================================== */
 
 #api-keys-section {
   margin-top: 2rem;
@@ -22,8 +26,8 @@
   border: 1px solid #ccc;
   border-radius: 6px;
   min-height: 200px;
-  height: auto; /* ✅ Prevent collapse */
-  visibility: visible; /* ✅ Force render */
+  height: auto;
+  visibility: visible;
 }
 
 /* 📊 Table Styles */
@@ -33,8 +37,8 @@
   border-collapse: collapse;
   table-layout: fixed;
   font-size: 0.95rem;
-  display: table; /* ✅ Required to show table */
-  height: auto; /* ✅ Prevent zero height */
+  display: table;
+  height: auto;
   visibility: visible;
 }
 
@@ -73,7 +77,7 @@
 
 /* 🫥 Prevent collapse on empty cells */
 #api-keys-section .admin-table td:empty::after {
-  content: " "; /* non-breaking space */
+  content: " ";
   visibility: hidden;
 }
 

@@ -1,7 +1,8 @@
 # ===================================================
 # ✅ USER MANAGEMENT ROUTER (routes.py)
-# Handles admin user CRUD operations and permissions
-# Mounted at: /api/users in main.py or admin.py
+# 🧠 Author: Captain & Chatman
+# 🧾 Handles admin user CRUD operations and permissions
+# 📍 Mounted at: /api/users in main.py or admin.py
 # ===================================================
 
 from fastapi import APIRouter, HTTPException, Request
@@ -10,7 +11,7 @@ from uuid import uuid4
 from typing import List
 import asyncpg
 
-router = APIRouter()  # Mounts in main.py at: prefix="/api/users"
+router = APIRouter()  # Mounted at prefix="/api/users"
 
 # 🧱 GET all admin users
 @router.get("/")

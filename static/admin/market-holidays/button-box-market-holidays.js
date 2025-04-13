@@ -1,10 +1,15 @@
-// static/admin/market-holidays/ButtonBoxMarketHolidays.js
+// ============================================================================
+// 📁 FILE: button-box-market-holidays.js
+// 📍 LOCATION: static/admin/market-holidays/button-box-market-holidays.js
+// 🎯 PURPOSE: Initializes ButtonBox for the Market Holidays section
+// 🧩 AUTHOR: Captain & Chatman
+// 🔖 VERSION: MPA Phase I (Market Holidays ButtonBox Integration)
+// ============================================================================
 
 window.ButtonBoxMarketHolidays = (() => {
   let initialized = false;
 
   function handleHolidayAction(action, selectedIds) {
-    // Skip selection warning for these actions
     const skipSelectionCheck = ["add", "undo", "save", "edit", "copy"];
     if (
       !skipSelectionCheck.includes(action) &&
@@ -14,16 +19,15 @@ window.ButtonBoxMarketHolidays = (() => {
       return;
     }
 
-    // Delegate to row logic
     ButtonBoxRows.handleRowAction(action, selectedIds, {
       section: "holiday",
       tableId: "holidays-table",
     });
 
-    // Optional backend call (disabled for now)
-    if (action === "save") {
-      // ButtonBoxDataBase?.saveToDatabase?.("holiday", selectedIds);
-    }
+    // 🔌 Optional DB logic — disabled for now
+    // if (action === "save") {
+    //   ButtonBoxDataBase?.saveToDatabase?.("holiday", selectedIds);
+    // }
   }
 
   function init() {
@@ -79,5 +83,5 @@ window.ButtonBoxMarketHolidays = (() => {
   return { init };
 })();
 
-// Auto-run the init
+// ✅ Auto-run init on script load
 window.ButtonBoxMarketHolidays.init();

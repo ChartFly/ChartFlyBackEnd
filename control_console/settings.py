@@ -1,3 +1,9 @@
+# ===================================================
+# ✅ FILE: settings.py
+# 🧠 Author: Captain & Chatman
+# 🛠️ Purpose: Manage global system settings from the database
+# ===================================================
+
 from fastapi import APIRouter, HTTPException
 from sqlalchemy import text
 from control_console.database import engine

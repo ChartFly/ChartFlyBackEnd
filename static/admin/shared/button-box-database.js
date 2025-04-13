@@ -1,4 +1,10 @@
-// static/admin/shared/ButtonBoxDataBase.js
+// ============================================
+// ✅ button-box-database.js
+// --------------------------------------------
+// Handles section-specific database saves via API
+// Author: Captain & Chatman
+// Version: MPA Phase I (Database Save Prototype)
+// ============================================
 
 window.ButtonBoxDataBase = (() => {
   async function saveToDatabase(section, rowIds) {
@@ -27,6 +33,7 @@ window.ButtonBoxDataBase = (() => {
         });
 
         if (!res.ok) throw new Error("Save failed");
+
         ButtonBox.showMessage(
           section,
           "Holidays saved successfully",
@@ -41,7 +48,7 @@ window.ButtonBoxDataBase = (() => {
   }
 
   function validateRow(rowData) {
-    // Placeholder for future schema validation
+    // Placeholder for future schema validation logic
     return true;
   }
 

@@ -1,4 +1,10 @@
-// static/frontend/core/main.js
+// ============================================================================
+// 📁 FILE: main.js
+// 📍 LOCATION: static/frontend/core/main.js
+// 🎯 PURPOSE: Global frontend logic for Admin Panel — market status + ticker
+// ✍️ AUTHOR: Captain & Chatman
+// 🔖 VERSION: MPA Core v1.0 (Global Logic Refined)
+// ============================================================================
 
 document.addEventListener("DOMContentLoaded", function () {
   console.log("🚦 DOM fully loaded");

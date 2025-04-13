@@ -1,3 +1,9 @@
+# ==========================================================
+# ✅ FILE: control_console/auth.py
+# 📌 PURPOSE: Placeholder for future auth features (RBAC, 2FA, sessions)
+# 🛠️ STATUS: Reserved (MPA Phase I) — Author: Captain & Chatman
+# ==========================================================
+
 """
 auth.py (Placeholder Module)
 

@@ -1,4 +1,11 @@
-// static/admin/api-keys/ApiKeys.js
+// ============================================================================
+// 📁 FILE: api-keys.js
+// 📍 LOCATION: static/admin/api-keys/api-keys.js
+// 🎯 PURPOSE: Loads and renders API Key data into the admin table
+// 🧩 AUTHOR: Captain & Chatman
+// 🔖 VERSION: MPA Phase I (API Keys Loader Integration)
+// ============================================================================
+
 (() => {
   if (window.API_KEYS_LOADED) return;
   window.API_KEYS_LOADED = true;
@@ -7,6 +14,7 @@
   async function loadApiKeys() {
     console.log("📥 loadApiKeys() has been called");
     console.log("📍 ApiKeys call stack:", new Error().stack);
+
     try {
       const response = await fetch("/api/api-keys/");
       const keys = await response.json();
@@ -31,6 +39,7 @@
         `;
         tbody.appendChild(row);
       });
+
       console.log(`✅ Rendered ${keys.length} API keys`);
 
       const idToggle = document.getElementById("api-keys-show-id-toggle");

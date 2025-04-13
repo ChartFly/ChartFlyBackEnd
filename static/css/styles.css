@@ -1,6 +1,10 @@
-/* ============================== */
-/* ✅ GLOBAL BACKEND STYLES.CSS (Header + Tabs Only) */
-/* ============================== */
+/* ============================================================================
+  📁 FILE: styles.css
+  📍 LOCATION: static/css/styles.css
+  🎯 PURPOSE: Global backend layout — Header, Tabs, Footer, Compact Toggle
+  ✍️ AUTHOR: Captain & Chatman
+  🔖 VERSION: MPA Global v1.0 (Header & Ticker)
+============================================================================ */
 
 /* ✅ Header Layout */
 .admin-header {
@@ -53,9 +57,7 @@
   color: black;
 }
 
-/* ============================== */
 /* ✅ Tabs */
-/* ============================== */
 .tab-container {
   display: flex;
   justify-content: flex-start;
@@ -79,9 +81,7 @@
   color: white;
 }
 
-/* ============================== */
 /* ✅ Shared Action Buttons */
-/* ============================== */
 .action-btn {
   padding: 8px 14px;
   border: none;
@@ -99,7 +99,6 @@
   color: white;
 }
 
-/* ============================== */
 /* ✅ Compact Mode Toggle Button */
 .compact-toggle {
   margin-bottom: 12px;
@@ -116,15 +115,13 @@
   color: white;
 }
 
-/* =============================== */
 /* ✅ Admin Footer + Holiday Ticker */
-/* =============================== */
 .admin-footer {
   background-color: #006373;
   color: white;
   font-size: 16px;
   font-family: Arial, sans-serif;
-  padding: 20px 50px; /* ✅ Matches header spacing on both sides */
+  padding: 20px 50px;
   box-sizing: border-box;
   position: fixed;
   bottom: 0;
@@ -141,9 +138,9 @@
   display: inline-block;
   animation: ticker-scroll 90s linear infinite;
   min-width: 100%;
-  line-height: 48px; /* Match just under footer height */
-  padding-top: 4px; /* Gently lifts text into perfect visual center */
-  transform: none; /* Remove previous vertical nudge */
+  line-height: 48px;
+  padding-top: 4px;
+  transform: none;
 }
 
 @keyframes ticker-scroll {
