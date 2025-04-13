@@ -13,7 +13,7 @@ async function loadMarketHolidays() {
     const holidays = await response.json();
     console.log("✅ Holidays fetched:", holidays);
 
-    const table = document.getElementById("holidays-table");
+    const table = document.getElementById("holiday-table");
     console.log("🔍 holidays-table:", table);
     const tbody = table?.querySelector("tbody");
     console.log("🔍 tbody:", tbody);
