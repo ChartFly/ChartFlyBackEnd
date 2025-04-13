@@ -6,9 +6,9 @@
     - Market Holidays
     - API Keys
     - User Management
-  Includes cache-busting and debug dump.
+  Includes cache-busting, debug dump, and ID scanner.
   Author: Captain & Chatman
-  Version: ChartFly Admin v13.5 (Nuclear Debug Mode)
+  Version: ChartFly Admin v13.5.1 (Sherlock Mode)
   ===========================================
 -->
 
@@ -79,6 +79,17 @@
         console.log("🕵️‍♂️ ButtonBox elements:");
         document.querySelectorAll(".button-box").forEach((b) => {
           console.log(" -", b.id || "(no ID)");
+        });
+      });
+    </script>
+
+    <!-- 🕵️ Bonus Debug: ID Scanner -->
+    <script>
+      window.addEventListener("DOMContentLoaded", () => {
+        console.log("🔍 ID SCAN — All Elements with IDs");
+        const elementsWithIds = document.querySelectorAll("[id]");
+        elementsWithIds.forEach((el) => {
+          console.log(`🧩 #${el.id} — <${el.tagName.toLowerCase()}>`, el);
         });
       });
     </script>
