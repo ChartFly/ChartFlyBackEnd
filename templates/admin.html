@@ -68,7 +68,7 @@
       </div>
     </div>
 
-    <!-- ✅ Tab Content Sections (Updated Includes) -->
+    <!-- ✅ Tab Content Sections -->
     <section
       id="market-holidays-section"
       class="admin-tab-section"
@@ -121,7 +121,7 @@
       </div>
     </footer>
 
-    <!-- ✅ Tab Switcher -->
+    <!-- ✅ Tab Switcher with Delay -->
     <script>
       function switchTab(sectionId) {
         document.querySelectorAll(".admin-tab-section").forEach((section) => {
@@ -133,26 +133,29 @@
           tab.classList.toggle("active", isActive);
         });
 
-        if (
-          sectionId === "market-holidays-section" &&
-          !window.MARKET_TAB_LOADED
-        ) {
-          window.MARKET_TAB_LOADED = true;
-          loadMarketHolidays();
-        }
+        // ⏳ Slight delay to ensure DOM elements are painted
+        setTimeout(() => {
+          if (
+            sectionId === "market-holidays-section" &&
+            !window.MARKET_TAB_LOADED
+          ) {
+            window.MARKET_TAB_LOADED = true;
+            loadMarketHolidays();
+          }
 
-        if (sectionId === "api-keys-section" && !window.API_TAB_LOADED) {
-          window.API_TAB_LOADED = true;
-          loadApiKeys();
-        }
+          if (sectionId === "api-keys-section" && !window.API_TAB_LOADED) {
+            window.API_TAB_LOADED = true;
+            loadApiKeys();
+          }
 
-        if (
-          sectionId === "user-management-section" &&
-          !window.USER_TAB_LOADED
-        ) {
-          window.USER_TAB_LOADED = true;
-          loadAdminUsers();
-        }
+          if (
+            sectionId === "user-management-section" &&
+            !window.USER_TAB_LOADED
+          ) {
+            window.USER_TAB_LOADED = true;
+            loadAdminUsers();
+          }
+        }, 50);
       }
 
       document.addEventListener("DOMContentLoaded", () => {
