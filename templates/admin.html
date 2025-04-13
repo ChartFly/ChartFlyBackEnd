@@ -2,18 +2,13 @@
   ===========================================
   ✅ ChartFly Admin Panel - Main Template
   -------------------------------------------
-  This is the primary admin layout for ChartFly.
-  It loads the ButtonBox system and includes:
+  Loads ButtonBox system and all 3 admin tabs:
     - Market Holidays
     - API Keys
     - User Management
-
-  Each section's content is loaded dynamically via Jinja.
-  All behavior is controlled by tab-switching JS.
-
+  Includes cache-busting and debug dump.
   Author: Captain & Chatman
-  Version: ChartFly Admin v13.5
-  Date: April 12, 2025
+  Version: ChartFly Admin v13.5 (Nuclear Debug Mode)
   ===========================================
 -->
 
@@ -29,17 +24,17 @@
       href="/static/images/ChartFly-Favicon.ico"
     />
 
-    <!-- ✅ Stylesheets -->
-    <link rel="stylesheet" href="/static/css/styles.css?v=3" />
-    <link rel="stylesheet" href="/static/admin/shared/ButtonBox.css?v=3" />
+    <!-- ✅ Stylesheets (Cache-Busted) -->
+    <link rel="stylesheet" href="/static/css/styles.css?v=999" />
+    <link rel="stylesheet" href="/static/admin/shared/ButtonBox.css?v=999" />
     <link
       rel="stylesheet"
-      href="/static/admin/market-holidays/MarketHolidays.css?v=3"
+      href="/static/admin/market-holidays/MarketHolidays.css?v=999"
     />
-    <link rel="stylesheet" href="/static/admin/api-keys/ApiKeys.css?v=3" />
+    <link rel="stylesheet" href="/static/admin/api-keys/ApiKeys.css?v=999" />
     <link
       rel="stylesheet"
-      href="/static/admin/user-management/UserManagement.css?v=3"
+      href="/static/admin/user-management/UserManagement.css?v=999"
     />
   </head>
 
@@ -57,6 +52,37 @@
       </div>
     </div>
 
+    <!-- 🔍 Debug Dump -->
+    <script>
+      window.addEventListener("DOMContentLoaded", () => {
+        console.log("🧨 DEBUG BLAST — DOM Report");
+        document
+          .querySelectorAll(".admin-tab-section")
+          .forEach((section, i) => {
+            console.log(
+              `🧱 Section ${i + 1}: #${section.id}`,
+              section.innerHTML.slice(0, 200)
+            );
+          });
+        console.log(
+          "📄 Tables found:",
+          document.querySelectorAll("table").length
+        );
+        console.log(
+          "🪑 TBodies found:",
+          document.querySelectorAll("tbody").length
+        );
+        console.log(
+          "🎯 Edit buttons found:",
+          document.querySelectorAll("button[id$='edit-btn']").length
+        );
+        console.log("🕵️‍♂️ ButtonBox elements:");
+        document.querySelectorAll(".button-box").forEach((b) => {
+          console.log(" -", b.id || "(no ID)");
+        });
+      });
+    </script>
+
     <!-- ✅ Tabs -->
     <div class="tab-container">
       <div class="tab" onclick="switchTab('market-holidays-section')">
@@ -68,7 +94,7 @@
       </div>
     </div>
 
-    <!-- ✅ Tab Content Sections -->
+    <!-- ✅ Tab Content (Dynamic Includes) -->
     <section
       id="market-holidays-section"
       class="admin-tab-section"
@@ -93,20 +119,20 @@
       {% include "user-management/UserManagement.html" %}
     </section>
 
-    <!-- ✅ Shared Scripts -->
-    <script src="/static/admin/shared/ButtonBox.js"></script>
-    <script src="/static/admin/shared/ButtonBoxMessages.js"></script>
-    <script src="/static/admin/shared/ButtonBoxRows.js"></script>
-    <script src="/static/admin/shared/ButtonBoxColumns.js"></script>
+    <!-- ✅ Shared Scripts (Cache-Busted) -->
+    <script src="/static/admin/shared/ButtonBox.js?v=999"></script>
+    <script src="/static/admin/shared/ButtonBoxMessages.js?v=999"></script>
+    <script src="/static/admin/shared/ButtonBoxRows.js?v=999"></script>
+    <script src="/static/admin/shared/ButtonBoxColumns.js?v=999"></script>
 
-    <!-- ✅ Section Scripts -->
-    <script src="/static/frontend/core/main.js"></script>
-    <script src="/static/admin/market-holidays/MarketHolidays.js"></script>
-    <script src="/static/admin/market-holidays/ButtonBoxMarketHolidays.js"></script>
-    <script src="/static/admin/api-keys/ApiKeys.js"></script>
-    <script src="/static/admin/api-keys/ButtonBoxApiKeys.js"></script>
-    <script src="/static/admin/user-management/UserManagement.js"></script>
-    <script src="/static/admin/user-management/ButtonBoxUserManagement.js"></script>
+    <!-- ✅ Section Scripts (Cache-Busted) -->
+    <script src="/static/frontend/core/main.js?v=999"></script>
+    <script src="/static/admin/market-holidays/MarketHolidays.js?v=999"></script>
+    <script src="/static/admin/market-holidays/ButtonBoxMarketHolidays.js?v=999"></script>
+    <script src="/static/admin/api-keys/ApiKeys.js?v=999"></script>
+    <script src="/static/admin/api-keys/ButtonBoxApiKeys.js?v=999"></script>
+    <script src="/static/admin/user-management/UserManagement.js?v=999"></script>
+    <script src="/static/admin/user-management/ButtonBoxUserManagement.js?v=999"></script>
 
     <!-- ✅ Footer Ticker -->
     <footer class="admin-footer">
@@ -121,7 +147,7 @@
       </div>
     </footer>
 
-    <!-- ✅ Tab Switcher with Delay -->
+    <!-- ✅ Tab Switcher -->
     <script>
       function switchTab(sectionId) {
         document.querySelectorAll(".admin-tab-section").forEach((section) => {
@@ -133,29 +159,26 @@
           tab.classList.toggle("active", isActive);
         });
 
-        // ⏳ Slight delay to ensure DOM elements are painted
-        setTimeout(() => {
-          if (
-            sectionId === "market-holidays-section" &&
-            !window.MARKET_TAB_LOADED
-          ) {
-            window.MARKET_TAB_LOADED = true;
-            loadMarketHolidays();
-          }
+        if (
+          sectionId === "market-holidays-section" &&
+          !window.MARKET_TAB_LOADED
+        ) {
+          window.MARKET_TAB_LOADED = true;
+          loadMarketHolidays();
+        }
 
-          if (sectionId === "api-keys-section" && !window.API_TAB_LOADED) {
-            window.API_TAB_LOADED = true;
-            loadApiKeys();
-          }
+        if (sectionId === "api-keys-section" && !window.API_TAB_LOADED) {
+          window.API_TAB_LOADED = true;
+          loadApiKeys();
+        }
 
-          if (
-            sectionId === "user-management-section" &&
-            !window.USER_TAB_LOADED
-          ) {
-            window.USER_TAB_LOADED = true;
-            loadAdminUsers();
-          }
-        }, 50);
+        if (
+          sectionId === "user-management-section" &&
+          !window.USER_TAB_LOADED
+        ) {
+          window.USER_TAB_LOADED = true;
+          loadAdminUsers();
+        }
       }
 
       document.addEventListener("DOMContentLoaded", () => {
