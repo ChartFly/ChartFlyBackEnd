@@ -1,15 +1,6 @@
 <!--
-  ===========================================
   ✅ ChartFly Admin Panel - Main Template
-  -------------------------------------------
-  Loads ButtonBox system and all 3 admin tabs:
-    - Market Holidays
-    - API Keys
-    - User Management
-  Includes cache-busting, debug dump, and ID scanner.
-  Author: Captain & Chatman
-  Version: ChartFly Admin v13.5.1 (Sherlock Mode)
-  ===========================================
+  Version: v13.5.2 (Flyswatter Edition)
 -->
 
 <!DOCTYPE html>
@@ -17,14 +8,9 @@
   <head>
     <meta charset="UTF-8" />
     <title>ChartFly Admin Panel</title>
+    <link rel="icon" href="/static/images/ChartFly-Favicon.ico" />
 
-    <link
-      rel="icon"
-      type="image/x-icon"
-      href="/static/images/ChartFly-Favicon.ico"
-    />
-
-    <!-- ✅ Stylesheets (Cache-Busted) -->
+    <!-- ✅ Styles (Cache-Busted) -->
     <link rel="stylesheet" href="/static/css/styles.css?v=999" />
     <link rel="stylesheet" href="/static/admin/shared/ButtonBox.css?v=999" />
     <link
@@ -41,11 +27,7 @@
   <body>
     <!-- ✅ Header -->
     <div class="admin-header">
-      <img
-        src="/static/images/Chartfly-logo.png"
-        alt="ChartFly Logo"
-        class="admin-logo"
-      />
+      <img src="/static/images/Chartfly-logo.png" class="admin-logo" />
       <h1 class="admin-title">ChartFly Admin Console</h1>
       <div id="market-status-indicator">
         Market Status: <span id="market-status-text">Checking...</span>
@@ -87,8 +69,7 @@
     <script>
       window.addEventListener("DOMContentLoaded", () => {
         console.log("🔍 ID SCAN — All Elements with IDs");
-        const elementsWithIds = document.querySelectorAll("[id]");
-        elementsWithIds.forEach((el) => {
+        document.querySelectorAll("[id]").forEach((el) => {
           console.log(`🧩 #${el.id} — <${el.tagName.toLowerCase()}>`, el);
         });
       });
@@ -105,7 +86,7 @@
       </div>
     </div>
 
-    <!-- ✅ Tab Content (Dynamic Includes) -->
+    <!-- ✅ Tab Content -->
     <section
       id="market-holidays-section"
       class="admin-tab-section"
@@ -130,13 +111,13 @@
       {% include "user-management/UserManagement.html" %}
     </section>
 
-    <!-- ✅ Shared Scripts (Cache-Busted) -->
+    <!-- ✅ Shared Scripts -->
     <script src="/static/admin/shared/ButtonBox.js?v=999"></script>
     <script src="/static/admin/shared/ButtonBoxMessages.js?v=999"></script>
     <script src="/static/admin/shared/ButtonBoxRows.js?v=999"></script>
     <script src="/static/admin/shared/ButtonBoxColumns.js?v=999"></script>
 
-    <!-- ✅ Section Scripts (Cache-Busted) -->
+    <!-- ✅ Section Scripts -->
     <script src="/static/frontend/core/main.js?v=999"></script>
     <script src="/static/admin/market-holidays/MarketHolidays.js?v=999"></script>
     <script src="/static/admin/market-holidays/ButtonBoxMarketHolidays.js?v=999"></script>
@@ -158,7 +139,7 @@
       </div>
     </footer>
 
-    <!-- ✅ Tab Switcher -->
+    <!-- ✅ Tab Switcher + Failsafe Loader -->
     <script>
       function switchTab(sectionId) {
         document.querySelectorAll(".admin-tab-section").forEach((section) => {
@@ -192,23 +173,20 @@
         }
       }
 
-      <script>
-  // ✅ Wait for full window load (all scripts, images, etc.)
-  window.addEventListener("load", () => {
-    console.log("🧼 Full window loaded. Checking if loadMarketHolidays exists...");
-
-    const interval = setInterval(() => {
-      if (typeof loadMarketHolidays === "function") {
-        console.log("✅ loadMarketHolidays is now available.");
-        clearInterval(interval);
-        switchTab("market-holidays-section");
-      } else {
-        console.log("⏳ Waiting for loadMarketHolidays...");
-      }
-    }, 100);
-  });
-</script>
-
+      window.addEventListener("load", () => {
+        console.log(
+          "🧼 Full window loaded. Checking if loadMarketHolidays exists..."
+        );
+        const interval = setInterval(() => {
+          if (typeof loadMarketHolidays === "function") {
+            console.log("✅ loadMarketHolidays is now available.");
+            clearInterval(interval);
+            switchTab("market-holidays-section");
+          } else {
+            console.log("⏳ Waiting for loadMarketHolidays...");
+          }
+        }, 100);
+      });
     </script>
   </body>
 </html>
