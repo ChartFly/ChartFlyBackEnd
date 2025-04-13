@@ -236,3 +236,5 @@ window.ButtonBoxRows = (() => {
     undoStacks,
   };
 })();
+
+// ?? Force rebuild
