@@ -104,6 +104,11 @@ async def admin_ui(request: Request):
 
     return RedirectResponse(url="/auth/login", status_code=HTTP_302_FOUND)
 
+# ✅ MPA Page: Market Holidays (standalone)
+@app.get("/market-holidays")
+async def market_holidays_page(request: Request):
+    return templates.TemplateResponse("market-holidays/market-holidays.html", {"request": request})
+
 # ✅ Healthcheck Endpoints
 @app.head("/")
 async def root_head():
