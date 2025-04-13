@@ -192,13 +192,23 @@
         }
       }
 
-      document.addEventListener("DOMContentLoaded", () => {
-        console.log("🕒 Waiting for JS files to settle...");
-        setTimeout(() => {
-          console.log("🔁 Calling switchTab after delay...");
-          switchTab("market-holidays-section");
-        }, 100);
-      });
+      <script>
+  // ✅ Wait for full window load (all scripts, images, etc.)
+  window.addEventListener("load", () => {
+    console.log("🧼 Full window loaded. Checking if loadMarketHolidays exists...");
+
+    const interval = setInterval(() => {
+      if (typeof loadMarketHolidays === "function") {
+        console.log("✅ loadMarketHolidays is now available.");
+        clearInterval(interval);
+        switchTab("market-holidays-section");
+      } else {
+        console.log("⏳ Waiting for loadMarketHolidays...");
+      }
+    }, 100);
+  });
+</script>
+
     </script>
   </body>
 </html>
