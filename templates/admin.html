@@ -177,13 +177,24 @@
         console.log(
           "🧼 Full window loaded. Checking if loadMarketHolidays exists..."
         );
+
+        let attempts = 0;
+        const maxAttempts = 50;
+
         const interval = setInterval(() => {
           if (typeof loadMarketHolidays === "function") {
             console.log("✅ loadMarketHolidays is now available.");
             clearInterval(interval);
             switchTab("market-holidays-section");
           } else {
-            console.log("⏳ Waiting for loadMarketHolidays...");
+            if (++attempts > maxAttempts) {
+              console.warn(
+                "⛔ Gave up waiting for loadMarketHolidays after 50 tries."
+              );
+              clearInterval(interval);
+            } else {
+              console.log("⏳ Waiting for loadMarketHolidays...");
+            }
           }
         }, 100);
       });
