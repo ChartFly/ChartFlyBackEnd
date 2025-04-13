@@ -1,13 +1,12 @@
 <!--
   ===========================================
-  ✅ ChartFly Admin Panel - market-hoidays.html
+  ✅ ChartFly Admin Panel - market-holidays.html
   -------------------------------------------
   Standalone MPA Page for Market Holidays Admin Section
   Author: Captain & Chatman
-  Version: MPA Phase I (Market Holidays - Refactored)
+  Version: MPA Phase I (Modular MPA Layout)
   ===========================================
 -->
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -20,6 +19,10 @@
       type="image/x-icon"
     />
     <link rel="stylesheet" href="/static/css/styles.css?v=999" />
+    <link
+      rel="stylesheet"
+      href="/static/admin/shared/navbar/navbar.css?v=999"
+    />
     <link rel="stylesheet" href="/static/admin/shared/button-box.css?v=999" />
     <link
       rel="stylesheet"
@@ -40,19 +43,13 @@
       </div>
     </div>
 
-    <!-- ✅ NavBar Placeholder (modular add later) -->
-    <nav class="admin-navbar">
-      <a href="/admin/market-holidays" class="nav-link active"
-        >Market Holidays</a
-      >
-      <a href="/admin/api-keys" class="nav-link">API Keys</a>
-      <a href="/admin/user-management" class="nav-link">Admin Users</a>
-    </nav>
+    <!-- ✅ Modular NavBar -->
+    {% include "shared/navbar/navbar.html" %}
 
     <!-- ✅ Market Holidays Table + ButtonBox -->
     <section id="market-holidays-section" class="admin-tab-section">
       {% include "shared/button-box.html" %} {% include
-      "market-holidays/market-holidays.html" %}
+      "market-holidays/holiday-table.html" %}
     </section>
 
     <!-- ✅ Footer -->
@@ -69,6 +66,7 @@
     </footer>
 
     <!-- ✅ Scripts -->
+    <script src="/static/admin/shared/navbar/navbar.js?v=999" defer></script>
     <script src="/static/admin/shared/button-box.js?v=999" defer></script>
     <script
       src="/static/admin/shared/button-box-messages.js?v=999"
@@ -79,7 +77,6 @@
       src="/static/admin/shared/button-box-columns.js?v=999"
       defer
     ></script>
-
     <script src="/static/frontend/core/main.js?v=999" defer></script>
     <script
       src="/static/admin/market-holidays/market-holidays.js?v=999"
