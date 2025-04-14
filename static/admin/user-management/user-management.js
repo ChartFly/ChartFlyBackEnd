@@ -1,10 +1,10 @@
 // ===========================================================
-// ✅ user-management.js
-// -----------------------------------------------------------
-// Loads and renders Admin User data into User Management table
-// Integrates with ButtonBox system
-// Author: Captain & Chatman
-// Version: MPA Phase I (User Management)
+// 📁 FILE: user-management.js
+// 📍 LOCATION: static/admin/user-management/user-management.js
+// 🎯 PURPOSE: Load and render Admin User data into User Management table
+// 🧩 DEPENDENCIES: ButtonBox, ButtonBoxUserManagement
+// 👥 Author: Captain & Chatman
+// 🔖 Version: MPA Phase I (Finalized Table Rendering)
 // ===========================================================
 
 (() => {
@@ -20,7 +20,7 @@
       const users = await response.json();
       console.log("✅ Admin users fetched:", users);
 
-      const table = document.getElementById("user-table");
+      const table = document.getElementById("user-management-table");
       const tbody = table?.querySelector("tbody");
       if (!tbody) throw new Error("Missing <tbody> in user table");
 
@@ -34,8 +34,10 @@
           <td class="id-col hidden-col">${user.id}</td>
           <td>${user.name}</td>
           <td>${user.email}</td>
-          <td>${user.access_level ?? "Admin"}</td>
-          <td>${user.status ?? "Active"}</td>
+          <td>${
+            Array.isArray(user.access) ? user.access.join(", ") : "None"
+          }</td>
+          <td>Active</td>
           <td><input type="checkbox" /></td>
         `;
         tbody.appendChild(row);
