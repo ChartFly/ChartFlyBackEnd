@@ -4,10 +4,9 @@
   -------------------------------------------
   Standalone MPA Page for API Keys Admin Section
   Author: Captain & Chatman
-  Version: MPA Phase I (API Keys - Refactored)
+  Version: MPA Phase I (Modular MPA Layout)
   ===========================================
 -->
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -20,8 +19,12 @@
       type="image/x-icon"
     />
     <link rel="stylesheet" href="/static/css/styles.css?v=999" />
-    <link rel="stylesheet" href="/static/admin/shared/button-box.css?v=999" />
-    <link rel="stylesheet" href="/static/admin/api-keys/api-keys.css?v=999" />
+    <link
+      rel="stylesheet"
+      href="/static/admin/shared/navbar/navbar.css?v=999"
+    />
+    <link rel="stylesheet" href="/static/admin/shared/ButtonBox.css?v=999" />
+    <link rel="stylesheet" href="/static/admin/api-keys/ApiKeys.css?v=999" />
   </head>
   <body>
     <!-- ✅ Header -->
@@ -37,17 +40,13 @@
       </div>
     </div>
 
-    <!-- ✅ NavBar Placeholder (modular add later) -->
-    <nav class="admin-navbar">
-      <a href="/admin/market-holidays" class="nav-link">Market Holidays</a>
-      <a href="/admin/api-keys" class="nav-link active">API Keys</a>
-      <a href="/admin/user-management" class="nav-link">Admin Users</a>
-    </nav>
+    <!-- ✅ Modular NavBar -->
+    {% include "shared/navbar/navbar.html" %}
 
     <!-- ✅ API Keys Table + ButtonBox -->
     <section id="api-keys-section" class="admin-tab-section">
-      {% include "shared/button-box.html" %} {% include "api-keys/api-keys.html"
-      %}
+      {% include "shared/button-box.html" %} {% include
+      "api-keys/api-keys-table.html" %}
     </section>
 
     <!-- ✅ Footer -->
@@ -64,6 +63,7 @@
     </footer>
 
     <!-- ✅ Scripts -->
+    <script src="/static/admin/shared/navbar/navbar.js?v=999" defer></script>
     <script src="/static/admin/shared/button-box.js?v=999" defer></script>
     <script
       src="/static/admin/shared/button-box-messages.js?v=999"
@@ -74,7 +74,6 @@
       src="/static/admin/shared/button-box-columns.js?v=999"
       defer
     ></script>
-
     <script src="/static/frontend/core/main.js?v=999" defer></script>
     <script src="/static/admin/api-keys/api-keys.js?v=999" defer></script>
     <script
