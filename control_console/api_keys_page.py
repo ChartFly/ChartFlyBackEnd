@@ -15,7 +15,7 @@ router = APIRouter()
 templates = Jinja2Templates(directory="templates")
 
 # ✅ API Keys Admin Page (MPA)
-@router.get("/admin/api-keys")
+@router.get("/api-keys")
 async def api_keys_page(request: Request):
     if not request.session.get("user_id"):
         return RedirectResponse(url="/auth/login", status_code=HTTP_302_FOUND)

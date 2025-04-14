@@ -15,7 +15,7 @@ router = APIRouter()
 templates = Jinja2Templates(directory="templates")
 
 # ✅ Admin Users Page (MPA)
-@router.get("/admin/user-management")
+@router.get("/user-management")
 async def user_management_page(request: Request):
     if not request.session.get("user_id"):
         return RedirectResponse(url="/auth/login", status_code=HTTP_302_FOUND)
