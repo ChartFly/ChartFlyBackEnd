@@ -1,0 +1,203 @@
+/*
+  ===========================================
+  ✅ button-box.css
+  -------------------------------------------
+  Shared styles for all ButtonBox components
+  Author: Captain & Chatman
+  Version: MPA Phase I (Finalized Stylesheet)
+  ===========================================
+*/
+
+/* 🔵 Default Action Button */
+.action-btn {
+  padding: 6px 12px;
+  margin: 0 5px;
+  border-radius: 6px;
+  background-color: #006373;
+  border: 1px solid #006373;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.action-btn:hover:not(:disabled):not(.disabled-btn) {
+  background-color: #cdebf0;
+  border-color: #cdebf0;
+  color: #000;
+}
+
+.action-btn:active {
+  background-color: #007a8a;
+  border-color: #007a8a;
+  color: #fff;
+}
+
+/* 🟧 Burnt Orange for Cell Mode */
+.cell-mode {
+  background-color: #cc6600 !important;
+  border-color: #cc6600 !important;
+  color: #fff !important;
+}
+.cell-mode:hover:not(:disabled):not(.disabled-btn) {
+  background-color: #ff8000 !important;
+}
+
+/* ❌ Disabled Button */
+.disabled-btn {
+  background-color: #ccc !important;
+  color: #666 !important;
+  cursor: not-allowed;
+}
+
+/* 🟨 Confirm Button */
+.confirm-btn {
+  padding: 6px 14px;
+  margin: 5px 0;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 16px;
+  border: none;
+  transition: background-color 0.2s ease;
+  min-width: 160px;
+  opacity: 1;
+  visibility: visible;
+}
+.confirm-btn.gray {
+  background-color: #bbb;
+  color: #444;
+}
+.confirm-btn.yellow {
+  background-color: #ffcf40;
+  color: #000;
+}
+.confirm-btn:disabled {
+  background-color: #ccc;
+  color: #666;
+  cursor: not-allowed;
+}
+
+/* 🔘 Confirm Button Wrapper */
+.confirm-button-container {
+  display: flex;
+  align-items: center;
+  padding-left: 8px;
+}
+
+/* 🗨️ Info / Tip / Warning Box */
+.info-box {
+  border-radius: 6px;
+  padding: 8px 12px;
+  margin: 24px 0;
+  font-size: 16px;
+  border: 1px solid #aaa;
+  white-space: normal;
+  word-wrap: break-word;
+}
+.info-box.tip {
+  background-color: #e9faff;
+  border-color: #55b5c3;
+  color: #007a8a;
+}
+.info-box.warn {
+  background-color: #fff4e5;
+  border-color: #ffa726;
+  color: #e65100;
+}
+
+/* 🧾 Current Action Tracker */
+#global-current-action,
+[id$="-current-action"] {
+  font-weight: bold;
+  font-size: 16px;
+  color: #007a8a;
+  margin-top: 5px;
+}
+
+/* 📊 Action Footer for Status and Selection */
+.status-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 8px 12px;
+  margin-top: 10px;
+  border: 1px solid #aaa;
+  border-radius: 6px;
+  background-color: #f0faff;
+  color: #007a8a;
+  font-weight: bold;
+  font-size: 16px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* 📋 Cell Paste Hover */
+.cell-paste-ready {
+  cursor: cell;
+  outline: 2px dashed transparent;
+}
+.cell-paste-ready:hover {
+  outline-color: #ffcf40;
+}
+
+/* ✅ Row Selection Highlight */
+.selected-row {
+  background-color: #f0faff;
+}
+
+/* ☑️ Checkbox Scaling */
+input[type="checkbox"] {
+  transform: scale(1.3);
+  cursor: pointer;
+}
+
+/* 🧰 Footer with Edit Mode + Confirm */
+.button-footer-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+  width: 100%;
+  max-width: 100%;
+  padding-left: 12px;
+  box-sizing: border-box;
+}
+
+/* 🔘 Edit Mode Controls (Radios + Checkbox) */
+.edit-mode-controls {
+  font-size: 16px;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.edit-mode-controls input[type="radio"],
+.edit-mode-controls input[type="checkbox"] {
+  margin-right: 6px;
+  transform: scale(1.1);
+}
+
+/* 🆔 Hidden ID Column */
+.line-id-col {
+  display: none;
+}
+
+/* 📦 ButtonBox Container */
+.button-box {
+  width: 100%;
+  max-width: 1100px;
+  min-width: unset;
+  margin: 0;
+  padding: 0 10px;
+  box-sizing: border-box;
+  margin-bottom: 6px;
+}
+
+/* 🔳 Toolbar Layout */
+.button-toolbar {
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 6px;
+}
