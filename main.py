@@ -25,7 +25,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 from starlette.middleware import Middleware
 from starlette.status import HTTP_302_FOUND
-from jinja2 import Environment, FileSystemLoader, select_autoescape  # 🧼 Disable template caching
+from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 # ✅ App Logging
 logging.basicConfig(level=logging.INFO)
@@ -40,6 +40,7 @@ from control_console.auth_login_register import router as login_register_router
 from control_console.auth_password_reset import router as password_reset_router
 from control_console.api_keys_page import router as api_keys_page_router
 from control_console.user_management_page import router as user_management_page_router
+from control_console.market_holidays_page import router as market_holidays_page_router  # ✅ ADDED
 
 # ✅ Local Imports: DB + Config
 from control_console.database import create_db_pool
@@ -106,11 +107,6 @@ async def admin_ui(request: Request):
 
     return RedirectResponse(url="/auth/login", status_code=HTTP_302_FOUND)
 
-# ✅ MPA Page: Market Holidays (standalone)
-@app.get("/market-holidays")
-async def market_holidays_page(request: Request):
-    return templates.TemplateResponse("market-holidays/market-holidays.html", {"request": request})
-
 # ✅ Healthcheck Endpoints
 @app.head("/")
 async def root_head():
@@ -132,8 +128,11 @@ app.include_router(admin_router, prefix="/api/admin")
 app.include_router(api_keys_router, prefix="/api/api-keys")
 app.include_router(admin_users_router, prefix="/api/users")
 app.include_router(dev_reset_router)
-app.include_router(api_keys_page_router)
-app.include_router(user_management_page_router)
+
+# ✅ Register Modular Page Routers
+app.include_router(market_holidays_page_router)      # 🧩 Market Holidays Page
+app.include_router(api_keys_page_router)             # 🧩 API Keys Page
+app.include_router(user_management_page_router)      # 🧩 Admin Users Page
 
 # ✅ Launch the app with Uvicorn if run directly
 if __name__ == "__main__":
