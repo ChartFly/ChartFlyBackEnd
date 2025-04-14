@@ -13,7 +13,7 @@ from control_console.user_management import (
     fetch_user_by_id,
     create_user,
     update_user,
-    delete_user
+    delete_user as delete_user_record
 )
 
 router = APIRouter()  # Mounted at prefix="/api/users"
@@ -64,4 +64,5 @@ async def update(user_id: str, request: Request):
 @router.delete("/{user_id}")
 async def delete(user_id: str, request: Request):
     db: Connection = request.state.db
-    await delete_user(db, user_id
+    await delete_user_record(db, user_id)
+    return {"message": "User deleted"}
