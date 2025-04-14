@@ -2,7 +2,7 @@
   ===========================================
   ✅ ChartFly Admin Panel - user-management.html
   -------------------------------------------
-  Standalone MPA Page for Admin User Management
+  Standalone MPA Page for Admin Users Section
   Author: Captain & Chatman
   Version: MPA Phase I (Modular MPA Layout)
   ===========================================
@@ -23,13 +23,12 @@
       rel="stylesheet"
       href="/static/admin/shared/navbar/navbar.css?v=999"
     />
-    <link rel="stylesheet" href="/static/admin/shared/button-box.css?v=999" />
+    <link rel="stylesheet" href="/static/admin/shared/ButtonBox.css?v=999" />
     <link
       rel="stylesheet"
       href="/static/admin/user-management/UserManagement.css?v=999"
     />
   </head>
-
   <body>
     <!-- ✅ Header -->
     <div class="admin-header">
@@ -47,7 +46,7 @@
     <!-- ✅ Modular NavBar -->
     {% include "shared/navbar/navbar.html" %}
 
-    <!-- ✅ Admin Users Table + ButtonBox -->
+    <!-- ✅ User Management Table + ButtonBox -->
     <section id="user-management-section" class="admin-tab-section">
       {% include "shared/button-box.html" %} {% include
       "user-management/user-management-table.html" %}
