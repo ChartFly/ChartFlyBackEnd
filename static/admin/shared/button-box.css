@@ -27,8 +27,8 @@
 }
 
 .action-btn:active {
-  background-color: #007a8a;
-  border-color: #007a8a;
+  background-color: #006373;
+  border-color: #006373;
   color: #fff;
 }
 
@@ -96,7 +96,7 @@
 .info-box.tip {
   background-color: #e9faff;
   border-color: #55b5c3;
-  color: #007a8a;
+  color: #006373;
 }
 .info-box.warn {
   background-color: #fff4e5;
@@ -109,7 +109,7 @@
 [id$="-current-action"] {
   font-weight: bold;
   font-size: 16px;
-  color: #007a8a;
+  color: #006373;
   margin-top: 5px;
 }
 
@@ -123,7 +123,7 @@
   border: 1px solid #aaa;
   border-radius: 6px;
   background-color: #f0faff;
-  color: #007a8a;
+  color: #006373;
   font-weight: bold;
   font-size: 16px;
   width: 100%;

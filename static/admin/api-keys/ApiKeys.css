@@ -51,7 +51,7 @@
   padding: 6px 10px;
   text-align: left;
   vertical-align: top;
-  background-color: #007a8a;
+  background-color: #006373;
   color: white;
   font-weight: bold;
   position: sticky;
@@ -79,7 +79,7 @@
   max-width: 6ch;
   text-align: center;
   white-space: nowrap;
-  background-color: #007a8a;
+  background-color: #006373;
   color: white;
 }
 
@@ -114,7 +114,7 @@
 }
 
 #api-keys-section tr.editing {
-  box-shadow: inset 0 0 0 2px #007a8a;
+  box-shadow: inset 0 0 0 2px #006373;
   background-color: #e9f7f9;
 }
 
