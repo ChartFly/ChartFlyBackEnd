@@ -1,92 +1,185 @@
 // ============================================
-// ✅ button-box-rows.js
+// ✅ button-box.js
 // --------------------------------------------
-// Shared row-level actions: add, edit, copy,
-// delete, undo, save for admin sections
+// Core ButtonBox controller: manages state,
+// button logic, event wiring, and UI updates.
 // Author: Captain & Chatman
-// Version: MPA Phase I (API Add Patch Edition)
+// Version: MPA Phase I (Debug Logging Edition)
 // ============================================
 
-window.ButtonBoxRows = (() => {
-  const undoMap = new Map();
+console.log("🧠 ButtonBox.js loaded ✅");
 
-  function handleRowAction(action, selectedIds, config) {
-    const { section, tableId } = config;
-    const table = document.getElementById(tableId);
-    const tbody = table?.querySelector("tbody");
-    if (!tbody) return;
+window.ButtonBox = (() => {
+  const stateMap = new Map();
 
-    saveUndoState(section, tbody);
+  function init(config) {
+    const {
+      section,
+      tableId,
+      domId,
+      tipBoxId,
+      warningBoxId,
+      footerId,
+      enabledActions,
+      onAction,
+    } = config;
 
-    switch (action) {
-      case "add":
-        const newRow = createEditableRow(section);
-        if (newRow) {
-          tbody.insertBefore(newRow, tbody.firstChild);
+    const state = {
+      section,
+      tableId,
+      domId,
+      tipBoxId,
+      warningBoxId,
+      footerId,
+      enabledActions,
+      selectedRows: new Set(),
+      onAction,
+      tipIndex: 0,
+    };
+
+    stateMap.set(section, state);
+    console.log(`🚀 ButtonBox initialized for section: ${section}`);
+    wireButtons(state);
+    ButtonBoxMessages.initTips(section);
+  }
+
+  function getState(section) {
+    return stateMap.get(section);
+  }
+
+  function getEditMode(section) {
+    const radio = document.querySelector(
+      `input[name="${section}-edit-mode"]:checked`
+    );
+    return radio ? radio.value : "row";
+  }
+
+  function wireButtons(state) {
+    const { section, enabledActions } = state;
+
+    enabledActions.forEach((action) => {
+      const btn = document.getElementById(`${section}-${action}-btn`);
+      if (!btn) {
+        console.warn(`⚠️ Missing button for action: ${action}`);
+        return;
+      }
+
+      btn.addEventListener("click", () => {
+        console.log(`🔘 Button clicked: ${section}-${action}-btn`);
+        ButtonBoxMessages.setStatus(section, action);
+        ButtonBoxMessages.resetButtons(section, btn);
+
+        const skipConfirm = ["add", "copy", "edit", "undo"].includes(action);
+
+        if (typeof state.onAction !== "function") {
+          console.warn(
+            `⚠️ No onAction handler defined for section: ${section}`
+          );
+          return;
         }
-        break;
 
-      case "undo":
-        restoreUndoState(section, tbody);
-        break;
+        if (skipConfirm) {
+          state.onAction(action, Array.from(state.selectedRows));
+        } else {
+          ButtonBoxMessages.enableConfirm(section, action, () => {
+            state.onAction(action, Array.from(state.selectedRows));
+            ButtonBoxMessages.resetConfirm(section);
+          });
+        }
+      });
 
-      default:
-        console.log(`⚠️ Action not yet implemented: ${action}`);
+      if (action === "undo") {
+        btn.disabled = false;
+        btn.classList.remove("disabled-btn");
+      }
+    });
+
+    const confirmBtn = document.getElementById(`${section}-confirm-btn`);
+    if (confirmBtn) {
+      confirmBtn.disabled = true;
+      confirmBtn.className = "confirm-btn gray";
+      confirmBtn.textContent = "Confirm";
     }
+
+    const idToggle = document.getElementById(`${section}-show-id-toggle`);
+    if (idToggle) {
+      idToggle.addEventListener("change", () => {
+        ButtonBoxMessages.updateIdColumnVisibility(section);
+      });
+      idToggle.dispatchEvent(new Event("change"));
+    }
+
+    const modeRadios = document.querySelectorAll(
+      `input[name="${section}-edit-mode"]`
+    );
+    modeRadios.forEach((radio) => {
+      radio.addEventListener("change", () => {
+        ButtonBoxMessages.updateButtonColors(section);
+      });
+    });
+
+    ButtonBoxMessages.updateButtonColors(section);
   }
 
-  function saveUndoState(section, tbody) {
-    const clone = tbody.cloneNode(true);
-    undoMap.set(section, clone);
-    console.log(`💾 Undo state saved for ${section}`);
-  }
-
-  function restoreUndoState(section, tbody) {
-    const saved = undoMap.get(section);
-    if (!saved) {
-      console.warn(`⚠️ No undo state to restore for ${section}`);
+  function wireCheckboxes(section) {
+    const state = getState(section);
+    if (!state) {
+      console.warn(`⚠️ No state found for section: ${section}`);
       return;
     }
-    tbody.replaceWith(saved.cloneNode(true));
-    undoMap.delete(section);
-    ButtonBox.wireCheckboxes(section);
-    console.log(`↩️ Undo restored for ${section}`);
-  }
 
-  function createEditableRow(section) {
-    const row = document.createElement("tr");
-
-    if (section === "api") {
-      row.innerHTML = `
-        <td class="col-select"><input type="checkbox" class="api-select-checkbox" data-id="new" /></td>
-        <td class="id-col hidden-col">New</td>
-        <td><input type="text" placeholder="Label" /></td>
-        <td><input type="text" placeholder="Key Type" /></td>
-        <td><input type="text" placeholder="Billing" /></td>
-        <td><input type="number" placeholder="Monthly" /></td>
-        <td><input type="number" placeholder="Yearly" /></td>
-        <td><input type="number" placeholder="Limit/Sec" /></td>
-        <td><input type="number" placeholder="Limit/Min" /></td>
-        <td><input type="number" placeholder="Limit/5m" /></td>
-        <td><input type="number" placeholder="Limit/Hour" /></td>
-        <td><input type="number" placeholder="Priority" /></td>
-        <td>
-          <select>
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
-          </select>
-        </td>
-      `;
-    } else {
-      console.warn(`⚠️ createEditableRow not implemented for: ${section}`);
-      return null;
+    const table = document.getElementById(state.tableId);
+    if (!table) {
+      console.warn(`⚠️ Table not found: ${state.tableId}`);
+      return;
     }
 
-    row.classList.add("editable-row");
-    return row;
+    const checkboxes = table.querySelectorAll(`.${section}-select-checkbox`);
+    console.log(
+      `🔍 Found ${checkboxes.length} checkboxes for section "${section}"`
+    );
+    state.selectedRows.clear();
+
+    checkboxes.forEach((checkbox, index) => {
+      const id = checkbox.dataset.id;
+      const newCheckbox = checkbox.cloneNode(true);
+      checkbox.replaceWith(newCheckbox);
+
+      newCheckbox.addEventListener("change", () => {
+        if (newCheckbox.checked) {
+          state.selectedRows.add(id);
+          console.log(`✅ Checkbox selected: ${id}`);
+        } else {
+          state.selectedRows.delete(id);
+          console.log(`❌ Checkbox deselected: ${id}`);
+        }
+
+        ButtonBoxMessages.updateSelectedCount(section);
+      });
+    });
+
+    ButtonBoxMessages.updateSelectedCount(section);
+  }
+
+  function showWarning(section, message) {
+    console.warn(`⚠️ Warning (${section}): ${message}`);
+    ButtonBoxMessages.showWarning(section, message);
+  }
+
+  function showMessage(section, message, type = "info") {
+    console.log(`💬 Message (${section}): ${message}`);
+    if (type === "success") {
+      ButtonBoxMessages.clearWarning(section);
+    }
   }
 
   return {
-    handleRowAction,
+    init,
+    getState,
+    getEditMode,
+    wireButtons,
+    wireCheckboxes,
+    showWarning,
+    showMessage,
   };
 })();

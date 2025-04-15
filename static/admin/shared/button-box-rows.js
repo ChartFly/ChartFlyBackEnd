@@ -4,12 +4,12 @@
 // Handles row-level actions (add, edit, copy,
 // delete, save, undo) and checkbox logic.
 // Author: Captain & Chatman
-// Version: MPA Phase I (Row Logic Finalized)
+// Version: MPA Phase I (Row Logic Finalized + API Add Fix)
 // ============================================
 
 window.ButtonBoxRows = (() => {
-  const undoStacks = {}; // Holds up to 30 snapshots per section (DOM clones)
-  const clipboards = {}; // Holds copied row HTML per section
+  const undoStacks = {};
+  const clipboards = {};
 
   function wireCheckboxes(section) {
     const state = ButtonBox.getState(section);
@@ -48,10 +48,7 @@ window.ButtonBoxRows = (() => {
       row.cloneNode(true)
     );
 
-    if (!undoStacks[section]) {
-      undoStacks[section] = [];
-      console.log(`[UNDO] Initialized undo stack for: ${section}`);
-    }
+    if (!undoStacks[section]) undoStacks[section] = [];
 
     undoStacks[section].push({
       rows: snapshot,
@@ -59,21 +56,12 @@ window.ButtonBoxRows = (() => {
     });
 
     if (undoStacks[section].length > 30) undoStacks[section].shift();
-
-    console.log(
-      `[UNDO] Pushed snapshot. Stack size: ${undoStacks[section].length}`
-    );
   }
 
   function handleRowAction(action, selectedIds, { section, tableId }) {
     const state = ButtonBox.getState(section);
     const table = document.getElementById(tableId);
-    if (!table) {
-      console.error(
-        `❌ Table not found for section "${section}" using ID "${tableId}"`
-      );
-      return;
-    }
+    if (!table) return;
 
     if (["add", "edit", "delete", "copy"].includes(action)) {
       pushUndo(section);
@@ -145,10 +133,17 @@ window.ButtonBoxRows = (() => {
       newRow.innerHTML = `
         <td class="col-select"><input type="checkbox" class="${section}-select-checkbox" data-id="${newId}" checked></td>
         <td class="line-id-col">${newId}</td>
-        <td contenteditable="true" class="editable">Edit</td>
-        <td contenteditable="true" class="editable">YYYY-MM-DD</td>
-        <td contenteditable="true" class="editable">Upcoming</td>
-        <td contenteditable="true" class="editable"></td>
+        <td contenteditable="true" class="editable">Label</td>
+        <td contenteditable="true" class="editable">Key Type</td>
+        <td contenteditable="true" class="editable">Billing</td>
+        <td contenteditable="true" class="editable">Monthly</td>
+        <td contenteditable="true" class="editable">Yearly</td>
+        <td contenteditable="true" class="editable">Limit/Sec</td>
+        <td contenteditable="true" class="editable">Limit/Min</td>
+        <td contenteditable="true" class="editable">Limit/5m</td>
+        <td contenteditable="true" class="editable">Limit/Hour</td>
+        <td contenteditable="true" class="editable">Priority</td>
+        <td contenteditable="true" class="editable">Active</td>
       `;
 
       newRow.querySelectorAll("td[contenteditable]").forEach((cell) => {
@@ -229,7 +224,6 @@ window.ButtonBoxRows = (() => {
 
       last.rows.forEach((rowNode, i) => {
         tbody.appendChild(rowNode.cloneNode(true));
-        console.log(`[UNDO] Inserted row ${i + 1}`);
       });
 
       state.selectedRows = new Set(last.selected);
