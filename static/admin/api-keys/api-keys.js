@@ -2,9 +2,9 @@
 // 📁 FILE: api-keys.js
 // 📍 LOCATION: static/admin/api-keys/api-keys.js
 // 🎯 PURPOSE: Load and render API Key data into the table
-// 🧩 DEPENDENCIES: None (render only)
+// 🧩 DEPENDENCIES: ButtonBox, ButtonBoxApiKeys
 // 👥 Author: Captain & Chatman
-// 🔖 Version: MPA Phase I (Render-Only Refactor)
+// 🔖 Version: MPA Phase I (Fully Wired)
 // =============================================================
 
 (() => {
@@ -27,9 +27,11 @@
       keys.forEach((key, i) => {
         const row = document.createElement("tr");
         row.innerHTML = `
-          <td class="col-select"><input type="checkbox" class="api-select-checkbox" data-id="${
-            key.id
-          }" /></td>
+          <td class="col-select">
+            <input type="checkbox" class="api-select-checkbox" data-id="${
+              key.id
+            }" />
+          </td>
           <td class="id-col hidden-col">${key.id}</td>
           <td>${key.key_label}</td>
           <td>${key.key_type}</td>
@@ -47,6 +49,12 @@
       });
 
       console.log(`✅ Rendered ${keys.length} API keys`);
+
+      // ✅ Wire ButtonBox and checkboxes after table is populated
+      if (window.ButtonBox && window.ButtonBoxApiKeys) {
+        ButtonBoxApiKeys.init();
+        ButtonBox.wireCheckboxes("api");
+      }
     } catch (err) {
       console.error("❌ loadApiKeys() error:", err);
     }
