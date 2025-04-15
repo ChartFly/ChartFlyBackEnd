@@ -4,7 +4,7 @@
 // Shared Tip/Warning logic, Confirm button state,
 // status footer updates, and button visual toggles.
 // Author: Captain & Chatman
-// Version: MPA Phase I (Button Messaging Finalized)
+// Version: MPA Phase I (Undo Limit Box Edition)
 // ============================================
 
 window.ButtonBoxMessages = (() => {
@@ -131,6 +131,24 @@ window.ButtonBoxMessages = (() => {
     }
   }
 
+  // ✅ NEW — Show Undo Limit Warning
+  function showUndoLimitWarning(section) {
+    const box = document.getElementById(`${section}-undo-limit-box`);
+    if (box) {
+      box.classList.add("warn");
+      box.textContent = "Max Undo 30";
+    }
+  }
+
+  // ✅ NEW — Clear Undo Limit Warning
+  function clearUndoLimitWarning(section) {
+    const box = document.getElementById(`${section}-undo-limit-box`);
+    if (box) {
+      box.classList.remove("warn");
+      box.textContent = "";
+    }
+  }
+
   function capitalize(word) {
     return word.charAt(0).toUpperCase() + word.slice(1);
   }
@@ -147,5 +165,7 @@ window.ButtonBoxMessages = (() => {
     updateIdColumnVisibility,
     updateButtonColors,
     updateSelectedCount,
+    showUndoLimitWarning,
+    clearUndoLimitWarning,
   };
 })();

@@ -231,3 +231,33 @@ input[type="checkbox"] {
 .id-col.hidden-col {
   display: none;
 }
+
+/* =============================== */
+/* 🛑 Undo Limit Message Box      */
+/* =============================== */
+
+.undo-limit-box {
+  margin-left: auto;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: bold;
+  border: 1px solid #55b5c3;
+  background-color: #e9faff;
+  color: #006373;
+  min-width: 160px;
+  text-align: center;
+  transition: all 0.2s ease-in-out;
+  white-space: nowrap;
+}
+
+.undo-limit-box.warn {
+  background-color: #ffe5e5;
+  border-color: #ff9999;
+  color: #b30000;
+}
+
+.undo-limit-box::before {
+  content: "Warning: ";
+  color: inherit;
+}

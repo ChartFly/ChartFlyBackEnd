@@ -4,7 +4,7 @@
 // Core ButtonBox controller: manages state,
 // button logic, event wiring, and UI updates.
 // Author: Captain & Chatman
-// Version: MPA Phase I (Debug Logging Edition)
+// Version: MPA Phase I (Debug Logging Edition + Clipboard Reset)
 // ============================================
 
 console.log("🧠 ButtonBox.js loaded ✅");
@@ -33,6 +33,8 @@ window.ButtonBox = (() => {
       footerId,
       enabledActions,
       selectedRows: new Set(),
+      clipboard: null,
+      clipboardType: null,
       onAction,
       tipIndex: 0,
     };
@@ -114,7 +116,11 @@ window.ButtonBox = (() => {
     );
     modeRadios.forEach((radio) => {
       radio.addEventListener("change", () => {
+        // 🔄 Reset clipboard when switching modes
+        state.clipboard = null;
+        state.clipboardType = null;
         ButtonBoxMessages.updateButtonColors(section);
+        ButtonBoxColumns.disablePaste(section); // Just to be sure
       });
     });
 

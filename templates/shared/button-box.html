@@ -38,6 +38,7 @@ Author: Captain & Chatman
     >
       Undo
     </button>
+    <div class="undo-limit-box" id="{{ section }}-undo-limit-box"></div>
   </div>
 
   <!-- 🧭 Edit Mode + Confirm -->
@@ -50,11 +51,11 @@ Author: Captain & Chatman
           value="row"
           checked
         />
-        Edit Lines
+        Edit Rows
       </label>
       <label>
         <input type="radio" name="{{ section }}-edit-mode" value="cell" />
-        Edit Cells & Columns
+        Edit Columns
       </label>
       <label>
         <input type="checkbox" id="{{ section }}-show-id-toggle" />
@@ -75,13 +76,13 @@ Author: Captain & Chatman
 
   <!-- 📊 Action + Selection Footer -->
   <div class="status-footer" id="{{ section }}-action-footer">
-    <span
-      ><strong>Action:</strong>
-      <span id="{{ section }}-current-action">None</span></span
-    >
-    <span
-      ><strong>Selected Rows:</strong>
-      <span id="{{ section }}-selected-count">0</span></span
-    >
+    <span>
+      <strong>Action:</strong>
+      <span id="{{ section }}-current-action">None</span>
+    </span>
+    <span>
+      <strong>Selected Rows:</strong>
+      <span id="{{ section }}-selected-count">0</span>
+    </span>
   </div>
 </div>
