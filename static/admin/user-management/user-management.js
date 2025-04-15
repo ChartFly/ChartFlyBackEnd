@@ -29,12 +29,14 @@
         row.innerHTML = `
           <td class="col-select"><input type="checkbox" /></td>
           <td class="id-col hidden-col">${user.id}</td>
-          <td>${user.first_name}</td>
-          <td>${user.last_name}</td>
+          <td>${user.username}</td>
           <td>${user.phone_number}</td>
           <td>${user.email}</td>
-          <td>${user.username}</td>
+          <td>${user.created}</td>
+          <td>${user.permissions ?? ""}</td>
           <td>${user.role}</td>
+          <td>${user.first_name}</td>
+          <td>${user.last_name}</td>
         `;
         tbody.appendChild(row);
       });

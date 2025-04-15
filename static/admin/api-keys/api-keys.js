@@ -1,7 +1,7 @@
 // =============================================================
 // 📁 FILE: api-keys.js
 // 📍 LOCATION: static/admin/api-keys/api-keys.js
-// 🎯 PURPOSE: Load and render API key data into the API Keys table
+// 🎯 PURPOSE: Load and render API Key data into the table
 // 🧩 DEPENDENCIES: ButtonBox, ButtonBoxApiKeys
 // 👥 Author: Captain & Chatman
 // 🔖 Version: MPA Phase I (API Keys Script Refactor)
@@ -16,15 +16,15 @@
     console.log("📥 loadApiKeys() called");
     try {
       const response = await fetch("/api/api-keys");
-      const apiKeys = await response.json();
-      console.log("✅ API Keys fetched:", apiKeys);
+      const keys = await response.json();
+      console.log("✅ API Keys fetched:", keys);
 
       const table = document.getElementById("api-keys-table");
       const tbody = table?.querySelector("tbody");
-      if (!tbody) throw new Error("Missing <tbody> in API Keys table");
+      if (!tbody) throw new Error("Missing <tbody> in api-keys table");
       tbody.innerHTML = "";
 
-      apiKeys.forEach((key, i) => {
+      keys.forEach((key, i) => {
         const row = document.createElement("tr");
         row.innerHTML = `
           <td class="col-select"><input type="checkbox" /></td>
@@ -34,7 +34,11 @@
           <td>${key.billing_interval}</td>
           <td>${key.cost_per_month}</td>
           <td>${key.cost_per_year}</td>
-          <td>${key.api_key_identifier}</td>
+          <td>${key.usage_limit_sec}</td>
+          <td>${key.usage_limit_min}</td>
+          <td>${key.usage_limit_5min}</td>
+          <td>${key.usage_limit_hour}</td>
+          <td>${key.priority_order}</td>
           <td>${key.is_active ? "✅" : "❌"}</td>
         `;
         tbody.appendChild(row);

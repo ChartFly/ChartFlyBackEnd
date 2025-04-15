@@ -1,18 +1,26 @@
-<!-- templates/api-keys/api-keys-table.html -->
-<div class="admin-table-wrapper">
-  <table id="api-keys-table" class="admin-table">
-    <thead>
-      <tr>
-        <th class="id-col hidden-col">ID</th>
-        <th>Label</th>
-        <th>Key</th>
-        <th>Status</th>
-        <th>Created</th>
-        <th>Select</th>
-      </tr>
-    </thead>
-    <tbody>
-      <!-- Dynamic rows to be inserted here -->
-    </tbody>
-  </table>
+<div class="table-container">
+  <div class="table-wrapper">
+    <table id="api-keys-table" class="admin-table">
+      <thead>
+        <tr>
+          <th class="col-select">Select</th>
+          <th class="id-col hidden-col">ID</th>
+          <th>Label</th>
+          <th>Key Type</th>
+          <th>Billing</th>
+          <th>Monthly</th>
+          <th>Yearly</th>
+          <th>Limit/Sec</th>
+          <th>Limit/Min</th>
+          <th>Limit/5m</th>
+          <th>Limit/Hour</th>
+          <th>Priority</th>
+          <th>Active</th>
+        </tr>
+      </thead>
+      <tbody id="api-keys-tbody">
+        <!-- Dynamic rows will be inserted here -->
+      </tbody>
+    </table>
+  </div>
 </div>

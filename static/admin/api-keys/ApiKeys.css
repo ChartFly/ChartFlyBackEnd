@@ -4,7 +4,7 @@
 🎯 SCOPE: Styles exclusive to #api-keys-section
 🧩 AUTHOR: Captain & Chatman
 🔖 VERSION: MPA Phase I (API Keys Table Styling)
-=========================================================================== */
+===========================================================================
 
 #api-keys-section {
   margin-top: 2rem;
@@ -89,11 +89,6 @@
 }
 
 #api-keys-section .line-id-col {
-  width: 4ch;
-  min-width: 2ch;
-  max-width: 8ch;
-  text-align: center;
-  white-space: nowrap;
   display: none;
 }
 
@@ -105,25 +100,4 @@
 }
 #api-keys-section .admin-table tr.selected-row {
   background-color: #d0f0ff !important;
-}
-
-#api-keys-section .editable {
-  background-color: #fff8dc;
-  border: 1px dashed #ccc;
-  outline: none;
-}
-
-#api-keys-section tr.editing {
-  box-shadow: inset 0 0 0 2px #006373;
-  background-color: #e9f7f9;
-}
-
-#api-keys-section tr[data-id^="paste-"],
-#api-keys-section tr[data-id^="new-"] {
-  background-color: #f2fff4;
-}
-
-#api-keys-section .invalid {
-  background-color: #ffe5e5;
-  border: 1px solid #ff4d4d;
 }

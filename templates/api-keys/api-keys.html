@@ -1,30 +1,80 @@
-<!-- templates/api-keys/api-keys.html -->
-<div class="table-container">
-  <div class="table-wrapper">
-    <table id="api-keys-table" class="admin-table">
-      <thead>
-        <tr>
-          <th class="col-select">Select</th>
-          <th class="id-col hidden-col">ID</th>
-          <th class="col-label">Label</th>
-          <th class="col-type">Type</th>
-          <th class="col-billing">Billing</th>
-          <th class="col-cost">Cost/Month</th>
-          <th class="col-cost">Cost/Year</th>
-          <th class="col-usage">Sec</th>
-          <th class="col-usage">Min</th>
-          <th class="col-usage">5 Min</th>
-          <th class="col-usage">10 Min</th>
-          <th class="col-usage">15 Min</th>
-          <th class="col-usage">Hour</th>
-          <th class="col-usage">Day</th>
-          <th class="col-priority">Priority</th>
-          <th class="col-status">Active</th>
-        </tr>
-      </thead>
-      <tbody id="api-keys-tbody">
-        <!-- Dynamic rows will be inserted here -->
-      </tbody>
-    </table>
-  </div>
-</div>
+<!-- ============================================
+✅ ChartFly Admin Panel - api-keys.html
+Standalone MPA Page for API Keys Admin Section
+Author: Captain & Chatman
+Version: MPA Phase I (Modular MPA Layout)
+============================================ -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Manage API Keys</title>
+
+    <link
+      rel="icon"
+      href="/static/images/ChartFly-Favicon.ico"
+      type="image/x-icon"
+    />
+    <link rel="stylesheet" href="/static/css/styles.css?v=999" />
+    <link
+      rel="stylesheet"
+      href="/static/admin/shared/navbar/navbar.css?v=999"
+    />
+    <link rel="stylesheet" href="/static/admin/shared/button-box.css?v=999" />
+    <link rel="stylesheet" href="/static/admin/api-keys/api-keys.css?v=999" />
+  </head>
+  <body>
+    <!-- ✅ Header -->
+    <div class="admin-header">
+      <img
+        src="/static/images/Chartfly-logo.png"
+        alt="ChartFly Logo"
+        class="admin-logo"
+      />
+      <h1 class="admin-title">ChartFly Admin Console</h1>
+      <div id="market-status-indicator">
+        Market Status: <span id="market-status-text">Checking...</span>
+      </div>
+    </div>
+
+    <!-- ✅ Modular NavBar -->
+    {% include "shared/navbar/navbar.html" %}
+
+    <!-- ✅ API Keys Table + ButtonBox -->
+    <section id="api-keys-section" class="admin-tab-section">
+      {% include "shared/button-box.html" %} {% include
+      "api-keys/api-keys-table.html" %}
+    </section>
+
+    <!-- ✅ Footer -->
+    <footer class="admin-footer">
+      <div class="footer-ticker">
+        <span id="holiday-ticker" class="ticker-content">🎉 Loading...</span>
+        <span
+          id="holiday-ticker-duplicate"
+          class="ticker-content"
+          aria-hidden="true"
+          >🎉 Loading...</span
+        >
+      </div>
+    </footer>
+
+    <!-- ✅ Scripts -->
+    <script src="/static/admin/shared/navbar/navbar.js?v=999" defer></script>
+    <script src="/static/admin/shared/button-box.js?v=999" defer></script>
+    <script
+      src="/static/admin/shared/button-box-messages.js?v=999"
+      defer
+    ></script>
+    <script src="/static/admin/shared/button-box-rows.js?v=999" defer></script>
+    <script
+      src="/static/admin/shared/button-box-columns.js?v=999"
+      defer
+    ></script>
+    <script src="/static/admin/api-keys/api-keys.js?v=999" defer></script>
+    <script
+      src="/static/admin/api-keys/button-box-api-keys.js?v=999"
+      defer
+    ></script>
+  </body>
+</html>
