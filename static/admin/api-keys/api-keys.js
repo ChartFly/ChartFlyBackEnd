@@ -4,7 +4,7 @@
 // 🎯 PURPOSE: Load and render API Key data into the table
 // 🧩 DEPENDENCIES: ButtonBox, ButtonBoxApiKeys
 // 👥 Author: Captain & Chatman
-// 🔖 Version: MPA Phase I (Fully Wired)
+// 🔖 Version: MPA Phase I (Fully Wired + Row ID)
 // =============================================================
 
 (() => {
@@ -26,6 +26,7 @@
 
       keys.forEach((key, i) => {
         const row = document.createElement("tr");
+        row.dataset.id = key.id; // ✅ Required for ButtonBox selection
         row.innerHTML = `
           <td class="col-select">
             <input type="checkbox" class="api-select-checkbox" data-id="${
