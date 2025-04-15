@@ -4,7 +4,7 @@
 // Core ButtonBox controller: manages state,
 // button logic, event wiring, and UI updates.
 // Author: Captain & Chatman
-// Version: MPA Phase I (Finalized Core Engine)
+// Version: MPA Phase I (Debug Logging Edition)
 // ============================================
 
 window.ButtonBox = (() => {
@@ -36,6 +36,7 @@ window.ButtonBox = (() => {
     };
 
     stateMap.set(section, state);
+    console.log(`🚀 ButtonBox initialized for section: ${section}`);
     wireButtons(state);
     ButtonBoxMessages.initTips(section);
   }
@@ -56,15 +57,24 @@ window.ButtonBox = (() => {
 
     enabledActions.forEach((action) => {
       const btn = document.getElementById(`${section}-${action}-btn`);
-      if (!btn) return;
+      if (!btn) {
+        console.warn(`⚠️ Missing button for action: ${action}`);
+        return;
+      }
 
       btn.addEventListener("click", () => {
+        console.log(`🔘 Button clicked: ${section}-${action}-btn`);
         ButtonBoxMessages.setStatus(section, action);
         ButtonBoxMessages.resetButtons(section, btn);
 
         const skipConfirm = ["add", "copy", "edit", "undo"].includes(action);
 
-        if (typeof state.onAction !== "function") return;
+        if (typeof state.onAction !== "function") {
+          console.warn(
+            `⚠️ No onAction handler defined for section: ${section}`
+          );
+          return;
+        }
 
         if (skipConfirm) {
           state.onAction(action, Array.from(state.selectedRows));
@@ -111,15 +121,24 @@ window.ButtonBox = (() => {
 
   function wireCheckboxes(section) {
     const state = getState(section);
-    if (!state) return;
+    if (!state) {
+      console.warn(`⚠️ No state found for section: ${section}`);
+      return;
+    }
 
     const table = document.getElementById(state.tableId);
-    if (!table) return;
+    if (!table) {
+      console.warn(`⚠️ Table not found: ${state.tableId}`);
+      return;
+    }
 
     const checkboxes = table.querySelectorAll(`.${section}-select-checkbox`);
+    console.log(
+      `🔍 Found ${checkboxes.length} checkboxes for section "${section}"`
+    );
     state.selectedRows.clear();
 
-    checkboxes.forEach((checkbox) => {
+    checkboxes.forEach((checkbox, index) => {
       const id = checkbox.dataset.id;
       const newCheckbox = checkbox.cloneNode(true);
       checkbox.replaceWith(newCheckbox);
@@ -127,8 +146,10 @@ window.ButtonBox = (() => {
       newCheckbox.addEventListener("change", () => {
         if (newCheckbox.checked) {
           state.selectedRows.add(id);
+          console.log(`✅ Checkbox selected: ${id}`);
         } else {
           state.selectedRows.delete(id);
+          console.log(`❌ Checkbox deselected: ${id}`);
         }
 
         ButtonBoxMessages.updateSelectedCount(section);
@@ -139,10 +160,12 @@ window.ButtonBox = (() => {
   }
 
   function showWarning(section, message) {
+    console.warn(`⚠️ Warning (${section}): ${message}`);
     ButtonBoxMessages.showWarning(section, message);
   }
 
   function showMessage(section, message, type = "info") {
+    console.log(`💬 Message (${section}): ${message}`);
     if (type === "success") {
       ButtonBoxMessages.clearWarning(section);
     }
