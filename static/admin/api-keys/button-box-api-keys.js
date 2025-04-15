@@ -1,10 +1,10 @@
 // =============================================================
 // 📁 FILE: button-box-api-keys.js
 // 📍 LOCATION: static/admin/api-keys/button-box-api-keys.js
-// 🎯 PURPOSE: Modular ButtonBox config + row action handler
+// 🎯 PURPOSE: Wire ButtonBox logic to API Keys table
 // 🧩 DEPENDENCIES: ButtonBox, ButtonBoxRows
 // 👥 Author: Captain & Chatman
-// 🔖 Version: MPA Phase I (Modular Config)
+// 🔖 Version: MPA Phase I (Fully Wired Edition)
 // =============================================================
 
 window.ButtonBoxApiKeys = (() => {
@@ -26,7 +26,7 @@ window.ButtonBoxApiKeys = (() => {
     });
 
     if (action === "save") {
-      // TODO: Hook into backend save when implemented
+      // ButtonBoxDataBase.saveToDatabase("api", selectedIds);
     }
   }
 
@@ -53,19 +53,15 @@ window.ButtonBoxApiKeys = (() => {
       onAction: handleApiAction,
     };
 
-    const waitForTable = setInterval(() => {
-      const tableReady =
-        window.ButtonBox &&
-        window.ButtonBoxRows &&
-        document.getElementById("api-keys-table");
-
-      if (tableReady) {
-        clearInterval(waitForTable);
+    const waitForBox = setInterval(() => {
+      const table = document.getElementById("api-keys-table");
+      if (window.ButtonBox && window.ButtonBoxRows && table) {
+        clearInterval(waitForBox);
         ButtonBox.init(config);
-        ButtonBox.wireCheckboxes("api");
         wireIdToggle();
+        ButtonBox.wireCheckboxes("api");
       }
-    }, 100);
+    }, 50);
   }
 
   function wireIdToggle() {
@@ -89,5 +85,7 @@ window.ButtonBoxApiKeys = (() => {
   return { init };
 })();
 
-// ✅ Auto-run like a good soldier
-window.ButtonBoxApiKeys.init();
+// ✅ Auto-run on DOM load
+window.addEventListener("DOMContentLoaded", () => {
+  window.ButtonBoxApiKeys.init();
+});
