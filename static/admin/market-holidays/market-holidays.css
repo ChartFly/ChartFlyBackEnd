@@ -4,19 +4,21 @@
 🎯 SCOPE: Styles exclusive to #market-holidays-section
 🧩 AUTHOR: Captain & Chatman
 🔖 VERSION: MPA Phase I (Market Holidays Styles Refactor)
-=========================================================================== */
+============================================================================ */
 
 #market-holidays-section {
   margin-top: 2rem;
+  text-align: left;
 }
 
 /* 🧭 Table + ButtonBox Container */
 #market-holidays-section .table-container {
   max-width: 1100px;
-  margin: 0;
+  margin: 0; /* Removed auto-centering */
   padding: 6px 10px;
 }
 
+/* 📦 Table Wrapper */
 #market-holidays-section .table-wrapper {
   display: block;
   overflow-x: auto;
@@ -26,6 +28,7 @@
   border: 1px solid #ccc;
   border-radius: 6px;
   min-height: 200px;
+  text-align: left;
 }
 
 /* 📊 Table Styles */
@@ -37,7 +40,7 @@
   font-size: 0.95rem;
 }
 
-/* 📐 Force cell layout */
+/* 📐 Cell Layout */
 #market-holidays-section .admin-table th:not(.col-select),
 #market-holidays-section .admin-table td:not(.col-select) {
   min-width: 8ch;
@@ -76,7 +79,7 @@
   visibility: hidden;
 }
 
-/* ✅ Select Column */
+/* ✅ Select Column — moved far left */
 #market-holidays-section .admin-table th.col-select,
 #market-holidays-section .admin-table td.col-select {
   width: 4ch;
@@ -84,9 +87,6 @@
   max-width: 6ch;
   text-align: center;
   white-space: nowrap;
-}
-
-#market-holidays-section .admin-table td.col-select {
   background-color: #007a8a;
   color: white;
 }

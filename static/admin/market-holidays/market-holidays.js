@@ -29,12 +29,12 @@
         console.log("🔧 Rendering holiday row", i + 1, ":", holiday);
         const row = document.createElement("tr");
         row.innerHTML = `
+          <td><input type="checkbox" /></td>
           <td class="id-col hidden-col">${holiday.id}</td>
           <td>${holiday.date}</td>
           <td>${holiday.name}</td>
           <td>${holiday.status}</td>
           <td>${holiday.close_time ?? ""}</td>
-          <td><input type="checkbox" /></td>
         `;
         tbody.appendChild(row);
       });
