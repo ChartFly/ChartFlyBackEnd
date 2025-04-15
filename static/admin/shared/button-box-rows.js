@@ -4,7 +4,7 @@
 // Handles row-level actions (add, edit, copy,
 // delete, save, undo) and checkbox logic.
 // Author: Captain & Chatman
-// Version: MPA Phase I (Row Logic Finalized + API Add Fix)
+// Version: MPA Phase I (Row Logic Finalized + Clean Add Row)
 // ============================================
 
 window.ButtonBoxRows = (() => {
@@ -133,17 +133,17 @@ window.ButtonBoxRows = (() => {
       newRow.innerHTML = `
         <td class="col-select"><input type="checkbox" class="${section}-select-checkbox" data-id="${newId}" checked></td>
         <td class="line-id-col">${newId}</td>
-        <td contenteditable="true" class="editable">Label</td>
-        <td contenteditable="true" class="editable">Key Type</td>
-        <td contenteditable="true" class="editable">Billing</td>
-        <td contenteditable="true" class="editable">Monthly</td>
-        <td contenteditable="true" class="editable">Yearly</td>
-        <td contenteditable="true" class="editable">Limit/Sec</td>
-        <td contenteditable="true" class="editable">Limit/Min</td>
-        <td contenteditable="true" class="editable">Limit/5m</td>
-        <td contenteditable="true" class="editable">Limit/Hour</td>
-        <td contenteditable="true" class="editable">Priority</td>
-        <td contenteditable="true" class="editable">Active</td>
+        <td contenteditable="true" class="editable">Edit New Row</td>
+        <td contenteditable="true" class="editable"></td>
+        <td contenteditable="true" class="editable"></td>
+        <td contenteditable="true" class="editable"></td>
+        <td contenteditable="true" class="editable"></td>
+        <td contenteditable="true" class="editable"></td>
+        <td contenteditable="true" class="editable"></td>
+        <td contenteditable="true" class="editable"></td>
+        <td contenteditable="true" class="editable"></td>
+        <td contenteditable="true" class="editable"></td>
+        <td contenteditable="true" class="editable"></td>
       `;
 
       newRow.querySelectorAll("td[contenteditable]").forEach((cell) => {
@@ -222,7 +222,7 @@ window.ButtonBoxRows = (() => {
       const tbody = table.querySelector("tbody");
       tbody.innerHTML = "";
 
-      last.rows.forEach((rowNode, i) => {
+      last.rows.forEach((rowNode) => {
         tbody.appendChild(rowNode.cloneNode(true));
       });
 
