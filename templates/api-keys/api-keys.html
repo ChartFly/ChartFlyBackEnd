@@ -2,7 +2,7 @@
 ✅ ChartFly Admin Panel - api-keys.html
 Standalone MPA Page for API Keys Admin Section
 Author: Captain & Chatman
-Version: MPA Phase I (Modular MPA Layout)
+Version: MPA Phase I (Modular MPA Layout, Jinja-Compatible)
 ============================================ -->
 <!DOCTYPE html>
 <html lang="en">
@@ -42,8 +42,8 @@ Version: MPA Phase I (Modular MPA Layout)
 
     <!-- ✅ API Keys Table + ButtonBox -->
     <section id="api-keys-section" class="admin-tab-section">
-      {% include "shared/button-box.html" with section="api" %} {% include
-      "api-keys/api-keys-table.html" %}
+      {% set section = "api" %} {% include "shared/button-box.html" %} {%
+      include "api-keys/api-keys-table.html" %}
     </section>
 
     <!-- ✅ Footer -->
