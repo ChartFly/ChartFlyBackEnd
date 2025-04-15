@@ -20,7 +20,7 @@
       const holidays = await response.json();
       console.log("✅ Holidays fetched:", holidays);
 
-      const table = document.getElementById("holiday-table");
+      const table = document.getElementById("market-holidays-table");
       const tbody = table?.querySelector("tbody");
       if (!tbody) throw new Error("Missing <tbody> in holidays table");
       tbody.innerHTML = "";
@@ -29,12 +29,12 @@
         console.log("🔧 Rendering holiday row", i + 1, ":", holiday);
         const row = document.createElement("tr");
         row.innerHTML = `
-          <td><input type="checkbox" /></td>
           <td class="id-col hidden-col">${holiday.id}</td>
           <td>${holiday.date}</td>
           <td>${holiday.name}</td>
-          <td>${holiday.status}</td>
           <td>${holiday.close_time ?? ""}</td>
+          <td>${holiday.status}</td>
+          <td class="col-select"><input type="checkbox" /></td>
         `;
         tbody.appendChild(row);
       });
