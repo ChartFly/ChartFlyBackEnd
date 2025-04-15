@@ -1,58 +1,45 @@
-// ===========================================================
+// =============================================================
 // 📁 FILE: user-management.js
 // 📍 LOCATION: static/admin/user-management/user-management.js
-// 🎯 PURPOSE: Load and render Admin User data into User Management table
+// 🎯 PURPOSE: Load and render Admin Users table
 // 🧩 DEPENDENCIES: ButtonBox, ButtonBoxUserManagement
 // 👥 Author: Captain & Chatman
-// 🔖 Version: MPA Phase I (Finalized Table Rendering)
-// ===========================================================
+// 🔖 Version: MPA Phase I (User Management Script Refactor)
+// =============================================================
 
 (() => {
-  if (window.ADMIN_USERS_LOADED) return;
-  window.ADMIN_USERS_LOADED = true;
-  console.log("🌭 UserManagement.js loaded");
+  if (window.USER_MANAGEMENT_LOADED) return;
+  window.USER_MANAGEMENT_LOADED = true;
+  console.log("🧭 UserManagement.js loaded");
 
   async function loadAdminUsers() {
-    console.log("🔥 loadAdminUsers() has been called");
-    console.log("📍 UserManagement call stack:", new Error().stack);
+    console.log("📥 loadAdminUsers() called");
     try {
-      const response = await fetch("/api/users/");
+      const response = await fetch("/api/users");
       const users = await response.json();
-      console.log("✅ Admin users fetched:", users);
+      console.log("✅ Admin Users fetched:", users);
 
       const table = document.getElementById("user-management-table");
       const tbody = table?.querySelector("tbody");
-      if (!tbody) throw new Error("Missing <tbody> in user table");
-
+      if (!tbody) throw new Error("Missing <tbody> in user management table");
       tbody.innerHTML = "";
-      console.log("🧹 Clearing existing rows");
 
       users.forEach((user, i) => {
-        console.log("🔧 Rendering user row", i + 1, ":", user);
         const row = document.createElement("tr");
         row.innerHTML = `
+          <td class="col-select"><input type="checkbox" /></td>
           <td class="id-col hidden-col">${user.id}</td>
-          <td>${user.name}</td>
+          <td>${user.first_name}</td>
+          <td>${user.last_name}</td>
+          <td>${user.phone_number}</td>
           <td>${user.email}</td>
-          <td>${
-            Array.isArray(user.access) ? user.access.join(", ") : "None"
-          }</td>
-          <td>Active</td>
-          <td><input type="checkbox" /></td>
+          <td>${user.username}</td>
+          <td>${user.role}</td>
         `;
         tbody.appendChild(row);
       });
-      console.log(`✅ Rendered ${users.length} admin user rows`);
-
-      const idToggle = document.getElementById(
-        "user-management-show-id-toggle"
-      );
-      console.log("🔍 user-management-show-id-toggle:", idToggle);
-      if (!idToggle)
-        console.warn("⚠️ user-management-show-id-toggle not found");
 
       if (window.ButtonBox && window.ButtonBoxUserManagement) {
-        console.log("✅ ButtonBox and UserManagement init functions available");
         ButtonBoxUserManagement.init();
         ButtonBox.wireCheckboxes("user-management");
       }
