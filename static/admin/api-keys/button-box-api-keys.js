@@ -1,4 +1,11 @@
-// static/admin/api-keys/ButtonBoxApiKeys.js
+// =============================================================
+// 📁 FILE: button-box-api-keys.js
+// 📍 LOCATION: static/admin/api-keys/button-box-api-keys.js
+// 🎯 PURPOSE: Modular ButtonBox config + row action handler
+// 🧩 DEPENDENCIES: ButtonBox, ButtonBoxRows
+// 👥 Author: Captain & Chatman
+// 🔖 Version: MPA Phase I (Modular Config)
+// =============================================================
 
 window.ButtonBoxApiKeys = (() => {
   let initialized = false;
@@ -19,7 +26,7 @@ window.ButtonBoxApiKeys = (() => {
     });
 
     if (action === "save") {
-      // ButtonBoxDataBase.saveToDatabase("api", selectedIds);
+      // TODO: Hook into backend save when implemented
     }
   }
 
@@ -46,14 +53,19 @@ window.ButtonBoxApiKeys = (() => {
       onAction: handleApiAction,
     };
 
-    const waitForBox = setInterval(() => {
-      const table = document.getElementById("api-keys-table");
-      if (window.ButtonBox && window.ButtonBoxRows && table) {
-        clearInterval(waitForBox);
+    const waitForTable = setInterval(() => {
+      const tableReady =
+        window.ButtonBox &&
+        window.ButtonBoxRows &&
+        document.getElementById("api-keys-table");
+
+      if (tableReady) {
+        clearInterval(waitForTable);
         ButtonBox.init(config);
+        ButtonBox.wireCheckboxes("api");
         wireIdToggle();
       }
-    }, 50);
+    }, 100);
   }
 
   function wireIdToggle() {

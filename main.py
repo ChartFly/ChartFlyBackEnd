@@ -3,14 +3,12 @@
 # 📍 Entry point for the ChartFly backend application
 # 🔧 Sets up FastAPI app, static mounting, DB middleware, routing
 # Author: Captain & Chatman
-# Version: MPA Phase I — Backend Ready Edition
+# Version: MPA Phase I — Backend Ready Edition (Lint Cleaned)
 # ============================================================
 
-# ✅ Standard Lib Imports
 import logging
 import os
 
-# ✅ Third-party Imports
 import uvicorn
 from dotenv import load_dotenv
 from fastapi import FastAPI, Request
@@ -23,14 +21,11 @@ from starlette.middleware import Middleware
 from starlette.middleware.sessions import SessionMiddleware
 from starlette.status import HTTP_302_FOUND
 
-# ✅ Local Imports: Routers
 from control_console.admin import router as admin_router
 from control_console.api_keys import router as api_keys_router
 from control_console.api_keys_page import router as api_keys_page_router
 from control_console.auth_login_register import router as login_register_router
 from control_console.auth_password_reset import router as password_reset_router
-
-# ✅ Local Imports: DB + Config
 from control_console.config import SESSION_SECRET
 from control_console.database import create_db_pool
 from control_console.dev_reset import router as dev_reset_router
@@ -39,13 +34,10 @@ from control_console.market_holidays_page import router as market_holidays_page_
 from control_console.user_management_page import router as user_management_page_router
 from control_console.user_management_routes import router as admin_users_router
 
-# ✅ Load environment variables early
 load_dotenv()
 
-# ✅ App Logging
 logging.basicConfig(level=logging.INFO)
 
-# ✅ FastAPI App Setup
 app = FastAPI(
     title="ChartFly API",
     description="Backend for ChartFly Trading Tools",
@@ -64,25 +56,22 @@ app = FastAPI(
     ],
 )
 
-# ✅ Mount Static Assets and Templates
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-# 🧯 Disable Jinja2 template caching (during dev)
+# ✅ Jinja2 Template Environment (caching enabled for production)
 env = Environment(
     loader=FileSystemLoader("templates"),
     autoescape=select_autoescape(["html", "xml"]),
-    cache_size=0,
+    cache_size=50,
 )
 templates = Jinja2Templates(env=env)
 
 
-# ✅ Startup: Create DB Pool
 @app.on_event("startup")
 async def startup():
     app.state.db_pool = await create_db_pool()
 
 
-# ✅ Middleware: Attach DB connection to each request
 @app.middleware("http")
 async def db_middleware(request: Request, call_next):
     async with app.state.db_pool.acquire() as connection:
@@ -91,7 +80,6 @@ async def db_middleware(request: Request, call_next):
         return response
 
 
-# ✅ Admin UI Entry — Handles login, register, or dashboard routing
 @app.get("/")
 async def admin_ui(request: Request):
     try:
@@ -99,8 +87,8 @@ async def admin_ui(request: Request):
             "SELECT COUNT(*) FROM admin_users;"
         )
         user_count = user_count if user_count is not None else 0
-    except Exception as e:
-        logging.error(f"🚨 Database error in admin_ui route: {e}")
+    except Exception as e:  # noqa: W0718
+        logging.error("🚨 Database error in admin_ui route: %s", e)
         return templates.TemplateResponse(
             "login.html", {"request": request, "error": "Database connection failed."}
         )
@@ -114,7 +102,6 @@ async def admin_ui(request: Request):
     return RedirectResponse(url="/auth/login", status_code=HTTP_302_FOUND)
 
 
-# ✅ Healthcheck Endpoints
 @app.head("/")
 async def root_head():
     return Response(status_code=200)
@@ -130,7 +117,6 @@ async def get_halted_stocks():
     return []
 
 
-# ✅ Register All Routers
 app.include_router(password_reset_router, prefix="/auth")
 app.include_router(login_register_router, prefix="/auth")
 app.include_router(holidays_router, prefix="/api/holidays")
@@ -139,11 +125,10 @@ app.include_router(api_keys_router, prefix="/api/api-keys")
 app.include_router(admin_users_router, prefix="/api/users")
 app.include_router(dev_reset_router)
 
-# ✅ Register Modular Page Routers
-app.include_router(market_holidays_page_router)  # 🧩 Market Holidays Page
-app.include_router(api_keys_page_router)  # 🧩 API Keys Page
-app.include_router(user_management_page_router)  # 🧩 Admin Users Page
+app.include_router(market_holidays_page_router)
+app.include_router(api_keys_page_router)
+app.include_router(user_management_page_router)
 
-# ✅ Launch the app with Uvicorn if run directly
+
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=int(os.getenv("PORT", 8000)))
+    uvicorn.run(app, host="0.0.0.0", port=int(os.getenv("PORT", "8000")))

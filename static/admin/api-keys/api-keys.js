@@ -2,9 +2,9 @@
 // 📁 FILE: api-keys.js
 // 📍 LOCATION: static/admin/api-keys/api-keys.js
 // 🎯 PURPOSE: Load and render API Key data into the table
-// 🧩 DEPENDENCIES: ButtonBox, ButtonBoxApiKeys
+// 🧩 DEPENDENCIES: None (render only)
 // 👥 Author: Captain & Chatman
-// 🔖 Version: MPA Phase I (API Keys Script Refactor)
+// 🔖 Version: MPA Phase I (Render-Only Refactor)
 // =============================================================
 
 (() => {
@@ -27,7 +27,9 @@
       keys.forEach((key, i) => {
         const row = document.createElement("tr");
         row.innerHTML = `
-          <td class="col-select"><input type="checkbox" /></td>
+          <td class="col-select"><input type="checkbox" class="api-select-checkbox" data-id="${
+            key.id
+          }" /></td>
           <td class="id-col hidden-col">${key.id}</td>
           <td>${key.key_label}</td>
           <td>${key.key_type}</td>
@@ -39,15 +41,12 @@
           <td>${key.usage_limit_5min}</td>
           <td>${key.usage_limit_hour}</td>
           <td>${key.priority_order}</td>
-          <td>${key.is_active ? "✅" : "❌"}</td>
+          <td>${key.is_active ? "Yes" : "No"}</td>
         `;
         tbody.appendChild(row);
       });
 
-      if (window.ButtonBox && window.ButtonBoxApiKeys) {
-        ButtonBoxApiKeys.init();
-        ButtonBox.wireCheckboxes("api-keys");
-      }
+      console.log(`✅ Rendered ${keys.length} API keys`);
     } catch (err) {
       console.error("❌ loadApiKeys() error:", err);
     }
