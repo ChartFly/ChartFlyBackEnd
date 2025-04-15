@@ -6,13 +6,15 @@ Shared button system used in admin sections
 Author: Captain & Chatman
 ============================================ -->
 
+{% set section = section or "market" %}
+
 <div class="button-box">
   <!-- 💬 Tip / Warning Box -->
   <div class="info-box" id="{{ section }}-info-box">
     <strong id="{{ section }}-info-label">Tip:</strong>
-    <span id="{{ section }}-info-message"
-      >Click a button to begin an action.</span
-    >
+    <span id="{{ section }}-info-message">
+      Click a button to begin an action.
+    </span>
   </div>
 
   <!-- 🛠️ Action Buttons -->
@@ -72,7 +74,7 @@ Author: Captain & Chatman
   </div>
 
   <!-- 📊 Action + Selection Footer -->
-  <div class="status-footer">
+  <div class="status-footer" id="{{ section }}-action-footer">
     <span
       ><strong>Action:</strong>
       <span id="{{ section }}-current-action">None</span></span
