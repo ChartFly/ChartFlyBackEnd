@@ -4,16 +4,18 @@
 # 🛠️ STATUS: Refactored (MPA Phase I) — Author: Captain & Chatman
 # ==========================================================
 
-from fastapi import APIRouter, HTTPException, Request
-from pydantic import BaseModel
-import bcrypt
 import logging
 import re
+
+import bcrypt
+from fastapi import APIRouter, HTTPException, Request
+from pydantic import BaseModel
 
 router = APIRouter()
 
 # ✅ Setup Logging
 logging.basicConfig(level=logging.INFO)
+
 
 # ✅ User Model (Request Data)
 class AdminUser(BaseModel):
@@ -24,21 +26,30 @@ class AdminUser(BaseModel):
     password: str  # Plain password for registration
     role: str  # e.g., "admin" or "user"
 
+
 # ✅ Utility: Hash Password
 def hash_password(password: str) -> str:
-    return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+    return bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
+
 
 # ✅ Utility: Verify Password
 def verify_password(password: str, hashed_password: str) -> bool:
-    return bcrypt.checkpw(password.encode('utf-8'), hashed_password.encode('utf-8'))
+    return bcrypt.checkpw(password.encode("utf-8"), hashed_password.encode("utf-8"))
+
 
 # ✅ Utility: Validate Username
 def validate_username(username: str) -> bool:
-    return bool(re.match(r"^[a-zA-Z0-9_]+$", username))  # Only alphanumeric and underscore allowed
+    return bool(
+        re.match(r"^[a-zA-Z0-9_]+$", username)
+    )  # Only alphanumeric and underscore allowed
+
 
 # ✅ Utility: Validate Phone Number
 def validate_phone_number(phone_number: str) -> bool:
-    return phone_number.isdigit() and len(phone_number) >= 10  # Only digits and at least 10 characters long
+    return (
+        phone_number.isdigit() and len(phone_number) >= 10
+    )  # Only digits and at least 10 characters long
+
 
 # ✅ GET All Admin Users
 @router.get("/", tags=["admin"])
@@ -53,6 +64,7 @@ async def get_admin_users(request: Request):
     users = [dict(row) for row in rows]
     logging.info(f"✅ Found {len(users)} users")
     return users
+
 
 # ✅ ADD New Admin User
 @router.post("/", tags=["admin"])
@@ -69,9 +81,18 @@ async def add_admin_user(user: AdminUser, request: Request):
         INSERT INTO admin_users (first_name, last_name, phone_number, username, password_hash, role)
         VALUES ($1, $2, $3, $4, $5, $6)
     """
-    await db.execute(query, user.first_name, user.last_name, user.phone_number, user.username, hashed_password, user.role)
+    await db.execute(
+        query,
+        user.first_name,
+        user.last_name,
+        user.phone_number,
+        user.username,
+        hashed_password,
+        user.role,
+    )
     logging.info(f"➕ Added new user: {user.username} (Role: {user.role})")
     return {"message": "Admin user added successfully"}
+
 
 # ✅ DELETE Admin User
 @router.delete("/{user_id}", tags=["admin"])
@@ -84,6 +105,7 @@ async def delete_admin_user(user_id: int, request: Request):
     logging.info(f"🗑️ Deleted user ID {user_id}")
     return {"message": "Admin user deleted successfully"}
 
+
 # ✅ UPDATE Admin User
 @router.put("/{user_id}", tags=["admin"])
 async def update_admin_user(user_id: int, user: AdminUser, request: Request):
@@ -93,12 +115,15 @@ async def update_admin_user(user_id: int, user: AdminUser, request: Request):
         SET first_name = $1, last_name = $2, phone_number = $3, role = $4
         WHERE id = $5
     """
-    result = await db.execute(query, user.first_name, user.last_name, user.phone_number, user.role, user_id)
+    result = await db.execute(
+        query, user.first_name, user.last_name, user.phone_number, user.role, user_id
+    )
     if result == "UPDATE 0":
         logging.warning(f"❌ Failed to update: user ID {user_id} not found")
         raise HTTPException(status_code=404, detail="User not found")
     logging.info(f"✏️ Updated user ID {user_id} (Role: {user.role})")
     return {"message": "Admin user updated successfully"}
+
 
 # ✅ LOGIN (Validate Username & Password)
 @router.post("/login", tags=["admin"])

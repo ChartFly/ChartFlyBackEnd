@@ -5,11 +5,12 @@
 # Version: Debug Mode — Direct Diagnostic
 # ============================================================
 
-import os
-import psycopg2
-from psycopg2.extras import RealDictCursor
-from dotenv import load_dotenv
 import logging
+import os
+
+import psycopg2
+from dotenv import load_dotenv
+from psycopg2.extras import RealDictCursor
 
 load_dotenv()
 logging.basicConfig(level=logging.INFO)
@@ -25,7 +26,9 @@ try:
     conn = psycopg2.connect(DATABASE_URL, cursor_factory=RealDictCursor)
     cur = conn.cursor()
 
-    cur.execute("SELECT id, name, date, year FROM market_holidays WHERE year = 2025 ORDER BY date")
+    cur.execute(
+        "SELECT id, name, date, year FROM market_holidays WHERE year = 2025 ORDER BY date"
+    )
     rows = cur.fetchall()
 
     if rows:

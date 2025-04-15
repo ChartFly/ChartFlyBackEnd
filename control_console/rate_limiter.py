@@ -4,13 +4,20 @@
 # 🛡️ Purpose: Track and enforce login attempt rate limits
 # ===================================================
 
+import logging
 from datetime import datetime, timedelta
 from typing import Tuple
 
-# Configuration
+# ✅ Configure logging
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
+
+# ✅ Configuration
 MAX_ATTEMPTS = 6
 WINDOW_MINUTES = 30
 
+
+# ✅ Check if IP is rate-limited
 async def is_rate_limited(db, ip_address: str) -> Tuple[bool, int]:
     """
     Checks if an IP address has exceeded the allowed number of login attempts.
@@ -24,18 +31,31 @@ async def is_rate_limited(db, ip_address: str) -> Tuple[bool, int]:
         ORDER BY attempt_time ASC
         LIMIT $3
     """
-    # Limit the query to only the most recent attempts
-    rows = await db.fetch(query, ip_address, cutoff_time, MAX_ATTEMPTS)
+    try:
+        rows = await db.fetch(query, ip_address, cutoff_time, MAX_ATTEMPTS)
 
-    if len(rows) >= MAX_ATTEMPTS:
-        oldest_attempt = rows[0]["attempt_time"]
-        seconds_remaining = int((oldest_attempt + timedelta(minutes=WINDOW_MINUTES) - datetime.utcnow()).total_seconds())
-        return True, max(0, seconds_remaining)
+        if len(rows) >= MAX_ATTEMPTS:
+            oldest_attempt = rows[0]["attempt_time"]
+            seconds_remaining = int(
+                (
+                    oldest_attempt
+                    + timedelta(minutes=WINDOW_MINUTES)
+                    - datetime.utcnow()
+                ).total_seconds()
+            )
+            return True, max(0, seconds_remaining)
+        return False, 0
 
-    return False, 0
+    except Exception as e:
+        logger.error("❌ Error checking rate limit for IP %s: %s", ip_address, e)
+        return False, 0  # Fail open (avoid false lockouts)
 
+
+# ✅ Record failed login attempt
 async def record_attempt(db, ip_address: str):
-    """Records a failed login attempt for the given IP."""
+    """
+    Records a failed login attempt for the given IP address.
+    """
     query = """
         INSERT INTO login_attempts (ip_address, attempt_time)
         VALUES ($1, $2)
@@ -43,6 +63,4 @@ async def record_attempt(db, ip_address: str):
     try:
         await db.execute(query, ip_address, datetime.utcnow())
     except Exception as e:
-        # Log the error if database query fails
-        print(f"❌ Error recording login attempt: {e}")
-        # In production, consider logging to a file or monitoring system.
+        logger.error("❌ Error recording login attempt for IP %s: %s", ip_address, e)

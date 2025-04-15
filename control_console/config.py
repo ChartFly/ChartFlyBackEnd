@@ -14,18 +14,18 @@ DB_PORT = os.getenv("DB_PORT", "5432")
 DB_NAME = os.getenv("DB_NAME")
 DB_SSL = os.getenv("DB_SSL", "require")
 
+
 # Used in database.py fallback
 def build_database_url():
     if not all([DB_USER, DB_PASS, DB_HOST, DB_NAME]):
         raise EnvironmentError("❌ Missing DB env variables for fallback URL.")
     return f"postgresql://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}?sslmode={DB_SSL}"
 
+
 # === Session Management ===
 SESSION_PREFIX = os.getenv("SESSION_PREFIX")
 SESSION_SUFFIX = os.getenv("SESSION_SUFFIX")
-SESSION_SECRET = (
-    os.getenv("SESSION_SECRET") or f"{SESSION_PREFIX}-{SESSION_SUFFIX}"
-)
+SESSION_SECRET = os.getenv("SESSION_SECRET") or f"{SESSION_PREFIX}-{SESSION_SUFFIX}"
 
 # === Developer Reset Token ===
 DEV_RESET_TOKEN = os.getenv("DEV_RESET_TOKEN")

@@ -7,12 +7,14 @@
 # Version: MPA Phase I — API Diagnostic Kit
 # ============================================================
 
+import logging
 import os
-from dotenv import load_dotenv  # ✅ Load from .env file
-load_dotenv()
 
 import requests
-import logging
+from dotenv import load_dotenv
+
+# ✅ Load from .env file
+load_dotenv()
 
 # ✅ Load API key from environment
 NASDAQ_API_KEY = os.getenv("NASDAQ_API_KEY")
@@ -20,11 +22,11 @@ if not NASDAQ_API_KEY:
     raise ValueError("❌ NASDAQ_API_KEY is not set in environment variables.")
 
 # ✅ API Endpoint + Auth Header
-url = "https://api.nasdaq.com/api/marketmovers/halted"
-headers = {"Authorization": f"Bearer {NASDAQ_API_KEY}"}
+URL = "https://api.nasdaq.com/api/marketmovers/halted"
+HEADERS = {"Authorization": f"Bearer {NASDAQ_API_KEY}"}
 
 # ✅ Optional proxy support
-proxies = (
+PROXIES = (
     {
         "http": os.getenv("HTTP_PROXY"),
         "https": os.getenv("HTTPS_PROXY"),
@@ -35,15 +37,16 @@ proxies = (
 
 # ✅ Configure logging
 logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 # ✅ Send test request
 try:
-    response = requests.get(url, headers=headers, proxies=proxies, timeout=5)
+    response = requests.get(URL, headers=HEADERS, proxies=PROXIES, timeout=5)
     response.raise_for_status()
 
-    logging.info(f"✅ Status Code: {response.status_code}")
-    logging.info(f"📦 Response Preview (500 chars):\n{response.text[:500]}")
+    logger.info("✅ Status Code: %s", response.status_code)
+    logger.info("📦 Response Preview (500 chars):\n%s", response.text[:500])
 except requests.exceptions.Timeout:
-    logging.error("❌ Request timed out! Nasdaq API is not responding.")
+    logger.error("❌ Request timed out! Nasdaq API is not responding.")
 except requests.exceptions.RequestException as e:
-    logging.error(f"❌ Request failed: {e}")
+    logger.error("❌ Request failed: %s", e)

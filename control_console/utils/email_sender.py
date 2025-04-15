@@ -4,27 +4,29 @@
 # 📬 Purpose: Sends password reset emails securely via SMTP
 # ===================================================
 
-import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
 import logging
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+
+from control_console.config import (
+    EMAIL_FROM,
+    SMTP_HOST,
+    SMTP_PASSWORD,
+    SMTP_PORT,
+    SMTP_USERNAME,
+)
 
 # ✅ Setup logging
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
-# ✅ Load SMTP config from environment
-from control_console.config import (
-    SMTP_HOST,
-    SMTP_PORT,
-    SMTP_USERNAME,
-    SMTP_PASSWORD,
-    EMAIL_FROM,
-)
-
 # ✅ Validate config
 if not all([SMTP_HOST, SMTP_PORT, SMTP_USERNAME, SMTP_PASSWORD, EMAIL_FROM]):
-    raise EnvironmentError("❌ Missing one or more required SMTP environment variables.")
+    raise EnvironmentError(
+        "❌ Missing one or more required SMTP environment variables."
+    )
+
 
 # ✅ Send Reset Email
 def send_reset_email(to_email: str, temp_password: str):
@@ -65,9 +67,9 @@ ChartFly Trading Tools. All Rights Reserved.
                 server.login(SMTP_USERNAME, SMTP_PASSWORD)
                 server.send_message(msg)
 
-        logger.info(f"📧 Password reset email sent to {to_email}")
+        logger.info("📧 Password reset email sent to %s", to_email)
         return True
 
-    except Exception as e:
-        logger.error(f"❌ Failed to send email to {to_email}: {e}")
+    except smtplib.SMTPException as e:
+        logger.error("❌ Failed to send email to %s: %s", to_email, str(e))
         return False

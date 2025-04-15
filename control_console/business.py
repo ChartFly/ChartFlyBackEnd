@@ -5,8 +5,7 @@
 # ==========================================================
 
 from datetime import datetime
-from fastapi import Request
-import logging
+
 
 # ✅ GET Active API Key
 async def get_active_api_key(db):
@@ -20,6 +19,7 @@ async def get_active_api_key(db):
     row = await db.fetchrow(query)
     return row["api_secret"] if row else None
 
+
 # ✅ Mark API Key as Failed
 async def mark_api_key_failed(db, api_key: str):
     query = """
@@ -28,6 +28,7 @@ async def mark_api_key_failed(db, api_key: str):
         WHERE api_secret = $1
     """
     await db.execute(query, api_key)
+
 
 # ✅ Check Role-Based Access
 async def user_has_access(db, admin_id: int, tab_name: str) -> bool:
@@ -38,6 +39,7 @@ async def user_has_access(db, admin_id: int, tab_name: str) -> bool:
     """
     row = await db.fetchrow(query, admin_id, tab_name)
     return row["has_access"] if row else False
+
 
 # ✅ Market Status Helper
 async def get_market_status(db):
@@ -55,16 +57,16 @@ async def get_market_status(db):
 
     if is_holiday or is_weekend:
         return "Market Closed (Holiday or Weekend)"
-    elif current_hour < 4:
+    if current_hour < 4:
         return "Market Closed"
-    elif current_hour < 9 or (current_hour == 9 and current_minute < 30):
+    if current_hour < 9 or (current_hour == 9 and current_minute < 30):
         return "Pre-Market Trading"
-    elif current_hour < 16:
+    if current_hour < 16:
         return "Market Open"
-    elif current_hour < 20:
+    if current_hour < 20:
         return "After-Market Trading"
-    else:
-        return "Market Closed"
+    return "Market Closed"
+
 
 # ✅ Log Admin Actions
 async def log_admin_action(db, admin_id: int, action: str, details: str = ""):

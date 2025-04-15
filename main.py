@@ -6,45 +6,44 @@
 # Version: MPA Phase I — Backend Ready Edition
 # ============================================================
 
-# ✅ Load environment variables early
-import os
-from dotenv import load_dotenv
-
-load_dotenv()
-
 # ✅ Standard Lib Imports
 import logging
+import os
 
 # ✅ Third-party Imports
 import uvicorn
+from dotenv import load_dotenv
 from fastapi import FastAPI, Request
-from fastapi.responses import Response, RedirectResponse
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import RedirectResponse, Response
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from fastapi.middleware.cors import CORSMiddleware
-from starlette.middleware.sessions import SessionMiddleware
-from starlette.middleware import Middleware
-from starlette.status import HTTP_302_FOUND
 from jinja2 import Environment, FileSystemLoader, select_autoescape
+from starlette.middleware import Middleware
+from starlette.middleware.sessions import SessionMiddleware
+from starlette.status import HTTP_302_FOUND
+
+# ✅ Local Imports: Routers
+from control_console.admin import router as admin_router
+from control_console.api_keys import router as api_keys_router
+from control_console.api_keys_page import router as api_keys_page_router
+from control_console.auth_login_register import router as login_register_router
+from control_console.auth_password_reset import router as password_reset_router
+
+# ✅ Local Imports: DB + Config
+from control_console.config import SESSION_SECRET
+from control_console.database import create_db_pool
+from control_console.dev_reset import router as dev_reset_router
+from control_console.holidays import router as holidays_router
+from control_console.market_holidays_page import router as market_holidays_page_router
+from control_console.user_management_page import router as user_management_page_router
+from control_console.user_management_routes import router as admin_users_router
+
+# ✅ Load environment variables early
+load_dotenv()
 
 # ✅ App Logging
 logging.basicConfig(level=logging.INFO)
-
-# ✅ Local Imports: Routers
-from control_console.dev_reset import router as dev_reset_router
-from control_console.holidays import router as holidays_router
-from control_console.admin import router as admin_router
-from control_console.api_keys import router as api_keys_router
-from control_console.user_management_routes import router as admin_users_router
-from control_console.auth_login_register import router as login_register_router
-from control_console.auth_password_reset import router as password_reset_router
-from control_console.api_keys_page import router as api_keys_page_router
-from control_console.user_management_page import router as user_management_page_router
-from control_console.market_holidays_page import router as market_holidays_page_router  # ✅ ADDED
-
-# ✅ Local Imports: DB + Config
-from control_console.database import create_db_pool
-from control_console.config import SESSION_SECRET
 
 # ✅ FastAPI App Setup
 app = FastAPI(
@@ -72,14 +71,16 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 env = Environment(
     loader=FileSystemLoader("templates"),
     autoescape=select_autoescape(["html", "xml"]),
-    cache_size=0
+    cache_size=0,
 )
 templates = Jinja2Templates(env=env)
+
 
 # ✅ Startup: Create DB Pool
 @app.on_event("startup")
 async def startup():
     app.state.db_pool = await create_db_pool()
+
 
 # ✅ Middleware: Attach DB connection to each request
 @app.middleware("http")
@@ -89,15 +90,20 @@ async def db_middleware(request: Request, call_next):
         response = await call_next(request)
         return response
 
+
 # ✅ Admin UI Entry — Handles login, register, or dashboard routing
 @app.get("/")
 async def admin_ui(request: Request):
     try:
-        user_count = await request.state.db.fetchval("SELECT COUNT(*) FROM admin_users;")
+        user_count = await request.state.db.fetchval(
+            "SELECT COUNT(*) FROM admin_users;"
+        )
         user_count = user_count if user_count is not None else 0
     except Exception as e:
         logging.error(f"🚨 Database error in admin_ui route: {e}")
-        return templates.TemplateResponse("login.html", {"request": request, "error": "Database connection failed."})
+        return templates.TemplateResponse(
+            "login.html", {"request": request, "error": "Database connection failed."}
+        )
 
     if user_count == 0:
         return RedirectResponse(url="/auth/register", status_code=HTTP_302_FOUND)
@@ -107,18 +113,22 @@ async def admin_ui(request: Request):
 
     return RedirectResponse(url="/auth/login", status_code=HTTP_302_FOUND)
 
+
 # ✅ Healthcheck Endpoints
 @app.head("/")
 async def root_head():
     return Response(status_code=200)
 
+
 @app.head("/api/haltdetails")
 async def head_halted_stocks():
     return Response(status_code=200)
 
+
 @app.get("/api/haltdetails")
 async def get_halted_stocks():
     return []
+
 
 # ✅ Register All Routers
 app.include_router(password_reset_router, prefix="/auth")
@@ -130,9 +140,9 @@ app.include_router(admin_users_router, prefix="/api/users")
 app.include_router(dev_reset_router)
 
 # ✅ Register Modular Page Routers
-app.include_router(market_holidays_page_router)      # 🧩 Market Holidays Page
-app.include_router(api_keys_page_router)             # 🧩 API Keys Page
-app.include_router(user_management_page_router)      # 🧩 Admin Users Page
+app.include_router(market_holidays_page_router)  # 🧩 Market Holidays Page
+app.include_router(api_keys_page_router)  # 🧩 API Keys Page
+app.include_router(user_management_page_router)  # 🧩 Admin Users Page
 
 # ✅ Launch the app with Uvicorn if run directly
 if __name__ == "__main__":

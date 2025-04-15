@@ -1,19 +1,15 @@
 repos:
-  - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v5.0.0
+  - repo: https://github.com/psf/black
+    rev: 24.3.0
     hooks:
-      - id: check-added-large-files
-      - id: detect-private-key
-      - id: check-merge-conflict
-      - id: end-of-file-fixer
-      - id: trailing-whitespace
-      - id: check-yaml
+      - id: black
+        language_version: python3
 
   - repo: local
     hooks:
-      - id: prevent-env-commit
-        name: 🚫 Prevent .env commit
-        entry: powershell -Command "if (git diff --cached --name-only | Select-String '^\.env$') { Write-Host '🚫 DO NOT COMMIT .env FILE!' -ForegroundColor Red; exit 1 }"
+      - id: pylint
+        name: Run pylint locally
+        entry: python -m pylint
         language: system
-        types: [text]
-        files: ^\.env$
+        types: [python]
+        args: ["--disable=missing-module-docstring,missing-function-docstring"]

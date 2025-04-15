@@ -4,24 +4,29 @@
 # 🛠️ STATUS: Active (MPA Phase I) — Author: Captain & Chatman
 # ===================================================
 
-from fastapi import APIRouter, HTTPException, Path, Request
-from pydantic import BaseModel
-from typing import List
 import logging
 import traceback
 from datetime import datetime
+from typing import List
+
+from fastapi import APIRouter, HTTPException, Path, Request
+from pydantic import BaseModel
 
 router = APIRouter()
+
+# ✅ Configure logger
+logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
-# ✅ GET Holidays by Year using asyncpg
+
+# ✅ GET Holidays by Year
 @router.get("/year/{year}", response_model=list, tags=["holidays"])
 async def get_holidays_by_year(
     request: Request,
-    year: int = Path(..., title="Year", description="The year to fetch holidays for.")
+    year: int = Path(..., title="Year", description="The year to fetch holidays for."),
 ):
     try:
-        logging.info(f"🔍 Fetching holidays for {year}")
+        logger.info("🔍 Fetching holidays for %s", year)
         db = request.state.db
 
         query = """
@@ -33,7 +38,7 @@ async def get_holidays_by_year(
         rows = await db.fetch(query, year)
 
         if not rows:
-            logging.warning(f"⚠ No holidays found for {year}")
+            logger.warning("⚠ No holidays found for %s", year)
             raise HTTPException(status_code=404, detail=f"No holidays found for {year}")
 
         today = datetime.utcnow().date()
@@ -43,10 +48,11 @@ async def get_holidays_by_year(
             holiday = dict(row)
             holiday_date = holiday["date"]
 
-            if holiday.get("close_time"):
-                holiday["close_time"] = holiday["close_time"].strftime("%H:%M")
-            else:
-                holiday["close_time"] = None
+            holiday["close_time"] = (
+                holiday["close_time"].strftime("%H:%M")
+                if holiday.get("close_time")
+                else None
+            )
 
             if holiday_date == today:
                 status = "Closed Today"
@@ -58,21 +64,22 @@ async def get_holidays_by_year(
             holiday["status"] = status
             holidays.append(holiday)
 
-        logging.info(f"✅ Found {len(holidays)} holidays for {year}")
+        logger.info("✅ Found %d holidays for %s", len(holidays), year)
         return holidays
 
     except Exception as e:
-        logging.error(f"❌ Database error: {e}")
-        logging.error(traceback.format_exc())
+        logger.error("❌ Database error: %s", e)
+        logger.debug(traceback.format_exc())
         raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
 
 
-# ✅ POST Save Edited Holidays (Frontend → DB)
+# ✅ POST Save Edited Holidays
 class HolidayUpdate(BaseModel):
     id: int
     name: str
     date: str
     close_time: str
+
 
 @router.post("/save", tags=["holidays"])
 async def save_holidays(request: Request, holidays: List[HolidayUpdate]):
@@ -92,9 +99,10 @@ async def save_holidays(request: Request, holidays: List[HolidayUpdate]):
                     h.id,
                 )
 
+        logger.info("✅ %d holidays updated successfully", len(holidays))
         return {"message": f"{len(holidays)} holidays updated successfully."}
 
     except Exception as e:
-        logging.error(f"❌ Save error: {e}")
-        logging.error(traceback.format_exc())
+        logger.error("❌ Save error: %s", e)
+        logger.debug(traceback.format_exc())
         raise HTTPException(status_code=500, detail="Failed to save holidays.")
