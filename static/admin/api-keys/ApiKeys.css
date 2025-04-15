@@ -6,17 +6,27 @@
 🔖 VERSION: MPA Phase I (API Keys Table Styling)
 ===========================================================================
 
+/* ============================================================================
+📁 FILE: api-keys.css
+📍 LOCATION: static/admin/api-keys/api-keys.css
+🎯 SCOPE: Styles exclusive to #api-keys-section
+🧩 AUTHOR: Captain & Chatman
+🔖 VERSION: MPA Phase I (API Keys Styles Refactor)
+============================================================================ */
+
 #api-keys-section {
   margin-top: 2rem;
   text-align: left;
 }
 
+/* 🧭 Table + ButtonBox Container */
 #api-keys-section .table-container {
   max-width: 1100px;
   margin: 0;
   padding: 6px 10px;
 }
 
+/* 📦 Table Wrapper */
 #api-keys-section .table-wrapper {
   display: block;
   overflow-x: auto;
@@ -29,6 +39,7 @@
   text-align: left;
 }
 
+/* 📊 Table Styles */
 #api-keys-section .admin-table {
   width: 100%;
   min-width: 800px;
@@ -37,6 +48,7 @@
   font-size: 0.95rem;
 }
 
+/* 📐 Cell Layout */
 #api-keys-section .admin-table th:not(.col-select),
 #api-keys-section .admin-table td:not(.col-select) {
   min-width: 8ch;
@@ -46,6 +58,7 @@
   word-break: break-word;
 }
 
+/* 🔠 Header Styling */
 #api-keys-section .admin-table th {
   border: 1px solid #ccc;
   padding: 6px 10px;
@@ -59,6 +72,7 @@
   z-index: 10;
 }
 
+/* 🔢 Body Cell Styling */
 #api-keys-section .admin-table td {
   border: 1px solid #ccc;
   padding: 6px 10px;
@@ -67,11 +81,13 @@
   min-height: 24px;
 }
 
+/* 🫥 Prevent collapse on empty cells */
 #api-keys-section .admin-table td:empty::after {
-  content: " ";
+  content: " "; /* non-breaking space */
   visibility: hidden;
 }
 
+/* ✅ Select Column */
 #api-keys-section .admin-table th.col-select,
 #api-keys-section .admin-table td.col-select {
   width: 4ch;
@@ -88,10 +104,17 @@
   color: black;
 }
 
+/* 🔠 Line ID Column */
 #api-keys-section .line-id-col {
+  width: 4ch;
+  min-width: 2ch;
+  max-width: 8ch;
+  text-align: center;
+  white-space: nowrap;
   display: none;
 }
 
+/* 🦓 Zebra Striping */
 #api-keys-section .admin-table tbody tr:nth-child(even) {
   background-color: #f9f9f9;
 }
@@ -100,4 +123,26 @@
 }
 #api-keys-section .admin-table tr.selected-row {
   background-color: #d0f0ff !important;
+}
+
+/* ✏️ Editable Cell Styling */
+#api-keys-section .editable {
+  background-color: #fff8dc;
+  border: 1px dashed #ccc;
+  outline: none;
+}
+
+#api-keys-section tr.editing {
+  box-shadow: inset 0 0 0 2px #006373;
+  background-color: #e9f7f9;
+}
+
+#api-keys-section tr[data-id^="paste-"],
+#api-keys-section tr[data-id^="new-"] {
+  background-color: #f2fff4;
+}
+
+#api-keys-section .invalid {
+  background-color: #ffe5e5;
+  border: 1px solid #ff4d4d;
 }
