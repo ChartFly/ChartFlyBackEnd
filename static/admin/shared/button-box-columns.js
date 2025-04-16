@@ -70,8 +70,9 @@ window.ButtonBoxColumns = (() => {
       )
         return;
 
-      header.style.cursor = "pointer";
       header.addEventListener("click", () => {
+        if (ButtonBox.getEditMode(section) !== "cell") return; // 🛑 Ignore if not in Orange Mode
+
         const prev = state.activeEditableColumnIndex ?? -1;
 
         if (index === prev) {
