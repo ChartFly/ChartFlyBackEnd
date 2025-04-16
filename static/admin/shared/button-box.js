@@ -4,7 +4,7 @@
 // Core ButtonBox controller: manages state,
 // button logic, event wiring, and UI updates.
 // Author: Captain & Chatman
-// Version: MPA Phase II — Line ID Toggle Logic Fixed
+// Version: MPA Phase III — Line ID Toggle Repaired
 // ============================================
 
 console.log("🧠 ButtonBox.js loaded ✅");
@@ -177,24 +177,18 @@ window.ButtonBox = (() => {
     if (!table) return;
 
     const headers = table.querySelectorAll("th.line-id-col");
-    const cells = table.querySelectorAll("td.line-id-col, td.id-col");
+    const cells = table.querySelectorAll("td.line-id-col");
 
     headers.forEach((th) => {
-      if (show) {
-        th.classList.remove("hidden-col");
-        th.textContent = "ID";
-      } else {
-        th.classList.add("hidden-col");
-        th.textContent = "";
-      }
+      th.classList.toggle("hidden-col", !show);
+      th.textContent = show ? "ID" : "";
     });
 
     cells.forEach((td) => {
+      td.classList.toggle("hidden-col", !show);
       if (show) {
-        td.classList.remove("hidden-col");
         td.textContent = td.dataset.originalId || "";
       } else {
-        td.classList.add("hidden-col");
         td.dataset.originalId = td.textContent;
         td.textContent = "";
       }
