@@ -4,7 +4,7 @@
 // 🎯 PURPOSE: Wire ButtonBox logic to API Keys table
 // 🧩 DEPENDENCIES: ButtonBox, ButtonBoxRows, ButtonBoxColumns
 // 👥 Author: Captain & Chatman
-// 🔖 Version: MPA Phase I (Header Clicks + ID Toggle Fix)
+// 🔖 Version: MPA Phase II — Shared Line ID Toggle Logic
 // =============================================================
 
 window.ButtonBoxApiKeys = (() => {
@@ -24,10 +24,17 @@ window.ButtonBoxApiKeys = (() => {
       section: "api",
       tableId: "api-keys-table",
     });
+  }
 
-    if (action === "save") {
-      // ButtonBoxDataBase.saveToDatabase("api", selectedIds);
-    }
+  function wireIdToggle() {
+    const toggle = document.getElementById("api-show-id-toggle");
+    if (!toggle) return;
+
+    toggle.addEventListener("change", () => {
+      ButtonBox.toggleLineIdVisibility("api", toggle.checked);
+    });
+
+    toggle.dispatchEvent(new Event("change"));
   }
 
   function init() {
@@ -60,27 +67,14 @@ window.ButtonBoxApiKeys = (() => {
         ButtonBox.init(config);
         wireIdToggle();
         ButtonBox.wireCheckboxes("api");
-        ButtonBoxMessages.updateIdColumnVisibility("api");
         ButtonBoxColumns.activateHeaderClicks("api");
       }
     }, 50);
   }
 
-  function wireIdToggle() {
-    const toggle = document.getElementById("api-show-id-toggle");
-    if (!toggle) return;
-
-    toggle.addEventListener("change", () => {
-      ButtonBoxMessages.updateIdColumnVisibility("api");
-    });
-
-    toggle.dispatchEvent(new Event("change"));
-  }
-
   return { init };
 })();
 
-// ✅ Auto-run on DOM load
 window.addEventListener("DOMContentLoaded", () => {
   window.ButtonBoxApiKeys.init();
 });

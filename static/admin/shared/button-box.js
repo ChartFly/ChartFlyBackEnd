@@ -4,7 +4,7 @@
 // Core ButtonBox controller: manages state,
 // button logic, event wiring, and UI updates.
 // Author: Captain & Chatman
-// Version: MPA Phase I (Paste Fix Applied)
+// Version: MPA Phase II — Line ID Toggle Logic Added
 // ============================================
 
 console.log("🧠 ButtonBox.js loaded ✅");
@@ -121,7 +121,7 @@ window.ButtonBox = (() => {
     const idToggle = document.getElementById(`${section}-show-id-toggle`);
     if (idToggle) {
       idToggle.addEventListener("change", () => {
-        ButtonBoxMessages.updateIdColumnVisibility(section);
+        toggleLineIdVisibility(section, idToggle.checked);
       });
       idToggle.dispatchEvent(new Event("change"));
     }
@@ -143,21 +143,12 @@ window.ButtonBox = (() => {
 
   function wireCheckboxes(section) {
     const state = getState(section);
-    if (!state) {
-      console.warn(`⚠️ No state found for section: ${section}`);
-      return;
-    }
+    if (!state) return;
 
     const table = document.getElementById(state.tableId);
-    if (!table) {
-      console.warn(`⚠️ Table not found: ${state.tableId}`);
-      return;
-    }
+    if (!table) return;
 
     const checkboxes = table.querySelectorAll(`.${section}-select-checkbox`);
-    console.log(
-      `🔍 Found ${checkboxes.length} checkboxes for section "${section}"`
-    );
     state.selectedRows.clear();
 
     checkboxes.forEach((checkbox) => {
@@ -168,12 +159,9 @@ window.ButtonBox = (() => {
       newCheckbox.addEventListener("change", () => {
         if (newCheckbox.checked) {
           state.selectedRows.add(id);
-          console.log(`✅ Checkbox selected: ${id}`);
         } else {
           state.selectedRows.delete(id);
-          console.log(`❌ Checkbox deselected: ${id}`);
         }
-
         ButtonBoxMessages.updateSelectedCount(section);
       });
     });
@@ -181,13 +169,40 @@ window.ButtonBox = (() => {
     ButtonBoxMessages.updateSelectedCount(section);
   }
 
+  function toggleLineIdVisibility(section, show) {
+    const table = document.getElementById(`${section}-table`);
+    if (!table) return;
+
+    const headers = table.querySelectorAll("th.line-id-col");
+    const cells = table.querySelectorAll("td.id-col");
+
+    headers.forEach((th) => {
+      if (show) {
+        th.classList.remove("hidden-col");
+        th.textContent = "ID";
+      } else {
+        th.classList.add("hidden-col");
+        th.textContent = "";
+      }
+    });
+
+    cells.forEach((td) => {
+      if (show) {
+        td.classList.remove("hidden-col");
+        td.textContent = td.dataset.originalId || "";
+      } else {
+        td.classList.add("hidden-col");
+        td.dataset.originalId = td.textContent;
+        td.textContent = "";
+      }
+    });
+  }
+
   function showWarning(section, message) {
-    console.warn(`⚠️ Warning (${section}): ${message}`);
     ButtonBoxMessages.showWarning(section, message);
   }
 
   function showMessage(section, message, type = "info") {
-    console.log(`💬 Message (${section}): ${message}`);
     if (type === "success") {
       ButtonBoxMessages.clearWarning(section);
     }
@@ -217,5 +232,6 @@ window.ButtonBox = (() => {
     wireCheckboxes,
     showWarning,
     showMessage,
+    toggleLineIdVisibility,
   };
 })();

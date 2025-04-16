@@ -3,7 +3,7 @@
 // -----------------------------------------------------------
 // ButtonBox Integration Logic for User Management Admin Tab
 // Author: Captain & Chatman
-// Version: MPA Phase I (User Management)
+// Version: MPA Phase II — Shared Line ID Toggle Logic
 // ===========================================================
 
 window.ButtonBoxUserManagement = (() => {
@@ -23,10 +23,17 @@ window.ButtonBoxUserManagement = (() => {
       section: "user",
       tableId: "user-management-table",
     });
+  }
 
-    if (action === "save") {
-      // ButtonBoxDataBase.saveToDatabase("user", selectedIds);
-    }
+  function wireIdToggle() {
+    const toggle = document.getElementById("user-show-id-toggle");
+    if (!toggle) return;
+
+    toggle.addEventListener("change", () => {
+      ButtonBox.toggleLineIdVisibility("user", toggle.checked);
+    });
+
+    toggle.dispatchEvent(new Event("change"));
   }
 
   function init() {
@@ -56,6 +63,7 @@ window.ButtonBoxUserManagement = (() => {
       if (window.ButtonBox && window.ButtonBoxRows) {
         clearInterval(waitForBox);
         ButtonBox.init(config);
+        wireIdToggle();
       }
     }, 50);
   }

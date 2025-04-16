@@ -3,7 +3,7 @@
 // 📍 LOCATION: static/admin/market-holidays/button-box-market-holidays.js
 // 🎯 PURPOSE: Initializes ButtonBox for the Market Holidays section
 // 🧩 AUTHOR: Captain & Chatman
-// 🔖 VERSION: MPA Phase I (Market Holidays ButtonBox Integration)
+// 🔖 Version: MPA Phase II — Shared Line ID Toggle Logic
 // ============================================================================
 
 window.ButtonBoxMarketHolidays = (() => {
@@ -23,11 +23,17 @@ window.ButtonBoxMarketHolidays = (() => {
       section: "holiday",
       tableId: "holidays-table",
     });
+  }
 
-    // 🔌 Optional DB logic — disabled for now
-    // if (action === "save") {
-    //   ButtonBoxDataBase?.saveToDatabase?.("holiday", selectedIds);
-    // }
+  function wireIdToggle() {
+    const toggle = document.getElementById("holiday-show-id-toggle");
+    if (!toggle) return;
+
+    toggle.addEventListener("change", () => {
+      ButtonBox.toggleLineIdVisibility("holiday", toggle.checked);
+    });
+
+    toggle.dispatchEvent(new Event("change"));
   }
 
   function init() {
@@ -62,26 +68,7 @@ window.ButtonBoxMarketHolidays = (() => {
     }, 50);
   }
 
-  function wireIdToggle() {
-    const toggle = document.getElementById("holiday-show-id-toggle");
-    if (!toggle) return;
-
-    toggle.addEventListener("change", () => {
-      const visible = toggle.checked;
-      document
-        .querySelectorAll(
-          "#market-holidays-section .line-id-col, #market-holidays-section th.line-id-col"
-        )
-        .forEach((el) => {
-          el.style.display = visible ? "table-cell" : "none";
-        });
-    });
-
-    toggle.dispatchEvent(new Event("change"));
-  }
-
   return { init };
 })();
 
-// ✅ Auto-run init on script load
 window.ButtonBoxMarketHolidays.init();
