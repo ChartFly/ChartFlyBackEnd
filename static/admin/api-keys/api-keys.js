@@ -4,7 +4,7 @@
 // 🎯 PURPOSE: Load and render API Key data into the table
 // 🧩 DEPENDENCIES: ButtonBox, ButtonBoxApiKeys
 // 👥 Author: Captain & Chatman
-// 🔖 Version: MPA Phase I (Fully Wired + Row ID)
+// 🔖 Version: MPA Phase II (Post-Render ID Toggle Fix)
 // =============================================================
 
 (() => {
@@ -26,14 +26,16 @@
 
       keys.forEach((key, i) => {
         const row = document.createElement("tr");
-        row.dataset.id = key.id; // ✅ Required for ButtonBox selection
+        row.dataset.id = key.id;
         row.innerHTML = `
           <td class="col-select">
             <input type="checkbox" class="api-select-checkbox" data-id="${
               key.id
             }" />
           </td>
-          <td class="id-col hidden-col">${key.id}</td>
+          <td class="line-id-col hidden-col" data-original-id="${key.id}">${
+          key.id
+        }</td>
           <td>${key.key_label}</td>
           <td>${key.key_type}</td>
           <td>${key.billing_interval}</td>
@@ -51,10 +53,16 @@
 
       console.log(`✅ Rendered ${keys.length} API keys`);
 
-      // ✅ Wire ButtonBox and checkboxes after table is populated
+      // ✅ Re-wire ButtonBox + ID toggle logic
       if (window.ButtonBox && window.ButtonBoxApiKeys) {
         ButtonBoxApiKeys.init();
         ButtonBox.wireCheckboxes("api");
+
+        const toggle = document.getElementById("api-show-id-toggle");
+        if (toggle) {
+          ButtonBox.toggleLineIdVisibility("api", toggle.checked);
+          console.log("🔄 Re-applied ID toggle post-render");
+        }
       }
     } catch (err) {
       console.error("❌ loadApiKeys() error:", err);
