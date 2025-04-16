@@ -4,7 +4,7 @@
 // Handles row-level actions (add, edit, copy,
 // paste, delete, save, undo) and checkbox logic.
 // Author: Captain & Chatman
-// Version: MPA Phase II — Column Count Dynamic
+// Version: MPA Phase III — Fully Dynamic Columns
 // ============================================
 
 window.ButtonBoxRows = (() => {
@@ -107,22 +107,27 @@ window.ButtonBoxRows = (() => {
       clone.setAttribute("data-id", clonedId);
       clone.classList.add("editing");
 
-      const checkbox = clone.querySelector("input[type='checkbox']");
-      if (checkbox) {
-        checkbox.setAttribute("data-id", clonedId);
-        checkbox.checked = true;
-        checkbox.className = `${section}-select-checkbox`;
-      }
+      const headerCells = table.querySelectorAll("thead th");
+      const tds = clone.querySelectorAll("td");
 
-      const idCell = clone.querySelector(".line-id-col");
-      if (idCell) idCell.textContent = clonedId;
+      headerCells.forEach((th, i) => {
+        const cell = tds[i];
+        if (!cell) return;
 
-      clone
-        .querySelectorAll("td:not(.col-select):not(.line-id-col)")
-        .forEach((cell) => {
+        if (th.classList.contains("col-select")) {
+          const checkbox = cell.querySelector("input[type='checkbox']");
+          if (checkbox) {
+            checkbox.setAttribute("data-id", clonedId);
+            checkbox.checked = true;
+            checkbox.className = `${section}-select-checkbox`;
+          }
+        } else if (th.classList.contains("line-id-col")) {
+          cell.textContent = clonedId;
+        } else {
           cell.setAttribute("contenteditable", "true");
           cell.classList.add("editable");
-        });
+        }
+      });
 
       if (state.clipboard) {
         const copiedRow = table.querySelector(
@@ -153,26 +158,17 @@ window.ButtonBoxRows = (() => {
       newRow.setAttribute("data-id", newId);
       newRow.setAttribute("data-index", "0");
 
-      // Get column count dynamically
+      let columnHtml = "";
+
       const headerCells = table.querySelectorAll("thead th");
-      const hasIdColumn =
-        table.querySelector(".line-id-col")?.offsetParent !== null;
-      let columnHtml = `
-        <td class="col-select"><input type="checkbox" class="${section}-select-checkbox" data-id="${newId}" checked></td>
-      `;
-
-      if (hasIdColumn) {
-        columnHtml += `<td class="line-id-col">${newId}</td>`;
-      }
-
       headerCells.forEach((th) => {
-        if (
-          th.classList.contains("col-select") ||
-          th.classList.contains("line-id-col")
-        )
-          return;
-
-        columnHtml += `<td contenteditable="true" class="editable"></td>`;
+        if (th.classList.contains("col-select")) {
+          columnHtml += `<td class="col-select"><input type="checkbox" class="${section}-select-checkbox" data-id="${newId}" checked></td>`;
+        } else if (th.classList.contains("line-id-col")) {
+          columnHtml += `<td class="line-id-col">${newId}</td>`;
+        } else {
+          columnHtml += `<td contenteditable="true" class="editable"></td>`;
+        }
       });
 
       newRow.innerHTML = columnHtml;

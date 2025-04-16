@@ -4,7 +4,7 @@
 // Handles cell-level Copy/Paste logic for
 // Edit Columns mode in ButtonBox
 // Author: Captain & Chatman
-// Version: MPA Phase II — Column Offset Fixed
+// Version: MPA Phase III — Fully Dynamic Columns
 // ============================================
 
 window.ButtonBoxColumns = (() => {
@@ -63,23 +63,33 @@ window.ButtonBoxColumns = (() => {
     if (!table) return;
 
     const headers = table.querySelectorAll("thead th");
+    const editableHeaders = [];
 
-    headers.forEach((header, index) => {
+    // Step 1: Build list of editable headers with matching cell indices
+    let trueCellIndex = 0;
+    headers.forEach((header, headerIndex) => {
       if (
         header.classList.contains("col-select") ||
         header.classList.contains("line-id-col")
-      )
-        return;
+      ) {
+        return; // Skip these, but don't increment cell index
+      }
 
+      editableHeaders.push({
+        header,
+        cellIndex: trueCellIndex,
+      });
+
+      trueCellIndex++;
+    });
+
+    // Step 2: Attach click listener to each editable header
+    editableHeaders.forEach(({ header, cellIndex }) => {
       header.style.cursor = "pointer";
       header.addEventListener("click", () => {
         const previousIndex = state.activeEditableColumnIndex ?? -1;
-        const lineIdVisible =
-          !!table.querySelector(".line-id-col")?.offsetParent;
-        const offset = lineIdVisible ? 1 : 0;
-        const correctedIndex = index + offset;
 
-        if (correctedIndex === previousIndex) {
+        if (cellIndex === previousIndex) {
           clearActiveColumn(table);
           state.activeEditableColumnIndex = null;
           ButtonBox.showTip(section, "Column deselected.");
@@ -87,11 +97,11 @@ window.ButtonBoxColumns = (() => {
         }
 
         clearActiveColumn(table);
-        state.activeEditableColumnIndex = correctedIndex;
+        state.activeEditableColumnIndex = cellIndex;
 
         const rows = table.querySelectorAll("tbody tr");
         rows.forEach((row) => {
-          const cell = row.cells[correctedIndex];
+          const cell = row.cells[cellIndex];
           if (!cell) return;
 
           if (
@@ -112,7 +122,7 @@ window.ButtonBoxColumns = (() => {
         ButtonBox.showTip(
           section,
           `Column ${
-            correctedIndex + 1
+            cellIndex + 1
           } activated. You can now edit one cell at a time.`
         );
       });
@@ -175,14 +185,24 @@ window.ButtonBoxColumns = (() => {
 
   function getSelectedColumnIndex(table) {
     const headers = table.querySelectorAll("thead th");
-    for (let i = 0; i < headers.length; i++) {
-      if (headers[i].classList.contains("editable-col")) {
-        const lineIdVisible =
-          !!table.querySelector(".line-id-col")?.offsetParent;
-        return lineIdVisible ? i + 1 : i;
+    const editableHeaders = [];
+
+    let trueCellIndex = 0;
+    headers.forEach((header) => {
+      if (
+        header.classList.contains("col-select") ||
+        header.classList.contains("line-id-col")
+      )
+        return;
+
+      if (header.classList.contains("editable-col")) {
+        editableHeaders.push(trueCellIndex);
       }
-    }
-    return -1;
+
+      trueCellIndex++;
+    });
+
+    return editableHeaders[0] ?? -1;
   }
 
   function pushCellUndo(section, cell) {
