@@ -88,7 +88,7 @@
   border-radius: 6px;
   padding: 8px 12px;
   margin: 24px 0;
-  font-size: 16px;
+  font-size: 18px;
   border: 1px solid #aaa;
   white-space: normal;
   word-wrap: break-word;
@@ -108,7 +108,7 @@
 #global-current-action,
 [id$="-current-action"] {
   font-weight: bold;
-  font-size: 16px;
+  font-size: 18px;
   color: #006373;
   margin-top: 5px;
 }
@@ -178,8 +178,11 @@ input[type="checkbox"] {
   transform: scale(1.1);
 }
 
-/* 🆔 Hidden ID Column */
+/* 🆔 Hidden ID Column Toggleable */
 .line-id-col {
+  display: table-cell;
+}
+.line-id-col.hidden-col {
   display: none;
 }
 
@@ -238,9 +241,9 @@ input[type="checkbox"] {
 
 .undo-limit-box {
   margin-left: 10px;
-  padding: 6px 12px;
+  padding: 8px 12px;
   border-radius: 6px;
-  font-size: 14px;
+  font-size: 18px;
   font-weight: bold;
   color: #006373;
   background-color: #e9faff;
