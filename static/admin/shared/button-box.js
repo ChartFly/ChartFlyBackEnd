@@ -185,16 +185,18 @@ window.ButtonBox = (() => {
     });
 
     cells.forEach((td) => {
-      td.classList.toggle("hidden-col", !show);
       if (show) {
+        td.classList.remove("hidden-col");
         td.textContent = td.dataset.originalId || "";
       } else {
-        td.dataset.originalId = td.textContent;
+        if (!td.dataset.originalId) {
+          td.dataset.originalId = td.textContent;
+        }
+        td.classList.add("hidden-col");
         td.textContent = "";
       }
     });
-  }
-
+  
   function showWarning(section, message) {
     ButtonBoxMessages.showWarning(section, message);
   }
