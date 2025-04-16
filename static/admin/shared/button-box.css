@@ -236,18 +236,23 @@ input[type="checkbox"] {
 /* 🛑 Undo Limit Message Box      */
 /* =============================== */
 
+/* =============================== */
+/* 🛑 Undo Limit Message Box      */
+/* =============================== */
+
 .undo-limit-box {
   margin-left: 10px;
-  padding: 6px 12px;
+  padding: 8px 12px;
   border-radius: 6px;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: bold;
   color: #006373;
   background-color: #e9faff; /* light blue like the tips box */
   border: 1px solid #55b5c3;
   flex-grow: 1;
-  max-width: 250px;
-  min-width: 180px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

@@ -4,7 +4,7 @@
 // 🎯 PURPOSE: Wire ButtonBox logic to API Keys table
 // 🧩 DEPENDENCIES: ButtonBox, ButtonBoxRows, ButtonBoxColumns
 // 👥 Author: Captain & Chatman
-// 🔖 Version: MPA Phase I (Column Click Enabled)
+// 🔖 Version: MPA Phase I (Header Clicks + ID Toggle Fix)
 // =============================================================
 
 window.ButtonBoxApiKeys = (() => {
@@ -55,17 +55,13 @@ window.ButtonBoxApiKeys = (() => {
 
     const waitForBox = setInterval(() => {
       const table = document.getElementById("api-keys-table");
-      if (
-        window.ButtonBox &&
-        window.ButtonBoxRows &&
-        window.ButtonBoxColumns &&
-        table
-      ) {
+      if (window.ButtonBox && window.ButtonBoxRows && table) {
         clearInterval(waitForBox);
         ButtonBox.init(config);
         wireIdToggle();
         ButtonBox.wireCheckboxes("api");
-        ButtonBoxColumns.activateHeaderClicks("api"); // 🟧 Enable column click-to-edit
+        ButtonBoxMessages.updateIdColumnVisibility("api");
+        ButtonBoxColumns.activateHeaderClicks("api");
       }
     }, 50);
   }
@@ -75,14 +71,7 @@ window.ButtonBoxApiKeys = (() => {
     if (!toggle) return;
 
     toggle.addEventListener("change", () => {
-      const visible = toggle.checked;
-      document
-        .querySelectorAll(
-          "#api-keys-section .line-id-col, #api-keys-section th.line-id-col"
-        )
-        .forEach((el) => {
-          el.style.display = visible ? "table-cell" : "none";
-        });
+      ButtonBoxMessages.updateIdColumnVisibility("api");
     });
 
     toggle.dispatchEvent(new Event("change"));
