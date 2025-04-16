@@ -4,7 +4,7 @@
 // Handles cell-level Copy/Paste logic for
 // Edit Columns mode in ButtonBox
 // Author: Captain & Chatman
-// Version: MPA Phase IV — DOM Index Aligned
+// Version: MPA Phase IV — Single Cell Focus
 // ============================================
 
 window.ButtonBoxColumns = (() => {
@@ -83,6 +83,7 @@ window.ButtonBoxColumns = (() => {
 
         clearActiveColumn(table);
         state.activeEditableColumnIndex = index;
+        header.classList.add("editable-col");
 
         const rows = table.querySelectorAll("tbody tr");
         rows.forEach((row) => {
@@ -95,21 +96,66 @@ window.ButtonBoxColumns = (() => {
           )
             return;
 
-          cell.setAttribute("contenteditable", "true");
           cell.classList.add("editable-col-cell");
 
-          cell.addEventListener("input", () => {
-            pushCellUndo(section, cell);
-            cell.classList.add("dirty");
+          cell.addEventListener("click", (e) => {
+            activateSingleEditableCell(cell, section);
           });
         });
 
         ButtonBox.showTip(
           section,
-          `Column ${index + 1} activated. You can now edit one cell at a time.`
+          `Column ${index + 1} activated. Click a cell to edit.`
         );
+
+        // Optional: Auto-focus first cell
+        const firstRow = table.querySelector("tbody tr");
+        if (firstRow && firstRow.cells[index]) {
+          activateSingleEditableCell(firstRow.cells[index], section);
+        }
+
+        // Add arrow key navigation
+        table.addEventListener("keydown", (e) => {
+          if (!["ArrowUp", "ArrowDown"].includes(e.key)) return;
+          e.preventDefault();
+          navigateColumnCells(table, section, index, e.key === "ArrowDown");
+        });
       });
     });
+  }
+
+  function activateSingleEditableCell(cell, section) {
+    const table = cell.closest("table");
+    if (!table) return;
+
+    table.querySelectorAll("td").forEach((td) => {
+      td.removeAttribute("contenteditable");
+      td.classList.remove("editable-focus-cell");
+    });
+
+    cell.setAttribute("contenteditable", "true");
+    cell.classList.add("editable-focus-cell");
+
+    cell.focus();
+
+    cell.addEventListener("input", () => {
+      pushCellUndo(section, cell);
+      cell.classList.add("dirty");
+    });
+  }
+
+  function navigateColumnCells(table, section, columnIndex, moveDown) {
+    const rows = Array.from(table.querySelectorAll("tbody tr"));
+    const currentCell = table.querySelector(".editable-focus-cell");
+    if (!currentCell) return;
+
+    const currentRowIndex = rows.findIndex((row) => row.contains(currentCell));
+
+    const nextIndex = moveDown ? currentRowIndex + 1 : currentRowIndex - 1;
+    if (nextIndex < 0 || nextIndex >= rows.length) return;
+
+    const nextCell = rows[nextIndex].cells[columnIndex];
+    if (nextCell) activateSingleEditableCell(nextCell, section);
   }
 
   function clearActiveColumn(table) {
@@ -117,7 +163,11 @@ window.ButtonBoxColumns = (() => {
       th.classList.remove("editable-col");
     });
     table.querySelectorAll("tbody td").forEach((td) => {
-      td.classList.remove("editable-col-cell", "cell-paste-ready");
+      td.classList.remove(
+        "editable-col-cell",
+        "editable-focus-cell",
+        "cell-paste-ready"
+      );
       td.removeAttribute("contenteditable");
     });
   }

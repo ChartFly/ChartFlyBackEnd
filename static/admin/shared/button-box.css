@@ -271,8 +271,15 @@ input[type="checkbox"] {
   outline: 1px dashed #ff9800;
 }
 
+/* 🔶 Currently Editable Cell in Orange Mode */
 .editable-focus-cell {
-  background-color: #ffd699 !important;
-  border: 2px solid #ff9900 !important;
+  background-color: #ffd699 !important; /* richer orange */
+  border: 2px solid #ff9900 !important; /* solid orange border */
   outline: none !important;
+  font-weight: bold;
+  box-shadow: inset 0 0 0 2px #ffb347; /* slight glow */
+}
+
+.editable-focus-cell:hover {
+  cursor: text;
 }
