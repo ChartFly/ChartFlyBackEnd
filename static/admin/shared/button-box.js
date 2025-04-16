@@ -196,7 +196,8 @@ window.ButtonBox = (() => {
         td.textContent = "";
       }
     });
-  
+  } // 👈✅ THIS was missing in your version!
+
   function showWarning(section, message) {
     ButtonBoxMessages.showWarning(section, message);
   }
