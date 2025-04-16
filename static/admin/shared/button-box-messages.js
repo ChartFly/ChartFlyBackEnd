@@ -4,7 +4,7 @@
 // Shared Tip/Warning logic, Confirm button state,
 // status footer updates, and button visual toggles.
 // Author: Captain & Chatman
-// Version: MPA Phase I (Undo Limit Box Edition)
+// Version: MPA Phase II — Orange Mode Button Logic Fix
 // ============================================
 
 window.ButtonBoxMessages = (() => {
@@ -121,11 +121,30 @@ window.ButtonBoxMessages = (() => {
 
   function updateButtonColors(section) {
     const isCell = ButtonBox.getEditMode(section) === "cell";
-    document
-      .querySelectorAll(`#${section}-toolbar .action-btn`)
-      .forEach((btn) => {
-        btn.classList.toggle("cell-mode", isCell);
-      });
+    const buttons = document.querySelectorAll(
+      `#${section}-toolbar .action-btn`
+    );
+
+    buttons.forEach((btn) => {
+      const id = btn.id;
+      const isAdd = id.includes("add");
+      const isPaste = id.includes("paste");
+
+      // Color class
+      btn.classList.toggle("cell-mode", isCell);
+
+      // Disable Add in Orange mode
+      if (isAdd) {
+        btn.disabled = isCell;
+        btn.classList.toggle("disabled-btn", isCell);
+      }
+
+      // Enable Paste in Orange mode
+      if (isPaste) {
+        btn.disabled = !isCell;
+        btn.classList.toggle("disabled-btn", !isCell);
+      }
+    });
   }
 
   function updateSelectedCount(section) {
@@ -136,7 +155,6 @@ window.ButtonBoxMessages = (() => {
     }
   }
 
-  // ✅ NEW — Show Undo Limit Warning
   function showUndoLimitWarning(section) {
     const box = document.getElementById(`${section}-undo-limit-box`);
     if (box) {
@@ -145,7 +163,6 @@ window.ButtonBoxMessages = (() => {
     }
   }
 
-  // ✅ NEW — Clear Undo Limit Warning
   function clearUndoLimitWarning(section) {
     const box = document.getElementById(`${section}-undo-limit-box`);
     if (box) {
