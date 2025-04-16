@@ -105,12 +105,17 @@ window.ButtonBoxMessages = (() => {
     const idToggle = document.getElementById(`${section}-show-id-toggle`);
     if (!idToggle) return;
 
+    const show = idToggle.checked;
     document
       .querySelectorAll(
         `#${state.domId} .line-id-col, #${state.domId} th.line-id-col`
       )
       .forEach((cell) => {
-        cell.style.display = idToggle.checked ? "table-cell" : "none";
+        cell.style.setProperty(
+          "display",
+          show ? "table-cell" : "none",
+          "important"
+        );
       });
   }
 

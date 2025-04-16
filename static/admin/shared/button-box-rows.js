@@ -4,7 +4,7 @@
 // Handles row-level actions (add, edit, copy,
 // paste, delete, save, undo) and checkbox logic.
 // Author: Captain & Chatman
-// Version: MPA Phase I (Blue Paste Behavior Fixed)
+// Version: MPA Phase I (Paste Confirm Logic Fixed)
 // ============================================
 
 window.ButtonBoxRows = (() => {
@@ -123,6 +123,17 @@ window.ButtonBoxRows = (() => {
           cell.setAttribute("contenteditable", "true");
           cell.classList.add("editable");
         });
+
+      // Uncheck original copied row
+      if (state.clipboard) {
+        const copiedRow = table.querySelector(
+          `tr[data-id="${selectedIds[0]}"]`
+        );
+        if (copiedRow) {
+          const oldCheckbox = copiedRow.querySelector("input[type='checkbox']");
+          if (oldCheckbox) oldCheckbox.checked = false;
+        }
+      }
 
       tbody.prepend(clone);
       state.selectedRows.clear();
