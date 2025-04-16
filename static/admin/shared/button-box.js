@@ -8,6 +8,7 @@
 // ============================================
 
 console.log("🧠 ButtonBox.js loaded ✅");
+console.log("🧨 ButtonBox toggleLineIdVisibility running...");
 
 window.ButtonBox = (() => {
   const stateMap = new Map();
@@ -172,6 +173,7 @@ window.ButtonBox = (() => {
   function toggleLineIdVisibility(section, show) {
     const state = getState(section);
     const table = document.getElementById(state?.tableId || `${section}-table`);
+    console.log("🔍 ID Toggle targeting:", table);
     if (!table) return;
 
     const headers = table.querySelectorAll("th.line-id-col");
