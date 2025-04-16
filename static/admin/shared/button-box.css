@@ -178,13 +178,9 @@ input[type="checkbox"] {
   transform: scale(1.1);
 }
 
-/* 🆔 Hidden ID Column Toggleable */
-.line-id-col {
-  display: table-cell;
-}
 .line-id-col.hidden-col,
 .id-col.hidden-col {
-  visibility: collapse;
+  display: none !important;
 }
 
 /* 📦 ButtonBox Container */
