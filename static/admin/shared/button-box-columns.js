@@ -65,31 +65,26 @@ window.ButtonBoxColumns = (() => {
     const headers = table.querySelectorAll("thead th");
     const editableHeaders = [];
 
-    // Step 1: Build list of editable headers with matching cell indices
-    let trueCellIndex = 0;
-    headers.forEach((header, headerIndex) => {
+    headers.forEach((header, domIndex) => {
       if (
         header.classList.contains("col-select") ||
         header.classList.contains("line-id-col")
       ) {
-        return; // Skip these, but don't increment cell index
+        return; // skip binding click logic
       }
 
       editableHeaders.push({
         header,
-        cellIndex: trueCellIndex,
+        domIndex, // use the true DOM column index
       });
-
-      trueCellIndex++;
     });
 
-    // Step 2: Attach click listener to each editable header
-    editableHeaders.forEach(({ header, cellIndex }) => {
+    editableHeaders.forEach(({ header, domIndex }) => {
       header.style.cursor = "pointer";
       header.addEventListener("click", () => {
-        const previousIndex = state.activeEditableColumnIndex ?? -1;
+        const prevIndex = state.activeEditableColumnIndex ?? -1;
 
-        if (cellIndex === previousIndex) {
+        if (domIndex === prevIndex) {
           clearActiveColumn(table);
           state.activeEditableColumnIndex = null;
           ButtonBox.showTip(section, "Column deselected.");
@@ -97,14 +92,13 @@ window.ButtonBoxColumns = (() => {
         }
 
         clearActiveColumn(table);
-        state.activeEditableColumnIndex = cellIndex;
+        state.activeEditableColumnIndex = domIndex;
 
         const rows = table.querySelectorAll("tbody tr");
         rows.forEach((row) => {
-          const cell = row.cells[cellIndex];
-          if (!cell) return;
-
+          const cell = row.cells[domIndex];
           if (
+            !cell ||
             cell.classList.contains("col-select") ||
             cell.classList.contains("line-id-col")
           )
@@ -122,7 +116,7 @@ window.ButtonBoxColumns = (() => {
         ButtonBox.showTip(
           section,
           `Column ${
-            cellIndex + 1
+            domIndex + 1
           } activated. You can now edit one cell at a time.`
         );
       });
