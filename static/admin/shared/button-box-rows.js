@@ -4,7 +4,7 @@
 // Handles row-level actions (add, edit, copy,
 // paste, delete, save, undo) and checkbox logic.
 // Author: Captain & Chatman
-// Version: MPA Phase I (Paste Confirm Logic Fixed)
+// Version: MPA Phase II — Column Count Dynamic
 // ============================================
 
 window.ButtonBoxRows = (() => {
@@ -124,7 +124,6 @@ window.ButtonBoxRows = (() => {
           cell.classList.add("editable");
         });
 
-      // Uncheck original copied row
       if (state.clipboard) {
         const copiedRow = table.querySelector(
           `tr[data-id="${selectedIds[0]}"]`
@@ -154,21 +153,29 @@ window.ButtonBoxRows = (() => {
       newRow.setAttribute("data-id", newId);
       newRow.setAttribute("data-index", "0");
 
-      newRow.innerHTML = `
+      // Get column count dynamically
+      const headerCells = table.querySelectorAll("thead th");
+      const hasIdColumn =
+        table.querySelector(".line-id-col")?.offsetParent !== null;
+      let columnHtml = `
         <td class="col-select"><input type="checkbox" class="${section}-select-checkbox" data-id="${newId}" checked></td>
-        <td class="line-id-col">${newId}</td>
-        <td contenteditable="true" class="editable">Edit New Row</td>
-        <td contenteditable="true" class="editable"></td>
-        <td contenteditable="true" class="editable"></td>
-        <td contenteditable="true" class="editable"></td>
-        <td contenteditable="true" class="editable"></td>
-        <td contenteditable="true" class="editable"></td>
-        <td contenteditable="true" class="editable"></td>
-        <td contenteditable="true" class="editable"></td>
-        <td contenteditable="true" class="editable"></td>
-        <td contenteditable="true" class="editable"></td>
-        <td contenteditable="true" class="editable"></td>
       `;
+
+      if (hasIdColumn) {
+        columnHtml += `<td class="line-id-col">${newId}</td>`;
+      }
+
+      headerCells.forEach((th) => {
+        if (
+          th.classList.contains("col-select") ||
+          th.classList.contains("line-id-col")
+        )
+          return;
+
+        columnHtml += `<td contenteditable="true" class="editable"></td>`;
+      });
+
+      newRow.innerHTML = columnHtml;
 
       newRow.querySelectorAll("td[contenteditable]").forEach((cell) => {
         cell.addEventListener("input", () => newRow.classList.add("dirty"));

@@ -4,7 +4,7 @@
 // Handles cell-level Copy/Paste logic for
 // Edit Columns mode in ButtonBox
 // Author: Captain & Chatman
-// Version: MPA Phase I — Orange Mode Polished
+// Version: MPA Phase II — Column Offset Fixed
 // ============================================
 
 window.ButtonBoxColumns = (() => {
@@ -76,7 +76,8 @@ window.ButtonBoxColumns = (() => {
         const previousIndex = state.activeEditableColumnIndex ?? -1;
         const lineIdVisible =
           !!table.querySelector(".line-id-col")?.offsetParent;
-        const correctedIndex = lineIdVisible ? index + 1 : index;
+        const offset = lineIdVisible ? 1 : 0;
+        const correctedIndex = index + offset;
 
         if (correctedIndex === previousIndex) {
           clearActiveColumn(table);
@@ -176,7 +177,9 @@ window.ButtonBoxColumns = (() => {
     const headers = table.querySelectorAll("thead th");
     for (let i = 0; i < headers.length; i++) {
       if (headers[i].classList.contains("editable-col")) {
-        return i;
+        const lineIdVisible =
+          !!table.querySelector(".line-id-col")?.offsetParent;
+        return lineIdVisible ? i + 1 : i;
       }
     }
     return -1;
