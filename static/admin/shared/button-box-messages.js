@@ -4,17 +4,24 @@
 // Shared Tip/Warning logic, Confirm button state,
 // status footer updates, and button visual toggles.
 // Author: Captain & Chatman
-// Version: MPA Phase II — Orange Mode Button Logic Fix
+// Version: MPA Phase III — Smart Tips by Mode
 // ============================================
 
 window.ButtonBoxMessages = (() => {
-  const rotatingTips = [
-    "Click a button to begin an action.",
-    "Select rows before editing or deleting.",
-    "Paste only works after you Copy.",
-    "Undo will reverse your last change.",
-    "You can copy/paste individual cell text!",
-  ];
+  const tipsByMode = {
+    row: [
+      "Click a button to begin a row-based action.",
+      "Select rows before editing or deleting.",
+      "Copy + Paste will duplicate a full row.",
+      "Undo will reverse your last row change.",
+    ],
+    cell: [
+      "Click column headers to enable cell editing.",
+      "Only one cell is editable at a time in Orange Mode.",
+      "Copy copies cell text. Paste pastes to clicked cells.",
+      "Undo will revert the last cell edit.",
+    ],
+  };
 
   const tipTimers = {};
 
@@ -22,10 +29,14 @@ window.ButtonBoxMessages = (() => {
     const state = ButtonBox.getState(section);
     if (!state) return;
 
-    showTip(section, rotatingTips[tipIndex]);
+    const mode = ButtonBox.getEditMode(section);
+    const tips = tipsByMode[mode] || tipsByMode.row;
+
+    showTip(section, tips[tipIndex]);
+    clearInterval(tipTimers[section]);
     tipTimers[section] = setInterval(() => {
-      state.tipIndex = (state.tipIndex + 1) % rotatingTips.length;
-      showTip(section, rotatingTips[state.tipIndex]);
+      state.tipIndex = (state.tipIndex + 1) % tips.length;
+      showTip(section, tips[state.tipIndex]);
     }, 60000);
   }
 
@@ -55,7 +66,11 @@ window.ButtonBoxMessages = (() => {
     const state = ButtonBox.getState(section);
     if (!state) return;
     state.tipIndex = 0;
-    showTip(section, rotatingTips[0]);
+
+    const mode = ButtonBox.getEditMode(section);
+    const tips = tipsByMode[mode] || tipsByMode.row;
+
+    showTip(section, tips[0]);
   }
 
   function enableConfirm(section, action, onClickHandler) {
@@ -130,16 +145,13 @@ window.ButtonBoxMessages = (() => {
       const isAdd = id.includes("add");
       const isPaste = id.includes("paste");
 
-      // Color class
       btn.classList.toggle("cell-mode", isCell);
 
-      // Disable Add in Orange mode
       if (isAdd) {
         btn.disabled = isCell;
         btn.classList.toggle("disabled-btn", isCell);
       }
 
-      // Enable Paste only if clipboard content matches edit mode
       const state = ButtonBox.getState(section);
       const hasClipboard = !!state.clipboard;
       const correctType = isCell
@@ -152,6 +164,9 @@ window.ButtonBoxMessages = (() => {
         btn.classList.toggle("disabled-btn", !enablePaste);
       }
     });
+
+    // 🔄 Refresh tip when switching modes
+    clearWarning(section);
   }
 
   function updateSelectedCount(section) {
