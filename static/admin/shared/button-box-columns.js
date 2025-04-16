@@ -4,7 +4,7 @@
 // Handles cell-level Copy/Paste logic for
 // Edit Columns mode in ButtonBox
 // Author: Captain & Chatman
-// Version: MPA Phase I (Column Click Active)
+// Version: MPA Phase I — Orange Mode Polished
 // ============================================
 
 window.ButtonBoxColumns = (() => {
@@ -73,12 +73,24 @@ window.ButtonBoxColumns = (() => {
 
       header.style.cursor = "pointer";
       header.addEventListener("click", () => {
+        const previousIndex = state.activeEditableColumnIndex ?? -1;
+        const lineIdVisible =
+          !!table.querySelector(".line-id-col")?.offsetParent;
+        const correctedIndex = lineIdVisible ? index + 1 : index;
+
+        if (correctedIndex === previousIndex) {
+          clearActiveColumn(table);
+          state.activeEditableColumnIndex = null;
+          ButtonBox.showTip(section, "Column deselected.");
+          return;
+        }
+
         clearActiveColumn(table);
-        header.classList.add("editable-col");
+        state.activeEditableColumnIndex = correctedIndex;
 
         const rows = table.querySelectorAll("tbody tr");
         rows.forEach((row) => {
-          const cell = row.cells[index];
+          const cell = row.cells[correctedIndex];
           if (!cell) return;
 
           if (
@@ -98,7 +110,9 @@ window.ButtonBoxColumns = (() => {
 
         ButtonBox.showTip(
           section,
-          `Column ${index + 1} activated. You can now edit one cell at a time.`
+          `Column ${
+            correctedIndex + 1
+          } activated. You can now edit one cell at a time.`
         );
       });
     });
