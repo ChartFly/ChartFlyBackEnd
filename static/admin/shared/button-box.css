@@ -237,24 +237,26 @@ input[type="checkbox"] {
 /* =============================== */
 
 .undo-limit-box {
-  margin-left: auto;
+  margin-left: 10px;
   padding: 6px 12px;
   border-radius: 6px;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: bold;
-  border: 1px solid #55b5c3;
-  background-color: #e9faff;
   color: #006373;
-  min-width: 160px;
-  text-align: center;
-  transition: all 0.2s ease-in-out;
+  background-color: #e9faff; /* light blue like the tips box */
+  border: 1px solid #55b5c3;
+  flex-grow: 1;
+  max-width: 250px;
+  min-width: 180px;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .undo-limit-box.warn {
-  background-color: #ffe5e5;
-  border-color: #ff9999;
-  color: #b30000;
+  background-color: #fff4e5; /* soft warning orange */
+  border-color: #ffa726;
+  color: #e65100;
 }
 
 .undo-limit-box::before {

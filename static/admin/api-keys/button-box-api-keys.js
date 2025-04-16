@@ -2,9 +2,9 @@
 // 📁 FILE: button-box-api-keys.js
 // 📍 LOCATION: static/admin/api-keys/button-box-api-keys.js
 // 🎯 PURPOSE: Wire ButtonBox logic to API Keys table
-// 🧩 DEPENDENCIES: ButtonBox, ButtonBoxRows
+// 🧩 DEPENDENCIES: ButtonBox, ButtonBoxRows, ButtonBoxColumns
 // 👥 Author: Captain & Chatman
-// 🔖 Version: MPA Phase I (Fully Wired Edition)
+// 🔖 Version: MPA Phase I (Column Click Enabled)
 // =============================================================
 
 window.ButtonBoxApiKeys = (() => {
@@ -55,11 +55,17 @@ window.ButtonBoxApiKeys = (() => {
 
     const waitForBox = setInterval(() => {
       const table = document.getElementById("api-keys-table");
-      if (window.ButtonBox && window.ButtonBoxRows && table) {
+      if (
+        window.ButtonBox &&
+        window.ButtonBoxRows &&
+        window.ButtonBoxColumns &&
+        table
+      ) {
         clearInterval(waitForBox);
         ButtonBox.init(config);
         wireIdToggle();
         ButtonBox.wireCheckboxes("api");
+        ButtonBoxColumns.activateHeaderClicks("api"); // 🟧 Enable column click-to-edit
       }
     }, 50);
   }

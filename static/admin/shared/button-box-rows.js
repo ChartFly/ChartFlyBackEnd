@@ -4,7 +4,7 @@
 // Handles row-level actions (add, edit, copy,
 // delete, save, undo) and checkbox logic.
 // Author: Captain & Chatman
-// Version: MPA Phase I (Row Logic Finalized + Clean Add Row)
+// Version: MPA Phase I (Blue Copy/Paste Separation)
 // ============================================
 
 window.ButtonBoxRows = (() => {
@@ -63,7 +63,7 @@ window.ButtonBoxRows = (() => {
     const table = document.getElementById(tableId);
     if (!table) return;
 
-    if (["add", "edit", "delete", "copy"].includes(action)) {
+    if (["add", "edit", "delete"].includes(action)) {
       pushUndo(section);
     }
 
@@ -89,8 +89,27 @@ window.ButtonBoxRows = (() => {
       const sourceRow = table.querySelector(`tr[data-id="${selectedIds[0]}"]`);
       if (!sourceRow) return;
 
+      clipboards[section] = sourceRow.cloneNode(true);
+      ButtonBox.showTip(section, "Row copied. Click Paste to insert.");
+
+      const pasteBtn = document.getElementById(`${section}-paste-btn`);
+      if (pasteBtn) {
+        pasteBtn.disabled = false;
+        pasteBtn.classList.remove("disabled-btn");
+      }
+    }
+
+    if (action === "paste") {
+      const clipboard = clipboards[section];
+      if (!clipboard) {
+        ButtonBox.showWarning(section, "Nothing copied to paste.");
+        return;
+      }
+
+      pushUndo(section);
+
       const clonedId = `S${Date.now()}`;
-      const clone = sourceRow.cloneNode(true);
+      const clone = clipboard.cloneNode(true);
       clone.setAttribute("data-id", clonedId);
       clone.classList.add("editing");
 
@@ -111,16 +130,18 @@ window.ButtonBoxRows = (() => {
           cell.classList.add("editable");
         });
 
-      const originalCheckbox = sourceRow.querySelector(
-        "input[type='checkbox']"
-      );
-      if (originalCheckbox) originalCheckbox.checked = false;
-      state.selectedRows.delete(selectedIds[0]);
-
       table.querySelector("tbody").prepend(clone);
+      state.selectedRows.clear();
       state.selectedRows.add(clonedId);
       ButtonBoxMessages.updateSelectedCount(section);
       ButtonBox.wireCheckboxes(section);
+
+      clipboards[section] = null;
+      const pasteBtn = document.getElementById(`${section}-paste-btn`);
+      if (pasteBtn) {
+        pasteBtn.disabled = true;
+        pasteBtn.classList.add("disabled-btn");
+      }
     }
 
     if (action === "add") {
