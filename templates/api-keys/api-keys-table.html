@@ -1,10 +1,18 @@
+<!-- ============================================
+📁 FILE: api-keys-table.html
+📍 LOCATION: templates/api-keys/api-keys-table.html
+🎯 PURPOSE: Table layout for API Keys section
+👥 Author: Captain & Chatman
+🔖 Version: MPA Phase I (ID Column Toggle Fixed)
+============================================ -->
+
 <div class="table-container">
   <div class="table-wrapper">
     <table id="api-keys-table" class="admin-table">
       <thead>
         <tr>
           <th class="col-select">Select</th>
-          <th class="id-col hidden-col">ID</th>
+          <th class="line-id-col hidden-col">ID</th>
           <th>Label</th>
           <th>Key Type</th>
           <th>Billing</th>
@@ -20,6 +28,28 @@
       </thead>
       <tbody id="api-keys-tbody">
         <!-- Dynamic rows will be inserted here -->
+        <!-- Example row for structure (can be removed if API populates table) -->
+        <tr data-id="S12345">
+          <td class="col-select">
+            <input
+              type="checkbox"
+              class="api-select-checkbox"
+              data-id="S12345"
+            />
+          </td>
+          <td class="line-id-col hidden-col">S12345</td>
+          <td contenteditable="true">Sample Label</td>
+          <td contenteditable="true">Public</td>
+          <td contenteditable="true">$</td>
+          <td contenteditable="true">5.00</td>
+          <td contenteditable="true">60.00</td>
+          <td contenteditable="true">2</td>
+          <td contenteditable="true">30</td>
+          <td contenteditable="true">60</td>
+          <td contenteditable="true">300</td>
+          <td contenteditable="true">High</td>
+          <td contenteditable="true">Yes</td>
+        </tr>
       </tbody>
     </table>
   </div>
