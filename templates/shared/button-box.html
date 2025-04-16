@@ -28,7 +28,7 @@ Author: Captain & Chatman
     >
       Paste
     </button>
-    <button id="{{ section }}-add-btn" class="action-btn">Add</button>
+    <button id="{{ section }}-add-btn" class="action-btn" {% if section == "api" %}disabled class="disabled-btn"{% endif %}>Add</button>
     <button id="{{ section }}-delete-btn" class="action-btn">Delete</button>
     <button id="{{ section }}-save-btn" class="action-btn">Save</button>
     <button

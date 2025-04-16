@@ -2,13 +2,13 @@
 // ✅ button-box-columns.js
 // --------------------------------------------
 // Handles cell-level Copy/Paste logic for
-// Edit Cells & Columns mode in ButtonBox
+// Edit Columns mode in ButtonBox
 // Author: Captain & Chatman
-// Version: MPA Phase I (Orange Mode Finalized)
+// Version: MPA Phase I (Column Click Active)
 // ============================================
 
 window.ButtonBoxColumns = (() => {
-  const cellUndoMap = new Map(); // Track up to 30 past cell states per section
+  const cellUndoMap = new Map();
 
   function handleCellAction(section, action) {
     const state = ButtonBox.getState(section);
@@ -53,8 +53,65 @@ window.ButtonBoxColumns = (() => {
 
     ButtonBox.showWarning(
       section,
-      `Switch to 'Edit Lines' to use ${capitalize(action)}.`
+      `Switch to 'Edit Rows' to use ${capitalize(action)}.`
     );
+  }
+
+  function activateHeaderClicks(section) {
+    const state = ButtonBox.getState(section);
+    const table = document.getElementById(state.tableId);
+    if (!table) return;
+
+    const headers = table.querySelectorAll("thead th");
+
+    headers.forEach((header, index) => {
+      if (
+        header.classList.contains("col-select") ||
+        header.classList.contains("line-id-col")
+      )
+        return;
+
+      header.style.cursor = "pointer";
+      header.addEventListener("click", () => {
+        clearActiveColumn(table);
+        header.classList.add("editable-col");
+
+        const rows = table.querySelectorAll("tbody tr");
+        rows.forEach((row) => {
+          const cell = row.cells[index];
+          if (!cell) return;
+
+          if (
+            cell.classList.contains("col-select") ||
+            cell.classList.contains("line-id-col")
+          )
+            return;
+
+          cell.setAttribute("contenteditable", "true");
+          cell.classList.add("editable-col-cell");
+
+          cell.addEventListener("input", () => {
+            pushCellUndo(section, cell);
+            cell.classList.add("dirty");
+          });
+        });
+
+        ButtonBox.showTip(
+          section,
+          `Column ${index + 1} activated. You can now edit one cell at a time.`
+        );
+      });
+    });
+  }
+
+  function clearActiveColumn(table) {
+    table.querySelectorAll("thead th").forEach((th) => {
+      th.classList.remove("editable-col");
+    });
+    table.querySelectorAll("tbody td").forEach((td) => {
+      td.classList.remove("editable-col-cell", "cell-paste-ready");
+      td.removeAttribute("contenteditable");
+    });
   }
 
   function activateCellPasteMode(section) {
@@ -74,7 +131,12 @@ window.ButtonBoxColumns = (() => {
     const rows = table.querySelectorAll("tbody tr");
     rows.forEach((row) => {
       const cell = row.cells[columnIndex];
-      if (!cell) return;
+      if (
+        !cell ||
+        cell.classList.contains("line-id-col") ||
+        cell.classList.contains("col-select")
+      )
+        return;
 
       cell.classList.add("cell-paste-ready");
       cell.addEventListener(
@@ -114,6 +176,11 @@ window.ButtonBoxColumns = (() => {
       prevValue: cell.textContent,
     });
     if (stack.length > 30) stack.shift();
+
+    if (stack.length === 30) {
+      showUndoLimit(section, true);
+    }
+
     console.log(`🧠 Cell undo pushed (${stack.length})`);
   }
 
@@ -129,8 +196,8 @@ window.ButtonBoxColumns = (() => {
     last.cell.classList.add("flash-yellow");
     setTimeout(() => last.cell.classList.remove("flash-yellow"), 500);
 
-    if (stack.length === 30) {
-      showUndoLimit(section, false); // Reset if backing off max
+    if (stack.length < 30) {
+      showUndoLimit(section, false);
     }
 
     console.log(`↩️ Cell undo applied (${stack.length} left)`);
@@ -139,7 +206,7 @@ window.ButtonBoxColumns = (() => {
   function showUndoLimit(section, isMax) {
     const box = document.getElementById(`${section}-undo-limit-box`);
     if (!box) return;
-    box.textContent = isMax ? "Max Undo 30" : "";
+    box.textContent = isMax ? "Warning: Max Undo 30" : "";
     box.className = isMax ? "undo-limit-box warn" : "undo-limit-box";
   }
 
@@ -189,5 +256,6 @@ window.ButtonBoxColumns = (() => {
     pushCellUndo,
     undoLastCellEdit,
     showUndoLimit,
+    activateHeaderClicks,
   };
 })();

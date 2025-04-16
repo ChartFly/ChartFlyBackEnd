@@ -4,7 +4,7 @@
 // Core ButtonBox controller: manages state,
 // button logic, event wiring, and UI updates.
 // Author: Captain & Chatman
-// Version: MPA Phase I (Debug Logging Edition + Clipboard Reset)
+// Version: MPA Phase I (Paste Fix Applied)
 // ============================================
 
 console.log("🧠 ButtonBox.js loaded ✅");
@@ -73,6 +73,21 @@ window.ButtonBox = (() => {
 
         const skipConfirm = ["add", "copy", "edit", "undo"].includes(action);
 
+        if (action === "copy" && getEditMode(section) === "row") {
+          const selected = Array.from(state.selectedRows);
+          if (selected.length !== 1) {
+            showWarning(section, "Select one row to copy.");
+            return;
+          }
+          state.clipboard = selected[0];
+          state.clipboardType = "row";
+          enablePaste(section);
+          ButtonBoxMessages.showTip(
+            section,
+            "Copied row. Paste to add duplicate."
+          );
+        }
+
         if (typeof state.onAction !== "function") {
           console.warn(
             `⚠️ No onAction handler defined for section: ${section}`
@@ -116,11 +131,10 @@ window.ButtonBox = (() => {
     );
     modeRadios.forEach((radio) => {
       radio.addEventListener("change", () => {
-        // 🔄 Reset clipboard when switching modes
         state.clipboard = null;
         state.clipboardType = null;
+        disablePaste(section);
         ButtonBoxMessages.updateButtonColors(section);
-        ButtonBoxColumns.disablePaste(section); // Just to be sure
       });
     });
 
@@ -146,7 +160,7 @@ window.ButtonBox = (() => {
     );
     state.selectedRows.clear();
 
-    checkboxes.forEach((checkbox, index) => {
+    checkboxes.forEach((checkbox) => {
       const id = checkbox.dataset.id;
       const newCheckbox = checkbox.cloneNode(true);
       checkbox.replaceWith(newCheckbox);
@@ -176,6 +190,22 @@ window.ButtonBox = (() => {
     console.log(`💬 Message (${section}): ${message}`);
     if (type === "success") {
       ButtonBoxMessages.clearWarning(section);
+    }
+  }
+
+  function enablePaste(section) {
+    const btn = document.getElementById(`${section}-paste-btn`);
+    if (btn) {
+      btn.disabled = false;
+      btn.classList.remove("disabled-btn");
+    }
+  }
+
+  function disablePaste(section) {
+    const btn = document.getElementById(`${section}-paste-btn`);
+    if (btn) {
+      btn.disabled = true;
+      btn.classList.add("disabled-btn");
     }
   }
 
