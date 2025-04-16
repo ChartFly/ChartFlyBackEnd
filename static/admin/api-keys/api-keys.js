@@ -4,7 +4,7 @@
 // 🎯 PURPOSE: Load and render API Key data into the table
 // 🧩 DEPENDENCIES: ButtonBox, ButtonBoxApiKeys
 // 👥 Author: Captain & Chatman
-// 🔖 Version: MPA Phase III (ID Column Fix with Manual Cells)
+// 🔖 Version: MPA Phase III (Fixed ID Column + Preserved Formatting)
 // =============================================================
 
 (() => {
@@ -28,50 +28,67 @@
         const row = document.createElement("tr");
         row.dataset.id = key.id;
 
-        // Checkbox cell
-        const checkboxTd = document.createElement("td");
-        checkboxTd.className = "col-select";
+        // 🔘 Select checkbox
+        const selectTd = document.createElement("td");
+        selectTd.className = "col-select";
         const checkbox = document.createElement("input");
         checkbox.type = "checkbox";
         checkbox.className = "api-select-checkbox";
         checkbox.dataset.id = key.id;
-        checkboxTd.appendChild(checkbox);
+        selectTd.appendChild(checkbox);
 
-        // ID column cell
+        // 🆔 ID column
         const idTd = document.createElement("td");
         idTd.className = "line-id-col hidden-col";
         idTd.dataset.originalId = key.id;
         idTd.textContent = key.id;
 
-        // Remaining cells via innerHTML
-        const rest = document.createElement("tr");
-        rest.innerHTML = `
-          <td>${key.key_label}</td>
-          <td>${key.key_type}</td>
-          <td>${key.billing_interval}</td>
-          <td>${key.cost_per_month}</td>
-          <td>${key.cost_per_year}</td>
-          <td>${key.usage_limit_sec}</td>
-          <td>${key.usage_limit_min}</td>
-          <td>${key.usage_limit_5min}</td>
-          <td>${key.usage_limit_hour}</td>
-          <td>${key.priority_order}</td>
-          <td>${key.is_active ? "Yes" : "No"}</td>
-        `;
+        // 🧱 Data cells
+        const cells = [
+          key.key_label,
+          key.key_type,
+          key.billing_interval,
+          key.cost_per_month,
+          key.cost_per_year,
+          key.usage_limit_sec,
+          key.usage_limit_min,
+          key.usage_limit_5min,
+          key.usage_limit_hour,
+          key.priority_order,
+          key.is_active ? "Yes" : "No",
+        ];
 
-        // Assemble the full row
-        row.appendChild(checkboxTd);
+        const editableKeys = [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true, // editable until "Active"
+        ];
+
+        const tdElements = cells.map((value, i) => {
+          const td = document.createElement("td");
+          td.textContent = value;
+          td.setAttribute("contenteditable", "true");
+          return td;
+        });
+
+        // 🧩 Final assembly
+        row.appendChild(selectTd);
         row.appendChild(idTd);
-        Array.from(rest.children[0].children).forEach((cell) =>
-          row.appendChild(cell)
-        );
-
+        tdElements.forEach((td) => row.appendChild(td));
         tbody.appendChild(row);
       });
 
       console.log(`✅ Rendered ${keys.length} API keys`);
 
-      // ✅ Re-wire ButtonBox + ID toggle logic
+      // 🔁 Wire ButtonBox and ID toggle logic
       if (window.ButtonBox && window.ButtonBoxApiKeys) {
         ButtonBoxApiKeys.init();
         ButtonBox.wireCheckboxes("api");
