@@ -1,4 +1,11 @@
-<!-- templates/market-holidays/holiday-table.html -->
+<!-- ============================================
+📁 FILE: holiday-table.html
+📍 LOCATION: templates/market-holidays/holiday-table.html
+🎯 PURPOSE: Table layout for Market Holidays section
+👥 Author: Captain & Chatman
+🔖 Version: MPA Phase III — ID Toggle Ready
+============================================ -->
+
 <div class="table-container">
   <div class="table-wrapper">
     <table id="market-holidays-table" class="admin-table">
@@ -13,7 +20,23 @@
         </tr>
       </thead>
       <tbody id="market-holidays-tbody">
-        <!-- Dynamic rows will be inserted here -->
+        <!-- Example row for structure/testing -->
+        <tr data-id="S98765">
+          <td class="col-select">
+            <input
+              type="checkbox"
+              class="holiday-select-checkbox"
+              data-id="S98765"
+            />
+          </td>
+          <td class="line-id-col hidden-col" data-original-id="S98765">
+            S98765
+          </td>
+          <td contenteditable="true">Thanksgiving</td>
+          <td contenteditable="true">2025-11-27</td>
+          <td contenteditable="true">CLOSED</td>
+          <td contenteditable="true">Upcoming</td>
+        </tr>
       </tbody>
     </table>
   </div>

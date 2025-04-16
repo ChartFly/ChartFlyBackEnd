@@ -1,4 +1,11 @@
-<!--- templates/user-management/user-management-table.html --->
+<!-- ============================================
+📁 FILE: user-management-table.html
+📍 LOCATION: templates/user-management/user-management-table.html
+🎯 PURPOSE: Table layout for User Management section
+👥 Author: Captain & Chatman
+🔖 Version: MPA Phase III — ID Toggle Ready
+============================================ -->
+
 <div class="table-container">
   <div class="table-wrapper">
     <table id="user-management-table" class="admin-table">
@@ -17,7 +24,25 @@
         </tr>
       </thead>
       <tbody id="user-management-tbody">
-        <!-- Dynamic rows go here -->
+        <!-- Example row for structure/testing -->
+        <tr data-id="U123">
+          <td class="col-select">
+            <input
+              type="checkbox"
+              class="user-select-checkbox"
+              data-id="U123"
+            />
+          </td>
+          <td class="line-id-col hidden-col" data-original-id="U123">U123</td>
+          <td contenteditable="true">captain_fred</td>
+          <td contenteditable="true">(555) 123-4567</td>
+          <td contenteditable="true">fred@example.com</td>
+          <td contenteditable="true">2024-09-01</td>
+          <td contenteditable="true">admin, api</td>
+          <td contenteditable="true">Captain</td>
+          <td contenteditable="true">Fred</td>
+          <td contenteditable="true">Moeller</td>
+        </tr>
       </tbody>
     </table>
   </div>

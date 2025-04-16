@@ -3,7 +3,7 @@
 📍 LOCATION: templates/api-keys/api-keys-table.html
 🎯 PURPOSE: Table layout for API Keys section
 👥 Author: Captain & Chatman
-🔖 Version: MPA Phase I (ID Column Toggle Fixed)
+🔖 Version: MPA Phase III — ID Toggle Fully Functional
 ============================================ -->
 
 <div class="table-container">
@@ -27,7 +27,7 @@
         </tr>
       </thead>
       <tbody id="api-keys-tbody">
-        <!-- Dynamic rows will be inserted here -->
+        <!-- Example row for structure/testing -->
         <tr data-id="S12345">
           <td class="col-select">
             <input
@@ -36,7 +36,9 @@
               data-id="S12345"
             />
           </td>
-          <td class="line-id-col hidden-col">S12345</td>
+          <td class="line-id-col hidden-col" data-original-id="S12345">
+            S12345
+          </td>
           <td contenteditable="true">Sample Label</td>
           <td contenteditable="true">Public</td>
           <td contenteditable="true">$</td>
