@@ -2,9 +2,9 @@
 // ✅ button-box-rows.js
 // --------------------------------------------
 // Handles row-level actions (add, edit, copy,
-// delete, save, undo) and checkbox logic.
+// paste, delete, save, undo) and checkbox logic.
 // Author: Captain & Chatman
-// Version: MPA Phase I (Row Logic Finalized + Clean Add Row)
+// Version: MPA Phase I (Blue Paste Behavior Fixed)
 // ============================================
 
 window.ButtonBoxRows = (() => {
@@ -63,7 +63,7 @@ window.ButtonBoxRows = (() => {
     const table = document.getElementById(tableId);
     if (!table) return;
 
-    if (["add", "edit", "delete", "copy"].includes(action)) {
+    if (["add", "edit", "delete", "copy", "paste"].includes(action)) {
       pushUndo(section);
     }
 
@@ -89,8 +89,21 @@ window.ButtonBoxRows = (() => {
       const sourceRow = table.querySelector(`tr[data-id="${selectedIds[0]}"]`);
       if (!sourceRow) return;
 
+      const rowHTML = sourceRow.outerHTML;
+      state.clipboard = rowHTML;
+      state.clipboardType = "row";
+
+      ButtonBox.showTip(section, "Copied row. Use Paste to add duplicate.");
+      ButtonBox.enablePaste(section);
+    }
+
+    if (action === "paste" && state.clipboardType === "row") {
+      const tbody = table.querySelector("tbody");
+      const temp = document.createElement("tbody");
+      temp.innerHTML = state.clipboard;
+
+      const clone = temp.firstElementChild;
       const clonedId = `S${Date.now()}`;
-      const clone = sourceRow.cloneNode(true);
       clone.setAttribute("data-id", clonedId);
       clone.classList.add("editing");
 
@@ -111,16 +124,16 @@ window.ButtonBoxRows = (() => {
           cell.classList.add("editable");
         });
 
-      const originalCheckbox = sourceRow.querySelector(
-        "input[type='checkbox']"
-      );
-      if (originalCheckbox) originalCheckbox.checked = false;
-      state.selectedRows.delete(selectedIds[0]);
-
-      table.querySelector("tbody").prepend(clone);
+      tbody.prepend(clone);
+      state.selectedRows.clear();
       state.selectedRows.add(clonedId);
-      ButtonBoxMessages.updateSelectedCount(section);
       ButtonBox.wireCheckboxes(section);
+      ButtonBoxMessages.updateSelectedCount(section);
+      ButtonBox.showMessage(
+        section,
+        "Row pasted and ready to edit.",
+        "success"
+      );
     }
 
     if (action === "add") {
