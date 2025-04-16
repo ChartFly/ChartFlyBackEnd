@@ -4,7 +4,7 @@
   -------------------------------------------
   Shared styles for all ButtonBox components
   Author: Captain & Chatman
-  Version: MPA Phase I (Column Highlight Added)
+  Version: MPA Phase III — Collapse Column Fix
   ===========================================
 */
 
@@ -182,8 +182,9 @@ input[type="checkbox"] {
 .line-id-col {
   display: table-cell;
 }
-.line-id-col.hidden-col {
-  display: none;
+.line-id-col.hidden-col,
+.id-col.hidden-col {
+  visibility: collapse;
 }
 
 /* 📦 ButtonBox Container */
@@ -228,10 +229,6 @@ input[type="checkbox"] {
   padding: 10px;
   border-bottom: 1px solid #ddd;
   text-align: left;
-}
-
-.id-col.hidden-col {
-  display: none;
 }
 
 /* =============================== */
