@@ -270,3 +270,9 @@ input[type="checkbox"] {
   background-color: #fff3e0 !important;
   outline: 1px dashed #ff9800;
 }
+
+.editable-focus-cell {
+  background-color: #ffd699 !important;
+  border: 2px solid #ff9900 !important;
+  outline: none !important;
+}

@@ -4,7 +4,7 @@
 // Core ButtonBox controller: manages state,
 // button logic, event wiring, and UI updates.
 // Author: Captain & Chatman
-// Version: MPA Phase III — Line ID Toggle Repaired
+// Version: MPA Phase III — Line ID Toggle Repaired + Orange Mode Logic
 // ============================================
 
 console.log("🧠 ButtonBox.js loaded ✅");
@@ -196,7 +196,7 @@ window.ButtonBox = (() => {
         td.textContent = "";
       }
     });
-  } // 👈✅ THIS was missing in your version!
+  }
 
   function showWarning(section, message) {
     ButtonBoxMessages.showWarning(section, message);
