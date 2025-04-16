@@ -170,11 +170,12 @@ window.ButtonBox = (() => {
   }
 
   function toggleLineIdVisibility(section, show) {
-    const table = document.getElementById(`${section}-table`);
+    const state = getState(section);
+    const table = document.getElementById(state?.tableId || `${section}-table`);
     if (!table) return;
 
     const headers = table.querySelectorAll("th.line-id-col");
-    const cells = table.querySelectorAll("td.id-col");
+    const cells = table.querySelectorAll("td.line-id-col");
 
     headers.forEach((th) => {
       if (show) {
