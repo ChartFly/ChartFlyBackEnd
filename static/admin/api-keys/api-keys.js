@@ -4,7 +4,7 @@
 // 🎯 PURPOSE: Load and render API Key data into the table
 // 🧩 DEPENDENCIES: ButtonBox, ButtonBoxApiKeys
 // 👥 Author: Captain & Chatman
-// 🔖 Version: MPA Phase II (Post-Render ID Toggle Fix)
+// 🔖 Version: MPA Phase III (ID Column Fix with Manual Cells)
 // =============================================================
 
 (() => {
@@ -24,18 +24,28 @@
       if (!tbody) throw new Error("Missing <tbody> in api-keys table");
       tbody.innerHTML = "";
 
-      keys.forEach((key, i) => {
+      keys.forEach((key) => {
         const row = document.createElement("tr");
         row.dataset.id = key.id;
-        row.innerHTML = `
-          <td class="col-select">
-            <input type="checkbox" class="api-select-checkbox" data-id="${
-              key.id
-            }" />
-          </td>
-          <td class="line-id-col hidden-col" data-original-id="${key.id}">${
-          key.id
-        }</td>
+
+        // Checkbox cell
+        const checkboxTd = document.createElement("td");
+        checkboxTd.className = "col-select";
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.className = "api-select-checkbox";
+        checkbox.dataset.id = key.id;
+        checkboxTd.appendChild(checkbox);
+
+        // ID column cell
+        const idTd = document.createElement("td");
+        idTd.className = "line-id-col hidden-col";
+        idTd.dataset.originalId = key.id;
+        idTd.textContent = key.id;
+
+        // Remaining cells via innerHTML
+        const rest = document.createElement("tr");
+        rest.innerHTML = `
           <td>${key.key_label}</td>
           <td>${key.key_type}</td>
           <td>${key.billing_interval}</td>
@@ -48,6 +58,14 @@
           <td>${key.priority_order}</td>
           <td>${key.is_active ? "Yes" : "No"}</td>
         `;
+
+        // Assemble the full row
+        row.appendChild(checkboxTd);
+        row.appendChild(idTd);
+        Array.from(rest.children[0].children).forEach((cell) =>
+          row.appendChild(cell)
+        );
+
         tbody.appendChild(row);
       });
 

@@ -83,7 +83,6 @@ window.ButtonBoxColumns = (() => {
 
         clearActiveColumn(table);
         state.activeEditableColumnIndex = index;
-        header.classList.add("editable-col");
 
         const rows = table.querySelectorAll("tbody tr");
         rows.forEach((row) => {
