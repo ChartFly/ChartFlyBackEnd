@@ -4,7 +4,7 @@
   -------------------------------------------
   Shared styles for all ButtonBox components
   Author: Captain & Chatman
-  Version: MPA Phase I (Finalized Stylesheet)
+  Version: MPA Phase I (Column Highlight Added)
   ===========================================
 */
 
@@ -206,7 +206,6 @@ input[type="checkbox"] {
 }
 
 /* 📋 Admin Table Styles */
-
 .admin-table-wrapper {
   width: 100%;
   max-width: 1200px;
@@ -249,23 +248,32 @@ input[type="checkbox"] {
   background-color: #e9faff;
   border: 1px solid #55b5c3;
   min-width: 180px;
-  max-width: 100%; /* Let it grow with the toolbar */
-  flex-grow: 1; /* Share space on the toolbar */
+  max-width: 100%;
+  flex-grow: 1;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  align-self: center; /* Stay aligned with buttons */
+  align-self: center;
 }
 
-/* Warning color override */
 .undo-limit-box.warn {
   background-color: #fff4e5;
   border-color: #ffa726;
   color: #e65100;
 }
 
-/* Warning label prefix */
 .undo-limit-box::before {
   content: "Warning: ";
   color: inherit;
+}
+
+/* 🟠 Orange Mode Column Highlighting */
+.editable-col {
+  background-color: #ffe0b2 !important;
+  font-weight: bold;
+}
+
+.editable-col-cell {
+  background-color: #fff3e0 !important;
+  outline: 1px dashed #ff9800;
 }
