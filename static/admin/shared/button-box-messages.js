@@ -139,10 +139,17 @@ window.ButtonBoxMessages = (() => {
         btn.classList.toggle("disabled-btn", isCell);
       }
 
-      // Enable Paste in Orange mode
+      // Enable Paste only if clipboard content matches edit mode
+      const state = ButtonBox.getState(section);
+      const hasClipboard = !!state.clipboard;
+      const correctType = isCell
+        ? state.clipboardType === "cell"
+        : state.clipboardType === "row";
+      const enablePaste = hasClipboard && correctType;
+
       if (isPaste) {
-        btn.disabled = !isCell;
-        btn.classList.toggle("disabled-btn", !isCell);
+        btn.disabled = !enablePaste;
+        btn.classList.toggle("disabled-btn", !enablePaste);
       }
     });
   }
