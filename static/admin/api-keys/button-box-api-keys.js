@@ -4,7 +4,7 @@
 // 🎯 PURPOSE: Wire ButtonBox logic to API Keys table
 // 🧩 DEPENDENCIES: ButtonBox, ButtonBoxRows, ButtonBoxColumns
 // 👥 Author: Captain & Chatman
-// 🔖 Version: MPA Phase II — Shared Line ID Toggle Logic
+// 🔖 Version: MPA Phase III — ID Toggle Auto-Refresh
 // =============================================================
 
 window.ButtonBoxApiKeys = (() => {
@@ -34,7 +34,8 @@ window.ButtonBoxApiKeys = (() => {
       ButtonBox.toggleLineIdVisibility("api", toggle.checked);
     });
 
-    toggle.dispatchEvent(new Event("change"));
+    // ⛑ Force fire the toggle now, in case table was just rendered
+    ButtonBox.toggleLineIdVisibility("api", toggle.checked);
   }
 
   function init() {
@@ -65,9 +66,9 @@ window.ButtonBoxApiKeys = (() => {
       if (window.ButtonBox && window.ButtonBoxRows && table) {
         clearInterval(waitForBox);
         ButtonBox.init(config);
-        wireIdToggle();
         ButtonBox.wireCheckboxes("api");
         ButtonBoxColumns.activateHeaderClicks("api");
+        wireIdToggle(); // ✅ NOW goes here, after all rows are ready
       }
     }, 50);
   }
