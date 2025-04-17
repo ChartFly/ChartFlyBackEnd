@@ -71,7 +71,7 @@ window.ButtonBoxColumns = (() => {
         return;
 
       header.addEventListener("click", () => {
-        if (ButtonBox.getEditMode(section) !== "cell") return; // 🛑 Ignore if not in Orange Mode
+        if (ButtonBox.getEditMode(section) !== "cell") return;
 
         const prev = state.activeEditableColumnIndex ?? -1;
 
@@ -98,7 +98,7 @@ window.ButtonBoxColumns = (() => {
 
           cell.classList.add("editable-col-cell");
 
-          cell.addEventListener("click", (e) => {
+          cell.addEventListener("click", () => {
             activateSingleEditableCell(cell, section);
           });
         });
@@ -108,28 +108,10 @@ window.ButtonBoxColumns = (() => {
           `Column ${index + 1} activated. Click a cell to edit.`
         );
 
-        // Optional: Auto-focus first cell
         const firstRow = table.querySelector("tbody tr");
         if (firstRow && firstRow.cells[index]) {
           activateSingleEditableCell(firstRow.cells[index], section);
         }
-
-        // Add arrow key navigation globally
-        document.addEventListener("keydown", function handleArrowKeys(e) {
-          const mode = ButtonBox.getEditMode(section);
-          if (mode !== "cell") return;
-
-          if (!["ArrowUp", "ArrowDown"].includes(e.key)) return;
-
-          const table = document.getElementById(
-            ButtonBox.getState(section)?.tableId
-          );
-          const index = ButtonBox.getState(section)?.activeEditableColumnIndex;
-          if (!table || index == null) return;
-
-          e.preventDefault();
-          navigateColumnCells(table, section, index, e.key === "ArrowDown");
-        });
       });
     });
   }
@@ -160,7 +142,6 @@ window.ButtonBoxColumns = (() => {
     if (!currentCell) return;
 
     const currentRowIndex = rows.findIndex((row) => row.contains(currentCell));
-
     const nextIndex = moveDown ? currentRowIndex + 1 : currentRowIndex - 1;
     if (nextIndex < 0 || nextIndex >= rows.length) return;
 
@@ -314,3 +295,33 @@ window.ButtonBoxColumns = (() => {
     activateHeaderClicks,
   };
 })();
+
+// ✅ Global arrow key navigation (runs once)
+document.addEventListener("keydown", function handleArrowKeys(e) {
+  if (!["ArrowUp", "ArrowDown"].includes(e.key)) return;
+
+  // 🔧 TODO: Dynamically detect section
+  const section = "api";
+  const mode = ButtonBox.getEditMode(section);
+  if (mode !== "cell") return;
+
+  const state = ButtonBox.getState(section);
+  const table = document.getElementById(state?.tableId);
+  const index = state?.activeEditableColumnIndex;
+  if (!table || index == null) return;
+
+  e.preventDefault();
+  const moveDown = e.key === "ArrowDown";
+  const rows = Array.from(table.querySelectorAll("tbody tr"));
+  const currentCell = table.querySelector(".editable-focus-cell");
+  if (!currentCell) return;
+
+  const currentRowIndex = rows.findIndex((row) => row.contains(currentCell));
+  const nextIndex = moveDown ? currentRowIndex + 1 : currentRowIndex - 1;
+  if (nextIndex < 0 || nextIndex >= rows.length) return;
+
+  const nextCell = rows[nextIndex].cells[index];
+  if (nextCell) {
+    nextCell.click();
+  }
+});
