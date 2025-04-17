@@ -185,6 +185,7 @@ input[type="checkbox"] {
 
 /* 📦 ButtonBox Container */
 .button-box {
+  position: relative; /* ✅ This enables inner overlay positioning */
   width: 100%;
   max-width: 1100px;
   min-width: unset;

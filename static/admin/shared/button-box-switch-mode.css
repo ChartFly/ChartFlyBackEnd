@@ -3,21 +3,22 @@
 --------------------------------------------
 Styles for mode switch confirmation overlay.
 Author: Captain & Chatman
-Version: MPA Phase IV — Mode Switch Overlay
+Version: MPA Phase IV — Mode Switch Overlay (Container-Scoped)
 ============================================ */
 
 .mode-switch-overlay {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  right: 0;
+  bottom: 0;
   background-color: #e9faff;
   z-index: 50;
   display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 8px;
+  pointer-events: auto;
 }
 
 .mode-switch-overlay.hidden {
