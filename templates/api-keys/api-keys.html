@@ -22,6 +22,10 @@ Version: MPA Phase I (Modular MPA Layout, Jinja-Compatible)
     />
     <link rel="stylesheet" href="/static/admin/shared/button-box.css?v=999" />
     <link rel="stylesheet" href="/static/admin/api-keys/api-keys.css?v=999" />
+    <link
+      rel="stylesheet"
+      href="/static/admin/shared/button-box-switch-mode.css?v=999"
+    />
   </head>
   <body>
     <!-- ✅ Header -->
@@ -43,7 +47,9 @@ Version: MPA Phase I (Modular MPA Layout, Jinja-Compatible)
     <!-- ✅ API Keys Table + ButtonBox -->
     <section id="api-keys-section" class="admin-tab-section">
       {% set section = "api" %} {% include "shared/button-box.html" %} {%
-      include "api-keys/api-keys-table.html" %}
+      include "shared/button-box-switch-mode.html" %}
+      <!-- ✅ Added -->
+      {% include "api-keys/api-keys-table.html" %}
     </section>
 
     <!-- ✅ Footer -->
@@ -76,15 +82,9 @@ Version: MPA Phase I (Modular MPA Layout, Jinja-Compatible)
       src="/static/admin/api-keys/button-box-api-keys.js?v=999"
       defer
     ></script>
-
-    <!-- ✅ ButtonBox Switch Mode Popup -->
     <script
       src="/static/admin/shared/button-box-switch-mode.js?v=999"
       defer
     ></script>
-    <link
-      rel="stylesheet"
-      href="/static/admin/shared/button-box-switch-mode.css?v=999"
-    />
   </body>
 </html>

@@ -1,12 +1,9 @@
-<!--
-  ===========================================
-  ✅ ChartFly Admin Panel - user-management.html
-  -------------------------------------------
-  Standalone MPA Page for Admin Users Section
-  Author: Captain & Chatman
-  Version: MPA Phase II (Mode Switch Overlay Integrated)
-  ===========================================
--->
+<!-- ===========================================
+✅ ChartFly Admin Panel - user-management.html
+Standalone MPA Page for Admin Users Section
+Author: Captain & Chatman
+Version: MPA Phase II (Mode Switch Overlay Integrated)
+=========================================== -->
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -28,12 +25,12 @@
       rel="stylesheet"
       href="/static/admin/user-management/user-management.css?v=999"
     />
-    <!-- ✅ ButtonBox Switch Mode Popup Styles -->
     <link
       rel="stylesheet"
       href="/static/admin/shared/button-box-switch-mode.css?v=999"
     />
   </head>
+
   <body>
     <!-- ✅ Header -->
     <div class="admin-header">
@@ -53,8 +50,10 @@
 
     <!-- ✅ User Management Table + ButtonBox -->
     <section id="user-management-section" class="admin-tab-section">
-      {% include "shared/button-box.html" %} {% include
-      "user-management/user-management-table.html" %}
+      {% set section = "user" %} {% include "shared/button-box.html" %} {%
+      include "shared/button-box-switch-mode.html" %}
+      <!-- ✅ ADDED -->
+      {% include "user-management/user-management-table.html" %}
     </section>
 
     <!-- ✅ Footer -->
@@ -91,8 +90,6 @@
       src="/static/admin/user-management/button-box-user-management.js?v=999"
       defer
     ></script>
-
-    <!-- ✅ Mode Switch Logic -->
     <script
       src="/static/admin/shared/button-box-switch-mode.js?v=999"
       defer

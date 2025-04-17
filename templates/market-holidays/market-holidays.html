@@ -1,12 +1,9 @@
-<!--
-  ============================================
-  ✅ ChartFly Admin Panel - market-holidays.html
-  -------------------------------------------
-  Standalone MPA Page for Market Holidays Admin Section
-  Author: Captain & Chatman
-  Version: MPA Phase I (Modular MPA Layout)
-  ============================================
--->
+<!-- ============================================
+✅ ChartFly Admin Panel - market-holidays.html
+Standalone MPA Page for Market Holidays Admin Section
+Author: Captain & Chatman
+Version: MPA Phase I (Modular MPA Layout)
+============================================ -->
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -28,12 +25,12 @@
       rel="stylesheet"
       href="/static/admin/market-holidays/market-holidays.css?v=999"
     />
-    <!-- ✅ ButtonBox Switch Mode Popup Styles -->
     <link
       rel="stylesheet"
       href="/static/admin/shared/button-box-switch-mode.css?v=999"
     />
   </head>
+
   <body>
     <!-- ✅ Header -->
     <div class="admin-header">
@@ -53,8 +50,10 @@
 
     <!-- ✅ Market Holidays Table + ButtonBox -->
     <section id="market-holidays-section" class="admin-tab-section">
-      {% include "shared/button-box.html" %} {% include
-      "market-holidays/holiday-table.html" %}
+      {% set section = "market" %} {% include "shared/button-box.html" %} {%
+      include "shared/button-box-switch-mode.html" %}
+      <!-- ✅ ADDED -->
+      {% include "market-holidays/holiday-table.html" %}
     </section>
 
     <!-- ✅ Footer -->
@@ -90,8 +89,6 @@
       src="/static/admin/market-holidays/button-box-market-holidays.js?v=999"
       defer
     ></script>
-
-    <!-- ✅ ButtonBox Switch Mode Popup Script -->
     <script
       src="/static/admin/shared/button-box-switch-mode.js?v=999"
       defer
