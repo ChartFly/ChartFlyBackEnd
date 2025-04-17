@@ -128,7 +128,7 @@ window.ButtonBox = (() => {
       idToggle.dispatchEvent(new Event("change"));
     }
 
-    wireModeSwitchHandler(state); // ✅ NOW called here after everything exists
+    wireModeSwitchHandler(state); // ✅ now wired correctly
   }
 
   function wireModeSwitchHandler(state) {
@@ -148,7 +148,21 @@ window.ButtonBox = (() => {
         if (isDirty) {
           e.preventDefault();
           radio.checked = false;
-          ButtonBoxSwitchMode.showPopup(section, currentMode, targetMode);
+
+          ButtonBoxSwitchMode.showOverlay(
+            section,
+            () => {
+              cleanupMode(section, currentMode);
+              forceSwitchMode(section, targetMode);
+            },
+            () => {
+              cleanupMode(section, currentMode);
+              forceSwitchMode(section, targetMode);
+            },
+            () => {
+              // Stay in current mode
+            }
+          );
         } else {
           cleanupMode(section, currentMode);
           ButtonBoxMessages.updateButtonColors(section);
