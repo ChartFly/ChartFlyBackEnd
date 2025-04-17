@@ -94,30 +94,20 @@ Author: Captain & Chatman
 
   <!-- 🧠 Switch Mode Popup Overlay -->
   <div
-    class="switch-mode-overlay"
+    class="mode-switch-overlay hidden"
     id="{{ section }}-switch-mode-overlay"
-    style="display: none"
   >
-    <div class="switch-mode-popup">
-      <div class="switch-mode-message">
+    <div class="mode-switch-content">
+      <div class="mode-switch-message">
         <strong>There are unsaved changes.</strong> Pick an option below:
       </div>
-      <button
-        class="switch-mode-btn"
-        data-action="save"
-      >
+      <button class="mode-switch-btn" data-action="save">
         Save changes and switch modes *
       </button>
-      <button
-        class="switch-mode-btn"
-        data-action="discard"
-      >
+      <button class="mode-switch-btn" data-action="discard">
         Discard changes and switch modes *
       </button>
-      <button
-        class="switch-mode-btn"
-        data-action="stay"
-      >
+      <button class="mode-switch-btn" data-action="stay">
         Stay in current mode *
       </button>
     </div>
