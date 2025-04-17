@@ -303,6 +303,10 @@ window.ButtonBox = (() => {
     }
   }
 
+  function showTip(section, message) {
+    ButtonBoxMessages.showTip(section, message);
+  }
+
   return {
     init,
     getState,
@@ -314,5 +318,6 @@ window.ButtonBox = (() => {
     toggleLineIdVisibility,
     cleanupMode,
     forceSwitchMode,
+    showTip,
   };
 })();
