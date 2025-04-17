@@ -4,7 +4,7 @@
   -------------------------------------------
   Standalone MPA Page for Admin Users Section
   Author: Captain & Chatman
-  Version: MPA Phase I (Modular MPA Layout)
+  Version: MPA Phase II (Mode Switch Overlay Integrated)
   ===========================================
 -->
 <!DOCTYPE html>
@@ -27,6 +27,11 @@
     <link
       rel="stylesheet"
       href="/static/admin/user-management/user-management.css?v=999"
+    />
+    <!-- ✅ ButtonBox Switch Mode Popup Styles -->
+    <link
+      rel="stylesheet"
+      href="/static/admin/shared/button-box-switch-mode.css?v=999"
     />
   </head>
   <body>
@@ -84,6 +89,12 @@
     ></script>
     <script
       src="/static/admin/user-management/button-box-user-management.js?v=999"
+      defer
+    ></script>
+
+    <!-- ✅ Mode Switch Logic -->
+    <script
+      src="/static/admin/shared/button-box-switch-mode.js?v=999"
       defer
     ></script>
   </body>

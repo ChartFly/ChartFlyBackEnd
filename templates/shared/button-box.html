@@ -91,4 +91,35 @@ Author: Captain & Chatman
       <span id="{{ section }}-selected-count">0</span>
     </span>
   </div>
+
+  <!-- 🧠 Switch Mode Popup Overlay -->
+  <div
+    class="switch-mode-overlay"
+    id="{{ section }}-switch-mode-overlay"
+    style="display: none"
+  >
+    <div class="switch-mode-popup">
+      <div class="switch-mode-message">
+        <strong>There are unsaved changes.</strong> Pick an option below:
+      </div>
+      <button
+        class="switch-mode-btn"
+        data-action="save"
+      >
+        Save changes and switch modes *
+      </button>
+      <button
+        class="switch-mode-btn"
+        data-action="discard"
+      >
+        Discard changes and switch modes *
+      </button>
+      <button
+        class="switch-mode-btn"
+        data-action="stay"
+      >
+        Stay in current mode *
+      </button>
+    </div>
+  </div>
 </div>
