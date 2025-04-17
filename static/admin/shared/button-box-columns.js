@@ -4,7 +4,7 @@
 // Handles cell-level Copy/Paste logic for
 // Edit Columns mode in ButtonBox
 // Author: Captain & Chatman
-// Version: MPA Phase IV — Single Cell Focus
+// Version: MPA Phase IV — Single Cell Focus + Text Selection
 // ============================================
 
 window.ButtonBoxColumns = (() => {
@@ -89,7 +89,6 @@ window.ButtonBoxColumns = (() => {
         rows.forEach((row) => {
           const cell = row.cells[index];
           if (!cell) return;
-
           if (
             cell.classList.contains("col-select") ||
             cell.classList.contains("line-id-col")
@@ -97,7 +96,6 @@ window.ButtonBoxColumns = (() => {
             return;
 
           cell.classList.add("editable-col-cell");
-
           cell.addEventListener("click", () => {
             activateSingleEditableCell(cell, section);
           });
@@ -127,8 +125,16 @@ window.ButtonBoxColumns = (() => {
 
     cell.setAttribute("contenteditable", "true");
     cell.classList.add("editable-focus-cell");
-
     cell.focus();
+
+    // ✅ Select all text in the cell
+    const range = document.createRange();
+    range.selectNodeContents(cell);
+    const selection = window.getSelection();
+    if (selection) {
+      selection.removeAllRanges();
+      selection.addRange(range);
+    }
 
     cell.addEventListener("input", () => {
       pushCellUndo(section, cell);
@@ -296,12 +302,11 @@ window.ButtonBoxColumns = (() => {
   };
 })();
 
-// ✅ Global arrow key navigation (runs once)
+// ✅ Global arrow key navigation
 document.addEventListener("keydown", function handleArrowKeys(e) {
   if (!["ArrowUp", "ArrowDown"].includes(e.key)) return;
 
-  // 🔧 TODO: Dynamically detect section
-  const section = "api";
+  const section = "api"; // 🔧 Adjust dynamically if needed
   const mode = ButtonBox.getEditMode(section);
   if (mode !== "cell") return;
 

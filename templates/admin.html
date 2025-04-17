@@ -5,7 +5,7 @@
   Main Admin Dashboard Launcher Page
   Links to Market Holidays, API Keys, and User Management
   Author: Captain & Chatman
-  Version: MPA Phase I (Admin Dashboard - Refactored)
+  Version: MPA Phase III — Switch Mode Popup Integrated
   ===========================================
 -->
 <!DOCTYPE html>
@@ -21,6 +21,10 @@
     />
     <link rel="stylesheet" href="/static/css/styles.css?v=999" />
     <link rel="stylesheet" href="/static/admin/shared/navbar/navbar.css" />
+    <link
+      rel="stylesheet"
+      href="/static/admin/shared/button-box-switch-mode.css?v=999"
+    />
     <script src="/static/admin/shared/navbar/navbar.js" defer></script>
   </head>
 
@@ -70,7 +74,14 @@
       </div>
     </footer>
 
+    <!-- ✅ Switch Mode Popup HTML -->
+    {% include "shared/button-box-switch-mode.html" %}
+
     <!-- ✅ Scripts -->
+    <script
+      src="/static/admin/shared/button-box-switch-mode.js?v=999"
+      defer
+    ></script>
     <script src="/static/frontend/core/main.js?v=999" defer></script>
   </body>
 </html>

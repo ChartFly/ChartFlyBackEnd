@@ -4,7 +4,7 @@
 // Core ButtonBox controller: manages state,
 // button logic, event wiring, and UI updates.
 // Author: Captain & Chatman
-// Version: MPA Phase III — Line ID Toggle Repaired + Orange Mode Logic
+// Version: MPA Phase IV — Mode Switch Overlay Integrated
 // ============================================
 
 console.log("🧠 ButtonBox.js loaded ✅");
@@ -38,11 +38,13 @@ window.ButtonBox = (() => {
       clipboardType: null,
       onAction,
       tipIndex: 0,
+      activeEditableColumnIndex: null,
     };
 
     stateMap.set(section, state);
     console.log(`🚀 ButtonBox initialized for section: ${section}`);
     wireButtons(state);
+    wireModeSwitchHandler(state); // 🧠 Hook for Blue/Orange switch logic
     ButtonBoxMessages.initTips(section);
   }
 
@@ -126,48 +128,83 @@ window.ButtonBox = (() => {
       });
       idToggle.dispatchEvent(new Event("change"));
     }
-
-    const modeRadios = document.querySelectorAll(
-      `input[name="${section}-edit-mode"]`
-    );
-    modeRadios.forEach((radio) => {
-      radio.addEventListener("change", () => {
-        state.clipboard = null;
-        state.clipboardType = null;
-        disablePaste(section);
-        ButtonBoxMessages.updateButtonColors(section);
-      });
-    });
-
-    ButtonBoxMessages.updateButtonColors(section);
   }
 
-  function wireCheckboxes(section) {
-    const state = getState(section);
-    if (!state) return;
+  // 🔄 Mode switch handling with unsaved change detection
+  function wireModeSwitchHandler(state) {
+    const { section } = state;
 
-    const table = document.getElementById(state.tableId);
-    if (!table) return;
+    const radios = document.querySelectorAll(
+      `input[name="${section}-edit-mode"]`
+    );
+    radios.forEach((radio) => {
+      radio.addEventListener("change", (e) => {
+        const targetMode = e.target.value;
+        const currentMode = getEditMode(section);
 
-    const checkboxes = table.querySelectorAll(`.${section}-select-checkbox`);
-    state.selectedRows.clear();
+        if (currentMode === targetMode) return;
 
-    checkboxes.forEach((checkbox) => {
-      const id = checkbox.dataset.id;
-      const newCheckbox = checkbox.cloneNode(true);
-      checkbox.replaceWith(newCheckbox);
-
-      newCheckbox.addEventListener("change", () => {
-        if (newCheckbox.checked) {
-          state.selectedRows.add(id);
+        const isDirty = checkDirtyState(section, currentMode);
+        if (isDirty) {
+          e.preventDefault();
+          radio.checked = false;
+          ButtonBoxSwitchMode.showPopup(section, currentMode, targetMode);
         } else {
-          state.selectedRows.delete(id);
+          cleanupMode(section, currentMode);
+          ButtonBoxMessages.updateButtonColors(section);
         }
-        ButtonBoxMessages.updateSelectedCount(section);
       });
     });
+  }
 
-    ButtonBoxMessages.updateSelectedCount(section);
+  function checkDirtyState(section, mode) {
+    const table = document.getElementById(getState(section).tableId);
+    if (!table) return false;
+
+    if (mode === "row") {
+      return table.querySelectorAll("tr.editing, tr.dirty").length > 0;
+    }
+    if (mode === "cell") {
+      return table.querySelectorAll("td.dirty").length > 0;
+    }
+    return false;
+  }
+
+  function cleanupMode(section, mode) {
+    const table = document.getElementById(getState(section).tableId);
+    if (!table) return;
+
+    if (mode === "row") {
+      table.querySelectorAll("tr").forEach((tr) => {
+        tr.classList.remove("editing", "dirty", "selected-row");
+        const checkbox = tr.querySelector("input[type='checkbox']");
+        if (checkbox) checkbox.checked = false;
+      });
+    } else if (mode === "cell") {
+      table.querySelectorAll("td").forEach((td) => {
+        td.removeAttribute("contenteditable");
+        td.classList.remove(
+          "editable-col-cell",
+          "editable-focus-cell",
+          "dirty",
+          "cell-paste-ready"
+        );
+      });
+      table.querySelectorAll("th").forEach((th) => {
+        th.classList.remove("editable-col");
+      });
+    }
+  }
+
+  function forceSwitchMode(section, targetMode) {
+    const input = document.querySelector(
+      `input[name="${section}-edit-mode"][value="${targetMode}"]`
+    );
+    if (input) {
+      input.checked = true;
+      cleanupMode(section, getEditMode(section));
+      ButtonBoxMessages.updateButtonColors(section);
+    }
   }
 
   function toggleLineIdVisibility(section, show) {
@@ -233,5 +270,7 @@ window.ButtonBox = (() => {
     showWarning,
     showMessage,
     toggleLineIdVisibility,
+    cleanupMode,
+    forceSwitchMode,
   };
 })();
