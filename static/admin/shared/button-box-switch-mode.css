@@ -6,7 +6,7 @@ Author: Captain & Chatman
 Version: MPA Phase IV — Mode Switch Overlay (Container-Scoped)
 ============================================ */
 
-.mode-switch-overlay {
+.switch-mode-overlay {
   position: absolute;
   top: 0;
   left: 0;
@@ -19,26 +19,27 @@ Version: MPA Phase IV — Mode Switch Overlay (Container-Scoped)
   align-items: center;
   border-radius: 8px;
   pointer-events: auto;
+  box-sizing: border-box;
 }
 
-.mode-switch-overlay.hidden {
+.switch-mode-overlay.hidden {
   display: none;
 }
 
-.mode-switch-content {
+.switch-mode-popup {
   text-align: center;
   padding: 20px;
   width: 100%;
 }
 
-.mode-switch-message {
+.switch-mode-message {
   font-size: 18px;
   font-weight: bold;
   color: #000;
   margin-bottom: 24px;
 }
 
-.mode-switch-btn {
+.switch-mode-btn {
   display: block;
   width: 100%;
   max-width: 520px;
@@ -54,6 +55,6 @@ Version: MPA Phase IV — Mode Switch Overlay (Container-Scoped)
   transition: background-color 0.2s ease;
 }
 
-.mode-switch-btn:hover {
+.switch-mode-btn:hover {
   background-color: #007a8a;
 }
