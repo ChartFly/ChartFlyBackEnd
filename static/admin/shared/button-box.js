@@ -4,7 +4,7 @@
 // Core ButtonBox controller: manages state,
 // button logic, event wiring, and UI updates.
 // Author: Captain & Chatman
-// Version: MPA Phase IV — Mode Switch Overlay Integrated
+// Version: MPA Phase IV — Mode Switch Overlay FIXED
 // ============================================
 
 console.log("🧠 ButtonBox.js loaded ✅");
@@ -44,7 +44,6 @@ window.ButtonBox = (() => {
     stateMap.set(section, state);
     console.log(`🚀 ButtonBox initialized for section: ${section}`);
     wireButtons(state);
-    wireModeSwitchHandler(state); // 🧠 Hook for Blue/Orange switch logic
     ButtonBoxMessages.initTips(section);
   }
 
@@ -128,9 +127,10 @@ window.ButtonBox = (() => {
       });
       idToggle.dispatchEvent(new Event("change"));
     }
+
+    wireModeSwitchHandler(state); // ✅ NOW called here after everything exists
   }
 
-  // 🔄 Mode switch handling with unsaved change detection
   function wireModeSwitchHandler(state) {
     const { section } = state;
 
