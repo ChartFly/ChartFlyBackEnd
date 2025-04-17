@@ -4,7 +4,7 @@
 // Core ButtonBox controller: manages state,
 // button logic, event wiring, and UI updates.
 // Author: Captain & Chatman
-// Version: MPA Phase IV — Mode Switch Overlay FIXED
+// Version: MPA Phase IV — Mode Switch Overlay with Logging
 // ============================================
 
 console.log("🧠 ButtonBox.js loaded ✅");
@@ -137,18 +137,31 @@ window.ButtonBox = (() => {
     const radios = document.querySelectorAll(
       `input[name="${section}-edit-mode"]`
     );
+
+    console.log(
+      `🎯 Found ${radios.length} radio buttons for section: ${section}`
+    );
+
     radios.forEach((radio) => {
+      console.log(`📻 Wiring radio:`, radio);
+
       radio.addEventListener("change", (e) => {
         const targetMode = e.target.value;
         const currentMode = getEditMode(section);
+        console.log(
+          `🔁 Attempting to switch from ${currentMode} ➜ ${targetMode}`
+        );
 
         if (currentMode === targetMode) return;
 
         const isDirty = checkDirtyState(section, currentMode);
+        console.log(`🧼 Dirty check for mode ${currentMode}:`, isDirty);
+
         if (isDirty) {
           e.preventDefault();
           radio.checked = false;
 
+          console.log("⚠️ Dirty detected — showing mode switch popup");
           ButtonBoxSwitchMode.showOverlay(
             section,
             () => {
@@ -160,10 +173,11 @@ window.ButtonBox = (() => {
               forceSwitchMode(section, targetMode);
             },
             () => {
-              // Stay in current mode
+              console.log("🚫 Stay in current mode selected");
             }
           );
         } else {
+          console.log("✅ No unsaved changes — switching mode cleanly");
           cleanupMode(section, currentMode);
           ButtonBoxMessages.updateButtonColors(section);
         }
