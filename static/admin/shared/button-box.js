@@ -4,7 +4,7 @@
 // Core ButtonBox controller: manages state,
 // button logic, event wiring, and UI updates.
 // Author: Captain & Chatman
-// Version: MPA Phase IV — Mode Switch Overlay with Logging
+// Version: MPA Phase IV — Mode Switch Overlay (Final Fix)
 // ============================================
 
 console.log("🧠 ButtonBox.js loaded ✅");
@@ -39,11 +39,13 @@ window.ButtonBox = (() => {
       onAction,
       tipIndex: 0,
       activeEditableColumnIndex: null,
+      previousMode: getEditMode(section),
     };
 
     stateMap.set(section, state);
     console.log(`🚀 ButtonBox initialized for section: ${section}`);
     wireButtons(state);
+    wireModeSwitchHandler(state); // ✅ Moved here correctly
     ButtonBoxMessages.initTips(section);
   }
 
@@ -127,8 +129,6 @@ window.ButtonBox = (() => {
       });
       idToggle.dispatchEvent(new Event("change"));
     }
-
-    wireModeSwitchHandler(state); // ✅ now wired correctly
   }
 
   function wireModeSwitchHandler(state) {
@@ -137,7 +137,6 @@ window.ButtonBox = (() => {
     const radios = document.querySelectorAll(
       `input[name="${section}-edit-mode"]`
     );
-
     console.log(
       `🎯 Found ${radios.length} radio buttons for section: ${section}`
     );
@@ -145,9 +144,14 @@ window.ButtonBox = (() => {
     radios.forEach((radio) => {
       console.log(`📻 Wiring radio:`, radio);
 
+      radio.addEventListener("mousedown", () => {
+        state.previousMode = getEditMode(section); // ✅ Set BEFORE the change
+      });
+
       radio.addEventListener("change", (e) => {
+        const currentMode = state.previousMode;
         const targetMode = e.target.value;
-        const currentMode = getEditMode(section);
+
         console.log(
           `🔁 Attempting to switch from ${currentMode} ➜ ${targetMode}`
         );
@@ -179,7 +183,7 @@ window.ButtonBox = (() => {
         } else {
           console.log("✅ No unsaved changes — switching mode cleanly");
           cleanupMode(section, currentMode);
-          ButtonBoxMessages.updateButtonColors(section);
+          forceSwitchMode(section, targetMode);
         }
       });
     });
@@ -230,7 +234,6 @@ window.ButtonBox = (() => {
     );
     if (input) {
       input.checked = true;
-      cleanupMode(section, getEditMode(section));
       ButtonBoxMessages.updateButtonColors(section);
     }
   }
