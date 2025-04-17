@@ -114,9 +114,19 @@ window.ButtonBoxColumns = (() => {
           activateSingleEditableCell(firstRow.cells[index], section);
         }
 
-        // Add arrow key navigation
-        table.addEventListener("keydown", (e) => {
+        // Add arrow key navigation globally
+        document.addEventListener("keydown", function handleArrowKeys(e) {
+          const mode = ButtonBox.getEditMode(section);
+          if (mode !== "cell") return;
+
           if (!["ArrowUp", "ArrowDown"].includes(e.key)) return;
+
+          const table = document.getElementById(
+            ButtonBox.getState(section)?.tableId
+          );
+          const index = ButtonBox.getState(section)?.activeEditableColumnIndex;
+          if (!table || index == null) return;
+
           e.preventDefault();
           navigateColumnCells(table, section, index, e.key === "ArrowDown");
         });
