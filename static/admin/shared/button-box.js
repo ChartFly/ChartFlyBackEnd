@@ -207,6 +207,34 @@ window.ButtonBox = (() => {
     }
   }
 
+  function wireCheckboxes(section) {
+    const state = getState(section);
+    if (!state) return;
+
+    const table = document.getElementById(state.tableId);
+    if (!table) return;
+
+    const checkboxes = table.querySelectorAll(`.${section}-select-checkbox`);
+    state.selectedRows.clear();
+
+    checkboxes.forEach((checkbox) => {
+      const id = checkbox.dataset.id;
+      const newCheckbox = checkbox.cloneNode(true);
+      checkbox.replaceWith(newCheckbox);
+
+      newCheckbox.addEventListener("change", () => {
+        if (newCheckbox.checked) {
+          state.selectedRows.add(id);
+        } else {
+          state.selectedRows.delete(id);
+        }
+        ButtonBoxMessages.updateSelectedCount(section);
+      });
+    });
+
+    ButtonBoxMessages.updateSelectedCount(section);
+  }
+
   function toggleLineIdVisibility(section, show) {
     const state = getState(section);
     const table = document.getElementById(state?.tableId || `${section}-table`);
