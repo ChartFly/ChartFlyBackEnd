@@ -23,11 +23,11 @@ Version: MPA Phase I (Modular MPA Layout)
     <link rel="stylesheet" href="/static/admin/shared/button-box.css?v=999" />
     <link
       rel="stylesheet"
-      href="/static/admin/market-holidays/market-holidays.css?v=999"
+      href="/static/admin/shared/button-box-switch-mode.css?v=999"
     />
     <link
       rel="stylesheet"
-      href="/static/admin/shared/button-box-switch-mode.css?v=999"
+      href="/static/admin/market-holidays/market-holidays.css?v=999"
     />
   </head>
 
@@ -51,9 +51,7 @@ Version: MPA Phase I (Modular MPA Layout)
     <!-- ✅ Market Holidays Table + ButtonBox -->
     <section id="market-holidays-section" class="admin-tab-section">
       {% set section = "market" %} {% include "shared/button-box.html" %} {%
-      include "shared/button-box-switch-mode.html" %}
-      <!-- ✅ ADDED -->
-      {% include "market-holidays/holiday-table.html" %}
+      include "market-holidays/holiday-table.html" %}
     </section>
 
     <!-- ✅ Footer -->
@@ -82,15 +80,15 @@ Version: MPA Phase I (Modular MPA Layout)
       defer
     ></script>
     <script
+      src="/static/admin/shared/button-box-switch-mode.js?v=999"
+      defer
+    ></script>
+    <script
       src="/static/admin/market-holidays/market-holidays.js?v=999"
       defer
     ></script>
     <script
       src="/static/admin/market-holidays/button-box-market-holidays.js?v=999"
-      defer
-    ></script>
-    <script
-      src="/static/admin/shared/button-box-switch-mode.js?v=999"
       defer
     ></script>
   </body>

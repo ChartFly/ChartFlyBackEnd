@@ -2,7 +2,7 @@
 ✅ ChartFly Admin Panel - api-keys.html
 Standalone MPA Page for API Keys Admin Section
 Author: Captain & Chatman
-Version: MPA Phase I (Modular MPA Layout, Jinja-Compatible)
+Version: MPA Phase IV — Switch Mode Overlay Cleanup
 ============================================ -->
 <!DOCTYPE html>
 <html lang="en">
@@ -22,10 +22,6 @@ Version: MPA Phase I (Modular MPA Layout, Jinja-Compatible)
     />
     <link rel="stylesheet" href="/static/admin/shared/button-box.css?v=999" />
     <link rel="stylesheet" href="/static/admin/api-keys/api-keys.css?v=999" />
-    <link
-      rel="stylesheet"
-      href="/static/admin/shared/button-box-switch-mode.css?v=999"
-    />
   </head>
   <body>
     <!-- ✅ Header -->
@@ -47,9 +43,7 @@ Version: MPA Phase I (Modular MPA Layout, Jinja-Compatible)
     <!-- ✅ API Keys Table + ButtonBox -->
     <section id="api-keys-section" class="admin-tab-section">
       {% set section = "api" %} {% include "shared/button-box.html" %} {%
-      include "shared/button-box-switch-mode.html" %}
-      <!-- ✅ Added -->
-      {% include "api-keys/api-keys-table.html" %}
+      include "api-keys/api-keys-table.html" %}
     </section>
 
     <!-- ✅ Footer -->

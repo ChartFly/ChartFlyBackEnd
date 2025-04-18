@@ -23,11 +23,11 @@ Version: MPA Phase II (Mode Switch Overlay Integrated)
     <link rel="stylesheet" href="/static/admin/shared/button-box.css?v=999" />
     <link
       rel="stylesheet"
-      href="/static/admin/user-management/user-management.css?v=999"
+      href="/static/admin/shared/button-box-switch-mode.css?v=999"
     />
     <link
       rel="stylesheet"
-      href="/static/admin/shared/button-box-switch-mode.css?v=999"
+      href="/static/admin/user-management/user-management.css?v=999"
     />
   </head>
 
@@ -51,9 +51,7 @@ Version: MPA Phase II (Mode Switch Overlay Integrated)
     <!-- ✅ User Management Table + ButtonBox -->
     <section id="user-management-section" class="admin-tab-section">
       {% set section = "user" %} {% include "shared/button-box.html" %} {%
-      include "shared/button-box-switch-mode.html" %}
-      <!-- ✅ ADDED -->
-      {% include "user-management/user-management-table.html" %}
+      include "user-management/user-management-table.html" %}
     </section>
 
     <!-- ✅ Footer -->
@@ -81,6 +79,10 @@ Version: MPA Phase II (Mode Switch Overlay Integrated)
       src="/static/admin/shared/button-box-columns.js?v=999"
       defer
     ></script>
+    <script
+      src="/static/admin/shared/button-box-switch-mode.js?v=999"
+      defer
+    ></script>
     <script src="/static/frontend/core/main.js?v=999" defer></script>
     <script
       src="/static/admin/user-management/user-management.js?v=999"
@@ -88,10 +90,6 @@ Version: MPA Phase II (Mode Switch Overlay Integrated)
     ></script>
     <script
       src="/static/admin/user-management/button-box-user-management.js?v=999"
-      defer
-    ></script>
-    <script
-      src="/static/admin/shared/button-box-switch-mode.js?v=999"
       defer
     ></script>
   </body>
