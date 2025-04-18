@@ -4,7 +4,7 @@
 // 🎯 PURPOSE: Wire ButtonBox logic to API Keys table
 // 🧩 DEPENDENCIES: ButtonBox, ButtonBoxRows, ButtonBoxColumns
 // 👥 Author: Captain & Chatman
-// 🔖 Version: MPA Phase III — ID Toggle Auto-Refresh
+// 🔖 Version: MPA Phase IV — Mode Switch Popup Injected in HTML
 // =============================================================
 
 window.ButtonBoxApiKeys = (() => {
@@ -68,7 +68,7 @@ window.ButtonBoxApiKeys = (() => {
         ButtonBox.init(config);
         ButtonBox.wireCheckboxes("api");
         ButtonBoxColumns.activateHeaderClicks("api");
-        wireIdToggle(); // ✅ NOW goes here, after all rows are ready
+        wireIdToggle(); // ✅ after table is fully ready
       }
     }, 50);
   }
