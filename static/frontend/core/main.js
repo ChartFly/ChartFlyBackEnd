@@ -3,7 +3,7 @@
 // 📍 LOCATION: static/frontend/core/main.js
 // 🎯 PURPOSE: Global frontend logic for Admin Panel — market status + ticker
 // ✍️ AUTHOR: Captain & Chatman
-// 🔖 VERSION: MPA Core v1.0 (Global Logic Refined)
+// 🔖 VERSION: MPA Core v1.1 (No More Tabs Baby!)
 // ============================================================================
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -11,46 +11,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   updateMarketStatus();
   loadHolidayTicker(); // ✅ Ticker now loads globally
-
-  // 🔍 TEMP: Log display state of all admin sections
-  console.log("🧼 Initial DOM Display States:");
-  [
-    "market-holidays-section",
-    "api-keys-section",
-    "user-management-section",
-  ].forEach((id) => {
-    const el = document.getElementById(id);
-    if (el) console.log(`📦 ${id} = display: ${getComputedStyle(el).display}`);
-  });
-
-  // ✅ Use admin.html's switchTab logic (no showTab override!)
-  console.log("📍 Initial tab logic starting...");
-  let tabId;
-  if (!location.hash) {
-    console.log("🔁 No hash, defaulting to market-holidays-section");
-    tabId = "market-holidays-section";
-    location.hash = tabId;
-  } else {
-    tabId = location.hash.replace("#", "");
-    console.log(`🔁 Hash present, loading section: ${tabId}`);
-    if (
-      ![
-        "market-holidays-section",
-        "api-keys-section",
-        "user-management-section",
-      ].includes(tabId)
-    ) {
-      tabId = "market-holidays-section";
-      location.hash = tabId;
-    }
-  }
-
-  switchTab(tabId);
-
-  // 🔨 RADICAL FIX: Force-hide all other sections again
-  document.querySelectorAll(".admin-tab-section").forEach((el) => {
-    el.style.display = el.id === tabId ? "block" : "none";
-  });
 });
 
 // ✅ Market status display logic
