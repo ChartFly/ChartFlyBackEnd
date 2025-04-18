@@ -152,6 +152,12 @@ window.ButtonBox = (() => {
         const currentMode = state.previousMode;
         const targetMode = e.target.value;
 
+        // 🧱 Defensive mode sanity check
+        if (!["row", "cell"].includes(currentMode)) {
+          console.warn("⚠️ Invalid previousMode detected, aborting switch.");
+          return;
+        }
+
         console.log(
           `🔁 Attempting to switch from ${currentMode} ➜ ${targetMode}`
         );
