@@ -2,8 +2,8 @@
 ✅ ChartFly Admin Panel - api-keys.html
 Standalone MPA Page for API Keys Admin Section
 Author: Captain & Chatman
-Version: MPA Phase IV — Switch Mode Overlay Cleanup
-======================================================= -->
+Version: MPA Phase IV — Switch Mode Overlay Cleanup (Dynamic Injection Only)
+================================================== -->
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -48,6 +48,7 @@ Version: MPA Phase IV — Switch Mode Overlay Cleanup
     <section id="api-keys-section" class="admin-tab-section">
       {% set section = "api" %} {% include "shared/button-box.html" %} {%
       include "api-keys/api-keys-table.html" %}
+      <!-- Note: The switch-mode popup will be dynamically injected via JS -->
     </section>
 
     <!-- ✅ Footer -->
