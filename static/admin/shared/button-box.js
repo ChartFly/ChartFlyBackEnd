@@ -144,8 +144,8 @@ window.ButtonBox = (() => {
     radios.forEach((radio) => {
       console.log(`📻 Wiring radio:`, radio);
 
-      radio.addEventListener("mousedown", () => {
-        state.previousMode = getEditMode(section); // ✅ Set BEFORE the change
+      radio.addEventListener("focus", () => {
+        state.previousMode = getEditMode(section);
       });
 
       radio.addEventListener("change", (e) => {
