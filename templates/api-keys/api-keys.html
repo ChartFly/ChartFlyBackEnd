@@ -21,6 +21,10 @@ Version: MPA Phase IV — Switch Mode Overlay Cleanup
       href="/static/admin/shared/navbar/navbar.css?v=999"
     />
     <link rel="stylesheet" href="/static/admin/shared/button-box.css?v=999" />
+    <link
+      rel="stylesheet"
+      href="/static/admin/shared/button-box-switch-mode.css?v=999"
+    />
     <link rel="stylesheet" href="/static/admin/api-keys/api-keys.css?v=999" />
   </head>
   <body>
@@ -43,7 +47,8 @@ Version: MPA Phase IV — Switch Mode Overlay Cleanup
     <!-- ✅ API Keys Table + ButtonBox -->
     <section id="api-keys-section" class="admin-tab-section">
       {% set section = "api" %} {% include "shared/button-box.html" %} {%
-      include "api-keys/api-keys-table.html" %}
+      include "api-keys/api-keys-table.html" %} {% include
+      "shared/button-box-switch-mode.html" %}
     </section>
 
     <!-- ✅ Footer -->
