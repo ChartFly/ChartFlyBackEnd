@@ -4,8 +4,8 @@
 // Logic for handling edit mode switch when
 // unsaved changes exist.
 // Author: Captain & Chatman
-// Version: MPA Phase IV — Mode Switch Overlay
-// ===========================================
+// Version: MPA Phase IV — Mode Switch Overlay (Working)
+// ============================================
 
 window.ButtonBoxSwitchMode = (() => {
   const popupId = "switch-mode-popup";
@@ -28,13 +28,6 @@ window.ButtonBoxSwitchMode = (() => {
       </div>
     `;
     box.appendChild(popup);
-
-    document.querySelector(`#${popupId} .save`).onclick = () =>
-      handleOption(section, "save");
-    document.querySelector(`#${popupId} .discard`).onclick = () =>
-      handleOption(section, "discard");
-    document.querySelector(`#${popupId} .stay`).onclick = () =>
-      handleOption(section, "stay");
   }
 
   function removePopup() {
@@ -57,8 +50,33 @@ window.ButtonBoxSwitchMode = (() => {
     }
   }
 
+  function showOverlay(section, onSave, onDiscard, onStay) {
+    injectPopup(section);
+
+    const saveBtn = document.querySelector(`#${popupId} .save`);
+    const discardBtn = document.querySelector(`#${popupId} .discard`);
+    const stayBtn = document.querySelector(`#${popupId} .stay`);
+
+    if (saveBtn)
+      saveBtn.onclick = () => {
+        removePopup();
+        onSave();
+      };
+    if (discardBtn)
+      discardBtn.onclick = () => {
+        removePopup();
+        onDiscard();
+      };
+    if (stayBtn)
+      stayBtn.onclick = () => {
+        removePopup();
+        onStay();
+      };
+  }
+
   return {
     injectPopup,
     removePopup,
+    showOverlay, // ✅ Exposed for devtools or ButtonBox.js
   };
 })();
