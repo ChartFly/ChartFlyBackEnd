@@ -1,8 +1,4 @@
-<!-- ============================================
-✅ ButtonBox Component (Modular)
-Shared button system used in admin sections
-Author: Captain & Chatman
-============================================ -->
+<!-- templates/shared/button-box.html -->
 
 {% set section = section or "market" %}
 
@@ -19,15 +15,29 @@ Author: Captain & Chatman
   <div class="button-toolbar" id="{{ section }}-toolbar">
     <button id="{{ section }}-edit-btn" class="action-btn">Edit</button>
     <button id="{{ section }}-copy-btn" class="action-btn">Copy</button>
-    <button id="{{ section }}-paste-btn" class="action-btn disabled-btn" disabled>Paste</button>
-    <button id="{{ section }}-add-btn"
+    <button
+      id="{{ section }}-paste-btn"
+      class="action-btn disabled-btn"
+      disabled
+    >
+      Paste
+    </button>
+    <button
+      id="{{ section }}-add-btn"
       class="action-btn {% if edit_mode == 'cell' %}disabled-btn{% endif %}"
-      {% if edit_mode == 'cell' %}disabled{% endif %}>
+      {% if edit_mode == 'cell' %}disabled{% endif %}
+    >
       Add
     </button>
     <button id="{{ section }}-delete-btn" class="action-btn">Delete</button>
     <button id="{{ section }}-save-btn" class="action-btn">Save</button>
-    <button id="{{ section }}-undo-btn" class="action-btn disabled-btn" disabled>Undo</button>
+    <button
+      id="{{ section }}-undo-btn"
+      class="action-btn disabled-btn"
+      disabled
+    >
+      Undo
+    </button>
     <div class="undo-limit-box" id="{{ section }}-undo-limit-box"></div>
   </div>
 
@@ -35,7 +45,12 @@ Author: Captain & Chatman
   <div class="button-footer-row">
     <div class="edit-mode-controls">
       <label>
-        <input type="radio" name="{{ section }}-edit-mode" value="row" checked />
+        <input
+          type="radio"
+          name="{{ section }}-edit-mode"
+          value="row"
+          checked
+        />
         Edit Rows
       </label>
       <label>
@@ -48,7 +63,11 @@ Author: Captain & Chatman
       </label>
 
       <div class="confirm-button-container">
-        <button id="{{ section }}-confirm-btn" class="confirm-btn gray" disabled>
+        <button
+          id="{{ section }}-confirm-btn"
+          class="confirm-btn gray"
+          disabled
+        >
           Confirm
         </button>
       </div>
@@ -65,5 +84,15 @@ Author: Captain & Chatman
       <strong>Selected Rows:</strong>
       <span id="{{ section }}-selected-count">0</span>
     </span>
+  </div>
+
+  <!-- ⚠️ Mode Switch Popup -->
+  <div class="mode-switch-popup" id="{{ section }}-mode-switch-popup">
+    <div class="popup-content">
+      <div class="popup-title">There are unsaved changes. Pick an option below:</div>
+      <button id="{{ section }}-popup-save-btn" class="popup-btn">Save & Switch</button>
+      <button id="{{ section }}-popup-discard-btn" class="popup-btn">Discard & Switch</button>
+      <button id="{{ section }}-popup-stay-btn" class="popup-btn">Stay in Current Mode</button>
+    </div>
   </div>
 </div>
