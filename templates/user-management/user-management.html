@@ -2,7 +2,7 @@
 ✅ ChartFly Admin Panel - user-management.html
 Standalone MPA Page for Admin Users Section
 Author: Captain & Chatman
-Version: MPA Phase II (Mode Switch Overlay Integrated)
+Version: MPA Phase IV — Switch Mode Overlay Cleanup
 =========================================== -->
 <!DOCTYPE html>
 <html lang="en">
@@ -21,10 +21,6 @@ Version: MPA Phase II (Mode Switch Overlay Integrated)
       href="/static/admin/shared/navbar/navbar.css?v=999"
     />
     <link rel="stylesheet" href="/static/admin/shared/button-box.css?v=999" />
-    <link
-      rel="stylesheet"
-      href="/static/admin/shared/button-box-switch-mode.css?v=999"
-    />
     <link
       rel="stylesheet"
       href="/static/admin/user-management/user-management.css?v=999"
@@ -50,8 +46,9 @@ Version: MPA Phase II (Mode Switch Overlay Integrated)
 
     <!-- ✅ User Management Table + ButtonBox -->
     <section id="user-management-section" class="admin-tab-section">
-      {% set section = "user" %} {% include "shared/button-box.html" %} {%
-      include "user-management/user-management-table.html" %}
+      {% set section = "user" %}
+      {% include "shared/button-box.html" %}
+      {% include "user-management/user-management-table.html" %}
     </section>
 
     <!-- ✅ Footer -->
@@ -73,24 +70,3 @@ Version: MPA Phase II (Mode Switch Overlay Integrated)
     <script
       src="/static/admin/shared/button-box-messages.js?v=999"
       defer
-    ></script>
-    <script src="/static/admin/shared/button-box-rows.js?v=999" defer></script>
-    <script
-      src="/static/admin/shared/button-box-columns.js?v=999"
-      defer
-    ></script>
-    <script
-      src="/static/admin/shared/button-box-switch-mode.js?v=999"
-      defer
-    ></script>
-    <script src="/static/frontend/core/main.js?v=999" defer></script>
-    <script
-      src="/static/admin/user-management/user-management.js?v=999"
-      defer
-    ></script>
-    <script
-      src="/static/admin/user-management/button-box-user-management.js?v=999"
-      defer
-    ></script>
-  </body>
-</html>

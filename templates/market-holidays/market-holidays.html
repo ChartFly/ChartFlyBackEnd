@@ -2,7 +2,7 @@
 ✅ ChartFly Admin Panel - market-holidays.html
 Standalone MPA Page for Market Holidays Admin Section
 Author: Captain & Chatman
-Version: MPA Phase I (Modular MPA Layout)
+Version: MPA Phase IV — Switch Mode Overlay Cleanup
 ============================================ -->
 <!DOCTYPE html>
 <html lang="en">
@@ -21,10 +21,6 @@ Version: MPA Phase I (Modular MPA Layout)
       href="/static/admin/shared/navbar/navbar.css?v=999"
     />
     <link rel="stylesheet" href="/static/admin/shared/button-box.css?v=999" />
-    <link
-      rel="stylesheet"
-      href="/static/admin/shared/button-box-switch-mode.css?v=999"
-    />
     <link
       rel="stylesheet"
       href="/static/admin/market-holidays/market-holidays.css?v=999"
@@ -50,8 +46,9 @@ Version: MPA Phase I (Modular MPA Layout)
 
     <!-- ✅ Market Holidays Table + ButtonBox -->
     <section id="market-holidays-section" class="admin-tab-section">
-      {% set section = "market" %} {% include "shared/button-box.html" %} {%
-      include "market-holidays/holiday-table.html" %}
+      {% set section = "market" %}
+      {% include "shared/button-box.html" %}
+      {% include "market-holidays/holiday-table.html" %}
     </section>
 
     <!-- ✅ Footer -->
@@ -88,8 +85,4 @@ Version: MPA Phase I (Modular MPA Layout)
       defer
     ></script>
     <script
-      src="/static/admin/market-holidays/button-box-market-holidays.js?v=999"
-      defer
-    ></script>
-  </body>
-</html>
+      src="/static
