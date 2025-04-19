@@ -1,11 +1,11 @@
-// ============================================
+// ================================================
 // ✅ button-box-switch-mode.js
 // --------------------------------------------
 // Logic for handling edit mode switch when
 // unsaved changes exist.
 // Author: Captain & Chatman
 // Version: MPA Phase IV — Mode Switch Overlay (Bulletproof Bindings)
-// ============================================
+// ================================================
 
 window.ButtonBoxSwitchMode = (() => {
   const popupId = "switch-mode-popup";

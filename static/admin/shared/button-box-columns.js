@@ -1,11 +1,11 @@
-// ============================================
+// ================================================
 // ✅ button-box-columns.js
 // --------------------------------------------
 // Handles cell-level Copy/Paste logic for
 // Edit Columns mode in ButtonBox
 // Author: Captain & Chatman
 // Version: MPA Phase IV — Single Cell Focus + Text Selection
-// ============================================
+// ================================================
 
 window.ButtonBoxColumns = (() => {
   const cellUndoMap = new Map();
