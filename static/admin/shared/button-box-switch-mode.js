@@ -35,6 +35,19 @@ window.ButtonBoxSwitchMode = (() => {
     if (existing) existing.remove();
   }
 
+  function forceSwitchMode(section) {
+    const current = ButtonBox.getEditMode(section);
+    const target = current === "row" ? "cell" : "row";
+
+    const input = document.querySelector(
+      `input[name="${section}-edit-mode"][value="${target}"]`
+    );
+    if (input) {
+      input.checked = true;
+      ButtonBoxMessages.updateButtonColors(section);
+    }
+  }
+
   function showOverlay(section, onSave, onDiscard, onStay) {
     injectPopup(section);
 
@@ -48,13 +61,13 @@ window.ButtonBoxSwitchMode = (() => {
         removePopup();
 
         const currentMode = ButtonBox.getEditMode(section);
-        console.log(`📦 Current Mode: ${currentMode}`);
-
         const state = ButtonBox.getState(section);
 
         if (currentMode === "cell") {
           console.log("🟠 Saving dirty cells...");
-          ButtonBoxColumns.saveDirtyCells(section);
+          if (typeof ButtonBoxColumns?.saveDirtyCells === "function") {
+            ButtonBoxColumns.saveDirtyCells(section);
+          }
           ButtonBox.cleanupMode(section, "cell");
         } else {
           console.log("🔵 Saving dirty rows...");
@@ -66,8 +79,7 @@ window.ButtonBoxSwitchMode = (() => {
         }
 
         setTimeout(() => {
-          console.log("🔁 Switching edit mode...");
-          ButtonBox.switchEditMode(section);
+          forceSwitchMode(section);
         }, 150);
       };
     }
@@ -79,7 +91,10 @@ window.ButtonBoxSwitchMode = (() => {
 
         const currentMode = ButtonBox.getEditMode(section);
         ButtonBox.cleanupMode(section, currentMode);
-        ButtonBox.switchEditMode(section);
+
+        setTimeout(() => {
+          forceSwitchMode(section);
+        }, 100);
       };
     }
 
