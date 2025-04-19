@@ -58,17 +58,25 @@ window.ButtonBoxSwitchMode = (() => {
       input.checked = true;
       ButtonBoxMessages.updateButtonColors(section);
       console.log(`🔁 Mode switched to: ${target}`);
+    } else {
+      console.warn("⚠️ Radio input not found for mode switch");
     }
   }
 
   function showOverlay(section, onSave, onDiscard, onStay) {
     injectPopup(section);
 
-    // Allow DOM to settle before attaching event listeners
+    // Let the DOM settle
     setTimeout(() => {
       const saveBtn = document.querySelector(`#${popupId} .save`);
       const discardBtn = document.querySelector(`#${popupId} .discard`);
       const stayBtn = document.querySelector(`#${popupId} .stay`);
+
+      console.log("🔍 Buttons in DOM:", {
+        saveBtn,
+        discardBtn,
+        stayBtn,
+      });
 
       if (saveBtn) {
         console.log("✅ Binding Save & Switch");
@@ -78,11 +86,18 @@ window.ButtonBoxSwitchMode = (() => {
 
           const currentMode = ButtonBox.getEditMode(section);
           const state = ButtonBox.getState(section);
+          console.log(`🧭 Current Mode: ${currentMode}`);
 
           if (currentMode === "cell") {
-            console.log("🟠 Saving dirty cells...");
-            if (typeof ButtonBoxColumns?.saveDirtyCells === "function") {
-              ButtonBoxColumns.saveDirtyCells(section);
+            console.log("🟠 Attempting to call saveDirtyCells...");
+            const saveFn = ButtonBoxColumns?.saveDirtyCells;
+            if (typeof saveFn === "function") {
+              saveFn(section);
+              console.log("✅ saveDirtyCells executed");
+            } else {
+              console.warn(
+                "❌ ButtonBoxColumns.saveDirtyCells is missing or not a function"
+              );
             }
             ButtonBox.cleanupMode(section, "cell");
           } else {
@@ -90,6 +105,9 @@ window.ButtonBoxSwitchMode = (() => {
             const selected = Array.from(state.selectedRows);
             if (typeof state.onAction === "function") {
               state.onAction("save", selected);
+              console.log("✅ Row save triggered via onAction");
+            } else {
+              console.warn("❌ state.onAction is not a function");
             }
             ButtonBox.cleanupMode(section, "row");
           }
@@ -98,6 +116,8 @@ window.ButtonBoxSwitchMode = (() => {
             forceSwitchMode(section);
           }, 100);
         };
+      } else {
+        console.warn("❌ Save button not found in popup");
       }
 
       if (discardBtn) {
@@ -113,6 +133,8 @@ window.ButtonBoxSwitchMode = (() => {
             forceSwitchMode(section);
           }, 100);
         };
+      } else {
+        console.warn("❌ Discard button not found in popup");
       }
 
       if (stayBtn) {
@@ -122,8 +144,10 @@ window.ButtonBoxSwitchMode = (() => {
           removePopup();
           onStay();
         };
+      } else {
+        console.warn("❌ Stay button not found in popup");
       }
-    }, 0); // Ensure DOM is ready
+    }, 0);
   }
 
   return {

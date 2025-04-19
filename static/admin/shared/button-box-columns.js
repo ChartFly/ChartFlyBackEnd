@@ -313,13 +313,14 @@ window.ButtonBoxColumns = (() => {
     return word.charAt(0).toUpperCase() + word.slice(1);
   }
 
-  return {
+  // ✅ Expose ButtonBoxColumns globally
+  window.ButtonBoxColumns = {
     handleCellAction,
     pushCellUndo,
     undoLastCellEdit,
     showUndoLimit,
     activateHeaderClicks,
-    saveDirtyCells, // ✅ THIS IS THE MISSING PIECE
+    saveDirtyCells, // 👈 Required for Orange Save & Switch
   };
 })();
 
