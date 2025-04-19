@@ -4,7 +4,7 @@
 // Logic for handling edit mode switch when
 // unsaved changes exist.
 // Author: Captain & Chatman
-// Version: MPA Phase IV — Mode Switch Overlay (Bulletproof Bindings)
+// Version: MPA Phase IV — Mode Switch Overlay (Fully Wired & Functional)
 // ================================================
 
 window.ButtonBoxSwitchMode = (() => {
@@ -29,14 +29,91 @@ window.ButtonBoxSwitchMode = (() => {
       <div class="switch-mode-popup-inner">
         <div class="switch-mode-message">There are unsaved changes. Pick an option below:</div>
         <div class="switch-mode-buttons">
-          <button class="switch-mode-btn save">Save & Switch</button>
-          <button class="switch-mode-btn discard">Discard & Switch</button>
-          <button class="switch-mode-btn stay">Stay in Current Mode</button>
+          <button id="save-btn" class="switch-mode-btn save">Save & Switch</button>
+          <button id="discard-btn" class="switch-mode-btn discard">Discard & Switch</button>
+          <button id="stay-btn" class="switch-mode-btn stay">Stay in Current Mode</button>
         </div>
       </div>
     `;
     box.appendChild(popup);
     console.log("✅ Popup injected into DOM");
+
+    wirePopupButtons(section);
+  }
+
+  function wirePopupButtons(section) {
+    const saveBtn = document.getElementById("save-btn");
+    const discardBtn = document.getElementById("discard-btn");
+    const stayBtn = document.getElementById("stay-btn");
+
+    if (saveBtn) {
+      console.log("✅ Binding Save & Switch");
+      saveBtn.onclick = () => {
+        console.log("💾 Save & Switch clicked");
+        removePopup();
+
+        const currentMode = ButtonBox.getEditMode(section);
+        const state = ButtonBox.getState(section);
+        console.log(`🧭 Current Mode: ${currentMode}`);
+
+        if (currentMode === "cell") {
+          console.log("🟠 Attempting to call saveDirtyCells...");
+          const saveFn = ButtonBoxColumns?.saveDirtyCells;
+          if (typeof saveFn === "function") {
+            saveFn(section);
+            console.log("✅ saveDirtyCells executed");
+          } else {
+            console.warn(
+              "❌ ButtonBoxColumns.saveDirtyCells is missing or not a function"
+            );
+          }
+          ButtonBox.cleanupMode(section, "cell");
+        } else {
+          console.log("🔵 Saving dirty rows...");
+          const selected = Array.from(state.selectedRows);
+          if (typeof state.onAction === "function") {
+            state.onAction("save", selected);
+            console.log("✅ Row save triggered via onAction");
+          } else {
+            console.warn("❌ state.onAction is not a function");
+          }
+          ButtonBox.cleanupMode(section, "row");
+        }
+
+        setTimeout(() => {
+          forceSwitchMode(section);
+        }, 100);
+      };
+    } else {
+      console.warn("❌ Save button not found in popup");
+    }
+
+    if (discardBtn) {
+      console.log("✅ Binding Discard & Switch");
+      discardBtn.onclick = () => {
+        console.log("🗑️ Discard & Switch clicked");
+        removePopup();
+
+        const currentMode = ButtonBox.getEditMode(section);
+        ButtonBox.cleanupMode(section, currentMode);
+
+        setTimeout(() => {
+          forceSwitchMode(section);
+        }, 100);
+      };
+    } else {
+      console.warn("❌ Discard button not found in popup");
+    }
+
+    if (stayBtn) {
+      console.log("✅ Binding Stay");
+      stayBtn.onclick = () => {
+        console.log("🙅 Stay in Current Mode clicked");
+        removePopup();
+      };
+    } else {
+      console.warn("❌ Stay button not found in popup");
+    }
   }
 
   function removePopup() {
@@ -63,91 +140,8 @@ window.ButtonBoxSwitchMode = (() => {
     }
   }
 
-  function showOverlay(section, onSave, onDiscard, onStay) {
+  function showOverlay(section) {
     injectPopup(section);
-
-    // Let the DOM settle
-    setTimeout(() => {
-      const saveBtn = document.querySelector(`#${popupId} .save`);
-      const discardBtn = document.querySelector(`#${popupId} .discard`);
-      const stayBtn = document.querySelector(`#${popupId} .stay`);
-
-      console.log("🔍 Buttons in DOM:", {
-        saveBtn,
-        discardBtn,
-        stayBtn,
-      });
-
-      if (saveBtn) {
-        console.log("✅ Binding Save & Switch");
-        saveBtn.onclick = () => {
-          console.log("💾 Save & Switch clicked");
-          removePopup();
-
-          const currentMode = ButtonBox.getEditMode(section);
-          const state = ButtonBox.getState(section);
-          console.log(`🧭 Current Mode: ${currentMode}`);
-
-          if (currentMode === "cell") {
-            console.log("🟠 Attempting to call saveDirtyCells...");
-            const saveFn = ButtonBoxColumns?.saveDirtyCells;
-            if (typeof saveFn === "function") {
-              saveFn(section);
-              console.log("✅ saveDirtyCells executed");
-            } else {
-              console.warn(
-                "❌ ButtonBoxColumns.saveDirtyCells is missing or not a function"
-              );
-            }
-            ButtonBox.cleanupMode(section, "cell");
-          } else {
-            console.log("🔵 Saving dirty rows...");
-            const selected = Array.from(state.selectedRows);
-            if (typeof state.onAction === "function") {
-              state.onAction("save", selected);
-              console.log("✅ Row save triggered via onAction");
-            } else {
-              console.warn("❌ state.onAction is not a function");
-            }
-            ButtonBox.cleanupMode(section, "row");
-          }
-
-          setTimeout(() => {
-            forceSwitchMode(section);
-          }, 100);
-        };
-      } else {
-        console.warn("❌ Save button not found in popup");
-      }
-
-      if (discardBtn) {
-        console.log("✅ Binding Discard & Switch");
-        discardBtn.onclick = () => {
-          console.log("🗑️ Discard & Switch clicked");
-          removePopup();
-
-          const currentMode = ButtonBox.getEditMode(section);
-          ButtonBox.cleanupMode(section, currentMode);
-
-          setTimeout(() => {
-            forceSwitchMode(section);
-          }, 100);
-        };
-      } else {
-        console.warn("❌ Discard button not found in popup");
-      }
-
-      if (stayBtn) {
-        console.log("✅ Binding Stay");
-        stayBtn.onclick = () => {
-          console.log("🙅 Stay in Current Mode clicked");
-          removePopup();
-          onStay();
-        };
-      } else {
-        console.warn("❌ Stay button not found in popup");
-      }
-    }, 0);
   }
 
   return {

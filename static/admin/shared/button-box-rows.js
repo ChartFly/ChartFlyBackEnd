@@ -94,7 +94,6 @@ window.ButtonBoxRows = (() => {
       state.clipboardType = "row";
 
       ButtonBox.showTip(section, "Copied row. Use Paste to add duplicate.");
-      ButtonBox.enablePaste(section);
     }
 
     if (action === "paste" && state.clipboardType === "row") {
