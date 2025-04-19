@@ -4,7 +4,7 @@
 // Logic for handling edit mode switch when
 // unsaved changes exist.
 // Author: Captain & Chatman
-// Version: MPA Phase IV — Mode Switch Overlay (Blue + Orange Save Fixed)
+// Version: MPA Phase IV — Mode Switch Overlay (Blue + Orange Save FIXED)
 // ============================================
 
 window.ButtonBoxSwitchMode = (() => {
@@ -48,14 +48,16 @@ window.ButtonBoxSwitchMode = (() => {
         removePopup();
 
         const currentMode = ButtonBox.getEditMode(section);
+        console.log(`📦 Current Mode: ${currentMode}`);
+
         const state = ButtonBox.getState(section);
 
         if (currentMode === "cell") {
-          // ✅ Save dirty cells in Orange mode
+          console.log("🟠 Saving dirty cells...");
           ButtonBoxColumns.saveDirtyCells(section);
           ButtonBox.cleanupMode(section, "cell");
         } else {
-          // ✅ Save dirty rows in Blue mode
+          console.log("🔵 Saving dirty rows...");
           const selected = Array.from(state.selectedRows);
           if (typeof state.onAction === "function") {
             state.onAction("save", selected);
@@ -64,8 +66,9 @@ window.ButtonBoxSwitchMode = (() => {
         }
 
         setTimeout(() => {
+          console.log("🔁 Switching edit mode...");
           ButtonBox.switchEditMode(section);
-        }, 100);
+        }, 150);
       };
     }
 
