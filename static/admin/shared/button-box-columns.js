@@ -53,7 +53,8 @@
   }
 
   function saveDirtyCells(section) {
-    const table = document.getElementById(ButtonBox.getState(section).tableId);
+    const state = ButtonBox.getState(section);
+    const table = document.getElementById(state.tableId);
     if (!table) return;
 
     const dirtyCells = table.querySelectorAll("td.dirty");
@@ -66,9 +67,9 @@
       cell.classList.remove("cell-paste-ready");
     });
 
-    table.querySelectorAll("th.editable-col").forEach((th) => {
-      th.classList.remove("editable-col");
-    });
+    // ✅ NEW: clear column highlights
+    clearActiveColumn(table);
+    state.activeEditableColumnIndex = null;
 
     ButtonBox.showMessage(
       section,
