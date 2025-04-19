@@ -46,7 +46,17 @@ window.ButtonBoxSwitchMode = (() => {
       saveBtn.onclick = () => {
         console.log("💾 Save & Switch clicked");
         removePopup();
-        onSave();
+
+        const state = ButtonBox.getState(section);
+        const selected = Array.from(state.selectedRows);
+        if (typeof state.onAction === "function") {
+          state.onAction("save", selected); // ✅ Save via onAction
+        }
+
+        setTimeout(() => {
+          ButtonBox.cleanupMode(section, "row"); // ✅ Clear row edit state
+          ButtonBox.switchEditMode(section); // ✅ Switch to target mode
+        }, 100);
       };
     }
 
@@ -54,7 +64,8 @@ window.ButtonBoxSwitchMode = (() => {
       discardBtn.onclick = () => {
         console.log("🗑️ Discard & Switch clicked");
         removePopup();
-        onDiscard();
+        ButtonBox.cleanupMode(section, "row");
+        ButtonBox.switchEditMode(section);
       };
     }
 
