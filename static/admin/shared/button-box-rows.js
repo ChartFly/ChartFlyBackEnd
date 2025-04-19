@@ -165,7 +165,7 @@ window.ButtonBoxRows = (() => {
         if (th.classList.contains("col-select")) {
           columnHtml += `<td class="col-select"><input type="checkbox" class="${section}-select-checkbox" data-id="${newId}" checked></td>`;
         } else if (th.classList.contains("line-id-col")) {
-          columnHtml += `<td class="line-id-col">${newId}</td>`;
+          columnHtml += `<td class="line-id-col hidden-col" data-original-id="${newId}"></td>`;
         } else if (th.classList.contains("skip-col")) {
           columnHtml += `<td class="skip-col"></td>`;
         } else {
@@ -224,7 +224,10 @@ window.ButtonBoxRows = (() => {
         }
 
         const idCell = row.querySelector(".line-id-col");
-        if (idCell) idCell.textContent = finalId;
+        if (idCell) {
+          idCell.textContent = finalId;
+          idCell.dataset.originalId = finalId;
+        }
 
         row.classList.remove("selected-row");
       });
