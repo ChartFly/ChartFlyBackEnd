@@ -4,7 +4,7 @@
 // Logic for handling edit mode switch when
 // unsaved changes exist.
 // Author: Captain & Chatman
-// Version: MPA Phase IV — Mode Switch Overlay (FIXED)
+// Version: MPA Phase IV — Mode Switch Overlay (Blue + Orange Save Fixed)
 // ============================================
 
 window.ButtonBoxSwitchMode = (() => {
@@ -47,15 +47,24 @@ window.ButtonBoxSwitchMode = (() => {
         console.log("💾 Save & Switch clicked");
         removePopup();
 
+        const currentMode = ButtonBox.getEditMode(section);
         const state = ButtonBox.getState(section);
-        const selected = Array.from(state.selectedRows);
-        if (typeof state.onAction === "function") {
-          state.onAction("save", selected); // ✅ Save via onAction
+
+        if (currentMode === "cell") {
+          // ✅ Save dirty cells in Orange mode
+          ButtonBoxColumns.saveDirtyCells(section);
+          ButtonBox.cleanupMode(section, "cell");
+        } else {
+          // ✅ Save dirty rows in Blue mode
+          const selected = Array.from(state.selectedRows);
+          if (typeof state.onAction === "function") {
+            state.onAction("save", selected);
+          }
+          ButtonBox.cleanupMode(section, "row");
         }
 
         setTimeout(() => {
-          ButtonBox.cleanupMode(section, "row"); // ✅ Clear row edit state
-          ButtonBox.switchEditMode(section); // ✅ Switch to target mode
+          ButtonBox.switchEditMode(section);
         }, 100);
       };
     }
@@ -64,7 +73,9 @@ window.ButtonBoxSwitchMode = (() => {
       discardBtn.onclick = () => {
         console.log("🗑️ Discard & Switch clicked");
         removePopup();
-        ButtonBox.cleanupMode(section, "row");
+
+        const currentMode = ButtonBox.getEditMode(section);
+        ButtonBox.cleanupMode(section, currentMode);
         ButtonBox.switchEditMode(section);
       };
     }
