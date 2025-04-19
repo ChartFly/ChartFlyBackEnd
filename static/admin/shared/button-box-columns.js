@@ -7,7 +7,7 @@
 // Version: MPA Phase IV — Single Cell Focus + Text Selection
 // ================================================
 
-window.ButtonBoxColumns = (() => {
+(() => {
   const cellUndoMap = new Map();
 
   function handleCellAction(section, action) {
@@ -83,7 +83,6 @@ window.ButtonBoxColumns = (() => {
     if (!table) return;
 
     const headers = table.querySelectorAll("thead th");
-
     headers.forEach((header, index) => {
       if (
         header.classList.contains("col-select") ||
@@ -95,7 +94,6 @@ window.ButtonBoxColumns = (() => {
         if (ButtonBox.getEditMode(section) !== "cell") return;
 
         const prev = state.activeEditableColumnIndex ?? -1;
-
         if (index === prev) {
           clearActiveColumn(table);
           state.activeEditableColumnIndex = null;
@@ -109,17 +107,17 @@ window.ButtonBoxColumns = (() => {
         const rows = table.querySelectorAll("tbody tr");
         rows.forEach((row) => {
           const cell = row.cells[index];
-          if (!cell) return;
           if (
+            !cell ||
             cell.classList.contains("col-select") ||
             cell.classList.contains("line-id-col")
           )
             return;
 
           cell.classList.add("editable-col-cell");
-          cell.addEventListener("click", () => {
-            activateSingleEditableCell(cell, section);
-          });
+          cell.addEventListener("click", () =>
+            activateSingleEditableCell(cell, section)
+          );
         });
 
         ButtonBox.showTip(
@@ -176,9 +174,9 @@ window.ButtonBoxColumns = (() => {
   }
 
   function clearActiveColumn(table) {
-    table.querySelectorAll("thead th").forEach((th) => {
-      th.classList.remove("editable-col");
-    });
+    table
+      .querySelectorAll("thead th")
+      .forEach((th) => th.classList.remove("editable-col"));
     table.querySelectorAll("tbody td").forEach((td) => {
       td.classList.remove(
         "editable-col-cell",
@@ -233,17 +231,9 @@ window.ButtonBoxColumns = (() => {
   function pushCellUndo(section, cell) {
     if (!cellUndoMap.has(section)) cellUndoMap.set(section, []);
     const stack = cellUndoMap.get(section);
-    stack.push({
-      cell,
-      prevValue: cell.textContent,
-    });
+    stack.push({ cell, prevValue: cell.textContent });
     if (stack.length > 30) stack.shift();
-
-    if (stack.length === 30) {
-      showUndoLimit(section, true);
-    }
-
-    console.log(`🧠 Cell undo pushed (${stack.length})`);
+    if (stack.length === 30) showUndoLimit(section, true);
   }
 
   function undoLastCellEdit(section) {
@@ -258,11 +248,7 @@ window.ButtonBoxColumns = (() => {
     last.cell.classList.add("flash-yellow");
     setTimeout(() => last.cell.classList.remove("flash-yellow"), 500);
 
-    if (stack.length < 30) {
-      showUndoLimit(section, false);
-    }
-
-    console.log(`↩️ Cell undo applied (${stack.length} left)`);
+    if (stack.length < 30) showUndoLimit(section, false);
   }
 
   function showUndoLimit(section, isMax) {
@@ -276,8 +262,7 @@ window.ButtonBoxColumns = (() => {
     document
       .querySelectorAll(`#${section}-toolbar .action-btn`)
       .forEach((btn) => {
-        const id = btn.id;
-        if (!id.endsWith("paste-btn")) {
+        if (!btn.id.endsWith("paste-btn")) {
           btn.disabled = true;
           btn.classList.add("disabled-btn");
         }
@@ -313,14 +298,14 @@ window.ButtonBoxColumns = (() => {
     return word.charAt(0).toUpperCase() + word.slice(1);
   }
 
-  // ✅ Expose ButtonBoxColumns globally
+  // ✅ Attach to window AFTER all functions are defined
   window.ButtonBoxColumns = {
     handleCellAction,
     pushCellUndo,
     undoLastCellEdit,
     showUndoLimit,
     activateHeaderClicks,
-    saveDirtyCells, // 👈 Required for Orange Save & Switch
+    saveDirtyCells,
   };
 })();
 
