@@ -4,7 +4,7 @@
 // Logic for handling edit mode switch when
 // unsaved changes exist.
 // Author: Captain & Chatman
-// Version: MPA Phase IV — Mode Switch Overlay (Blue + Orange Save FIXED)
+// Version: MPA Phase IV — Mode Switch Overlay (Bulletproof Bindings)
 // ============================================
 
 window.ButtonBoxSwitchMode = (() => {
@@ -12,7 +12,15 @@ window.ButtonBoxSwitchMode = (() => {
 
   function injectPopup(section) {
     const box = document.getElementById(`${section}-button-box`);
-    if (!box || document.getElementById(popupId)) return;
+    const existing = document.getElementById(popupId);
+    if (!box) {
+      console.warn("❌ No ButtonBox container found for popup injection");
+      return;
+    }
+    if (existing) {
+      console.warn("🧽 Removing existing popup before reinjecting");
+      existing.remove();
+    }
 
     const popup = document.createElement("div");
     popup.id = popupId;
@@ -28,11 +36,15 @@ window.ButtonBoxSwitchMode = (() => {
       </div>
     `;
     box.appendChild(popup);
+    console.log("✅ Popup injected into DOM");
   }
 
   function removePopup() {
     const existing = document.getElementById(popupId);
-    if (existing) existing.remove();
+    if (existing) {
+      existing.remove();
+      console.log("🧹 Popup removed");
+    }
   }
 
   function forceSwitchMode(section) {
@@ -45,66 +57,73 @@ window.ButtonBoxSwitchMode = (() => {
     if (input) {
       input.checked = true;
       ButtonBoxMessages.updateButtonColors(section);
+      console.log(`🔁 Mode switched to: ${target}`);
     }
   }
 
   function showOverlay(section, onSave, onDiscard, onStay) {
     injectPopup(section);
 
-    const saveBtn = document.querySelector(`#${popupId} .save`);
-    const discardBtn = document.querySelector(`#${popupId} .discard`);
-    const stayBtn = document.querySelector(`#${popupId} .stay`);
+    // Allow DOM to settle before attaching event listeners
+    setTimeout(() => {
+      const saveBtn = document.querySelector(`#${popupId} .save`);
+      const discardBtn = document.querySelector(`#${popupId} .discard`);
+      const stayBtn = document.querySelector(`#${popupId} .stay`);
 
-    if (saveBtn) {
-      saveBtn.onclick = () => {
-        console.log("💾 Save & Switch clicked");
-        removePopup();
+      if (saveBtn) {
+        console.log("✅ Binding Save & Switch");
+        saveBtn.onclick = () => {
+          console.log("💾 Save & Switch clicked");
+          removePopup();
 
-        const currentMode = ButtonBox.getEditMode(section);
-        const state = ButtonBox.getState(section);
+          const currentMode = ButtonBox.getEditMode(section);
+          const state = ButtonBox.getState(section);
 
-        if (currentMode === "cell") {
-          console.log("🟠 Saving dirty cells...");
-          if (typeof ButtonBoxColumns?.saveDirtyCells === "function") {
-            ButtonBoxColumns.saveDirtyCells(section);
+          if (currentMode === "cell") {
+            console.log("🟠 Saving dirty cells...");
+            if (typeof ButtonBoxColumns?.saveDirtyCells === "function") {
+              ButtonBoxColumns.saveDirtyCells(section);
+            }
+            ButtonBox.cleanupMode(section, "cell");
+          } else {
+            console.log("🔵 Saving dirty rows...");
+            const selected = Array.from(state.selectedRows);
+            if (typeof state.onAction === "function") {
+              state.onAction("save", selected);
+            }
+            ButtonBox.cleanupMode(section, "row");
           }
-          ButtonBox.cleanupMode(section, "cell");
-        } else {
-          console.log("🔵 Saving dirty rows...");
-          const selected = Array.from(state.selectedRows);
-          if (typeof state.onAction === "function") {
-            state.onAction("save", selected);
-          }
-          ButtonBox.cleanupMode(section, "row");
-        }
 
-        setTimeout(() => {
-          forceSwitchMode(section);
-        }, 150);
-      };
-    }
+          setTimeout(() => {
+            forceSwitchMode(section);
+          }, 100);
+        };
+      }
 
-    if (discardBtn) {
-      discardBtn.onclick = () => {
-        console.log("🗑️ Discard & Switch clicked");
-        removePopup();
+      if (discardBtn) {
+        console.log("✅ Binding Discard & Switch");
+        discardBtn.onclick = () => {
+          console.log("🗑️ Discard & Switch clicked");
+          removePopup();
 
-        const currentMode = ButtonBox.getEditMode(section);
-        ButtonBox.cleanupMode(section, currentMode);
+          const currentMode = ButtonBox.getEditMode(section);
+          ButtonBox.cleanupMode(section, currentMode);
 
-        setTimeout(() => {
-          forceSwitchMode(section);
-        }, 100);
-      };
-    }
+          setTimeout(() => {
+            forceSwitchMode(section);
+          }, 100);
+        };
+      }
 
-    if (stayBtn) {
-      stayBtn.onclick = () => {
-        console.log("🙅 Stay in Current Mode clicked");
-        removePopup();
-        onStay();
-      };
-    }
+      if (stayBtn) {
+        console.log("✅ Binding Stay");
+        stayBtn.onclick = () => {
+          console.log("🙅 Stay in Current Mode clicked");
+          removePopup();
+          onStay();
+        };
+      }
+    }, 0); // Ensure DOM is ready
   }
 
   return {

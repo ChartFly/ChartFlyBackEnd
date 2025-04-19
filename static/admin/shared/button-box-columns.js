@@ -42,17 +42,38 @@ window.ButtonBoxColumns = (() => {
     }
 
     if (action === "save") {
-      ButtonBox.showMessage(
-        section,
-        "Cell edits saved (frontend only).",
-        "success"
-      );
+      saveDirtyCells(section);
       return;
     }
 
     ButtonBox.showWarning(
       section,
       `Switch to 'Edit Rows' to use ${capitalize(action)}.`
+    );
+  }
+
+  function saveDirtyCells(section) {
+    const table = document.getElementById(ButtonBox.getState(section).tableId);
+    if (!table) return;
+
+    const dirtyCells = table.querySelectorAll("td.dirty");
+    dirtyCells.forEach((cell) => {
+      cell.classList.remove("dirty", "editable-focus-cell");
+      cell.removeAttribute("contenteditable");
+    });
+
+    table.querySelectorAll("td.cell-paste-ready").forEach((cell) => {
+      cell.classList.remove("cell-paste-ready");
+    });
+
+    table.querySelectorAll("th.editable-col").forEach((th) => {
+      th.classList.remove("editable-col");
+    });
+
+    ButtonBox.showMessage(
+      section,
+      "Cell edits saved (frontend only).",
+      "success"
     );
   }
 
@@ -127,7 +148,6 @@ window.ButtonBoxColumns = (() => {
     cell.classList.add("editable-focus-cell");
     cell.focus();
 
-    // ✅ Select all text in the cell
     const range = document.createRange();
     range.selectNodeContents(cell);
     const selection = window.getSelection();
@@ -299,6 +319,7 @@ window.ButtonBoxColumns = (() => {
     undoLastCellEdit,
     showUndoLimit,
     activateHeaderClicks,
+    saveDirtyCells, // ✅ THIS IS THE MISSING PIECE
   };
 })();
 
