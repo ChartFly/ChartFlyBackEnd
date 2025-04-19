@@ -4,7 +4,7 @@
 // Core ButtonBox controller: manages state,
 // button logic, event wiring, and UI updates.
 // Author: Captain & Chatman
-// Version: MPA Phase IV — Mode Switch Overlay + Orange Save Cleanup + switchEditMode()
+// Version: MPA Phase IV — Intercept Mode Switch + Snapshot Dirty Fix
 // ============================================
 
 console.log("🧠 ButtonBox.js loaded ✅");
@@ -149,16 +149,12 @@ window.ButtonBox = (() => {
     radios.forEach((radio) => {
       console.log(`📻 Wiring radio:`, radio);
 
-      radio.addEventListener("focus", () => {
-        state.previousMode = getEditMode(section);
-      });
-
       radio.addEventListener("change", (e) => {
-        const currentMode = state.previousMode;
         const targetMode = e.target.value;
+        const currentMode = getEditMode(section); // Check current mode before it changes
 
         if (!["row", "cell"].includes(currentMode)) {
-          console.warn("⚠️ Invalid previousMode detected, aborting switch.");
+          console.warn("⚠️ Invalid mode detected — aborting switch");
           return;
         }
 
@@ -166,36 +162,22 @@ window.ButtonBox = (() => {
           `🔁 Attempting to switch from ${currentMode} ➜ ${targetMode}`
         );
 
-        if (currentMode === targetMode) return;
+        if (currentMode === targetMode) {
+          console.log("🟨 Already in target mode. Ignoring switch.");
+          return;
+        }
 
         const isDirty = checkDirtyState(section, currentMode);
         console.log(`🧼 Dirty check for mode ${currentMode}:`, isDirty);
 
         if (isDirty) {
+          console.log(
+            "⚠️ Dirty state detected — blocking mode switch, showing popup"
+          );
           e.preventDefault();
           radio.checked = false;
 
-          console.log("⚠️ Dirty detected — showing mode switch popup");
-          ButtonBoxSwitchMode.showOverlay(
-            section,
-            () => {
-              const state = getState(section);
-              if (typeof state.onAction === "function") {
-                state.onAction("save", Array.from(state.selectedRows));
-              }
-              setTimeout(() => {
-                cleanupMode(section, currentMode);
-                switchEditMode(section);
-              }, 100);
-            },
-            () => {
-              cleanupMode(section, currentMode);
-              switchEditMode(section);
-            },
-            () => {
-              console.log("🚫 Stay in current mode selected");
-            }
-          );
+          ButtonBoxSwitchMode.showOverlay(section, currentMode);
         } else {
           console.log("✅ No unsaved changes — switching mode cleanly");
           cleanupMode(section, currentMode);
@@ -358,7 +340,7 @@ window.ButtonBox = (() => {
     toggleLineIdVisibility,
     cleanupMode,
     forceSwitchMode,
-    switchEditMode, // ✅ NEW: Now available
+    switchEditMode,
     showTip,
   };
 })();
