@@ -2,7 +2,7 @@
 ✅ ChartFly Admin Panel - market-holidays.html
 Standalone MPA Page for Market Holidays Admin Section
 Author: Captain & Chatman
-Version: MPA Phase IV — Switch Mode Overlay Fixed
+Version: MPA Phase IV — Script Order with Module Support
 ============================================ -->
 <!DOCTYPE html>
 <html lang="en">
@@ -67,31 +67,38 @@ Version: MPA Phase IV — Switch Mode Overlay Fixed
       </div>
     </footer>
 
-    <!-- ✅ Scripts -->
-    <script src="/static/admin/shared/navbar/navbar.js?v=999" defer></script>
-    <script src="/static/admin/shared/button-box.js?v=999" defer></script>
+    <!-- ✅ Scripts (Module-based load order) -->
+    <script
+      src="/static/admin/shared/navbar/navbar.js?v=999"
+      type="module"
+    ></script>
+    <script
+      src="/static/admin/shared/button-box.js?v=999"
+      type="module"
+    ></script>
     <script
       src="/static/admin/shared/button-box-messages.js?v=999"
-      defer
+      type="module"
     ></script>
-    <script src="/static/admin/shared/button-box-rows.js?v=999" defer></script>
+    <script
+      src="/static/admin/shared/button-box-rows.js?v=999"
+      type="module"
+    ></script>
     <script
       src="/static/admin/shared/button-box-columns.js?v=999"
-      defer
+      type="module"
     ></script>
-
-    <!-- 🛠️ MUST BE BEFORE section init -->
     <script
       src="/static/admin/shared/button-box-switch-mode.js?v=999"
-      defer
+      type="module"
     ></script>
     <script
       src="/static/admin/market-holidays/button-box-market-holidays.js?v=999"
-      defer
+      type="module"
     ></script>
     <script
       src="/static/admin/market-holidays/market-holidays.js?v=999"
-      defer
+      type="module"
     ></script>
   </body>
 </html>

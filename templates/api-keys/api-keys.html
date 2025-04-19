@@ -2,7 +2,7 @@
 ✅ ChartFly Admin Panel - api-keys.html
 Standalone MPA Page for API Keys Admin Section
 Author: Captain & Chatman
-Version: MPA Phase IV — Injected Mode Switch Logic Restored + Script Order Fixed
+Version: MPA Phase IV — Script Load Order Secured via Modules
 ======================================================= -->
 <!DOCTYPE html>
 <html lang="en">
@@ -63,26 +63,38 @@ Version: MPA Phase IV — Injected Mode Switch Logic Restored + Script Order Fix
       </div>
     </footer>
 
-    <!-- ✅ Scripts -->
-    <script src="/static/admin/shared/navbar/navbar.js?v=999" defer></script>
-    <script src="/static/admin/shared/button-box.js?v=999" defer></script>
+    <!-- ✅ Scripts (Now Module-Based for Load Order) -->
+    <script
+      src="/static/admin/shared/navbar/navbar.js?v=999"
+      type="module"
+    ></script>
+    <script
+      src="/static/admin/shared/button-box.js?v=999"
+      type="module"
+    ></script>
     <script
       src="/static/admin/shared/button-box-messages.js?v=999"
-      defer
+      type="module"
     ></script>
-    <script src="/static/admin/shared/button-box-rows.js?v=999" defer></script>
+    <script
+      src="/static/admin/shared/button-box-rows.js?v=999"
+      type="module"
+    ></script>
     <script
       src="/static/admin/shared/button-box-columns.js?v=999"
-      defer
+      type="module"
     ></script>
     <script
       src="/static/admin/shared/button-box-switch-mode.js?v=999"
-      defer
+      type="module"
     ></script>
-    <script src="/static/admin/api-keys/api-keys.js?v=999" defer></script>
+    <script
+      src="/static/admin/api-keys/api-keys.js?v=999"
+      type="module"
+    ></script>
     <script
       src="/static/admin/api-keys/button-box-api-keys.js?v=999"
-      defer
+      type="module"
     ></script>
   </body>
 </html>

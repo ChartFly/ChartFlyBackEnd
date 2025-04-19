@@ -34,7 +34,6 @@ window.ButtonBoxApiKeys = (() => {
       ButtonBox.toggleLineIdVisibility("api", toggle.checked);
     });
 
-    // ⛑ Force fire the toggle now, in case table was just rendered
     ButtonBox.toggleLineIdVisibility("api", toggle.checked);
   }
 
@@ -63,12 +62,18 @@ window.ButtonBoxApiKeys = (() => {
 
     const waitForBox = setInterval(() => {
       const table = document.getElementById("api-keys-table");
-      if (window.ButtonBox && window.ButtonBoxRows && table) {
+      if (
+        window.ButtonBox &&
+        window.ButtonBoxRows &&
+        window.ButtonBoxColumns &&
+        table
+      ) {
         clearInterval(waitForBox);
         ButtonBox.init(config);
         ButtonBox.wireCheckboxes("api");
         ButtonBoxColumns.activateHeaderClicks("api");
-        wireIdToggle(); // ✅ after table is fully ready
+        wireIdToggle();
+        console.log("✅ ButtonBox API Keys fully initialized");
       }
     }, 50);
   }
