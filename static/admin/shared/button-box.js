@@ -4,7 +4,7 @@
 // Core ButtonBox controller: manages state,
 // button logic, event wiring, and UI updates.
 // Author: Captain & Chatman
-// Version: MPA Phase IV — Intercept Mode Switch + Snapshot Dirty Fix
+// Version: MPA Phase IV — Mode Tracking (Bulletproof currentMode)
 // ============================================
 
 console.log("🧠 ButtonBox.js loaded ✅");
@@ -25,6 +25,8 @@ window.ButtonBox = (() => {
       onAction,
     } = config;
 
+    const mode = getEditMode(section); // 🧠 read true mode from radio on load
+
     const state = {
       section,
       tableId,
@@ -39,7 +41,8 @@ window.ButtonBox = (() => {
       onAction,
       tipIndex: 0,
       activeEditableColumnIndex: null,
-      previousMode: getEditMode(section),
+      previousMode: mode,
+      currentMode: mode, // ✅ Track it manually from the start
     };
 
     stateMap.set(section, state);
@@ -150,7 +153,7 @@ window.ButtonBox = (() => {
       console.log(`📻 Wiring radio:`, radio);
 
       radio.addEventListener("focus", () => {
-        state.previousMode = getEditMode(section);
+        state.previousMode = state.currentMode; // 🔒 capture before change
       });
 
       radio.addEventListener("change", (e) => {
@@ -181,11 +184,14 @@ window.ButtonBox = (() => {
           e.preventDefault();
           radio.checked = false;
 
-          ButtonBoxSwitchMode.showOverlay(section, currentMode);
+          ButtonBoxSwitchMode.showOverlay(section, currentMode, () => {
+            state.currentMode = targetMode; // ✅ Save after switch
+          });
         } else {
           console.log("✅ No unsaved changes — switching mode cleanly");
           cleanupMode(section, currentMode);
           forceSwitchMode(section, targetMode);
+          state.currentMode = targetMode; // ✅ Manual update
         }
       });
     });
@@ -245,6 +251,7 @@ window.ButtonBox = (() => {
     const current = getEditMode(section);
     const target = current === "row" ? "cell" : "row";
     forceSwitchMode(section, target);
+    getState(section).currentMode = target;
   }
 
   function wireCheckboxes(section) {
