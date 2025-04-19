@@ -4,7 +4,7 @@
 // Core ButtonBox controller: manages state,
 // button logic, event wiring, and UI updates.
 // Author: Captain & Chatman
-// Version: MPA Phase IV — Mode Switch Overlay (Final Fix)
+// Version: MPA Phase IV — Mode Switch Overlay + Orange Save Cleanup
 // ============================================
 
 console.log("🧠 ButtonBox.js loaded ✅");
@@ -45,7 +45,7 @@ window.ButtonBox = (() => {
     stateMap.set(section, state);
     console.log(`🚀 ButtonBox initialized for section: ${section}`);
     wireButtons(state);
-    wireModeSwitchHandler(state); // ✅ Moved here correctly
+    wireModeSwitchHandler(state);
     ButtonBoxMessages.initTips(section);
   }
 
@@ -105,6 +105,12 @@ window.ButtonBox = (() => {
           ButtonBoxMessages.enableConfirm(section, action, () => {
             state.onAction(action, Array.from(state.selectedRows));
             ButtonBoxMessages.resetConfirm(section);
+
+            // 🟠 Extra cleanup if in Orange (cell) mode
+            const mode = getEditMode(section);
+            if (mode === "cell") {
+              cleanupMode(section, "cell");
+            }
           });
         }
       });
@@ -152,7 +158,6 @@ window.ButtonBox = (() => {
         const currentMode = state.previousMode;
         const targetMode = e.target.value;
 
-        // 🧱 Defensive mode sanity check
         if (!["row", "cell"].includes(currentMode)) {
           console.warn("⚠️ Invalid previousMode detected, aborting switch.");
           return;
