@@ -149,9 +149,13 @@ window.ButtonBox = (() => {
     radios.forEach((radio) => {
       console.log(`📻 Wiring radio:`, radio);
 
+      radio.addEventListener("focus", () => {
+        state.previousMode = getEditMode(section);
+      });
+
       radio.addEventListener("change", (e) => {
         const targetMode = e.target.value;
-        const currentMode = getEditMode(section); // Check current mode before it changes
+        const currentMode = state.previousMode;
 
         if (!["row", "cell"].includes(currentMode)) {
           console.warn("⚠️ Invalid mode detected — aborting switch");
