@@ -4,7 +4,7 @@
 // Logic for handling edit mode switch when
 // unsaved changes exist.
 // Author: Captain & Chatman
-// Version: MPA Phase IV — Mode Switch Overlay (Fixed Mode Snapshot Logic)
+// Version: MPA Phase IV — Fixed Mode Snapshot Logic (Final Patch)
 // ================================================
 
 window.ButtonBoxSwitchMode = (() => {
@@ -38,7 +38,10 @@ window.ButtonBoxSwitchMode = (() => {
     box.appendChild(popup);
     console.log("✅ Popup injected into DOM");
 
-    wirePopupButtons(section, modeAtTrigger);
+    // ⏱️ Delay button wiring to ensure DOM is committed
+    setTimeout(() => {
+      wirePopupButtons(section, modeAtTrigger);
+    }, 10);
   }
 
   function wirePopupButtons(section, modeAtTrigger) {
@@ -89,6 +92,7 @@ window.ButtonBoxSwitchMode = (() => {
         console.log("🗑️ Discard & Switch clicked");
         removePopup();
         ButtonBox.cleanupMode(section, modeAtTrigger);
+
         setTimeout(() => {
           forceSwitchMode(section);
         }, 100);
