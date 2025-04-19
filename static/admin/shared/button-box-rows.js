@@ -4,7 +4,7 @@
 // Handles row-level actions (add, edit, copy,
 // paste, delete, save, undo) and checkbox logic.
 // Author: Captain & Chatman
-// Version: MPA Phase III — Fully Dynamic Columns
+// Version: MPA Phase IV — Fixed Add Row Logic
 // ============================================
 
 window.ButtonBoxRows = (() => {
@@ -159,13 +159,15 @@ window.ButtonBoxRows = (() => {
       newRow.setAttribute("data-index", "0");
 
       let columnHtml = "";
-
       const headerCells = table.querySelectorAll("thead th");
+
       headerCells.forEach((th) => {
         if (th.classList.contains("col-select")) {
           columnHtml += `<td class="col-select"><input type="checkbox" class="${section}-select-checkbox" data-id="${newId}" checked></td>`;
         } else if (th.classList.contains("line-id-col")) {
           columnHtml += `<td class="line-id-col">${newId}</td>`;
+        } else if (th.classList.contains("skip-col")) {
+          columnHtml += `<td class="skip-col"></td>`;
         } else {
           columnHtml += `<td contenteditable="true" class="editable"></td>`;
         }
@@ -190,7 +192,9 @@ window.ButtonBoxRows = (() => {
 
         row.classList.add("editing", "dirty");
         row
-          .querySelectorAll("td:not(.col-select):not(.line-id-col)")
+          .querySelectorAll(
+            "td:not(.col-select):not(.line-id-col):not(.skip-col)"
+          )
           .forEach((cell) => {
             cell.setAttribute("contenteditable", "true");
             cell.classList.add("editable");
