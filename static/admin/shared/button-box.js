@@ -4,7 +4,7 @@
 // Core ButtonBox controller: manages state,
 // button logic, event wiring, and UI updates.
 // Author: Captain & Chatman
-// Version: MPA Phase IV — Mode Switch Overlay + Orange Save Cleanup
+// Version: MPA Phase IV — Mode Switch Overlay + Orange Save Cleanup + switchEditMode()
 // ============================================
 
 console.log("🧠 ButtonBox.js loaded ✅");
@@ -106,7 +106,6 @@ window.ButtonBox = (() => {
             state.onAction(action, Array.from(state.selectedRows));
             ButtonBoxMessages.resetConfirm(section);
 
-            // 🟠 Extra cleanup if in Orange (cell) mode
             const mode = getEditMode(section);
             if (mode === "cell") {
               cleanupMode(section, "cell");
@@ -180,12 +179,18 @@ window.ButtonBox = (() => {
           ButtonBoxSwitchMode.showOverlay(
             section,
             () => {
-              cleanupMode(section, currentMode);
-              forceSwitchMode(section, targetMode);
+              const state = getState(section);
+              if (typeof state.onAction === "function") {
+                state.onAction("save", Array.from(state.selectedRows));
+              }
+              setTimeout(() => {
+                cleanupMode(section, currentMode);
+                switchEditMode(section);
+              }, 100);
             },
             () => {
               cleanupMode(section, currentMode);
-              forceSwitchMode(section, targetMode);
+              switchEditMode(section);
             },
             () => {
               console.log("🚫 Stay in current mode selected");
@@ -246,7 +251,14 @@ window.ButtonBox = (() => {
     if (input) {
       input.checked = true;
       ButtonBoxMessages.updateButtonColors(section);
+      ButtonBoxMessages.initTips(section);
     }
+  }
+
+  function switchEditMode(section) {
+    const current = getEditMode(section);
+    const target = current === "row" ? "cell" : "row";
+    forceSwitchMode(section, target);
   }
 
   function wireCheckboxes(section) {
@@ -346,6 +358,7 @@ window.ButtonBox = (() => {
     toggleLineIdVisibility,
     cleanupMode,
     forceSwitchMode,
+    switchEditMode, // ✅ NEW: Now available
     showTip,
   };
 })();
