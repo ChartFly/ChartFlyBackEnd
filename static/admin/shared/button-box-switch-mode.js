@@ -4,13 +4,13 @@
 // Logic for handling edit mode switch when
 // unsaved changes exist.
 // Author: Captain & Chatman
-// Version: MPA Phase IV — Mode Switch Overlay (Fully Wired & Functional)
+// Version: MPA Phase IV — Mode Switch Overlay (Fixed Mode Snapshot Logic)
 // ================================================
 
 window.ButtonBoxSwitchMode = (() => {
   const popupId = "switch-mode-popup";
 
-  function injectPopup(section) {
+  function injectPopup(section, modeAtTrigger) {
     const box = document.getElementById(`${section}-button-box`);
     const existing = document.getElementById(popupId);
     if (!box) {
@@ -38,10 +38,10 @@ window.ButtonBoxSwitchMode = (() => {
     box.appendChild(popup);
     console.log("✅ Popup injected into DOM");
 
-    wirePopupButtons(section);
+    wirePopupButtons(section, modeAtTrigger);
   }
 
-  function wirePopupButtons(section) {
+  function wirePopupButtons(section, modeAtTrigger) {
     const saveBtn = document.getElementById("save-btn");
     const discardBtn = document.getElementById("discard-btn");
     const stayBtn = document.getElementById("stay-btn");
@@ -52,28 +52,23 @@ window.ButtonBoxSwitchMode = (() => {
         console.log("💾 Save & Switch clicked");
         removePopup();
 
-        const currentMode = ButtonBox.getEditMode(section);
-        const state = ButtonBox.getState(section);
-        console.log(`🧭 Current Mode: ${currentMode}`);
-
-        if (currentMode === "cell") {
-          console.log("🟠 Attempting to call saveDirtyCells...");
+        if (modeAtTrigger === "cell") {
+          console.log("🟠 Saving dirty cells...");
           const saveFn = ButtonBoxColumns?.saveDirtyCells;
           if (typeof saveFn === "function") {
             saveFn(section);
             console.log("✅ saveDirtyCells executed");
           } else {
-            console.warn(
-              "❌ ButtonBoxColumns.saveDirtyCells is missing or not a function"
-            );
+            console.warn("❌ ButtonBoxColumns.saveDirtyCells missing");
           }
           ButtonBox.cleanupMode(section, "cell");
         } else {
           console.log("🔵 Saving dirty rows...");
+          const state = ButtonBox.getState(section);
           const selected = Array.from(state.selectedRows);
           if (typeof state.onAction === "function") {
             state.onAction("save", selected);
-            console.log("✅ Row save triggered via onAction");
+            console.log("✅ Row save triggered");
           } else {
             console.warn("❌ state.onAction is not a function");
           }
@@ -93,10 +88,7 @@ window.ButtonBoxSwitchMode = (() => {
       discardBtn.onclick = () => {
         console.log("🗑️ Discard & Switch clicked");
         removePopup();
-
-        const currentMode = ButtonBox.getEditMode(section);
-        ButtonBox.cleanupMode(section, currentMode);
-
+        ButtonBox.cleanupMode(section, modeAtTrigger);
         setTimeout(() => {
           forceSwitchMode(section);
         }, 100);
@@ -141,7 +133,8 @@ window.ButtonBoxSwitchMode = (() => {
   }
 
   function showOverlay(section) {
-    injectPopup(section);
+    const modeAtTrigger = ButtonBox.getEditMode(section);
+    injectPopup(section, modeAtTrigger);
   }
 
   return {
