@@ -1,9 +1,9 @@
-<!-- ====================================================
+<!-- ==============================================
 ✅ ChartFly Admin Panel - api-keys.html
 Standalone MPA Page for API Keys Admin Section
 Author: Captain & Chatman
-Version: MPA Phase IV — Script Load Order Secured via Modules
-========================================================= -->
+Version: MPA Phase IV — Header Inserted Above ButtonBox
+====================================================== -->
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -28,7 +28,6 @@ Version: MPA Phase IV — Script Load Order Secured via Modules
     <link rel="stylesheet" href="/static/admin/api-keys/api-keys.css?v=999" />
   </head>
   <body>
-    <!-- ✅ Header -->
     <div class="admin-header">
       <img
         src="/static/images/Chartfly-logo.png"
@@ -41,16 +40,14 @@ Version: MPA Phase IV — Script Load Order Secured via Modules
       </div>
     </div>
 
-    <!-- ✅ Modular NavBar -->
     {% include "shared/navbar/navbar.html" %}
 
-    <!-- ✅ API Keys Table + ButtonBox -->
     <section id="api-keys-section" class="admin-tab-section">
+      <div class="section-header">Admin API Keys</div>
       {% set section = "api" %} {% include "shared/button-box.html" %} {%
       include "api-keys/api-keys-table.html" %}
     </section>
 
-    <!-- ✅ Footer -->
     <footer class="admin-footer">
       <div class="footer-ticker">
         <span id="holiday-ticker" class="ticker-content">🎉 Loading...</span>
@@ -63,7 +60,6 @@ Version: MPA Phase IV — Script Load Order Secured via Modules
       </div>
     </footer>
 
-    <!-- ✅ Scripts (Now Module-Based for Load Order) -->
     <script
       src="/static/admin/shared/navbar/navbar.js?v=999"
       type="module"

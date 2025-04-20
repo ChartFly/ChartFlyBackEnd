@@ -2,7 +2,7 @@
 ✅ ChartFly Admin Panel - user-management.html
 Standalone MPA Page for Admin Users Section
 Author: Captain & Chatman
-Version: MPA Phase IV — Mode Switch + Column Logic Working
+Version: MPA Phase IV — Section Header Inserted
 ================================================ -->
 <!DOCTYPE html>
 <html lang="en">
@@ -50,6 +50,7 @@ Version: MPA Phase IV — Mode Switch + Column Logic Working
 
     <!-- ✅ User Management Table + ButtonBox -->
     <section id="user-management-section" class="admin-tab-section">
+      <div class="section-header">Admin User Management</div>
       {% set section = "user" %} {% include "shared/button-box.html" %} {%
       include "user-management/user-management-table.html" %}
     </section>

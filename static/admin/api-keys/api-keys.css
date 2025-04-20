@@ -3,12 +3,20 @@
 📍 LOCATION: static/admin/api-keys/api-keys.css
 🎯 SCOPE: Styles exclusive to #api-keys-section
 🧩 AUTHOR: Captain & Chatman
-🔖 VERSION: MPA Phase II — Cleaned + Layout Delegated
+🔖 VERSION: MPA Phase III — Section Header Added
 ============================================================================ */
 
 #api-keys-section {
   margin-top: 2rem;
   text-align: left;
+}
+
+/* 🧾 Section Header */
+#api-keys-section .section-header {
+  font-size: 26pt;
+  font-weight: bold;
+  padding-left: 10px;
+  margin-bottom: 10px;
 }
 
 /* 🧭 Table + ButtonBox Container */

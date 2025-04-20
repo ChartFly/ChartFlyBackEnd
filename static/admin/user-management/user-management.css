@@ -3,12 +3,20 @@
 📍 LOCATION: static/admin/user-management/user-management.css
 🎯 SCOPE: Styles exclusive to #user-management-section
 🧩 AUTHOR: Captain & Chatman
-🔖 VERSION: MPA Phase II — Cleaned + Layout Delegated
+🔖 VERSION: MPA Phase III — Section Header Inserted
 ============================================================================ */
 
 #user-management-section {
   margin-top: 2rem;
   text-align: left;
+}
+
+/* 🧾 Section Header */
+#user-management-section .section-header {
+  font-size: 26pt;
+  font-weight: bold;
+  padding-left: 10px;
+  margin-bottom: 10px;
 }
 
 /* 🧭 Table + ButtonBox Container */

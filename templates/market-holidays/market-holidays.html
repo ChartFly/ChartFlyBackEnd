@@ -2,7 +2,7 @@
 ✅ ChartFly Admin Panel - market-holidays.html
 Standalone MPA Page for Market Holidays Admin Section
 Author: Captain & Chatman
-Version: MPA Phase IV — Script Order with Module Support
+Version: MPA Phase IV — Section Header Inserted
 =================================================== -->
 <!DOCTYPE html>
 <html lang="en">
@@ -48,6 +48,7 @@ Version: MPA Phase IV — Script Order with Module Support
 
     <!-- ✅ Market Holidays Table + ButtonBox -->
     <section id="market-holidays-section" class="admin-tab-section">
+      <div class="section-header">Admin Market Holidays</div>
       {% set section = "holiday" %} {% include "shared/button-box.html" %} {%
       include "market-holidays/holiday-table.html" %}
     </section>

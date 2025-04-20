@@ -3,12 +3,20 @@
 📍 LOCATION: static/admin/market-holidays/market-holidays.css
 🎯 SCOPE: Styles exclusive to #market-holidays-section
 🧩 AUTHOR: Captain & Chatman
-🔖 VERSION: MPA Phase II — Cleaned, Layout Deconflicted
+🔖 VERSION: MPA Phase III — Section Header Inserted
 ============================================================================ */
 
 #market-holidays-section {
   margin-top: 2rem;
   text-align: left;
+}
+
+/* 🧾 Section Header */
+#market-holidays-section .section-header {
+  font-size: 26pt;
+  font-weight: bold;
+  padding-left: 10px;
+  margin-bottom: 10px;
 }
 
 /* 🧭 Table + ButtonBox Container */
@@ -101,7 +109,7 @@
   display: none;
 }
 
-/* 🦓 Row Striping */
+/* 🦓 Zebra Striping */
 #market-holidays-section .admin-table tbody tr:nth-child(even) {
   background-color: #f9f9f9;
 }
