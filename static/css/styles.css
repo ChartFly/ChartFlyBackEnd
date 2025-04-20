@@ -3,13 +3,13 @@
 📍 LOCATION: static/css/styles.css
 🎯 PURPOSE: Global backend layout — Header, Tabs, Footer, Compact Toggle + Table Overflow
 ✍️ AUTHOR: Captain & Chatman
-🔖 VERSION: MPA Global v2.0 — Cleaned, Deconflicted, Overflow Safe
+🔖 VERSION: MPA Global v2.1 — Footer Respect + Bottom Padding Applied
 ============================================================================ */
 
 /* ✅ Header Layout */
 .admin-header {
   width: 100%;
-  background: #006373; /* ChartFly Dark Turquoise */
+  background: #006373;
   padding: 20px 50px;
   display: flex;
   justify-content: space-between;
@@ -139,6 +139,7 @@
   flex-direction: column;
   height: calc(100vh - 210px); /* Header + Footer buffer */
   overflow: hidden;
+  padding-bottom: 12px; /* ✅ Give breathing room above footer */
 }
 
 /* Table + ButtonBox wrapper */
