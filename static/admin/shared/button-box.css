@@ -284,3 +284,10 @@ input[type="checkbox"] {
 .editable-focus-cell:hover {
   cursor: text;
 }
+
+/* 🧱 Limit Table Container Height to Prevent Footer Overlap */
+.table-container {
+  max-height: calc(100vh - 240px); /* Adjust as needed */
+  overflow-y: auto;
+  margin-bottom: 20px;
+}
