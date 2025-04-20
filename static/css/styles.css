@@ -3,7 +3,7 @@
 📍 LOCATION: static/css/styles.css
 🎯 PURPOSE: Global backend layout — Header, Tabs, Footer, Compact Toggle + Table Overflow
 ✍️ AUTHOR: Captain & Chatman
-🔖 VERSION: MPA Global v2.2 — Ticker Resurrected + Scroll Safe
+🔖 VERSION: MPA Global v2.3 — Ticker Visible + Layout Stable
 ============================================================================ */
 
 /* ✅ Header Layout */
@@ -123,6 +123,8 @@
   white-space: nowrap;
   font-family: monospace;
   font-size: 16px;
+  padding-top: 2px; /* ✅ Was 0 or 4 — now tuned for visibility */
+  line-height: 1.4; /* ✅ Nudges text up inside footer */
   animation: ticker-scroll 90s linear infinite;
   position: absolute;
   left: 100%;

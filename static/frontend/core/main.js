@@ -3,7 +3,7 @@
 // 📍 LOCATION: static/frontend/core/main.js
 // 🎯 PURPOSE: Global frontend logic for Admin Panel — market status + ticker
 // ✍️ AUTHOR: Captain & Chatman
-// 🔖 VERSION: MPA Core v1.1 (No More Tabs Baby!)
+// 🔖 VERSION: MPA Core v1.2 — Debug Logs for Market Status
 // ============================================================================
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -15,13 +15,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // ✅ Market status display logic
 function updateMarketStatus() {
+  console.log("🧠 updateMarketStatus() called");
+
   const now = new Date();
   const hours = now.getHours();
   const minutes = now.getMinutes();
   const dayOfWeek = now.getDay();
   const statusElement = document.getElementById("market-status-text");
 
-  if (!statusElement) return;
+  console.log("📍 Found status element:", statusElement);
+
+  if (!statusElement) {
+    console.warn("❌ #market-status-text not found!");
+    return;
+  }
 
   let status = "";
   let statusClass = "";
@@ -47,6 +54,8 @@ function updateMarketStatus() {
   );
   statusElement.classList.add("market-status-text", statusClass);
   statusElement.innerText = status;
+
+  console.log("✅ Market Status Set:", status);
 }
 
 // ✅ Holiday Ticker (now GLOBAL 🎉)
