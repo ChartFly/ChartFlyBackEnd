@@ -16,9 +16,13 @@
     const selectedText = selection ? selection.toString().trim() : "";
 
     if (action === "copy") {
-      let contentToCopy = selectedText;
+      let contentToCopy = "";
 
-      if (!contentToCopy) {
+      // Try selected text first
+      if (selectedText) {
+        contentToCopy = selectedText;
+      } else {
+        // Fallback: get content from focused editable cell
         const cell = document.querySelector(
           `#${state.tableId} td.editable-focus-cell`
         );
