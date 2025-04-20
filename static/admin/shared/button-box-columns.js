@@ -4,7 +4,7 @@
 // Handles cell-level Copy/Paste logic for
 // Edit Columns mode in ButtonBox
 // Author: Captain & Chatman
-// Version: MPA Phase IV — Single Cell Focus + Text Selection
+// Version: MPA Phase IV — Discard Cell Changes + Save Cleanup
 // ================================================
 
 (() => {
@@ -67,7 +67,6 @@
       cell.classList.remove("cell-paste-ready");
     });
 
-    // ✅ NEW: clear column highlights
     clearActiveColumn(table);
     state.activeEditableColumnIndex = null;
 
@@ -76,6 +75,27 @@
       "Cell edits saved (frontend only).",
       "success"
     );
+  }
+
+  function discardAllCellChanges(section) {
+    const state = ButtonBox.getState(section);
+    const table = document.getElementById(state.tableId);
+    const stack = cellUndoMap.get(section);
+    if (!stack || !table) return;
+
+    while (stack.length > 0) {
+      const { cell, prevValue } = stack.pop();
+      cell.textContent = prevValue;
+      cell.classList.remove("dirty", "editable-focus-cell");
+      cell.removeAttribute("contenteditable");
+    }
+
+    table.querySelectorAll("td.cell-paste-ready").forEach((cell) => {
+      cell.classList.remove("cell-paste-ready");
+    });
+
+    clearActiveColumn(table);
+    state.activeEditableColumnIndex = null;
   }
 
   function activateHeaderClicks(section) {
@@ -159,19 +179,6 @@
       pushCellUndo(section, cell);
       cell.classList.add("dirty");
     });
-  }
-
-  function navigateColumnCells(table, section, columnIndex, moveDown) {
-    const rows = Array.from(table.querySelectorAll("tbody tr"));
-    const currentCell = table.querySelector(".editable-focus-cell");
-    if (!currentCell) return;
-
-    const currentRowIndex = rows.findIndex((row) => row.contains(currentCell));
-    const nextIndex = moveDown ? currentRowIndex + 1 : currentRowIndex - 1;
-    if (nextIndex < 0 || nextIndex >= rows.length) return;
-
-    const nextCell = rows[nextIndex].cells[columnIndex];
-    if (nextCell) activateSingleEditableCell(nextCell, section);
   }
 
   function clearActiveColumn(table) {
@@ -299,7 +306,6 @@
     return word.charAt(0).toUpperCase() + word.slice(1);
   }
 
-  // ✅ Attach to window AFTER all functions are defined
   window.ButtonBoxColumns = {
     handleCellAction,
     pushCellUndo,
@@ -307,14 +313,14 @@
     showUndoLimit,
     activateHeaderClicks,
     saveDirtyCells,
+    discardAllCellChanges, // ✅ NEW
   };
 })();
 
-// ✅ Global arrow key navigation
 document.addEventListener("keydown", function handleArrowKeys(e) {
   if (!["ArrowUp", "ArrowDown"].includes(e.key)) return;
 
-  const section = "api"; // 🔧 Adjust dynamically if needed
+  const section = "api"; // 🔧 Dynamically update if needed
   const mode = ButtonBox.getEditMode(section);
   if (mode !== "cell") return;
 
@@ -334,7 +340,5 @@ document.addEventListener("keydown", function handleArrowKeys(e) {
   if (nextIndex < 0 || nextIndex >= rows.length) return;
 
   const nextCell = rows[nextIndex].cells[index];
-  if (nextCell) {
-    nextCell.click();
-  }
+  if (nextCell) nextCell.click();
 });

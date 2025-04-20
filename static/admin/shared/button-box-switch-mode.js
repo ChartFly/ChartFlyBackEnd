@@ -91,6 +91,18 @@ window.ButtonBoxSwitchMode = (() => {
       discardBtn.onclick = () => {
         console.log("🗑️ Discard & Switch clicked");
         removePopup();
+
+        if (modeAtTrigger === "cell") {
+          console.log("🟠 Reverting dirty cells via discardAllCellChanges...");
+          const discardFn = ButtonBoxColumns?.discardAllCellChanges;
+          if (typeof discardFn === "function") {
+            discardFn(section);
+            console.log("✅ discardAllCellChanges executed");
+          } else {
+            console.warn("❌ ButtonBoxColumns.discardAllCellChanges missing");
+          }
+        }
+
         ButtonBox.cleanupMode(section, modeAtTrigger);
 
         setTimeout(() => {
