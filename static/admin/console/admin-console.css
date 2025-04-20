@@ -1,0 +1,19 @@
+/* ============================================================================
+📁 FILE: admin-console.css
+📍 LOCATION: static/admin/console/admin-console.css
+🎯 PURPOSE: Styles for ChartFly Admin Console Landing Page
+✍️ AUTHOR: Captain & Chatman
+🔖 VERSION: MPA Phase I — Console Home Layout
+============================================================================ */
+
+#admin-console {
+  margin-top: 2rem;
+  padding-left: 12px;
+  text-align: left;
+}
+
+#admin-console .section-title {
+  font-size: 26pt;
+  font-weight: bold;
+  color: #006373;
+}

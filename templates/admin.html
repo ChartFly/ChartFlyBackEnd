@@ -2,17 +2,16 @@
   ===========================================
   ✅ admin.html
   -------------------------------------------
-  Main Admin Dashboard Launcher Page
-  Links to Market Holidays, API Keys, and User Management
+  Main Admin Dashboard Landing Page (Console)
   Author: Captain & Chatman
-  Version: MPA Phase IV — Consistent Layout + Switch Mode Ready
+  Version: MPA Phase IV — Clean Console Header
   ===========================================
 -->
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>ChartFly Admin Dashboard</title>
+    <title>ChartFly Admin Console</title>
 
     <link
       rel="icon"
@@ -28,7 +27,13 @@
       rel="stylesheet"
       href="/static/admin/shared/button-box-switch-mode.css?v=999"
     />
+    <link
+      rel="stylesheet"
+      href="/static/admin/console/admin-console.css?v=999"
+    />
+
     <script src="/static/admin/shared/navbar/navbar.js?v=999" defer></script>
+    <script src="/static/admin/console/admin-console.js?v=999" defer></script>
   </head>
 
   <body>
@@ -45,23 +50,12 @@
       </div>
     </div>
 
-    <!-- ✅ NavBar (modular include) -->
+    <!-- ✅ NavBar -->
     {% include "shared/navbar/navbar.html" %}
 
-    <!-- ✅ Main Admin Dashboard -->
-    <main class="admin-dashboard">
-      <h2>Welcome, Captain!</h2>
-      <p>Select a section below to begin managing ChartFly data:</p>
-
-      <div class="dashboard-cards">
-        <a href="/admin/market-holidays" class="dashboard-card"
-          >📅 Manage Market Holidays</a
-        >
-        <a href="/admin/api-keys" class="dashboard-card">🗝️ Manage API Keys</a>
-        <a href="/admin/user-management" class="dashboard-card"
-          >👤 Manage Admin Users</a
-        >
-      </div>
+    <!-- ✅ Main Admin Console -->
+    <main id="admin-console" class="admin-tab-section">
+      <h2 class="admin-console-header">Admin Console</h2>
     </main>
 
     <!-- ✅ Footer -->
