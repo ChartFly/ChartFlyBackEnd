@@ -3,7 +3,7 @@
 📍 LOCATION: static/admin/user-management/user-management.css
 🎯 SCOPE: Styles exclusive to #user-management-section
 🧩 AUTHOR: Captain & Chatman
-🔖 VERSION: MPA Phase II — Unified Layout + Footer Avoidance
+🔖 VERSION: MPA Phase II — Cleaned + Layout Delegated
 ============================================================================ */
 
 #user-management-section {
@@ -21,10 +21,6 @@
 /* 📦 Table Wrapper */
 #user-management-section .table-wrapper {
   display: block;
-  overflow-x: auto;
-  overflow-y: auto;
-  max-height: calc(100vh - 260px);
-  max-width: 100%;
   border: 1px solid #ccc;
   border-radius: 6px;
   min-height: 200px;
@@ -90,7 +86,6 @@
   background-color: #006373;
   color: white;
 }
-
 #user-management-section .admin-table tr.selected-row td.col-select {
   background-color: #d0f0ff;
   color: black;
@@ -137,26 +132,4 @@
 #user-management-section .invalid {
   background-color: #ffe5e5;
   border: 1px solid #ff4d4d;
-}
-
-/* ✅ Layout Constraints — Footer Avoidance */
-body,
-html {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
-
-#user-management-section.admin-tab-section {
-  display: flex;
-  flex-direction: column;
-  height: calc(100vh - 200px); /* header + footer buffer */
-  overflow: hidden;
-}
-
-#user-management-section .table-wrapper {
-  flex-grow: 1;
-  overflow-y: auto;
-  overflow-x: auto;
-  max-height: none;
 }

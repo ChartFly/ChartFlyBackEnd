@@ -1,9 +1,9 @@
 /* ============================================================================
 📁 FILE: styles.css
 📍 LOCATION: static/css/styles.css
-🎯 PURPOSE: Global backend layout — Header, Tabs, Footer, Compact Toggle
+🎯 PURPOSE: Global backend layout — Header, Tabs, Footer, Compact Toggle + Table Overflow
 ✍️ AUTHOR: Captain & Chatman
-🔖 VERSION: MPA Global v2.0 — Cleaned & Deconflicted
+🔖 VERSION: MPA Global v2.0 — Cleaned, Deconflicted, Overflow Safe
 ============================================================================ */
 
 /* ✅ Header Layout */
@@ -65,7 +65,6 @@
   padding: 10px 50px;
   gap: 10px;
 }
-
 .tab {
   padding: 10px 20px;
   border-radius: 5px;
@@ -75,7 +74,6 @@
   cursor: pointer;
   transition: background-color 0.2s ease;
 }
-
 .tab.active {
   background-color: #006373;
   color: white;
@@ -91,7 +89,6 @@
   font-weight: bold;
   cursor: pointer;
 }
-
 .compact-toggle.active {
   background-color: #006373;
   color: white;
@@ -113,7 +110,6 @@
   overflow: hidden;
   height: 50px;
 }
-
 .footer-ticker {
   white-space: pre;
   font-family: monospace;
@@ -124,7 +120,6 @@
   padding-top: 4px;
   transform: none;
 }
-
 @keyframes ticker-scroll {
   0% {
     transform: translateX(100%);
@@ -132,4 +127,45 @@
   100% {
     transform: translateX(-100%);
   }
+}
+
+/* ================================================================
+✅ GLOBAL TABLE CONTAINER RULES — Applies to All Admin Tables
+================================================================ */
+
+/* Prevent table from hitting footer */
+.admin-tab-section {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 210px); /* Header + Footer buffer */
+  overflow: hidden;
+}
+
+/* Table + ButtonBox wrapper */
+.table-container {
+  flex-grow: 1;
+  overflow: hidden;
+  padding: 6px 10px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Scrollable table zone */
+.table-wrapper {
+  flex-grow: 1;
+  overflow-y: auto;
+  overflow-x: auto;
+  max-height: 100%;
+  max-width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #fff;
+}
+
+/* Base table layout */
+.admin-table {
+  width: 100%;
+  min-width: 800px;
+  border-collapse: collapse;
+  table-layout: fixed;
 }

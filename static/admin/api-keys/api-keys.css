@@ -3,7 +3,7 @@
 📍 LOCATION: static/admin/api-keys/api-keys.css
 🎯 SCOPE: Styles exclusive to #api-keys-section
 🧩 AUTHOR: Captain & Chatman
-🔖 VERSION: MPA Phase II — Unified Layout + Footer Avoidance
+🔖 VERSION: MPA Phase II — Cleaned + Layout Delegated
 ============================================================================ */
 
 #api-keys-section {
@@ -21,10 +21,6 @@
 /* 📦 Table Wrapper */
 #api-keys-section .table-wrapper {
   display: block;
-  overflow-x: auto;
-  overflow-y: auto;
-  max-height: calc(100vh - 260px); /* or tweak as needed */
-  max-width: 100%;
   border: 1px solid #ccc;
   border-radius: 6px;
   min-height: 200px;
@@ -90,7 +86,6 @@
   background-color: #006373;
   color: white;
 }
-
 #api-keys-section .admin-table tr.selected-row td.col-select {
   background-color: #d0f0ff;
   color: black;
@@ -136,26 +131,4 @@
 #api-keys-section .invalid {
   background-color: #ffe5e5;
   border: 1px solid #ff4d4d;
-}
-
-/* ✅ Layout Constraints — Footer Avoidance */
-body,
-html {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
-
-#api-keys-section.admin-tab-section {
-  display: flex;
-  flex-direction: column;
-  height: calc(100vh - 200px); /* header + footer buffer */
-  overflow: hidden;
-}
-
-#api-keys-section .table-wrapper {
-  flex-grow: 1;
-  overflow-y: auto;
-  overflow-x: auto;
-  max-height: none; /* override legacy limits */
 }

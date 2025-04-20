@@ -3,7 +3,7 @@
 📍 LOCATION: static/admin/market-holidays/market-holidays.css
 🎯 SCOPE: Styles exclusive to #market-holidays-section
 🧩 AUTHOR: Captain & Chatman
-🔖 VERSION: MPA Phase I (Market Holidays Styles Refactor)
+🔖 VERSION: MPA Phase II — Cleaned, Layout Deconflicted
 ============================================================================ */
 
 #market-holidays-section {
@@ -14,17 +14,13 @@
 /* 🧭 Table + ButtonBox Container */
 #market-holidays-section .table-container {
   max-width: 1100px;
-  margin: 0; /* Removed auto-centering */
+  margin: 0;
   padding: 6px 10px;
 }
 
 /* 📦 Table Wrapper */
 #market-holidays-section .table-wrapper {
   display: block;
-  overflow-x: auto;
-  overflow-y: auto;
-  max-height: calc(100vh - 260px); /* or tweak as needed */
-  max-width: 100%;
   border: 1px solid #ccc;
   border-radius: 6px;
   min-height: 200px;
@@ -79,7 +75,7 @@
   visibility: hidden;
 }
 
-/* ✅ Select Column — moved far left */
+/* ✅ Select Column */
 #market-holidays-section .admin-table th.col-select,
 #market-holidays-section .admin-table td.col-select {
   width: 4ch;
@@ -90,7 +86,6 @@
   background-color: #006373;
   color: white;
 }
-
 #market-holidays-section .admin-table tr.selected-row td.col-select {
   background-color: #d0f0ff;
   color: black;
@@ -137,26 +132,4 @@
 #market-holidays-section .invalid {
   background-color: #ffe5e5;
   border: 1px solid #ff4d4d;
-}
-
-/* ✅ Lock table container height to avoid footer overlap */
-body,
-html {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
-
-.admin-tab-section {
-  display: flex;
-  flex-direction: column;
-  height: calc(100vh - 200px); /* header + footer space buffer */
-  overflow: hidden;
-}
-
-.table-wrapper {
-  flex-grow: 1;
-  overflow-y: auto;
-  overflow-x: auto;
-  max-height: none; /* override previous 500px */
 }
