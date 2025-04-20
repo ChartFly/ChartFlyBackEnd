@@ -4,7 +4,7 @@
 // Logic for handling edit mode switch when
 // unsaved changes exist.
 // Author: Captain & Chatman
-// Version: MPA Phase IV — Fixed Mode Snapshot Logic (Final Patch)
+// Version: MPA Phase IV — Bulletproof Mode Switch (Final Fix)
 // ================================================
 
 window.ButtonBoxSwitchMode = (() => {
@@ -38,7 +38,6 @@ window.ButtonBoxSwitchMode = (() => {
     box.appendChild(popup);
     console.log("✅ Popup injected into DOM");
 
-    // ⏱️ Delay button wiring to ensure DOM is committed
     setTimeout(() => {
       wirePopupButtons(section, modeAtTrigger);
     }, 10);
@@ -55,6 +54,8 @@ window.ButtonBoxSwitchMode = (() => {
         console.log("💾 Save & Switch clicked");
         removePopup();
 
+        const state = ButtonBox.getState(section);
+
         if (modeAtTrigger === "cell") {
           console.log("🟠 Saving dirty cells...");
           const saveFn = ButtonBoxColumns?.saveDirtyCells;
@@ -67,7 +68,6 @@ window.ButtonBoxSwitchMode = (() => {
           ButtonBox.cleanupMode(section, "cell");
         } else {
           console.log("🔵 Saving dirty rows...");
-          const state = ButtonBox.getState(section);
           const selected = Array.from(state.selectedRows);
           if (typeof state.onAction === "function") {
             state.onAction("save", selected);
@@ -79,7 +79,7 @@ window.ButtonBoxSwitchMode = (() => {
         }
 
         setTimeout(() => {
-          forceSwitchMode(section);
+          forceSwitchMode(section, modeAtTrigger);
         }, 100);
       };
     } else {
@@ -94,7 +94,7 @@ window.ButtonBoxSwitchMode = (() => {
         ButtonBox.cleanupMode(section, modeAtTrigger);
 
         setTimeout(() => {
-          forceSwitchMode(section);
+          forceSwitchMode(section, modeAtTrigger);
         }, 100);
       };
     } else {
@@ -120,8 +120,8 @@ window.ButtonBoxSwitchMode = (() => {
     }
   }
 
-  function forceSwitchMode(section) {
-    const current = ButtonBox.getEditMode(section);
+  function forceSwitchMode(section, modeAtTrigger) {
+    const current = modeAtTrigger;
     const target = current === "row" ? "cell" : "row";
 
     const input = document.querySelector(
@@ -130,14 +130,15 @@ window.ButtonBoxSwitchMode = (() => {
     if (input) {
       input.checked = true;
       ButtonBoxMessages.updateButtonColors(section);
+      ButtonBoxMessages.initTips(section);
+      ButtonBox.getState(section).currentMode = target;
       console.log(`🔁 Mode switched to: ${target}`);
     } else {
       console.warn("⚠️ Radio input not found for mode switch");
     }
   }
 
-  function showOverlay(section) {
-    const modeAtTrigger = ButtonBox.getEditMode(section);
+  function showOverlay(section, modeAtTrigger) {
     injectPopup(section, modeAtTrigger);
   }
 
