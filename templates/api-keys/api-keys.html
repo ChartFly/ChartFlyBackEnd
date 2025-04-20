@@ -2,7 +2,7 @@
 ✅ ChartFly Admin Panel - api-keys.html
 Standalone MPA Page for API Keys Admin Section
 Author: Captain & Chatman
-Version: MPA Phase IV — Header Inserted Above ButtonBox
+Version: MPA Phase IV — Header Inserted + Ticker Fixed
 ====================================================== -->
 <!DOCTYPE html>
 <html lang="en">
@@ -28,6 +28,7 @@ Version: MPA Phase IV — Header Inserted Above ButtonBox
     <link rel="stylesheet" href="/static/admin/api-keys/api-keys.css?v=999" />
   </head>
   <body>
+    <!-- ✅ Header -->
     <div class="admin-header">
       <img
         src="/static/images/Chartfly-logo.png"
@@ -40,14 +41,17 @@ Version: MPA Phase IV — Header Inserted Above ButtonBox
       </div>
     </div>
 
+    <!-- ✅ Navbar -->
     {% include "shared/navbar/navbar.html" %}
 
+    <!-- ✅ Main Content -->
     <section id="api-keys-section" class="admin-tab-section">
       <div class="section-header">Admin API Keys</div>
       {% set section = "api" %} {% include "shared/button-box.html" %} {%
       include "api-keys/api-keys-table.html" %}
     </section>
 
+    <!-- ✅ Footer -->
     <footer class="admin-footer">
       <div class="footer-ticker">
         <span id="holiday-ticker" class="ticker-content">🎉 Loading...</span>
@@ -60,6 +64,7 @@ Version: MPA Phase IV — Header Inserted Above ButtonBox
       </div>
     </footer>
 
+    <!-- ✅ Scripts -->
     <script
       src="/static/admin/shared/navbar/navbar.js?v=999"
       type="module"
@@ -92,5 +97,8 @@ Version: MPA Phase IV — Header Inserted Above ButtonBox
       src="/static/admin/api-keys/button-box-api-keys.js?v=999"
       type="module"
     ></script>
+
+    <!-- ✅ Global Market Status + Holiday Ticker -->
+    <script src="/static/frontend/core/main.js?v=999" defer></script>
   </body>
 </html>
