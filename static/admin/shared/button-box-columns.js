@@ -17,6 +17,9 @@
 
     if (action === "copy") {
       let contentToCopy = "";
+      const focusCell = document.querySelector(
+        `#${state.tableId} td.editable-focus-cell`
+      );
 
       console.log("🔍 Selected text:", selectedText);
 
@@ -26,16 +29,19 @@
       console.log("🔍 Focused editable cell:", cell);
       if (cell) console.log("🔍 Cell textContent:", cell.textContent.trim());
 
-      // Try selected text first
+      console.log("🔍 Focused editable cell:", focusCell);
+      if (focusCell)
+        console.log("🔍 Cell textContent:", focusCell.textContent.trim());
+      console.log("🔍 Selected text:", selectedText);
+
+      // Use selected text if present
       if (selectedText) {
         contentToCopy = selectedText;
-      } else {
-        // Fallback: get content from focused editable cell
-        const cell = document.querySelector(
-          `#${state.tableId} td.editable-focus-cell`
-        );
-        if (cell) contentToCopy = cell.textContent.trim();
+      } else if (focusCell) {
+        contentToCopy = focusCell.textContent.trim();
       }
+
+      console.log("📋 contentToCopy before validation:", contentToCopy);
 
       if (!contentToCopy) {
         ButtonBox.showWarning(section, "No content found to copy.");
@@ -44,6 +50,8 @@
 
       state.clipboard = contentToCopy;
       state.clipboardType = "cell";
+      console.log("📋 Copied:", state.clipboard);
+
       ButtonBox.showTip(
         section,
         "Copying specific data. Use Paste to apply to another cell."
