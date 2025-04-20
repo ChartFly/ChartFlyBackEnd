@@ -3,7 +3,7 @@
 📍 LOCATION: static/css/styles.css
 🎯 PURPOSE: Global backend layout — Header, Tabs, Footer, Compact Toggle + Table Overflow
 ✍️ AUTHOR: Captain & Chatman
-🔖 VERSION: MPA Global v2.5 — Footer Clearance Finalized
+🔖 VERSION: MPA Global v2.6 — Footer Clearance Truly Finalized
 ============================================================================ */
 
 /* ✅ Header Layout */
@@ -110,7 +110,7 @@
   left: 0;
   width: 100%;
   z-index: 100;
-  height: 75px; /* ✅ Footer height increased */
+  height: 75px;
   overflow: hidden;
 }
 
@@ -126,7 +126,7 @@
 .ticker-content {
   white-space: nowrap;
   font-family: monospace;
-  font-size: 18px; /* ✅ Ticker text enlarged */
+  font-size: 18px;
   animation: ticker-scroll 90s linear infinite;
   position: absolute;
   left: 100%;
@@ -150,23 +150,20 @@
 .admin-tab-section {
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 230px); /* ✅ Adjusted for taller footer */
+  height: calc(100vh - 250px); /* ✅ Header + New Footer + Breathing Space */
   overflow: hidden;
-  padding-bottom: 30px;
 }
 
 /* Table + ButtonBox wrapper */
 .table-container {
-  flex-grow: 1;
-  overflow: hidden;
-  padding: 6px 10px;
+  overflow: auto;
+  padding: 6px 10px 30px;
   max-width: 1200px;
   margin: 0 auto;
 }
 
 /* Scrollable table zone */
 .table-wrapper {
-  flex-grow: 1;
   overflow-y: auto;
   overflow-x: auto;
   max-height: 100%;
