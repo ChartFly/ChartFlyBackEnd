@@ -3,7 +3,7 @@
 // -----------------------------------------------------------
 // ButtonBox Integration Logic for User Management Admin Tab
 // Author: Captain & Chatman
-// Version: MPA Phase II — Shared Line ID Toggle Logic
+// Version: MPA Phase IV — Mode Switch + Column Logic Ready
 // ===========================================================
 
 window.ButtonBoxUserManagement = (() => {
@@ -60,13 +60,20 @@ window.ButtonBoxUserManagement = (() => {
     };
 
     const waitForBox = setInterval(() => {
-      if (window.ButtonBox && window.ButtonBoxRows) {
+      if (window.ButtonBox && window.ButtonBoxRows && window.ButtonBoxColumns) {
         clearInterval(waitForBox);
         ButtonBox.init(config);
+        ButtonBox.wireCheckboxes("user");
+        ButtonBoxColumns.activateHeaderClicks("user");
         wireIdToggle();
+        console.log("✅ ButtonBox Admin Users fully initialized");
       }
     }, 50);
   }
 
   return { init };
 })();
+
+window.addEventListener("DOMContentLoaded", () => {
+  window.ButtonBoxUserManagement.init();
+});

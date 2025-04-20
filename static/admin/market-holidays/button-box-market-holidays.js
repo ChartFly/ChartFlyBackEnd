@@ -3,7 +3,7 @@
 // 📍 LOCATION: static/admin/market-holidays/button-box-market-holidays.js
 // 🎯 PURPOSE: Initializes ButtonBox for the Market Holidays section
 // 🧩 AUTHOR: Captain & Chatman
-// 🔖 Version: MPA Phase II — Shared Line ID Toggle Logic
+// 🔖 Version: MPA Phase IV — Shared Logic Finalized
 // ============================================================================
 
 window.ButtonBoxMarketHolidays = (() => {
@@ -21,7 +21,7 @@ window.ButtonBoxMarketHolidays = (() => {
 
     ButtonBoxRows.handleRowAction(action, selectedIds, {
       section: "holiday",
-      tableId: "holidays-table",
+      tableId: "market-holidays-table",
     });
   }
 
@@ -43,7 +43,7 @@ window.ButtonBoxMarketHolidays = (() => {
     const config = {
       section: "holiday",
       domId: "market-holidays-section",
-      tableId: "holidays-table",
+      tableId: "market-holidays-table",
       tipBoxId: "holiday-info-box",
       warningBoxId: "holiday-info-box",
       footerId: "holiday-action-footer",
@@ -60,10 +60,13 @@ window.ButtonBoxMarketHolidays = (() => {
     };
 
     const waitForBox = setInterval(() => {
-      if (window.ButtonBox && window.ButtonBoxRows) {
+      if (window.ButtonBox && window.ButtonBoxRows && window.ButtonBoxColumns) {
         clearInterval(waitForBox);
         ButtonBox.init(config);
+        ButtonBox.wireCheckboxes("holiday");
+        ButtonBoxColumns.activateHeaderClicks("holiday");
         wireIdToggle();
+        console.log("✅ ButtonBox Market Holidays fully initialized");
       }
     }, 50);
   }
@@ -71,4 +74,6 @@ window.ButtonBoxMarketHolidays = (() => {
   return { init };
 })();
 
-window.ButtonBoxMarketHolidays.init();
+window.addEventListener("DOMContentLoaded", () => {
+  window.ButtonBoxMarketHolidays.init();
+});

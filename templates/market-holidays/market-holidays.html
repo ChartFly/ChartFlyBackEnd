@@ -9,7 +9,6 @@ Version: MPA Phase IV — Script Order with Module Support
   <head>
     <meta charset="UTF-8" />
     <title>Manage Market Holidays</title>
-
     <link
       rel="icon"
       href="/static/images/ChartFly-Favicon.ico"
@@ -30,9 +29,7 @@ Version: MPA Phase IV — Script Order with Module Support
       href="/static/admin/market-holidays/market-holidays.css?v=999"
     />
   </head>
-
   <body>
-    <!-- ✅ Header -->
     <div class="admin-header">
       <img
         src="/static/images/Chartfly-logo.png"
@@ -45,16 +42,13 @@ Version: MPA Phase IV — Script Order with Module Support
       </div>
     </div>
 
-    <!-- ✅ Modular NavBar -->
     {% include "shared/navbar/navbar.html" %}
 
-    <!-- ✅ Market Holidays Table + ButtonBox -->
     <section id="market-holidays-section" class="admin-tab-section">
-      {% set section = "market" %} {% include "shared/button-box.html" %} {%
+      {% set section = "holiday" %} {% include "shared/button-box.html" %} {%
       include "market-holidays/holiday-table.html" %}
     </section>
 
-    <!-- ✅ Footer -->
     <footer class="admin-footer">
       <div class="footer-ticker">
         <span id="holiday-ticker" class="ticker-content">🎉 Loading...</span>
@@ -67,7 +61,6 @@ Version: MPA Phase IV — Script Order with Module Support
       </div>
     </footer>
 
-    <!-- ✅ Scripts (Module-based load order) -->
     <script
       src="/static/admin/shared/navbar/navbar.js?v=999"
       type="module"
