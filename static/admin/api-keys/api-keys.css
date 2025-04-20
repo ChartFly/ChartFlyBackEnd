@@ -3,15 +3,7 @@
 📍 LOCATION: static/admin/api-keys/api-keys.css
 🎯 SCOPE: Styles exclusive to #api-keys-section
 🧩 AUTHOR: Captain & Chatman
-🔖 VERSION: MPA Phase I (API Keys Table Styling)
-===========================================================================
-
-/* ============================================================================
-📁 FILE: api-keys.css
-📍 LOCATION: static/admin/api-keys/api-keys.css
-🎯 SCOPE: Styles exclusive to #api-keys-section
-🧩 AUTHOR: Captain & Chatman
-🔖 VERSION: MPA Phase I (API Keys Styles Refactor)
+🔖 VERSION: MPA Phase II — Unified Layout + Footer Avoidance
 ============================================================================ */
 
 #api-keys-section {
@@ -144,4 +136,26 @@
 #api-keys-section .invalid {
   background-color: #ffe5e5;
   border: 1px solid #ff4d4d;
+}
+
+/* ✅ Layout Constraints — Footer Avoidance */
+body,
+html {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+#api-keys-section.admin-tab-section {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 200px); /* header + footer buffer */
+  overflow: hidden;
+}
+
+#api-keys-section .table-wrapper {
+  flex-grow: 1;
+  overflow-y: auto;
+  overflow-x: auto;
+  max-height: none; /* override legacy limits */
 }

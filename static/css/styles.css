@@ -1,9 +1,9 @@
 /* ============================================================================
-  📁 FILE: styles.css
-  📍 LOCATION: static/css/styles.css
-  🎯 PURPOSE: Global backend layout — Header, Tabs, Footer, Compact Toggle
-  ✍️ AUTHOR: Captain & Chatman
-  🔖 VERSION: MPA Global v1.0 (Header & Ticker)
+📁 FILE: styles.css
+📍 LOCATION: static/css/styles.css
+🎯 PURPOSE: Global backend layout — Header, Tabs, Footer, Compact Toggle
+✍️ AUTHOR: Captain & Chatman
+🔖 VERSION: MPA Global v2.0 — Cleaned & Deconflicted
 ============================================================================ */
 
 /* ✅ Header Layout */
@@ -57,7 +57,7 @@
   color: black;
 }
 
-/* ✅ Tabs */
+/* ✅ Tab Navigation */
 .tab-container {
   display: flex;
   justify-content: flex-start;
@@ -81,25 +81,7 @@
   color: white;
 }
 
-/* ✅ Shared Action Buttons */
-.action-btn {
-  padding: 8px 14px;
-  border: none;
-  background-color: #e0e0e0;
-  color: #333;
-  cursor: pointer;
-  margin-right: 6px;
-  border-radius: 5px;
-  font-weight: bold;
-  transition: background-color 0.2s ease;
-}
-
-.action-btn.active {
-  background-color: #006373;
-  color: white;
-}
-
-/* ✅ Compact Mode Toggle Button */
+/* ✅ Compact Mode Toggle */
 .compact-toggle {
   margin-bottom: 12px;
   padding: 6px 10px;
@@ -115,7 +97,7 @@
   color: white;
 }
 
-/* ✅ Admin Footer + Holiday Ticker */
+/* ✅ Footer + Scrolling Ticker */
 .admin-footer {
   background-color: #006373;
   color: white;
