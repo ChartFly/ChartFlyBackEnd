@@ -23,7 +23,7 @@
   display: block;
   overflow-x: auto;
   overflow-y: auto;
-  max-height: 500px;
+  max-height: calc(100vh - 260px); /* or tweak as needed */
   max-width: 100%;
   border: 1px solid #ccc;
   border-radius: 6px;
