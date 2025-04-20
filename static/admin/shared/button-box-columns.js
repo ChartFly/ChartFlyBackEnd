@@ -16,11 +16,21 @@
     const selectedText = selection ? selection.toString().trim() : "";
 
     if (action === "copy") {
-      if (!selectedText) {
-        ButtonBox.showWarning(section, "Highlight text to Copy.");
+      let contentToCopy = selectedText;
+
+      if (!contentToCopy) {
+        const cell = document.querySelector(
+          `#${state.tableId} td.editable-focus-cell`
+        );
+        if (cell) contentToCopy = cell.textContent.trim();
+      }
+
+      if (!contentToCopy) {
+        ButtonBox.showWarning(section, "No content found to copy.");
         return;
       }
-      state.clipboard = selectedText;
+
+      state.clipboard = contentToCopy;
       state.clipboardType = "cell";
       ButtonBox.showTip(
         section,
