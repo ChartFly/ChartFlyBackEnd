@@ -4,7 +4,7 @@
 // Logic for handling edit mode switch when
 // unsaved changes exist.
 // Author: Captain & Chatman
-// Version: MPA Phase IV — Bulletproof Mode Switch (Final Fix)
+// Version: MPA Phase IV — Bulletproof Mode Switch (Final Fix + Row Discard)
 // ================================================
 
 window.ButtonBoxSwitchMode = (() => {
@@ -100,6 +100,15 @@ window.ButtonBoxSwitchMode = (() => {
             console.log("✅ discardAllCellChanges executed");
           } else {
             console.warn("❌ ButtonBoxColumns.discardAllCellChanges missing");
+          }
+        } else if (modeAtTrigger === "row") {
+          console.log("🔵 Reverting dirty rows via discardDirtyRows...");
+          const discardRowsFn = ButtonBoxRows?.discardDirtyRows;
+          if (typeof discardRowsFn === "function") {
+            discardRowsFn(section);
+            console.log("✅ discardDirtyRows executed");
+          } else {
+            console.warn("❌ ButtonBoxRows.discardDirtyRows missing");
           }
         }
 

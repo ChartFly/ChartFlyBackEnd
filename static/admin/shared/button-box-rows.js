@@ -4,7 +4,7 @@
 // Handles row-level actions (add, edit, copy,
 // paste, delete, save, undo) and checkbox logic.
 // Author: Captain & Chatman
-// Version: MPA Phase IV — Fixed Add Row Logic
+// Version: MPA Phase IV — Fixed Add Row Logic + Discard Support
 // ============================================
 
 window.ButtonBoxRows = (() => {
@@ -56,6 +56,26 @@ window.ButtonBoxRows = (() => {
     });
 
     if (undoStacks[section].length > 30) undoStacks[section].shift();
+  }
+
+  function discardDirtyRows(section) {
+    const stack = undoStacks[section];
+    if (!stack || stack.length === 0) return;
+
+    const last = stack[stack.length - 1]; // peek instead of pop
+    const table = document.getElementById(ButtonBox.getState(section).tableId);
+    if (!table) return;
+
+    const tbody = table.querySelector("tbody");
+    tbody.innerHTML = "";
+    last.rows.forEach((rowNode) => {
+      tbody.appendChild(rowNode.cloneNode(true));
+    });
+
+    ButtonBox.getState(section).selectedRows = new Set(last.selected);
+    ButtonBox.wireCheckboxes(section);
+    ButtonBoxMessages.updateSelectedCount(section);
+    console.log("🗑️ Dirty rows discarded and restored from last snapshot");
   }
 
   function handleRowAction(action, selectedIds, { section, tableId }) {
@@ -269,6 +289,7 @@ window.ButtonBoxRows = (() => {
   return {
     handleRowAction,
     wireCheckboxes,
+    discardDirtyRows, // ✅ Included!
     undoStacks,
   };
 })();

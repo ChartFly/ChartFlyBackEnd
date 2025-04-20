@@ -4,7 +4,7 @@
 // Handles cell-level Copy/Paste logic for
 // Edit Columns mode in ButtonBox
 // Author: Captain & Chatman
-// Version: MPA Phase IV — Discard Cell Changes + Save Cleanup
+// Version: MPA Phase IV — Discard Cell Changes + Save Cleanup + Accurate Restore
 // ================================================
 
 (() => {
@@ -61,6 +61,7 @@
     dirtyCells.forEach((cell) => {
       cell.classList.remove("dirty", "editable-focus-cell");
       cell.removeAttribute("contenteditable");
+      delete cell.dataset.originalText;
     });
 
     table.querySelectorAll("td.cell-paste-ready").forEach((cell) => {
@@ -80,15 +81,17 @@
   function discardAllCellChanges(section) {
     const state = ButtonBox.getState(section);
     const table = document.getElementById(state.tableId);
-    const stack = cellUndoMap.get(section);
-    if (!stack || !table) return;
+    if (!table) return;
 
-    while (stack.length > 0) {
-      const { cell, prevValue } = stack.pop();
-      cell.textContent = prevValue;
+    const dirtyCells = table.querySelectorAll("td.dirty");
+    dirtyCells.forEach((cell) => {
+      if (cell.dataset.originalText !== undefined) {
+        cell.textContent = cell.dataset.originalText;
+      }
       cell.classList.remove("dirty", "editable-focus-cell");
       cell.removeAttribute("contenteditable");
-    }
+      delete cell.dataset.originalText;
+    });
 
     table.querySelectorAll("td.cell-paste-ready").forEach((cell) => {
       cell.classList.remove("cell-paste-ready");
@@ -162,6 +165,11 @@
       td.removeAttribute("contenteditable");
       td.classList.remove("editable-focus-cell");
     });
+
+    // ✅ Store original value the first time a cell is edited
+    if (cell.dataset.originalText === undefined) {
+      cell.dataset.originalText = cell.textContent;
+    }
 
     cell.setAttribute("contenteditable", "true");
     cell.classList.add("editable-focus-cell");
@@ -313,7 +321,7 @@
     showUndoLimit,
     activateHeaderClicks,
     saveDirtyCells,
-    discardAllCellChanges, // ✅ NEW
+    discardAllCellChanges,
   };
 })();
 
