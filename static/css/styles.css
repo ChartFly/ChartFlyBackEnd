@@ -152,7 +152,7 @@
   flex-direction: column;
   height: calc(100vh - 230px); /* ✅ Adjusted for taller footer */
   overflow: hidden;
-  padding-bottom: 12px;
+  padding-bottom: 22px;
 }
 
 /* Table + ButtonBox wrapper */
