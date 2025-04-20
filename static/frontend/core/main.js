@@ -81,7 +81,7 @@ async function loadHolidayTicker() {
         });
         return `${formattedDate}  -  ${h.name}`;
       })
-      .join("          |          ");
+      .join("\u00A0\u00A0\u00A0\u00A0|\u00A0\u00A0\u00A0\u00A0");
 
     const ticker = document.getElementById("holiday-ticker");
     if (ticker) ticker.textContent = `🎉 ${formatted}`;
