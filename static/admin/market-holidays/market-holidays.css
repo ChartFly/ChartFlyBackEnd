@@ -138,3 +138,25 @@
   background-color: #ffe5e5;
   border: 1px solid #ff4d4d;
 }
+
+/* ✅ Lock table container height to avoid footer overlap */
+body,
+html {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.admin-tab-section {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 200px); /* header + footer space buffer */
+  overflow: hidden;
+}
+
+.table-wrapper {
+  flex-grow: 1;
+  overflow-y: auto;
+  overflow-x: auto;
+  max-height: none; /* override previous 500px */
+}
