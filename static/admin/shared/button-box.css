@@ -285,9 +285,19 @@ input[type="checkbox"] {
   cursor: text;
 }
 
-/* 🧱 Limit Table Container Height to Prevent Footer Overlap */
+/* 🌊 Prevent Table Overflow – Lock height below header & above footer */
+.admin-tab-section {
+  display: flex;
+  flex-direction: column;
+  max-height: calc(
+    100vh - 220px
+  ); /* Adjust depending on your header/footer size */
+  overflow: hidden;
+}
+
 .table-container {
-  max-height: calc(100vh - 240px); /* Adjust as needed */
+  flex-grow: 1;
   overflow-y: auto;
-  margin-bottom: 20px;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
 }
