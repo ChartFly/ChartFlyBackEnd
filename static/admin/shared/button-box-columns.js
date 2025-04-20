@@ -17,18 +17,16 @@
 
     if (action === "copy") {
       let contentToCopy = "";
-      const focusCell = document.querySelector(
-        `#${state.tableId} td.editable-focus-cell`
-      );
+      const activeEl = document.activeElement;
+      const isCell = activeEl?.tagName === "TD" && activeEl.isContentEditable;
+
+      if (selectedText) {
+        contentToCopy = selectedText;
+      } else if (isCell) {
+        contentToCopy = activeEl.textContent.trim();
+      }
 
       console.log("🔍 Selected text:", selectedText);
-
-      const cell = document.querySelector(
-        `#${state.tableId} td.editable-focus-cell`
-      );
-      console.log("🔍 Focused editable cell:", cell);
-      if (cell) console.log("🔍 Cell textContent:", cell.textContent.trim());
-
       console.log("🔍 Focused editable cell:", focusCell);
       if (focusCell)
         console.log("🔍 Cell textContent:", focusCell.textContent.trim());
