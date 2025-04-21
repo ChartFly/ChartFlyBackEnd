@@ -35,6 +35,7 @@
   flex-grow: 1;
   overflow-y: auto;
   overflow-x: auto;
+  max-height: 100%; /* Or exact: calc(100vh - header - buttons - footer) */
   border: 1px solid #ccc;
   border-radius: 6px;
   background-color: #fff;
