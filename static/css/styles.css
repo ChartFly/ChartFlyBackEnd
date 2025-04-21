@@ -151,53 +151,6 @@ body {
   }
 }
 
-/* ============================================================================
-✅ TABLE LAYOUT ZONES — Admin Panel
-============================================================================ */
-
-/* ✅ Main Section with Footer Offset */
-.admin-tab-section {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  overflow: hidden;
-}
-
-/* ✅ Table + ButtonBox Container */
-.table-container {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 6px 10px 0;
-  box-sizing: border-box;
-  overflow: hidden;
-}
-
-/* ✅ Scrollable Table Wrapper (never dips below footer) */
-.table-wrapper {
-  flex-grow: 1;
-  overflow-y: auto;
-  overflow-x: auto;
-  max-height: calc(
-    100vh - 390px
-  ); /* Header (160) + ButtonBox (50) + Footer (75) + buffer (25) */
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  background-color: #fff;
-  padding-bottom: 0;
-  background: rgba(255, 0, 0, 0.05); /* Faint red for visibility */
-}
-
-/* ✅ Table Base */
-.admin-table {
-  width: 100%;
-  min-width: 800px;
-  border-collapse: collapse;
-  table-layout: fixed;
-}
-
 /* ✅ Section Page Header */
 .section-header {
   font-size: 26px;
@@ -207,4 +160,46 @@ body {
   margin: 0;
   max-width: 1200px;
   font-family: Arial, sans-serif;
+}
+/* ============================================================================
+✅ TABLE LAYOUT ZONES — Admin Panel
+============================================================================ */
+
+/* ✅ Table Base */
+.admin-table {
+  width: 100%;
+  min-width: 800px;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+/* ✅ Footer-Safe Section */
+.admin-tab-section {
+  height: calc(100vh - 75px); /* Remove footer space */
+  overflow: hidden;
+}
+
+/* ✅ Table Container With Fixed Height (🔧 Debug Red Border) */
+.table-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 6px 10px 0;
+  max-width: 1200px;
+  margin: 0 auto;
+  box-sizing: border-box;
+
+  /* 🔧 Debug Visuals */
+  border: 2px solid red;
+  background-color: rgba(255, 0, 0, 0.05);
+}
+
+/* ✅ Scrollable Table Area Inside Container */
+.table-wrapper {
+  flex-grow: 1;
+  overflow-y: auto;
+  overflow-x: auto;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #fff;
 }
