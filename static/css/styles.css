@@ -1,9 +1,9 @@
 /* ============================================================================
 📁 FILE: styles.css
 📍 LOCATION: static/css/styles.css
-🎯 PURPOSE: Global backend layout — Footer Clearance + Table Scroll Fix
+🎯 PURPOSE: Global backend layout — True Table Scroll + Footer Safe + Header Stable
 ✍️ AUTHOR: Captain & Chatman
-🔖 VERSION: MPA Global v3.0 — True Table Scroll, Footer Safe, ButtonBox Fixed
+🔖 VERSION: MPA Global v3.1 — Finalized Footer Lock and Table Scroll
 ============================================================================ */
 
 /* ✅ Lock Page Scroll */
@@ -106,7 +106,7 @@ body {
   color: white;
 }
 
-/* ✅ Footer + Scrolling Ticker */
+/* ✅ Footer + Ticker */
 .admin-footer {
   background-color: #006373;
   color: white;
@@ -151,19 +151,19 @@ body {
   }
 }
 
-/* ================================================================
-✅ GLOBAL TABLE CONTAINER RULES — Applies to All Admin Tables
-================================================================ */
+/* ============================================================================
+✅ TABLE LAYOUT ZONES — Admin Panel
+============================================================================ */
 
-/* ✅ Footer-Safe Section */
+/* ✅ Main Section with Footer Offset */
 .admin-tab-section {
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 75px); /* Subtract footer height */
+  height: 100%;
   overflow: hidden;
 }
 
-/* ✅ Wrapper with ButtonBox + Table */
+/* ✅ Table + ButtonBox Container */
 .table-container {
   flex-grow: 1;
   display: flex;
@@ -172,21 +172,24 @@ body {
   margin: 0 auto;
   padding: 6px 10px 0;
   box-sizing: border-box;
+  overflow: hidden;
 }
 
-/* ✅ Scrollable Table */
+/* ✅ Scrollable Table Wrapper (never dips below footer) */
 .table-wrapper {
   flex-grow: 1;
   overflow-y: auto;
   overflow-x: auto;
-  max-height: calc(100vh - 310px); /* Header + ButtonBox + Buffer */
+  max-height: calc(
+    100vh - 310px
+  ); /* Header (160) + ButtonBox (50) + Footer (75) + buffer (25) */
   border: 1px solid #ccc;
   border-radius: 6px;
   background-color: #fff;
   padding-bottom: 0;
 }
 
-/* Base table layout */
+/* ✅ Table Base */
 .admin-table {
   width: 100%;
   min-width: 800px;
