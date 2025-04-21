@@ -3,8 +3,8 @@
 📍 LOCATION: static/css/styles.css
 🎯 PURPOSE: Global backend layout — Header, Tabs, Footer, Compact Toggle + Table Overflow
 ✍️ AUTHOR: Captain & Chatman
-🔖 VERSION: MPA Global v2.7 — Scrollbar Exorcism & Footer Clearance Final
-=============================================================================== */
+🔖 VERSION: MPA Global v2.8 — Scrollbar Fixes + Footer Buffer + Header Left Align
+============================================================================ */
 
 /* ✅ Kill Page-Level Scrollbars */
 html,
@@ -159,11 +159,13 @@ body {
 .admin-tab-section {
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 250px);
+  height: calc(100vh - 260px); /* ✅ Adjusted for taller footer + gap */
+  overflow: hidden;
 }
 
 /* Table + ButtonBox wrapper */
 .table-container {
+  overflow: hidden;
   padding: 6px 10px 12px;
   max-width: 1200px;
   margin: 0 auto;
@@ -195,8 +197,7 @@ body {
   font-weight: bold;
   text-align: left;
   padding: 0 10px 12px 10px;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 0 auto;
   max-width: 1200px;
   font-family: Arial, sans-serif;
 }
