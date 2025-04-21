@@ -181,7 +181,7 @@ body {
   overflow-y: auto;
   overflow-x: auto;
   max-height: calc(
-    100vh - 310px
+    100vh - 390px
   ); /* Header (160) + ButtonBox (50) + Footer (75) + buffer (25) */
   border: 1px solid #ccc;
   border-radius: 6px;
