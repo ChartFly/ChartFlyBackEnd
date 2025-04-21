@@ -179,17 +179,26 @@ body {
   overflow: hidden;
 }
 
-/* ✅ Table Container With Fixed Height (🔧 Debug Red Border) */
-.table-container {
-  height: 100%;
+.admin-tab-section {
   display: flex;
   flex-direction: column;
-  padding: 6px 10px 0;
+  flex-grow: 1;
+  overflow: hidden;
+}
+
+/* ✅ Table Container with Fixed Max Height */
+.table-container {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(
+    100vh - 275px
+  ); /* Header (160) + Section Title (40) + Buttons (50) + Buffer (25) */
   max-width: 1200px;
   margin: 0 auto;
+  padding: 6px 10px 0;
   box-sizing: border-box;
 
-  /* 🔧 Debug Visuals */
   border: 2px solid red;
   background-color: rgba(255, 0, 0, 0.05);
 }
