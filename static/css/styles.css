@@ -1,19 +1,18 @@
 /* ============================================================================
 📁 FILE: styles.css
 📍 LOCATION: static/css/styles.css
-🎯 PURPOSE: Global backend layout — Footer Clearance + Scroll Repair
+🎯 PURPOSE: Global backend layout — Footer Clearance + Table Scroll Fix
 ✍️ AUTHOR: Captain & Chatman
-🔖 VERSION: MPA Global v2.9 — Final Footer Fix + Table Scroll Restored
+🔖 VERSION: MPA Global v3.0 — True Table Scroll, Footer Safe, ButtonBox Fixed
 ============================================================================ */
 
-/* ✅ Allow Page Scroll */
+/* ✅ Lock Page Scroll */
 html,
 body {
   margin: 0;
   padding: 0;
   height: 100vh;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
 /* ✅ Header Layout */
@@ -156,11 +155,11 @@ body {
 ✅ GLOBAL TABLE CONTAINER RULES — Applies to All Admin Tables
 ================================================================ */
 
-/* ✅ Section with Footer-Safe Table Scroll */
+/* ✅ Footer-Safe Section */
 .admin-tab-section {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  height: calc(100vh - 75px); /* Subtract footer height */
   overflow: hidden;
 }
 
@@ -169,27 +168,23 @@ body {
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  padding: 6px 10px 0;
   max-width: 1200px;
   margin: 0 auto;
-  overflow: hidden;
+  padding: 6px 10px 0;
+  box-sizing: border-box;
 }
 
-/* ✅ Scrollable Table Zone */
+/* ✅ Scrollable Table */
 .table-wrapper {
   flex-grow: 1;
   overflow-y: auto;
   overflow-x: auto;
-  max-height: calc(
-    100vh - 380px
-  ); /* Adjusted: Header (160) + ButtonBox (50) + Footer (75) + Buffer (30) */
+  max-height: calc(100vh - 310px); /* Header + ButtonBox + Buffer */
   border: 1px solid #ccc;
   border-radius: 6px;
   background-color: #fff;
   padding-bottom: 0;
 }
-
-/* ⬆️ Footer stays fixed — table scrolls inside wrapper */
 
 /* Base table layout */
 .admin-table {
