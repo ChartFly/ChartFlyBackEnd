@@ -1,18 +1,19 @@
 /* ============================================================================
 📁 FILE: styles.css
 📍 LOCATION: static/css/styles.css
-🎯 PURPOSE: Global backend layout — Header, Tabs, Footer, Compact Toggle + Table Overflow
+🎯 PURPOSE: Global backend layout — Footer Clearance + Scroll Repair
 ✍️ AUTHOR: Captain & Chatman
-🔖 VERSION: MPA Global v2.8 — Scrollbar Fixes + Footer Buffer + Header Left Align
+🔖 VERSION: MPA Global v2.9 — Final Footer Fix + Table Scroll Restored
 ============================================================================ */
 
-/* ✅ Kill Page-Level Scrollbars */
+/* ✅ Allow Page Scroll */
 html,
 body {
-  overflow: hidden;
   margin: 0;
   padding: 0;
   height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 /* ✅ Header Layout */
@@ -155,20 +156,21 @@ body {
 ✅ GLOBAL TABLE CONTAINER RULES — Applies to All Admin Tables
 ================================================================ */
 
-/* Prevent table from hitting footer */
+/* Page Content Section */
 .admin-tab-section {
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 260px); /* ✅ Adjusted for taller footer + gap */
-  overflow: hidden;
+  flex-grow: 1;
+  min-height: calc(100vh - 75px); /* full page minus footer */
+  padding-bottom: 100px; /* gives space for footer overlap */
 }
 
 /* Table + ButtonBox wrapper */
 .table-container {
-  overflow: hidden;
   padding: 6px 10px 12px;
   max-width: 1200px;
   margin: 0 auto;
+  flex-grow: 1;
 }
 
 /* Scrollable table zone */
