@@ -21,18 +21,23 @@
 
 /* 🧭 Table + ButtonBox Container */
 #market-holidays-section .table-container {
-  max-width: 1100px;
-  margin: 0;
-  padding: 6px 10px;
+  height: 100%; /* Critical */
+  display: flex; /* Flex layout */
+  flex-direction: column;
+  padding: 6px 10px 0;
+  max-width: 1200px;
+  margin: 0 auto;
+  box-sizing: border-box;
 }
 
-/* 📦 Table Wrapper */
+/* 📦 Table Wrapper (Scrolls) */
 #market-holidays-section .table-wrapper {
-  display: block;
+  flex-grow: 1;
+  overflow-y: auto;
+  overflow-x: auto;
   border: 1px solid #ccc;
   border-radius: 6px;
-  min-height: 200px;
-  text-align: left;
+  background-color: #fff;
 }
 
 /* 📊 Table Styles */
