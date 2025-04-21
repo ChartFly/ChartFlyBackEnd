@@ -105,27 +105,5 @@ Version: MPA Phase IV — Ticker Restored + Footer Spacer Added
 
     <!-- ✅ Global Market Status + Holiday Ticker -->
     <script src="/static/frontend/core/main.js?v=999" defer></script>
-
-    <!-- ✅ Inject missing Show Line ID toggle -->
-    <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        const box = document.querySelector(
-          "#market-holidays-section .edit-mode-controls"
-        );
-        if (box && !document.getElementById("market-holidays-show-id-toggle")) {
-          const checkbox = document.createElement("input");
-          checkbox.type = "checkbox";
-          checkbox.id = "market-holidays-show-id-toggle";
-          checkbox.checked = true;
-
-          const label = document.createElement("label");
-          label.htmlFor = checkbox.id;
-          label.textContent = "Show Line ID";
-
-          box.appendChild(checkbox);
-          box.appendChild(label);
-        }
-      });
-    </script>
   </body>
 </html>
