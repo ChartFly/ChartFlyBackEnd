@@ -12,8 +12,13 @@
   text-align: left;
 }
 
-#admin-console .section-title {
-  font-size: 26pt;
+/* ✅ Console Page Header */
+.admin-console-header {
+  font-size: 26px;
   font-weight: bold;
-  color: #006373;
+  text-align: left;
+  padding: 0 10px 12px 10px;
+  margin: 0;
+  max-width: 1200px;
+  font-family: Arial, sans-serif;
 }
