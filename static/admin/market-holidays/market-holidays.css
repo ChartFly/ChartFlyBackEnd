@@ -39,8 +39,8 @@
 /* 🧾 Scrollable Wrapper */
 #market-holidays-section .table-wrapper {
   flex-grow: 1;
-  overflow-y: auto;
-  overflow-x: auto;
+  overflow-y: scroll;
+  overflow-x: scroll;
   border: 1px solid #ccc;
   border-radius: 6px;
   background-color: #fff;
