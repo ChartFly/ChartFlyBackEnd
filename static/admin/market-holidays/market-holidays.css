@@ -45,9 +45,9 @@
   border-radius: 6px;
   background-color: #fff;
   padding-bottom: 12px;
-  max-height: calc(100vh - 340px); /* 💥 Hard clamp */
-  height: 100%; /* Let it stretch within safe bounds */
-  min-height: 200px;
+  max-height: 200px; /* 💥 Hard clamp */
+  height: 200px; /* Let it stretch within safe bounds */
+  min-height: 100px;
 }
 
 /* 📊 Table Structure */
