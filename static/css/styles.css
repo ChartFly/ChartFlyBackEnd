@@ -121,7 +121,7 @@ body {
   overflow: hidden;
 }
 
-/* 📦 Shared Container for ButtonBox + Table */
+/* 📦 Shared Table + ButtonBox Container */
 .table-container {
   display: flex;
   flex-direction: column;
@@ -132,8 +132,8 @@ body {
   margin-left: 0;
   margin-right: auto;
   height: 100%;
-  overflow: hidden;
-  outline: 3px solid red;
+  overflow-y: scroll; /* ✅ fix: show vertical scroll */
+  overflow-x: hidden;
 }
 
 /* 📜 Scrollable Table Wrapper */
