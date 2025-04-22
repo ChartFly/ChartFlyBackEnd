@@ -17,8 +17,8 @@
 #market-holidays-section .section-header {
   font-size: 26pt;
   font-weight: bold;
-  padding-left: 10px;
-  margin-bottom: 10px;
+  padding: 4px 0px 4px 2px;
+  margin-bottom: 4px;
 }
 
 /* 📦 Container for Table + ButtonBox */
