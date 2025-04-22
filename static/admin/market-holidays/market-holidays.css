@@ -45,8 +45,8 @@
   border-radius: 6px;
   background-color: #fff;
   padding-bottom: 12px;
-  max-height: 200px; /* 💥 Hard clamp */
-  height: 200px; /* Let it stretch within safe bounds */
+  max-height: 300px; /* 💥 Hard clamp */
+  height: 300px; /* Let it stretch within safe bounds */
   min-height: 100px;
 }
 
