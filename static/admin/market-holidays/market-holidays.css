@@ -36,8 +36,8 @@
   overflow-y: auto; /* ✅ Let that scrollbar in */
 }
 
-/* 🧾 Scrollable Wrapper */
-#market-holidays-section .table-wrapper {
+/* 📜 Scrollable Table Wrapper */
+.table-wrapper {
   flex-grow: 1;
   overflow-y: scroll;
   overflow-x: scroll;
@@ -45,10 +45,9 @@
   border-radius: 6px;
   background-color: #fff;
   padding-bottom: 12px;
-  height: calc(
-    100vh - 340px
-  ); /* 160 header + 50 buttonbox + 30 header + buffer + 75 footer + 25 fudge */
-  min-height: 200px; /* Force height */
+  max-height: calc(100vh - 340px); /* 💥 Hard clamp */
+  height: 100%; /* Let it stretch within safe bounds */
+  min-height: 200px;
 }
 
 /* 📊 Table Structure */

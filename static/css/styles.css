@@ -3,7 +3,7 @@
 📍 LOCATION: static/css/styles.css
 🎯 PURPOSE: Global backend layout — Footer Safe + Table Scroll + Aligned Left
 ✍️ AUTHOR: Captain & Chatman
-🔖 VERSION: MPA Global v3.4 — Scrollbar + Footer Safety Synced with Sections
+🔖 VERSION: MPA Global v3.5 — Triple Lock Height + Scrollbar Fixed
 ============================================================================ */
 
 /* ✅ Lock Page Scroll */
@@ -68,7 +68,6 @@ body {
   z-index: 100;
   height: 75px;
   overflow: hidden;
-  margin-top: 20px; /* 🧪 TEMP: Visual buffer for scroll testing */
 }
 
 .footer-ticker {
@@ -134,23 +133,22 @@ body {
   margin-right: auto;
   height: 100%;
   overflow-x: auto;
-  overflow-y: auto; /* ✅ Let that scrollbar in */
+  overflow-y: auto;
 }
 
 /* 📜 Scrollable Table Wrapper */
 .table-wrapper {
   flex-grow: 1;
-  overflow-y: scroll;
-  overflow-x: scroll;
+  overflow-y: auto;
+  overflow-x: auto;
   border: 1px solid #ccc;
   border-radius: 6px;
   background-color: #fff;
   padding-bottom: 10px;
-  height: calc(
-    100vh - 340px
-  ); /* 160 header + 50 buttonbox + 30 header + buffer + 75 footer + 25 fudge */
-  min-height: 200px; /* Force height */
-  outline: 3px solid red;
+  height: calc(100vh - 340px);
+  max-height: calc(100vh - 340px);
+  min-height: 200px;
+  outline: 3px solid red; /* Debug */
 }
 
 /* 🧾 Base Table Setup */
