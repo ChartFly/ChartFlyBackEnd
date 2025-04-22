@@ -132,8 +132,8 @@ body {
   margin-left: 0;
   margin-right: auto;
   height: 100%;
-  overflow-y: scroll; /* ✅ fix: show vertical scroll */
-  overflow-x: hidden;
+  overflow-x: auto;
+  overflow-y: auto; /* ✅ Let that scrollbar in */
 }
 
 /* 📜 Scrollable Table Wrapper */

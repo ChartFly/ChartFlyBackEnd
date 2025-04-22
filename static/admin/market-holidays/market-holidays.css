@@ -32,7 +32,8 @@
   margin-left: 0;
   margin-right: auto;
   height: 100%;
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: auto; /* ✅ Let that scrollbar in */
 }
 
 /* 🧾 Scrollable Wrapper */
