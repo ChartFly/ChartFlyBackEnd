@@ -38,12 +38,12 @@
 /* 🧾 Scrollable Wrapper */
 #market-holidays-section .table-wrapper {
   flex-grow: 1;
-  overflow-y: scroll;
+  overflow-y: auto;
   overflow-x: auto;
   border: 1px solid #ccc;
   border-radius: 6px;
   background-color: #fff;
-  padding-bottom: 10px;
+  padding-bottom: 12px;
   max-height: 100%;
 }
 

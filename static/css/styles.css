@@ -3,7 +3,7 @@
 📍 LOCATION: static/css/styles.css
 🎯 PURPOSE: Global backend layout — Footer Safe + Table Scroll + Aligned Left
 ✍️ AUTHOR: Captain & Chatman
-🔖 VERSION: MPA Global v3.3 — Extreme Scroll Fix Applied
+🔖 VERSION: MPA Global v3.4 — Scrollbar + Footer Safety Synced with Sections
 ============================================================================ */
 
 /* ✅ Lock Page Scroll */
@@ -110,18 +110,18 @@ body {
 }
 
 /* ============================================================================
-✅ TABLE LAYOUT ZONES
+✅ TABLE LAYOUT ZONES — Global Shared Baseline
 ============================================================================ */
 
 /* 🧱 Outer Container Below Header, Above Footer */
 .admin-tab-section {
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 75px); /* Subtract footer */
+  height: calc(100vh - 75px); /* Subtract footer height */
   overflow: hidden;
 }
 
-/* 📦 Shared Table + ButtonBox Container */
+/* 📦 Shared Container for ButtonBox + Table */
 .table-container {
   display: flex;
   flex-direction: column;
@@ -135,7 +135,7 @@ body {
   overflow: hidden;
 }
 
-/* 📜 Scrollable Wrapper */
+/* 📜 Scrollable Table Wrapper */
 .table-wrapper {
   flex-grow: 1;
   overflow-y: scroll;
@@ -147,7 +147,7 @@ body {
   max-height: 100%;
 }
 
-/* ✅ Table Layout */
+/* 🧾 Base Table Setup */
 .admin-table {
   width: 100%;
   min-width: 800px;
