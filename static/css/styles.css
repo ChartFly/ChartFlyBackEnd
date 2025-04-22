@@ -3,7 +3,7 @@
 📍 LOCATION: static/css/styles.css
 🎯 PURPOSE: Global backend layout — True Table Scroll + Footer Safe + Header Stable
 ✍️ AUTHOR: Captain & Chatman
-🔖 VERSION: MPA Global v3.1 — Finalized Footer Lock and Table Scroll
+🔖 VERSION: MPA Global v3.2 — Scrollable Table, Footer Safe, Left Justified
 ============================================================================ */
 
 /* ✅ Lock Page Scroll */
@@ -49,64 +49,11 @@ body {
   font-size: 18px;
   font-weight: bold;
   color: white;
-  background-color: transparent;
   padding: 5px 10px;
   border-radius: 5px;
 }
 
-/* ✅ Market status color cues */
-.market-open {
-  background-color: green;
-}
-.market-closed {
-  background-color: red;
-}
-.market-prepost {
-  background-color: gold;
-  color: black;
-}
-
-/* ✅ Tab Navigation */
-.tab-container {
-  display: flex;
-  justify-content: flex-start;
-  margin-top: 20px;
-  padding: 10px 50px;
-  gap: 10px;
-}
-
-.tab {
-  padding: 10px 20px;
-  border-radius: 5px;
-  background-color: #e0e0e0;
-  color: #333;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-.tab.active {
-  background-color: #006373;
-  color: white;
-}
-
-/* ✅ Compact Mode Toggle */
-.compact-toggle {
-  margin-bottom: 12px;
-  padding: 6px 10px;
-  background-color: #ccc;
-  border: none;
-  border-radius: 4px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.compact-toggle.active {
-  background-color: #006373;
-  color: white;
-}
-
-/* ✅ Footer + Ticker */
+/* ✅ Footer */
 .admin-footer {
   background-color: #006373;
   color: white;
@@ -161,55 +108,46 @@ body {
   max-width: 1200px;
   font-family: Arial, sans-serif;
 }
+
 /* ============================================================================
-✅ TABLE LAYOUT ZONES — Admin Panel
+✅ TABLE LAYOUT ZONES
 ============================================================================ */
-
-/* ✅ Table Base */
-.admin-table {
-  width: 100%;
-  min-width: 800px;
-  border-collapse: collapse;
-  table-layout: fixed;
-}
-
-/* ✅ Footer-Safe Section */
-.admin-tab-section {
-  height: calc(100vh - 75px); /* Remove footer space */
-  overflow: hidden;
-}
 
 .admin-tab-section {
   display: flex;
   flex-direction: column;
-  flex-grow: 1;
+  height: calc(100vh - 75px); /* remove footer */
   overflow: hidden;
 }
 
-/* ✅ Table Container with Fixed Max Height */
+/* ✅ Shared table-container wrapper */
 .table-container {
   flex-grow: 1;
   display: flex;
   flex-direction: column;
   max-height: calc(
     100vh - 275px
-  ); /* Header (160) + Section Title (40) + Buttons (50) + Buffer (25) */
+  ); /* header + header text + ButtonBox + buffer */
   max-width: 1200px;
-  margin: 0 auto;
+  margin: 0;
   padding: 6px 10px 0;
   box-sizing: border-box;
-
-  border: 2px solid red;
-  background-color: rgba(255, 0, 0, 0.05);
 }
 
-/* ✅ Scrollable Table Area Inside Container */
+/* ✅ Scrolls inside here */
 .table-wrapper {
   flex-grow: 1;
   overflow-y: auto;
   overflow-x: auto;
-  max-height: 100%; /* Or exact: calc(100vh - header - buttons - footer) */
   border: 1px solid #ccc;
   border-radius: 6px;
   background-color: #fff;
+}
+
+/* ✅ Table Layout */
+.admin-table {
+  width: 100%;
+  min-width: 800px;
+  border-collapse: collapse;
+  table-layout: fixed;
 }
