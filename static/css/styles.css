@@ -145,8 +145,8 @@ body {
   border-radius: 6px;
   background-color: #fff;
   padding-bottom: 10px;
-  height: 300;
-  max-height: 300;
+  height: 400;
+  max-height: 400;
   min-height: 100px;
   outline: 3px solid red; /* Debug */
 }
