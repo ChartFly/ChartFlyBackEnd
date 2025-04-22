@@ -1,9 +1,9 @@
 /* ============================================================================
 📁 FILE: styles.css
 📍 LOCATION: static/css/styles.css
-🎯 PURPOSE: Global backend layout — True Table Scroll + Footer Safe + Header Stable
+🎯 PURPOSE: Global backend layout — Footer Safe + Table Scroll + Aligned Left
 ✍️ AUTHOR: Captain & Chatman
-🔖 VERSION: MPA Global v3.2 — Scrollable Table, Footer Safe, Left Justified
+🔖 VERSION: MPA Global v3.3 — Extreme Scroll Fix Applied
 ============================================================================ */
 
 /* ✅ Lock Page Scroll */
@@ -113,35 +113,38 @@ body {
 ✅ TABLE LAYOUT ZONES
 ============================================================================ */
 
+/* 🧱 Outer Container Below Header, Above Footer */
 .admin-tab-section {
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 75px); /* remove footer */
+  height: calc(100vh - 75px); /* Subtract footer */
   overflow: hidden;
 }
 
-/* ✅ Shared table-container wrapper */
+/* 📦 Shared Table + ButtonBox Container */
 .table-container {
-  flex-grow: 1;
   display: flex;
   flex-direction: column;
-  max-height: calc(
-    100vh - 275px
-  ); /* header + header text + ButtonBox + buffer */
-  max-width: 1200px;
-  margin: 0;
-  padding: 6px 10px 0;
+  flex-grow: 1;
   box-sizing: border-box;
+  padding: 6px 10px 0;
+  max-width: 1200px;
+  margin-left: 0;
+  margin-right: auto;
+  height: 100%;
+  overflow: hidden;
 }
 
-/* ✅ Scrolls inside here */
+/* 📜 Scrollable Wrapper */
 .table-wrapper {
   flex-grow: 1;
-  overflow-y: auto;
+  overflow-y: scroll;
   overflow-x: auto;
   border: 1px solid #ccc;
   border-radius: 6px;
   background-color: #fff;
+  padding-bottom: 10px;
+  max-height: 100%;
 }
 
 /* ✅ Table Layout */
