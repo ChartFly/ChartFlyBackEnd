@@ -117,7 +117,7 @@ body {
 .admin-tab-section {
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 235px);
+  height: calc(100vh - 285px);
   overflow: hidden;
 }
 

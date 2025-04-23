@@ -9,7 +9,7 @@
   text-align: left;
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 235px); /* ✅ 160 (header) + 75 (footer) */
+  height: calc(100vh - 285px); /* ✅ 160 (header) + 75 (footer) */
   overflow: hidden;
 }
 
