@@ -36,15 +36,17 @@
 }
 
 /* 📜 Table Wrapper */
-#market-holidays-section .table-wrapper {
+.table-wrapper {
   flex-grow: 1;
+  height: 400px; /* 🔒 Fixed height */
+  max-height: 400px; /* 🧱 Hard cap */
+  min-height: 200px; /* ⚓ Safety floor */
   overflow-y: auto;
   overflow-x: auto;
   border: 1px solid #ccc;
   border-radius: 6px;
   background-color: #fff;
   padding-bottom: 10px;
-  min-height: 100px;
 }
 
 /* 📊 Table Structure */
