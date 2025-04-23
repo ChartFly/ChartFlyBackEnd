@@ -33,7 +33,7 @@ window.ButtonBoxMarketHolidays = (() => {
       ButtonBox.toggleLineIdVisibility("holiday", toggle.checked);
     });
 
-    toggle.dispatchEvent(new Event("change"));
+    ButtonBox.toggleLineIdVisibility("holiday", toggle.checked); // 🔥 Directly trigger on load
   }
 
   function init() {
