@@ -4,7 +4,7 @@
 // 🎯 PURPOSE: Load and render Admin Users table
 // 🧩 DEPENDENCIES: ButtonBox, ButtonBoxUserManagement
 // 👥 Author: Captain & Chatman
-// 🔖 Version: MPA Phase I (User Management Script Refactor)
+// 🔖 Version: MPA Phase IV — Show Line ID Fixed
 // =============================================================
 
 (() => {
@@ -28,7 +28,9 @@
         const row = document.createElement("tr");
         row.innerHTML = `
           <td class="col-select"><input type="checkbox" /></td>
-          <td class="id-col hidden-col">${user.id}</td>
+          <td class="line-id-col hidden-col" data-original-id="${user.id}">${
+          user.id
+        }</td>
           <td>${user.username}</td>
           <td>${user.phone_number}</td>
           <td>${user.email}</td>

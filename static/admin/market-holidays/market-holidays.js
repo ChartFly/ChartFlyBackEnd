@@ -4,7 +4,7 @@
 // 🎯 PURPOSE: Load and render holiday data into the holidays table
 // 🧩 DEPENDENCIES: ButtonBox, ButtonBoxMarketHolidays
 // 👥 Author: Captain & Chatman
-// 🔖 Version: MPA Phase I (Market Holidays Script Refactor)
+// 🔖 Version: MPA Phase IV — ID Toggle Fixed
 // =============================================================
 
 (() => {
@@ -29,9 +29,11 @@
         console.log("🔧 Rendering holiday row", i + 1, ":", holiday);
         const row = document.createElement("tr");
         row.innerHTML = `
-          <td class="col-select"><input type="checkbox" /></td>  
-          <td class="id-col hidden-col">${holiday.id}</td>
-          <td>${holiday.name}</td>  
+          <td class="col-select"><input type="checkbox" /></td>
+          <td class="line-id-col hidden-col" data-original-id="${holiday.id}">${
+          holiday.id
+        }</td>
+          <td>${holiday.name}</td>
           <td>${holiday.date}</td>
           <td>${holiday.close_time ?? ""}</td>
           <td>${holiday.status}</td>
@@ -41,14 +43,13 @@
       console.log(`✅ Rendered ${holidays.length} holidays`);
 
       const idToggle = document.getElementById("holiday-show-id-toggle");
-      console.log("🔍 market-holidays-show-id-toggle:", idToggle);
-      if (!idToggle)
-        console.warn("⚠️ market-holidays-show-id-toggle not found");
+      console.log("🔍 holiday-show-id-toggle:", idToggle);
+      if (!idToggle) console.warn("⚠️ holiday-show-id-toggle not found");
 
       if (window.ButtonBox && window.ButtonBoxMarketHolidays) {
         console.log("✅ ButtonBox and MarketHolidays init functions available");
         ButtonBoxMarketHolidays.init();
-        ButtonBox.wireCheckboxes("market-holidays");
+        ButtonBox.wireCheckboxes("holiday");
       }
     } catch (err) {
       console.error("❌ loadMarketHolidays() error:", err);

@@ -26,7 +26,7 @@ window.ButtonBoxUserManagement = (() => {
   }
 
   function wireIdToggle() {
-    const toggle = document.getElementById("user-management-show-id-toggle");
+    const toggle = document.getElementById("user-show-id-toggle");
     if (!toggle) return;
 
     toggle.addEventListener("change", () => {
