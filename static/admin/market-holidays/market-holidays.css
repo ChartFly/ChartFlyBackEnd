@@ -39,7 +39,7 @@
 .table-wrapper {
   flex-grow: 1;
   height: 400px; /* 🔒 Fixed height */
-  max-height: 400px; /* 🧱 Hard cap */
+  max-height: 420px; /* 🧱 Hard cap */
   min-height: 200px; /* ⚓ Safety floor */
   overflow-y: auto;
   overflow-x: auto;
