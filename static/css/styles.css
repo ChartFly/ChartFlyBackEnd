@@ -1,9 +1,9 @@
 /* ============================================================================
 📁 FILE: styles.css
 📍 LOCATION: static/css/styles.css
-🎯 PURPOSE: Global backend layout — Footer Safe + Table Scroll + Aligned Left
+🎯 PURPOSE: Global backend layout — Responsive Scroll + Footer Lock
 ✍️ AUTHOR: Captain & Chatman
-🔖 VERSION: MPA Global v3.6 — Triple Flex Clamp Fix + Footer Safety
+🔖 VERSION: MPA Global v3.6 — Final Flexbox Alignment
 ============================================================================ */
 
 /* ✅ Lock Page Scroll */
@@ -103,8 +103,8 @@ body {
   font-size: 26px;
   font-weight: bold;
   text-align: left;
-  padding: 0 10px 12px 10px;
-  margin: 0;
+  padding: 16px 0px 0px 12px;
+  margin-bottom: 0px;
   max-width: 1200px;
   font-family: Arial, sans-serif;
 }
@@ -117,9 +117,7 @@ body {
 .admin-tab-section {
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 75px); /* Subtract footer */
-  max-height: calc(100vh - 75px);
-  flex-grow: 1;
+  height: calc(100vh - 285px); /* 160 (header) + 75 (footer) + 50 buffer */
   overflow: hidden;
 }
 
@@ -128,13 +126,14 @@ body {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  max-height: 100%;
   box-sizing: border-box;
   padding: 6px 10px 0;
   max-width: 1200px;
   margin-left: 0;
   margin-right: auto;
-  overflow: hidden;
+  height: 100%;
+  overflow-x: auto;
+  overflow-y: auto;
 }
 
 /* 📜 Scrollable Table Wrapper */
@@ -142,13 +141,12 @@ body {
   flex-grow: 1;
   overflow-y: auto;
   overflow-x: auto;
-  max-height: 100%;
-  min-height: 100px;
   border: 1px solid #ccc;
   border-radius: 6px;
   background-color: #fff;
   padding-bottom: 10px;
-  outline: 3px solid red; /* Optional: for visual debug */
+  max-height: 100%;
+  min-height: 200px;
 }
 
 /* 🧾 Base Table Setup */
