@@ -145,10 +145,8 @@ body {
   border-radius: 6px;
   background-color: #fff;
   padding-bottom: 10px;
-  height: 400;
-  max-height: 400;
-  min-height: 100px;
-  outline: 3px solid red; /* Debug */
+  max-height: 100%;
+  outline: 3px solid red; /* Optional: for testing */
 }
 
 /* 🧾 Base Table Setup */
