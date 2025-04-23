@@ -26,7 +26,7 @@ window.ButtonBoxMarketHolidays = (() => {
   }
 
   function wireIdToggle() {
-    const toggle = document.getElementById("holiday-show-id-toggle");
+    const toggle = document.getElementById("market-holiday-show-id-toggle");
     if (!toggle) return;
 
     toggle.addEventListener("change", () => {
