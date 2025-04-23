@@ -40,9 +40,7 @@
       });
       console.log(`✅ Rendered ${holidays.length} holidays`);
 
-      const idToggle = document.getElementById(
-        "market-holidays-show-id-toggle"
-      );
+      const idToggle = document.getElementById("holiday-show-id-toggle");
       console.log("🔍 market-holidays-show-id-toggle:", idToggle);
       if (!idToggle)
         console.warn("⚠️ market-holidays-show-id-toggle not found");
