@@ -30,7 +30,7 @@
         const row = document.createElement("tr");
         row.innerHTML = `
           <td class="col-select"><input type="checkbox" /></td>
-          <td class="line-id-col hidden-col" data-original-id="${holiday.id}">${
+          <td class="line-id-col hidden" data-original-id="${holiday.id}">${
           holiday.id
         }</td>
           <td>${holiday.name}</td>
