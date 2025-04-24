@@ -282,6 +282,13 @@ window.ButtonBox = (() => {
     ButtonBoxMessages.updateSelectedCount(section);
   }
 
+  console.log("🧪 Forcing Line ID Toggle:");
+  console.log(
+    "➡️ Looking for table ID:",
+    ButtonBox.getState("holiday").tableId
+  );
+  console.log("➡️ DOM has:", document.getElementById("market-holidays-table"));
+
   function toggleLineIdVisibility(section, show) {
     const state = getState(section);
     const table = document.getElementById(state?.tableId || `${section}-table`);

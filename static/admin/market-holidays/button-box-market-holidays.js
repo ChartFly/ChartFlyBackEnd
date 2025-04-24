@@ -3,7 +3,7 @@
 // 📍 LOCATION: static/admin/market-holidays/button-box-market-holidays.js
 // 🎯 PURPOSE: Initializes ButtonBox for the Market Holidays section
 // 🧩 AUTHOR: Captain & Chatman
-// 🔖 Version: MPA Phase IV — Shared Logic Finalized
+// 🔖 Version: MPA Phase IV — Shared Logic Finalized + ID Toggle Fix
 // ============================================================================
 
 window.ButtonBoxMarketHolidays = (() => {
@@ -28,15 +28,24 @@ window.ButtonBoxMarketHolidays = (() => {
   function wireIdToggle() {
     const waitForToggle = setInterval(() => {
       const toggle = document.getElementById("holiday-show-id-toggle");
-      if (!toggle) return;
+      if (!toggle) {
+        console.warn("🕵️ Waiting for holiday-show-id-toggle...");
+        return;
+      }
 
       clearInterval(waitForToggle);
+      console.log("🎯 Found holiday-show-id-toggle:", toggle);
 
       toggle.addEventListener("change", () => {
+        console.log("🌀 Checkbox toggled. Checked:", toggle.checked);
         ButtonBox.toggleLineIdVisibility("holiday", toggle.checked);
       });
 
-      ButtonBox.toggleLineIdVisibility("holiday", toggle.checked); // Trigger on load
+      // 🔁 Reapply after slight delay to ensure cells are present
+      setTimeout(() => {
+        console.log("⏱ Reapplying toggle after 100ms delay...");
+        ButtonBox.toggleLineIdVisibility("holiday", toggle.checked);
+      }, 100);
     }, 50);
   }
 
