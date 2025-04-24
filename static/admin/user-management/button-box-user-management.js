@@ -26,14 +26,18 @@ window.ButtonBoxUserManagement = (() => {
   }
 
   function wireIdToggle() {
-    const toggle = document.getElementById("user-show-id-toggle");
-    if (!toggle) return;
+    const waitForToggle = setInterval(() => {
+      const toggle = document.getElementById("user-show-id-toggle");
+      if (!toggle) return;
 
-    toggle.addEventListener("change", () => {
+      clearInterval(waitForToggle);
+
+      toggle.addEventListener("change", () => {
+        ButtonBox.toggleLineIdVisibility("user", toggle.checked);
+      });
+
       ButtonBox.toggleLineIdVisibility("user", toggle.checked);
-    });
-
-    toggle.dispatchEvent(new Event("change"));
+    }, 50);
   }
 
   function init() {

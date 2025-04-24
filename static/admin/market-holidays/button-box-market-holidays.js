@@ -26,14 +26,18 @@ window.ButtonBoxMarketHolidays = (() => {
   }
 
   function wireIdToggle() {
-    const toggle = document.getElementById("holiday-show-id-toggle");
-    if (!toggle) return;
+    const waitForToggle = setInterval(() => {
+      const toggle = document.getElementById("holiday-show-id-toggle");
+      if (!toggle) return;
 
-    toggle.addEventListener("change", () => {
-      ButtonBox.toggleLineIdVisibility("holiday", toggle.checked);
-    });
+      clearInterval(waitForToggle);
 
-    ButtonBox.toggleLineIdVisibility("holiday", toggle.checked); // 🔥 Directly trigger on load
+      toggle.addEventListener("change", () => {
+        ButtonBox.toggleLineIdVisibility("holiday", toggle.checked);
+      });
+
+      ButtonBox.toggleLineIdVisibility("holiday", toggle.checked); // Trigger on load
+    }, 50);
   }
 
   function init() {
