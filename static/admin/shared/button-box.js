@@ -8,7 +8,7 @@
 // ============================================
 
 console.log("🧠 ButtonBox.js loaded ✅");
-console.log("🧨 ButtonBox toggleLineIdVisibility running...");
+console.log("🧨 ButtonBox toggleLineIdVisibility ready...");
 
 window.ButtonBox = (() => {
   const stateMap = new Map();
@@ -25,7 +25,7 @@ window.ButtonBox = (() => {
       onAction,
     } = config;
 
-    const mode = getEditMode(section); // 🧠 read true mode from radio on load
+    const mode = getEditMode(section);
 
     const state = {
       section,
@@ -42,7 +42,7 @@ window.ButtonBox = (() => {
       tipIndex: 0,
       activeEditableColumnIndex: null,
       previousMode: mode,
-      currentMode: mode, // ✅ Track it manually from the start
+      currentMode: mode,
     };
 
     stateMap.set(section, state);
@@ -50,6 +50,12 @@ window.ButtonBox = (() => {
     wireButtons(state);
     wireModeSwitchHandler(state);
     ButtonBoxMessages.initTips(section);
+
+    // 🧪 Debug block now safe
+    const table = document.getElementById(state.tableId);
+    console.log("🧪 Forcing Line ID Toggle:");
+    console.log("➡️ Looking for table ID:", state.tableId);
+    console.log("➡️ DOM has:", table);
   }
 
   function getState(section) {
@@ -109,8 +115,7 @@ window.ButtonBox = (() => {
             state.onAction(action, Array.from(state.selectedRows));
             ButtonBoxMessages.resetConfirm(section);
 
-            const mode = getEditMode(section);
-            if (mode === "cell") {
+            if (getEditMode(section) === "cell") {
               cleanupMode(section, "cell");
             }
           });
@@ -153,7 +158,7 @@ window.ButtonBox = (() => {
       console.log(`📻 Wiring radio:`, radio);
 
       radio.addEventListener("focus", () => {
-        state.previousMode = state.currentMode; // 🔒 capture before change
+        state.previousMode = state.currentMode;
       });
 
       radio.addEventListener("change", (e) => {
@@ -185,13 +190,13 @@ window.ButtonBox = (() => {
           radio.checked = false;
 
           ButtonBoxSwitchMode.showOverlay(section, currentMode, () => {
-            state.currentMode = targetMode; // ✅ Save after switch
+            state.currentMode = targetMode;
           });
         } else {
           console.log("✅ No unsaved changes — switching mode cleanly");
           cleanupMode(section, currentMode);
           forceSwitchMode(section, targetMode);
-          state.currentMode = targetMode; // ✅ Manual update
+          state.currentMode = targetMode;
         }
       });
     });
@@ -282,17 +287,14 @@ window.ButtonBox = (() => {
     ButtonBoxMessages.updateSelectedCount(section);
   }
 
-  console.log("🧪 Forcing Line ID Toggle:");
-  console.log(
-    "➡️ Looking for table ID:",
-    ButtonBox.getState("holiday").tableId
-  );
-  console.log("➡️ DOM has:", document.getElementById("market-holidays-table"));
-
   function toggleLineIdVisibility(section, show) {
     const state = getState(section);
-    const table = document.getElementById(state?.tableId || `${section}-table`);
-    console.log("🔍 ID Toggle targeting:", table);
+    if (!state) {
+      console.warn(`❌ No ButtonBox state found for section: ${section}`);
+      return;
+    }
+
+    const table = document.getElementById(state.tableId || `${section}-table`);
     if (!table) return;
 
     const headers = table.querySelectorAll("th.line-id-col");
