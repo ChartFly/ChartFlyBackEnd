@@ -4,7 +4,7 @@
 // 🎯 PURPOSE: Load and render holiday data into the holidays table
 // 🧩 DEPENDENCIES: ButtonBox, ButtonBoxMarketHolidays
 // 👥 Author: Captain & Chatman
-// 🔖 Version: MPA Phase IV — ID Toggle + Resizable Columns Polished
+// 🔖 Version: MPA Phase IV — Resize Polished + ID Fixed + Sanity Restored
 // =============================================================
 
 (() => {
@@ -74,14 +74,14 @@
         th.style.width = savedWidths[headerText] + "px";
       }
 
-      // ⛔ Skip Select column only
-      if (th.classList.contains("col-select")) return;
+      // Skip SELECT column only; allow ID column
+      const isLocked = th.classList.contains("col-select");
+      if (isLocked) return;
 
-      // Force visible during setup if hidden
+      // Force visible temporarily to allow attaching a handle
       const wasHidden = th.style.display === "none";
       if (wasHidden) th.style.display = "table-cell";
 
-      // Create drag handle
       const handle = document.createElement("div");
       handle.className = "resize-handle";
       handle.title = "Drag to resize • Double-click to reset";
@@ -94,9 +94,8 @@
         startWidth = th.offsetWidth;
         document.body.style.cursor = "col-resize";
 
-        // 🧠 Lock all other column widths to prevent shifting
         headers.forEach((otherTh) => {
-          if (otherTh !== th) {
+          if (otherTh !== th && !otherTh.classList.contains("col-select")) {
             otherTh.style.width = otherTh.offsetWidth + "px";
           }
         });
@@ -121,7 +120,6 @@
         document.addEventListener("mouseup", onMouseUp);
       });
 
-      // Double-click to reset column
       handle.addEventListener("dblclick", () => {
         th.style.width = "";
         delete savedWidths[headerText];
@@ -131,7 +129,6 @@
         );
       });
 
-      // Restore hidden state if it was hidden
       if (wasHidden) th.style.display = "none";
     });
   }
