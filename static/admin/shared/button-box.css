@@ -181,7 +181,13 @@ input[type="checkbox"] {
 /* 👻 Hide Line ID columns */
 .line-id-col.hidden-col,
 .id-col.hidden-col {
-  display: none !important;
+  display: table-cell !important;
+  width: 0 !important;
+  max-width: 0 !important;
+  overflow: hidden !important;
+  color: transparent !important;
+  pointer-events: none !important;
+  white-space: nowrap !important;
 }
 
 /* 📦 ButtonBox Container */
