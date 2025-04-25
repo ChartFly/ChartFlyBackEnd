@@ -189,6 +189,7 @@ input[type="checkbox"] {
   color: transparent !important;
   pointer-events: none !important;
   white-space: nowrap !important;
+  user-select: none !important;
 }
 
 /* 📦 ButtonBox Container */
