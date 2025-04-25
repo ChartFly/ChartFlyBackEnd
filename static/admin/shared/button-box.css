@@ -182,8 +182,9 @@ input[type="checkbox"] {
 .line-id-col.hidden-col,
 .id-col.hidden-col {
   display: table-cell !important;
-  width: 0 !important;
-  max-width: 0 !important;
+  width: 4ch !important; /* Minimum readable space */
+  max-width: 4ch !important; /* Prevent weird stretching */
+  min-width: 4ch !important; /* Align with Select column */
   overflow: hidden !important;
   color: transparent !important;
   pointer-events: none !important;
