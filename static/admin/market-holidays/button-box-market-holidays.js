@@ -1,10 +1,10 @@
-// ============================================================================
+// ========================================================================
 // 📁 FILE: button-box-market-holidays.js
 // 📍 LOCATION: static/admin/market-holidays/button-box-market-holidays.js
 // 🎯 PURPOSE: Initializes ButtonBox for the Market Holidays section
 // 🧩 AUTHOR: Captain & Chatman
 // 🔖 Version: MPA Phase IV — WireIdToggle Forced & Verified
-// ============================================================================
+// ========================================================================
 
 window.ButtonBoxMarketHolidays = (() => {
   let initialized = false;
