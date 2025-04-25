@@ -3,7 +3,7 @@
 // 📍 LOCATION: static/admin/market-holidays/button-box-market-holidays.js
 // 🎯 PURPOSE: Initializes ButtonBox for the Market Holidays section
 // 🧩 AUTHOR: Captain & Chatman
-// 🔖 Version: MPA Phase IV — Shared Logic Finalized + ID Toggle Fix
+// 🔖 Version: MPA Phase IV — WireIdToggle Forced & Verified
 // ============================================================================
 
 window.ButtonBoxMarketHolidays = (() => {
@@ -26,27 +26,24 @@ window.ButtonBoxMarketHolidays = (() => {
   }
 
   function wireIdToggle() {
-    const waitForToggle = setInterval(() => {
-      const toggle = document.getElementById("holiday-show-id-toggle");
-      if (!toggle) {
-        console.warn("🕵️ Waiting for holiday-show-id-toggle...");
-        return;
-      }
+    console.log("🔌 Attempting to wire holiday-show-id-toggle...");
+    const toggle = document.getElementById("holiday-show-id-toggle");
 
-      clearInterval(waitForToggle);
-      console.log("🎯 Found holiday-show-id-toggle:", toggle);
+    if (!toggle) {
+      console.warn("❌ holiday-show-id-toggle not found at wireIdToggle()");
+      return;
+    }
 
-      toggle.addEventListener("change", () => {
-        console.log("🌀 Checkbox toggled. Checked:", toggle.checked);
-        ButtonBox.toggleLineIdVisibility("holiday", toggle.checked);
-      });
+    console.log("🎯 Found holiday-show-id-toggle:", toggle);
 
-      // 🔁 Reapply after slight delay to ensure cells are present
-      setTimeout(() => {
-        console.log("⏱ Reapplying toggle after 100ms delay...");
-        ButtonBox.toggleLineIdVisibility("holiday", toggle.checked);
-      }, 100);
-    }, 50);
+    toggle.addEventListener("change", () => {
+      console.log("🌀 Checkbox changed. Checked:", toggle.checked);
+      ButtonBox.toggleLineIdVisibility("holiday", toggle.checked);
+    });
+
+    // ✅ Immediately apply on load
+    console.log("⚡ Applying toggle state now:", toggle.checked);
+    ButtonBox.toggleLineIdVisibility("holiday", toggle.checked);
   }
 
   function init() {
@@ -78,7 +75,11 @@ window.ButtonBoxMarketHolidays = (() => {
         ButtonBox.init(config);
         ButtonBox.wireCheckboxes("holiday");
         ButtonBoxColumns.activateHeaderClicks("holiday");
+
+        // 🧪 Force it no matter what
+        console.log("🔧 Forcing wireIdToggle immediately after init...");
         wireIdToggle();
+
         console.log("✅ ButtonBox Market Holidays fully initialized");
       }
     }, 50);
