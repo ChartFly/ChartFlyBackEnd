@@ -4,7 +4,7 @@
 // 🎯 PURPOSE: Load and render holiday data into the holidays table
 // 🧩 DEPENDENCIES: ButtonBox, ButtonBoxMarketHolidays
 // 👥 Author: Captain & Chatman
-// 🔖 Version: MPA Phase IV — ID Toggle + Resizable Columns
+// 🔖 Version: MPA Phase IV — ID Toggle + Resizable Columns Polished
 // =============================================================
 
 (() => {
@@ -61,14 +61,15 @@
 
   function applyColumnResize(sectionKey) {
     const table = document.getElementById(`${sectionKey}-table`);
-    const headers = table.querySelectorAll("th");
+    const headers = table.querySelectorAll("thead th");
 
     const savedWidths = JSON.parse(
       localStorage.getItem(`chartfly_colwidths_${sectionKey}`) || "{}"
     );
 
     headers.forEach((th) => {
-      const headerText = th.textContent.trim();
+      const headerText = th.textContent?.trim() || th.dataset.name || "Unnamed";
+
       if (savedWidths[headerText]) {
         th.style.width = savedWidths[headerText] + "px";
       }
@@ -76,9 +77,14 @@
       // ⛔ Skip Select column only
       if (th.classList.contains("col-select")) return;
 
+      // Force visible during setup if hidden
+      const wasHidden = th.style.display === "none";
+      if (wasHidden) th.style.display = "table-cell";
+
       // Create drag handle
       const handle = document.createElement("div");
       handle.className = "resize-handle";
+      handle.title = "Drag to resize • Double-click to reset";
       th.appendChild(handle);
 
       let startX, startWidth;
@@ -88,6 +94,13 @@
         startWidth = th.offsetWidth;
         document.body.style.cursor = "col-resize";
 
+        // 🧠 Lock all other column widths to prevent shifting
+        headers.forEach((otherTh) => {
+          if (otherTh !== th) {
+            otherTh.style.width = otherTh.offsetWidth + "px";
+          }
+        });
+
         function onMouseMove(e) {
           const newWidth = Math.max(60, startWidth + e.pageX - startX);
           th.style.width = newWidth + "px";
@@ -95,7 +108,6 @@
 
         function onMouseUp() {
           document.body.style.cursor = "";
-          const headerText = th.textContent.trim();
           savedWidths[headerText] = th.offsetWidth;
           localStorage.setItem(
             `chartfly_colwidths_${sectionKey}`,
@@ -109,16 +121,18 @@
         document.addEventListener("mouseup", onMouseUp);
       });
 
-      // Double-click to reset
+      // Double-click to reset column
       handle.addEventListener("dblclick", () => {
         th.style.width = "";
-        const headerText = th.textContent.trim();
         delete savedWidths[headerText];
         localStorage.setItem(
           `chartfly_colwidths_${sectionKey}`,
           JSON.stringify(savedWidths)
         );
       });
+
+      // Restore hidden state if it was hidden
+      if (wasHidden) th.style.display = "none";
     });
   }
 

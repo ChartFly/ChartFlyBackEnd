@@ -162,17 +162,10 @@
   cursor: col-resize;
   user-select: none;
   z-index: 100;
-}
-
-.resize-handle {
-  position: absolute;
-  right: 0;
-  top: 0;
-  height: 100%;
-  width: 6px;
-  cursor: col-resize;
-  user-select: none;
-  z-index: 100;
   background-color: #007a8a33; /* semi-transparent ChartFly Blue */
   border-left: 1px solid #007a8a; /* gives a visible line */
+}
+
+.resize-handle:hover {
+  background-color: #007a8acc;
 }
