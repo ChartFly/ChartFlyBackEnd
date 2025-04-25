@@ -113,8 +113,9 @@
 /* 🔠 Line ID Column */
 #market-holidays-section .line-id-col {
   width: 4ch;
+  min-width: 2ch;
+  max-width: 8ch;
   text-align: center;
-  display: none;
   white-space: nowrap;
 }
 
