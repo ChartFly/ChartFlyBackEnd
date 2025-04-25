@@ -3,7 +3,7 @@
 📍 LOCATION: templates/market-holidays/holiday-table.html
 🎯 PURPOSE: Table layout for Market Holidays section
 👥 Author: Captain & Chatman
-🔖 Version: MPA Phase IV — ID Toggle Fixed + Class Corrected
+🔖 Version: MPA Phase IV — ID Toggle Fixed + Resize Handles Enabled
 ============================================ -->
 
 <div class="table-container">
@@ -12,8 +12,8 @@
       <thead>
         <tr>
           <th class="col-select">Select</th>
-          <th class="line-id-col hidden-col"></th>
-          <!-- ✅ Corrected -->
+          <th class="line-id-col hidden-col">ID</th>
+          <!-- ✅ ID column now has header text -->
           <th class="col-name">Holiday Name</th>
           <th class="col-date">Date</th>
           <th class="col-close">Close Time</th>
@@ -31,7 +31,6 @@
             />
           </td>
           <td class="line-id-col hidden-col" data-original-id="S98765">
-            <!-- ✅ Corrected -->
             S98765
           </td>
           <td contenteditable="true">Thanksgiving</td>
