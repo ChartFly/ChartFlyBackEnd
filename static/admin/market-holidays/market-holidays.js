@@ -4,7 +4,7 @@
 // 🎯 PURPOSE: Load and render holiday data into the holidays table
 // 🧩 DEPENDENCIES: ButtonBox, ButtonBoxMarketHolidays
 // 👥 Author: Captain & Chatman
-// 🔖 Version: MPA Phase IV — ID Toggle Fixed
+// 🔖 Version: MPA Phase IV — ID Toggle + Resizable Columns
 // =============================================================
 
 (() => {
@@ -51,9 +51,75 @@
         ButtonBoxMarketHolidays.init();
         ButtonBox.wireCheckboxes("holiday");
       }
+
+      // 🧩 Add Column Resize
+      applyColumnResize("market-holidays");
     } catch (err) {
       console.error("❌ loadMarketHolidays() error:", err);
     }
+  }
+
+  function applyColumnResize(sectionKey) {
+    const table = document.getElementById(`${sectionKey}-table`);
+    const headers = table.querySelectorAll("th");
+
+    const savedWidths = JSON.parse(
+      localStorage.getItem(`chartfly_colwidths_${sectionKey}`) || "{}"
+    );
+
+    headers.forEach((th) => {
+      const headerText = th.textContent.trim();
+      if (savedWidths[headerText]) {
+        th.style.width = savedWidths[headerText] + "px";
+      }
+
+      // ⛔ Skip Select column only
+      if (th.classList.contains("col-select")) return;
+
+      // Create drag handle
+      const handle = document.createElement("div");
+      handle.className = "resize-handle";
+      th.appendChild(handle);
+
+      let startX, startWidth;
+
+      handle.addEventListener("mousedown", (e) => {
+        startX = e.pageX;
+        startWidth = th.offsetWidth;
+        document.body.style.cursor = "col-resize";
+
+        function onMouseMove(e) {
+          const newWidth = Math.max(60, startWidth + e.pageX - startX);
+          th.style.width = newWidth + "px";
+        }
+
+        function onMouseUp() {
+          document.body.style.cursor = "";
+          const headerText = th.textContent.trim();
+          savedWidths[headerText] = th.offsetWidth;
+          localStorage.setItem(
+            `chartfly_colwidths_${sectionKey}`,
+            JSON.stringify(savedWidths)
+          );
+          document.removeEventListener("mousemove", onMouseMove);
+          document.removeEventListener("mouseup", onMouseUp);
+        }
+
+        document.addEventListener("mousemove", onMouseMove);
+        document.addEventListener("mouseup", onMouseUp);
+      });
+
+      // Double-click to reset
+      handle.addEventListener("dblclick", () => {
+        th.style.width = "";
+        const headerText = th.textContent.trim();
+        delete savedWidths[headerText];
+        localStorage.setItem(
+          `chartfly_colwidths_${sectionKey}`,
+          JSON.stringify(savedWidths)
+        );
+      });
+    });
   }
 
   window.addEventListener("DOMContentLoaded", loadMarketHolidays);
