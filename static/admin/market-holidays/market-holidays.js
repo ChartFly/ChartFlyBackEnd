@@ -4,7 +4,7 @@
 // 🎯 PURPOSE: Load and render holiday data into the holidays table
 // 🧩 DEPENDENCIES: ButtonBox, ButtonBoxMarketHolidays
 // 👥 Author: Captain & Chatman
-// 🔖 Version: MPA Phase IV — Resize Polished + ID Fixed + Sanity Restored
+// 🔖 Version: MPA Phase IV — ID Resize Fixed + Select Stable + Layout Clean
 // =============================================================
 
 (() => {
@@ -44,7 +44,14 @@
 
       const idToggle = document.getElementById("holiday-show-id-toggle");
       console.log("🔍 holiday-show-id-toggle:", idToggle);
-      if (!idToggle) console.warn("⚠️ holiday-show-id-toggle not found");
+      if (!idToggle) {
+        console.warn("⚠️ holiday-show-id-toggle not found");
+      } else {
+        idToggle.addEventListener("change", () => {
+          ButtonBox.toggleLineIdVisibility("holiday", idToggle.checked);
+          applyColumnResize("market-holidays"); // 🧩 Re-run after toggle
+        });
+      }
 
       if (window.ButtonBox && window.ButtonBoxMarketHolidays) {
         console.log("✅ ButtonBox and MarketHolidays init functions available");
@@ -74,11 +81,10 @@
         th.style.width = savedWidths[headerText] + "px";
       }
 
-      // Skip SELECT column only; allow ID column
-      const isLocked = th.classList.contains("col-select");
-      if (isLocked) return;
+      const isSelect = th.classList.contains("col-select");
+      const isId = th.classList.contains("line-id-col");
+      if (isSelect) return;
 
-      // Force visible temporarily to allow attaching a handle
       const wasHidden = th.style.display === "none";
       if (wasHidden) th.style.display = "table-cell";
 
@@ -95,7 +101,11 @@
         document.body.style.cursor = "col-resize";
 
         headers.forEach((otherTh) => {
-          if (otherTh !== th && !otherTh.classList.contains("col-select")) {
+          if (
+            otherTh !== th &&
+            !otherTh.classList.contains("col-select") &&
+            !otherTh.classList.contains("line-id-col")
+          ) {
             otherTh.style.width = otherTh.offsetWidth + "px";
           }
         });
