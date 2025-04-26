@@ -4,7 +4,7 @@
 // 🎯 PURPOSE: Load and render holiday data into the holidays table
 // 🧩 DEPENDENCIES: ButtonBox, ButtonBoxMarketHolidays
 // 👥 Author: Captain & Chatman
-// 🔖 Version: MPA Phase IV — ID Resize Fixed + Select Stable + Layout Clean
+// 🔖 Version: MPA Phase IV — ID Resize Fixed + Select Stable + Layout Hard-Frozen
 // =============================================================
 
 (() => {
@@ -49,7 +49,10 @@
       } else {
         idToggle.addEventListener("change", () => {
           ButtonBox.toggleLineIdVisibility("holiday", idToggle.checked);
-          setTimeout(() => applyColumnResize("market-holidays"), 100); // 🧩 reapply clean after toggle
+          setTimeout(() => {
+            applyColumnResize("market-holidays");
+            freezeInitialColumnWidths("market-holidays"); // 🧊 Re-freeze after toggle
+          }, 100);
         });
       }
 
@@ -60,6 +63,7 @@
       }
 
       applyColumnResize("market-holidays"); // 🛠️ Initial resize setup
+      freezeInitialColumnWidths("market-holidays"); // 🧊 Freeze immediately after setup
     } catch (err) {
       console.error("❌ loadMarketHolidays() error:", err);
     }
@@ -137,6 +141,23 @@
       });
 
       if (wasHidden) th.style.display = "none";
+    });
+  }
+
+  // =============================================================
+  // 🧊 Freeze Initial Column Widths on First Load
+  // =============================================================
+  function freezeInitialColumnWidths(sectionKey) {
+    const table = document.getElementById(`${sectionKey}-table`);
+    if (!table) return;
+    const headers = table.querySelectorAll("thead th");
+
+    headers.forEach((th) => {
+      if (!th.classList.contains("col-select")) {
+        th.style.width = `${th.offsetWidth}px`;
+        th.style.minWidth = `${th.offsetWidth}px`;
+        th.style.maxWidth = `${th.offsetWidth}px`;
+      }
     });
   }
 
