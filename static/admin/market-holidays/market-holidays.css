@@ -2,7 +2,7 @@
 📁 FILE: market-holidays.css
 📍 LOCATION: static/admin/market-holidays/market-holidays.css
 🎯 PURPOSE: Lock Table Layout, Resizable Columns, Footer Safe
-🔒 VERSION: MPA Phase IV — Final Freeze + Safe Scroll
+🔒 VERSION: MPA Phase IV — Final Freeze + Safe Scroll + Select Column Lockdown
 =========================================================================== */
 
 #market-holidays-section {
@@ -96,14 +96,25 @@
   visibility: hidden;
 }
 
-/* ☑️ Select Column */
+/* ☑️ Select Column - FINAL LOCKDOWN */
 #market-holidays-section .admin-table th.col-select,
 #market-holidays-section .admin-table td.col-select {
-  width: 4ch;
+  width: 50px;
+  min-width: 50px;
+  max-width: 50px;
   text-align: center;
+  overflow: hidden;
   white-space: nowrap;
-  background-color: #006373;
-  color: white;
+  position: relative;
+}
+
+/* ☑️ Center and Size Checkboxes inside Select */
+#market-holidays-section .admin-table th.col-select input[type="checkbox"],
+#market-holidays-section .admin-table td.col-select input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  margin: 0 auto;
+  display: block;
 }
 
 /* 📛 Line ID Column (Stable Width) */
