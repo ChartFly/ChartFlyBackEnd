@@ -106,8 +106,9 @@
   overflow: hidden;
   white-space: nowrap;
   position: relative;
-  background-color: #006373; /* ✅ Restored ChartFly Blue */
-  color: white; /* ✅ Make checkbox and any text white */
+  background-color: #006373;
+  color: white;
+  pointer-events: none; /* 🛡️ NEW: Lock out resizing drag on Select */
 }
 
 /* ☑️ Center and Size Checkboxes inside Select */
