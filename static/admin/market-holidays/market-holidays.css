@@ -1,8 +1,8 @@
 /* ========================================================================
 📁 FILE: market-holidays.css
 📍 LOCATION: static/admin/market-holidays/market-holidays.css
-🎯 PURPOSE: Hardcoded Height for Market Holidays Table (No Footer Issues)
-🔒 VERSION: MPA Lockdown Mode — Final Fix
+🎯 PURPOSE: Lock Table Layout, Resizable Columns, Footer Safe
+🔒 VERSION: MPA Phase IV — Final Freeze + Safe Scroll
 =========================================================================== */
 
 #market-holidays-section {
@@ -21,7 +21,7 @@
   margin-bottom: 0px;
 }
 
-/* 📦 Hardcoded Table Container */
+/* 📦 Table Container */
 #market-holidays-section .table-container {
   display: flex;
   flex-direction: column;
@@ -30,7 +30,7 @@
   max-width: 1200px;
   margin-left: 0;
   margin-right: auto;
-  height: 380px; /* 💥 Fixed height — adjust as needed */
+  height: 380px; /* Lock height above footer */
   overflow-x: auto;
   overflow-y: auto;
 }
@@ -38,9 +38,9 @@
 /* 📜 Table Wrapper */
 .table-wrapper {
   flex-grow: 1;
-  height: 350px; /* 🔒 Fixed height */
-  max-height: 380px; /* 🧱 Hard cap */
-  min-height: 200px; /* ⚓ Safety floor */
+  height: 350px;
+  max-height: 380px;
+  min-height: 200px;
   overflow-y: auto;
   overflow-x: auto;
   border: 1px solid #ccc;
@@ -49,7 +49,7 @@
   padding-bottom: 10px;
 }
 
-/* 📊 Table Structure */
+/* 📊 Admin Table */
 #market-holidays-section .admin-table {
   width: 100%;
   min-width: 800px;
@@ -58,7 +58,7 @@
   font-size: 0.95rem;
 }
 
-/* 📐 Column Constraints */
+/* 📐 Column Defaults */
 #market-holidays-section .admin-table th:not(.col-select):not(.line-id-col),
 #market-holidays-section .admin-table td:not(.col-select):not(.line-id-col) {
   min-width: 10ch;
@@ -68,7 +68,7 @@
   word-break: break-word;
 }
 
-/* 🔠 Table Header Styling */
+/* 🔠 Table Headers */
 #market-holidays-section .admin-table th {
   border: 1px solid #ccc;
   padding: 6px 10px;
@@ -82,7 +82,7 @@
   z-index: 10;
 }
 
-/* 🔢 Cell Styling */
+/* 🔢 Table Cells */
 #market-holidays-section .admin-table td {
   border: 1px solid #ccc;
   padding: 6px 10px;
@@ -92,11 +92,11 @@
 }
 
 #market-holidays-section .admin-table td:empty::after {
-  content: " ";
+  content: "\00a0"; /* non-breaking space */
   visibility: hidden;
 }
 
-/* ✅ Select Column */
+/* ☑️ Select Column */
 #market-holidays-section .admin-table th.col-select,
 #market-holidays-section .admin-table td.col-select {
   width: 4ch;
@@ -105,12 +105,8 @@
   background-color: #006373;
   color: white;
 }
-#market-holidays-section .admin-table tr.selected-row td.col-select {
-  background-color: #d0f0ff;
-  color: black;
-}
 
-/* 🔠 Line ID Column (Fixed Width) */
+/* 📛 Line ID Column (Stable Width) */
 #market-holidays-section .line-id-col {
   width: 60px;
   min-width: 60px;
@@ -121,7 +117,7 @@
   text-overflow: ellipsis;
 }
 
-/* 🦓 Zebra Striping */
+/* 🦓 Zebra Stripes */
 #market-holidays-section .admin-table tbody tr:nth-child(even) {
   background-color: #f9f9f9;
 }
@@ -132,7 +128,7 @@
   background-color: #d0f0ff !important;
 }
 
-/* ✏️ Editable Cell Styling */
+/* ✏️ Editable Cells */
 #market-holidays-section .editable {
   background-color: #fff8dc;
   border: 1px dashed #ccc;
@@ -154,7 +150,7 @@
   border: 1px solid #ff4d4d;
 }
 
-/* 🎯 Resizable Column Handle */
+/* 🎯 Resize Handle */
 .resize-handle {
   position: absolute;
   right: 0;
@@ -164,8 +160,8 @@
   cursor: col-resize;
   user-select: none;
   z-index: 100;
-  background-color: #007a8a33; /* semi-transparent ChartFly Blue */
-  border-left: 1px solid #007a8a; /* gives a visible line */
+  background-color: #007a8a33;
+  border-left: 1px solid #007a8a;
 }
 
 .resize-handle:hover {
