@@ -4,7 +4,7 @@
 // 🎯 PURPOSE: Load and render holiday data into the holidays table
 // 🧩 DEPENDENCIES: ButtonBox, ButtonBoxMarketHolidays
 // 👥 Author: Captain & Chatman
-// 🔖 Version: MPA Phase IV — Final Clean Resize — No Freezing
+// 🔖 Version: MPA Phase IV — Stable Resizing Rollback
 // =============================================================
 
 (() => {
