@@ -171,7 +171,7 @@ window.ButtonBoxRows = (() => {
     }
 
     if (action === "add") {
-      const newId = `S${Date.now()}`;
+      const newId = ButtonBox.generateID("T"); // 🔥 Use smart 5-char ID generator
       const newRow = document.createElement("tr");
       newRow.classList.add("editing");
       newRow.setAttribute("data-id", newId);
@@ -184,7 +184,7 @@ window.ButtonBoxRows = (() => {
         if (th.classList.contains("col-select")) {
           columnHtml += `<td class="col-select"><input type="checkbox" class="${section}-select-checkbox" data-id="${newId}" checked></td>`;
         } else if (th.classList.contains("line-id-col")) {
-          columnHtml += `<td class="line-id-col hidden-col" data-original-id="${newId}"></td>`;
+          columnHtml += `<td class="line-id-col hidden-col" data-original-id="${newId}">&nbsp;</td>`; // 🧠 Insert non-breaking space
         } else if (th.classList.contains("skip-col")) {
           columnHtml += `<td class="skip-col"></td>`;
         } else {
@@ -199,6 +199,7 @@ window.ButtonBoxRows = (() => {
       });
 
       table.querySelector("tbody").prepend(newRow);
+      state.selectedRows.clear();
       state.selectedRows.add(newId);
       ButtonBoxMessages.updateSelectedCount(section);
       ButtonBox.wireCheckboxes(section);
