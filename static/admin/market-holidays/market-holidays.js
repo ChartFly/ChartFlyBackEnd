@@ -30,9 +30,9 @@
         const row = document.createElement("tr");
         row.innerHTML = `
           <td class="col-select"><input type="checkbox" /></td>
-          <td class="line-id-col hidden-col" data-original-id="${holiday.id}">${
-          holiday.id
-        }</td>
+          <td class="line-id-col hidden-col" data-original-id="${
+            holiday.id
+          }">&nbsp;</td>
           <td>${holiday.name}</td>
           <td>${holiday.date}</td>
           <td>${holiday.close_time ?? ""}</td>
@@ -40,6 +40,7 @@
         `;
         tbody.appendChild(row);
       });
+
       console.log(`✅ Rendered ${holidays.length} holidays`);
 
       const idToggle = document.getElementById("holiday-show-id-toggle");

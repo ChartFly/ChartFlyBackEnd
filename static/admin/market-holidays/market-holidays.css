@@ -59,10 +59,10 @@
 }
 
 /* 📐 Column Constraints */
-#market-holidays-section .admin-table th:not(.col-select),
-#market-holidays-section .admin-table td:not(.col-select) {
-  min-width: 8ch;
-  max-width: 44ch;
+#market-holidays-section .admin-table th:not(.col-select):not(.line-id-col),
+#market-holidays-section .admin-table td:not(.col-select):not(.line-id-col) {
+  min-width: 10ch;
+  max-width: 40ch;
   white-space: normal;
   overflow-wrap: anywhere;
   word-break: break-word;
