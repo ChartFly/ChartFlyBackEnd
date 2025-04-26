@@ -108,13 +108,14 @@
 
 /* 📛 Line ID Column (Stable Width) */
 #market-holidays-section .line-id-col {
-  width: 60px;
-  min-width: 60px;
-  max-width: 60px;
+  width: 5ch;
+  min-width: 5ch;
+  max-width: 5ch;
   text-align: center;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  user-select: none;
 }
 
 /* 🦓 Zebra Stripes */
