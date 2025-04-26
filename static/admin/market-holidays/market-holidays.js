@@ -4,7 +4,7 @@
 // 🎯 PURPOSE: Load and render holiday data into the holidays table
 // 🧩 DEPENDENCIES: ButtonBox, ButtonBoxMarketHolidays
 // 👥 Author: Captain & Chatman
-// 🔖 Version: MPA Phase IV — ID Resize Fixed + Full Column Freeze
+// 🔖 Version: MPA Phase IV — Final Clean Resize — No Freezing
 // =============================================================
 
 (() => {
@@ -14,7 +14,6 @@
 
   async function loadMarketHolidays() {
     console.log("📥 loadMarketHolidays() called");
-    console.log("📍 MarketHolidays call stack:", new Error().stack);
     try {
       const response = await fetch("/api/holidays/year/2025");
       const holidays = await response.json();
@@ -41,30 +40,20 @@
         tbody.appendChild(row);
       });
 
-      console.log(`✅ Rendered ${holidays.length} holidays`);
-
       const idToggle = document.getElementById("holiday-show-id-toggle");
-      console.log("🔍 holiday-show-id-toggle:", idToggle);
-      if (!idToggle) {
-        console.warn("⚠️ holiday-show-id-toggle not found");
-      } else {
+      if (idToggle) {
         idToggle.addEventListener("change", () => {
           ButtonBox.toggleLineIdVisibility("holiday", idToggle.checked);
-          setTimeout(() => {
-            applyColumnResize("market-holidays");
-            freezeInitialColumnWidths("market-holidays");
-          }, 100);
+          setTimeout(() => applyColumnResize("market-holidays"), 100);
         });
       }
 
       if (window.ButtonBox && window.ButtonBoxMarketHolidays) {
-        console.log("✅ ButtonBox and MarketHolidays init functions available");
         ButtonBoxMarketHolidays.init();
         ButtonBox.wireCheckboxes("holiday");
       }
 
       applyColumnResize("market-holidays");
-      freezeInitialColumnWidths("market-holidays");
     } catch (err) {
       console.error("❌ loadMarketHolidays() error:", err);
     }
@@ -72,6 +61,7 @@
 
   function applyColumnResize(sectionKey) {
     const table = document.getElementById(`${sectionKey}-table`);
+    if (!table) return;
     const headers = table.querySelectorAll("thead th");
 
     const savedWidths = JSON.parse(
@@ -80,7 +70,6 @@
 
     headers.forEach((th) => {
       const headerText = th.textContent?.trim() || th.dataset.name || "Unnamed";
-
       if (savedWidths[headerText]) {
         th.style.width = savedWidths[headerText] + "px";
       }
@@ -102,21 +91,15 @@
         startWidth = th.offsetWidth;
         document.body.style.cursor = "col-resize";
 
-        headers.forEach((otherTh) => {
-          if (otherTh !== th) {
-            otherTh.style.width = otherTh.offsetWidth + "px";
-            otherTh.style.minWidth = otherTh.offsetWidth + "px";
-            otherTh.style.maxWidth = otherTh.offsetWidth + "px";
-          }
-        });
-
         function onMouseMove(e) {
-          const newWidth = Math.max(60, startWidth + e.pageX - startX);
+          const newWidth = Math.max(40, startWidth + e.pageX - startX);
           th.style.width = newWidth + "px";
         }
 
         function onMouseUp() {
           document.body.style.cursor = "";
+          const headerText =
+            th.textContent?.trim() || th.dataset.name || "Unnamed";
           savedWidths[headerText] = th.offsetWidth;
           localStorage.setItem(
             `chartfly_colwidths_${sectionKey}`,
@@ -132,6 +115,8 @@
 
       handle.addEventListener("dblclick", () => {
         th.style.width = "";
+        const headerText =
+          th.textContent?.trim() || th.dataset.name || "Unnamed";
         delete savedWidths[headerText];
         localStorage.setItem(
           `chartfly_colwidths_${sectionKey}`,
@@ -140,20 +125,6 @@
       });
 
       if (wasHidden) th.style.display = "none";
-    });
-  }
-
-  function freezeInitialColumnWidths(sectionKey) {
-    const table = document.getElementById(`${sectionKey}-table`);
-    if (!table) return;
-    const headers = table.querySelectorAll("thead th");
-
-    headers.forEach((th) => {
-      if (!th.classList.contains("col-select")) {
-        th.style.width = `${th.offsetWidth}px`;
-        th.style.minWidth = `${th.offsetWidth}px`;
-        th.style.maxWidth = `${th.offsetWidth}px`;
-      }
     });
   }
 
