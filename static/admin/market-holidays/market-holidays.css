@@ -106,15 +106,17 @@
   overflow: hidden;
   white-space: nowrap;
   position: relative;
+  background-color: #006373; /* ✅ Restored ChartFly Blue */
+  color: white; /* ✅ Make checkbox and any text white */
 }
 
 /* ☑️ Center and Size Checkboxes inside Select */
 #market-holidays-section .admin-table th.col-select input[type="checkbox"],
 #market-holidays-section .admin-table td.col-select input[type="checkbox"] {
-  width: 20px;
-  height: 20px;
-  margin: 0 auto;
-  display: block;
+  transform: scale(1.2); /* Slightly smaller */
+  display: inline-block; /* Not block */
+  margin: 0; /* No auto-centering */
+  vertical-align: middle;
 }
 
 /* 📛 Line ID Column (Stable Width) */
