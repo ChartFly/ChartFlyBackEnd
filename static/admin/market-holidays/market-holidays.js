@@ -4,7 +4,7 @@
 // 🎯 PURPOSE: Load and render holiday data into the holidays table
 // 🧩 DEPENDENCIES: ButtonBox, ButtonBoxMarketHolidays
 // 👥 Author: Captain & Chatman
-// 🔖 Version: MPA Phase IV — Stable Resizing Rollback
+// 🔖 Version: MPA Phase IV — Stable Resizing Rollback + Select Column Lock
 // =============================================================
 
 (() => {
@@ -139,4 +139,33 @@
   }
 
   window.addEventListener("DOMContentLoaded", loadMarketHolidays);
+
+  // =======================================================
+  // 📜 LOCK SELECT COLUMN WIDTH ON HANDLE MOUSEDOWN
+  // 📍 Prevent Select column from growing on mouse down
+  // 👥 Captain & Chatmandoo
+  // =======================================================
+
+  document.addEventListener("mousedown", (e) => {
+    const selectHeader = document.querySelector(
+      "#market-holidays-section .admin-table th.col-select"
+    );
+    const selectCells = document.querySelectorAll(
+      "#market-holidays-section .admin-table td.col-select"
+    );
+
+    // Only react if clicking on a resize handle
+    if (e.target.closest(".resize-handle")) {
+      if (selectHeader) {
+        selectHeader.style.width = "50px";
+        selectHeader.style.minWidth = "50px";
+        selectHeader.style.maxWidth = "50px";
+      }
+      selectCells.forEach((cell) => {
+        cell.style.width = "50px";
+        cell.style.minWidth = "50px";
+        cell.style.maxWidth = "50px";
+      });
+    }
+  });
 })();
