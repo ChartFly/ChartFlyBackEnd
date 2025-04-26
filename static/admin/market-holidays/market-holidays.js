@@ -4,7 +4,7 @@
 // 🎯 PURPOSE: Load and render holiday data into the holidays table
 // 🧩 DEPENDENCIES: ButtonBox, ButtonBoxMarketHolidays
 // 👥 Author: Captain & Chatman
-// 🔖 Version: MPA Phase IV — ID Resize Fixed + Select Stable + Layout Hard-Frozen
+// 🔖 Version: MPA Phase IV — ID Resize Fixed + Full Column Freeze
 // =============================================================
 
 (() => {
@@ -52,7 +52,7 @@
           ButtonBox.toggleLineIdVisibility("holiday", idToggle.checked);
           setTimeout(() => {
             applyColumnResize("market-holidays");
-            freezeInitialColumnWidths("market-holidays"); // 🧊 Re-freeze after toggle
+            freezeInitialColumnWidths("market-holidays");
           }, 100);
         });
       }
@@ -63,8 +63,8 @@
         ButtonBox.wireCheckboxes("holiday");
       }
 
-      applyColumnResize("market-holidays"); // 🛠️ Initial resize setup
-      freezeInitialColumnWidths("market-holidays"); // 🧊 Freeze immediately after setup
+      applyColumnResize("market-holidays");
+      freezeInitialColumnWidths("market-holidays");
     } catch (err) {
       console.error("❌ loadMarketHolidays() error:", err);
     }
@@ -103,12 +103,10 @@
         document.body.style.cursor = "col-resize";
 
         headers.forEach((otherTh) => {
-          if (
-            otherTh !== th &&
-            !otherTh.classList.contains("col-select") &&
-            !otherTh.classList.contains("line-id-col")
-          ) {
+          if (otherTh !== th) {
             otherTh.style.width = otherTh.offsetWidth + "px";
+            otherTh.style.minWidth = otherTh.offsetWidth + "px";
+            otherTh.style.maxWidth = otherTh.offsetWidth + "px";
           }
         });
 
@@ -145,9 +143,6 @@
     });
   }
 
-  // =============================================================
-  // 🧊 Freeze Initial Column Widths on First Load
-  // =============================================================
   function freezeInitialColumnWidths(sectionKey) {
     const table = document.getElementById(`${sectionKey}-table`);
     if (!table) return;
