@@ -30,7 +30,7 @@
         const row = document.createElement("tr");
         row.innerHTML = `
           <td class="col-select"><input type="checkbox" /></td>
-          <td class="line-id-col hidden" data-original-id="${holiday.id}">${
+          <td class="line-id-col hidden-col" data-original-id="${holiday.id}">${
           holiday.id
         }</td>
           <td>${holiday.name}</td>
@@ -49,7 +49,7 @@
       } else {
         idToggle.addEventListener("change", () => {
           ButtonBox.toggleLineIdVisibility("holiday", idToggle.checked);
-          applyColumnResize("market-holidays"); // 🧩 Re-run after toggle
+          setTimeout(() => applyColumnResize("market-holidays"), 100); // 🧩 reapply clean after toggle
         });
       }
 
@@ -59,8 +59,7 @@
         ButtonBox.wireCheckboxes("holiday");
       }
 
-      // 🧩 Add Column Resize
-      applyColumnResize("market-holidays");
+      applyColumnResize("market-holidays"); // 🛠️ Initial resize setup
     } catch (err) {
       console.error("❌ loadMarketHolidays() error:", err);
     }
@@ -81,9 +80,7 @@
         th.style.width = savedWidths[headerText] + "px";
       }
 
-      const isSelect = th.classList.contains("col-select");
-      const isId = th.classList.contains("line-id-col");
-      if (isSelect) return;
+      if (th.classList.contains("col-select")) return;
 
       const wasHidden = th.style.display === "none";
       if (wasHidden) th.style.display = "table-cell";
