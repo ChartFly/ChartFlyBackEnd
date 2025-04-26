@@ -91,9 +91,19 @@
         startWidth = th.offsetWidth;
         document.body.style.cursor = "col-resize";
 
+        // 🛡️ Lock all columns except the one being resized
+        headers.forEach((otherTh) => {
+          if (otherTh !== th) {
+            const width = otherTh.offsetWidth;
+            otherTh.style.width = `${width}px`;
+            otherTh.style.minWidth = `${width}px`;
+            otherTh.style.maxWidth = `${width}px`;
+          }
+        });
+
         function onMouseMove(e) {
           const newWidth = Math.max(40, startWidth + e.pageX - startX);
-          th.style.width = newWidth + "px";
+          th.style.width = `${newWidth}px`;
         }
 
         function onMouseUp() {

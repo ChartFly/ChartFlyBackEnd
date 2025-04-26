@@ -302,7 +302,9 @@ window.ButtonBox = (() => {
 
     headers.forEach((th) => {
       th.classList.toggle("hidden-col", !show);
-      th.textContent = show ? "ID" : "";
+      th.innerHTML = show
+        ? "ID&nbsp;&nbsp;&nbsp;&nbsp;"
+        : "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
     });
 
     cells.forEach((td) => {
@@ -349,6 +351,15 @@ window.ButtonBox = (() => {
     ButtonBoxMessages.showTip(section, message);
   }
 
+  function generateID(prefix = "T") {
+    const safeChars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+    let id = prefix;
+    for (let i = 0; i < 4; i++) {
+      id += safeChars.charAt(Math.floor(Math.random() * safeChars.length));
+    }
+    return id;
+  }
+
   return {
     init,
     getState,
@@ -362,5 +373,6 @@ window.ButtonBox = (() => {
     forceSwitchMode,
     switchEditMode,
     showTip,
+    generateID,
   };
 })();
