@@ -1,0 +1,43 @@
+/* ===============================================
+📁 FILE: thinkscripts-manage.css
+🎯 PURPOSE: Styles for ThinkScripts Admin Console
+👥 Author: Captain & Chatman
+=============================================== */
+
+#thinkscripts-admin-section {
+  margin: 20px;
+  padding: 10px;
+}
+
+#add-script-btn {
+  padding: 10px 20px;
+  font-size: 16px;
+  margin-bottom: 15px;
+  cursor: pointer;
+  background-color: #006373;
+  color: white;
+  border: none;
+  border-radius: 6px;
+}
+
+#thinkscripts-table-container {
+  margin-top: 20px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+th,
+td {
+  border: 1px solid #ccc;
+  padding: 8px 10px;
+  text-align: left;
+}
+
+th {
+  background-color: #006373;
+  color: white;
+}

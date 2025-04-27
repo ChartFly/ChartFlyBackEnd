@@ -3,7 +3,7 @@
 # 📍 Entry point for the ChartFly backend application
 # 🔧 Sets up FastAPI app, static mounting, DB middleware, routing
 # Author: Captain & Chatman
-# Version: MPA Phase I — Backend Ready Edition (Lint Cleaned)
+# Version: MPA Phase II — Stores Module Enabled
 # ============================================================
 
 import logging
@@ -21,6 +21,7 @@ from starlette.middleware import Middleware
 from starlette.middleware.sessions import SessionMiddleware
 from starlette.status import HTTP_302_FOUND
 
+# 📦 Admin Console Routers
 from control_console.admin import router as admin_router
 from control_console.api_keys import router as api_keys_router
 from control_console.api_keys_page import router as api_keys_page_router
@@ -34,14 +35,17 @@ from control_console.market_holidays_page import router as market_holidays_page_
 from control_console.user_management_page import router as user_management_page_router
 from control_console.user_management_routes import router as admin_users_router
 
+# 📦 Stores Routers
+from api.stores import thinkscripts
+
 load_dotenv()
 
 logging.basicConfig(level=logging.INFO)
 
 app = FastAPI(
     title="ChartFly API",
-    description="Backend for ChartFly Trading Tools",
-    version="1.0.0",
+    description="Backend for ChartFly Trading Tools and Storefronts",
+    version="1.1.0",
     docs_url="/docs",
     redoc_url="/redoc",
     middleware=[
@@ -58,7 +62,7 @@ app = FastAPI(
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-# ✅ Jinja2 Template Environment (caching enabled for production)
+# ✅ Jinja2 Template Environment
 env = Environment(
     loader=FileSystemLoader("templates"),
     autoescape=select_autoescape(["html", "xml"]),
@@ -117,6 +121,9 @@ async def get_halted_stocks():
     return []
 
 
+# ====================
+# 📦 Include Admin Routers
+# ====================
 app.include_router(password_reset_router, prefix="/auth")
 app.include_router(login_register_router, prefix="/auth")
 app.include_router(holidays_router, prefix="/api/holidays")
@@ -129,6 +136,13 @@ app.include_router(market_holidays_page_router)
 app.include_router(api_keys_page_router)
 app.include_router(user_management_page_router)
 
+# ====================
+# 🛍️ Include Stores Routers
+# ====================
+app.include_router(thinkscripts.router)
 
+# ====================
+# 🏁 Server Launch
+# ====================
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=int(os.getenv("PORT", "8000")))
