@@ -4,7 +4,7 @@
 // 🎯 PURPOSE: Load and render holiday data into the holidays table
 // 🧩 DEPENDENCIES: ButtonBox, ButtonBoxMarketHolidays
 // 👥 Author: Captain & Chatman
-// 🔖 Version: MPA Phase IV — Final Lockdown Edition
+// 🔖 Version: MPA Phase IV — Stable Resizing Rollback + Select Column Lock
 // =============================================================
 
 (() => {
@@ -44,11 +44,7 @@
       if (idToggle) {
         idToggle.addEventListener("change", () => {
           ButtonBox.toggleLineIdVisibility("holiday", idToggle.checked);
-          setTimeout(() => {
-            applyColumnResize("market-holidays");
-            lockAllColumnWidths("market-holidays");
-            lockTableWidth("market-holidays");
-          }, 100);
+          setTimeout(() => applyColumnResize("market-holidays"), 100);
         });
       }
 
@@ -57,35 +53,10 @@
         ButtonBox.wireCheckboxes("holiday");
       }
 
-      applyStartingWidths("market-holidays");
       applyColumnResize("market-holidays");
-      lockAllColumnWidths("market-holidays");
-      lockTableWidth("market-holidays");
     } catch (err) {
       console.error("❌ loadMarketHolidays() error:", err);
     }
-  }
-
-  function applyStartingWidths(sectionKey) {
-    const table = document.getElementById(`${sectionKey}-table`);
-    if (!table) return;
-    const headers = table.querySelectorAll("thead th");
-
-    headers.forEach((th) => {
-      if (th.classList.contains("col-select")) {
-        th.style.width = "50px";
-      } else if (th.classList.contains("line-id-col")) {
-        th.style.width = "60px";
-      } else if (th.classList.contains("col-name")) {
-        th.style.width = "180px";
-      } else if (th.classList.contains("col-date")) {
-        th.style.width = "100px";
-      } else if (th.classList.contains("col-close")) {
-        th.style.width = "100px";
-      } else if (th.classList.contains("col-status")) {
-        th.style.width = "120px";
-      }
-    });
   }
 
   function applyColumnResize(sectionKey) {
@@ -120,10 +91,7 @@
         startWidth = th.offsetWidth;
         document.body.style.cursor = "col-resize";
 
-        // 🛡️ LOCK everything immediately on mousedown
-        lockAllColumnWidths(sectionKey);
-        lockTableWidth(sectionKey);
-
+        // 🛡️ Lock all columns except the one being resized
         headers.forEach((otherTh) => {
           if (otherTh !== th) {
             const width = otherTh.offsetWidth;
@@ -149,10 +117,6 @@
           );
           document.removeEventListener("mousemove", onMouseMove);
           document.removeEventListener("mouseup", onMouseUp);
-
-          // 🛡️ Re-lock all columns and table after drag
-          lockAllColumnWidths(sectionKey);
-          lockTableWidth(sectionKey);
         }
 
         document.addEventListener("mousemove", onMouseMove);
@@ -174,6 +138,14 @@
     });
   }
 
+  window.addEventListener("DOMContentLoaded", loadMarketHolidays);
+
+  // =======================================================
+  // 📜 LOCK SELECT COLUMN WIDTH ON HANDLE MOUSEDOWN
+  // 📍 Prevent Select column from growing on mouse down
+  // 👥 Captain & Chatmandoo
+  // =======================================================
+
   document.addEventListener("mousedown", (e) => {
     const selectHeader = document.querySelector(
       "#market-holidays-section .admin-table th.col-select"
@@ -182,6 +154,7 @@
       "#market-holidays-section .admin-table td.col-select"
     );
 
+    // Only react if clicking on a resize handle
     if (e.target.closest(".resize-handle")) {
       if (selectHeader) {
         selectHeader.style.width = "50px";
@@ -195,34 +168,4 @@
       });
     }
   });
-
-  function lockAllColumnWidths(sectionKey) {
-    const table = document.getElementById(`${sectionKey}-table`);
-    if (!table) return;
-    const headers = table.querySelectorAll("thead th");
-
-    headers.forEach((th) => {
-      const width = th.offsetWidth;
-      th.style.width = `${width}px`;
-      th.style.minWidth = `${width}px`;
-      th.style.maxWidth = `${width}px`;
-    });
-  }
-
-  function lockTableWidth(sectionKey) {
-    const table = document.getElementById(`${sectionKey}-table`);
-    if (!table) return;
-    const headers = table.querySelectorAll("thead th");
-
-    let totalWidth = 0;
-    headers.forEach((th) => {
-      totalWidth += th.offsetWidth;
-    });
-
-    table.style.width = `${totalWidth}px`;
-    table.style.minWidth = `${totalWidth}px`;
-    table.style.maxWidth = `${totalWidth}px`;
-  }
-
-  window.addEventListener("DOMContentLoaded", loadMarketHolidays);
 })();
