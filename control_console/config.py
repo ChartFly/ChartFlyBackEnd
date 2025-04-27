@@ -38,7 +38,7 @@ EMAIL_USER = os.getenv("EMAIL_USER")
 EMAIL_DOMAIN = os.getenv("EMAIL_DOMAIN")
 EMAIL_FROM = os.getenv("EMAIL_FROM") or f"{EMAIL_USER}@{EMAIL_DOMAIN}"
 SMTP_HOST = os.getenv("SMTP_HOST")
-SMTP_PORT = int(os.getenv("SMTP_PORT", 587))
+SMTP_PORT = int(os.getenv("SMTP_PORT") or 587)
 SMTP_USERNAME = EMAIL_FROM  # Using built EMAIL_FROM as login
 SMTP_PASSWORD = os.getenv("EMAIL_APP_PASS")  # Modular password key
 

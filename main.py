@@ -1,10 +1,10 @@
-# ============================================================
+# ==============================================================
 # ✅ main.py
 # 📍 Entry point for the ChartFly backend application
 # 🔧 Sets up FastAPI app, static mounting, DB middleware, routing
 # Author: Captain & Chatman
 # Version: MPA Phase II — Stores Module Enabled
-# ============================================================
+# ==============================================================
 
 import logging
 import os
@@ -34,6 +34,9 @@ from control_console.holidays import router as holidays_router
 from control_console.market_holidays_page import router as market_holidays_page_router
 from control_console.user_management_page import router as user_management_page_router
 from control_console.user_management_routes import router as admin_users_router
+from control_console.stores_thinkscripts_page import (
+    router as stores_thinkscripts_page_router,
+)
 
 # 📦 Stores Routers
 from api.stores import thinkscripts
@@ -135,6 +138,7 @@ app.include_router(dev_reset_router)
 app.include_router(market_holidays_page_router)
 app.include_router(api_keys_page_router)
 app.include_router(user_management_page_router)
+app.include_router(stores_thinkscripts_page_router)
 
 # ====================
 # 🛍️ Include Stores Routers
