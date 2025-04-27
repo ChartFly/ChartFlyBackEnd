@@ -4,7 +4,7 @@
 // 🎯 PURPOSE: Load and render holiday data into the holidays table
 // 🧩 DEPENDENCIES: ButtonBox, ButtonBoxMarketHolidays
 // 👥 Author: Captain & Chatman
-// 🔖 Version: MPA Phase IV — Stable Resizing Rollback + Select Column Lock
+// 🔖 Version: MPA Phase IV — Total Column Lockdown Upgrade
 // =============================================================
 
 (() => {
@@ -54,6 +54,9 @@
       }
 
       applyColumnResize("market-holidays");
+
+      // 🛡️ NEW: Lock all column widths after table loads
+      lockAllColumnWidths("market-holidays");
     } catch (err) {
       console.error("❌ loadMarketHolidays() error:", err);
     }
@@ -91,7 +94,7 @@
         startWidth = th.offsetWidth;
         document.body.style.cursor = "col-resize";
 
-        // 🛡️ Lock all columns except the one being resized
+        // 🛡️ Lock all other columns immediately when starting to resize
         headers.forEach((otherTh) => {
           if (otherTh !== th) {
             const width = otherTh.offsetWidth;
@@ -117,6 +120,9 @@
           );
           document.removeEventListener("mousemove", onMouseMove);
           document.removeEventListener("mouseup", onMouseUp);
+
+          // 🛡️ NEW: Re-lock all columns after drag completes
+          lockAllColumnWidths(sectionKey);
         }
 
         document.addEventListener("mousemove", onMouseMove);
@@ -138,14 +144,11 @@
     });
   }
 
-  window.addEventListener("DOMContentLoaded", loadMarketHolidays);
-
   // =======================================================
   // 📜 LOCK SELECT COLUMN WIDTH ON HANDLE MOUSEDOWN
   // 📍 Prevent Select column from growing on mouse down
   // 👥 Captain & Chatmandoo
   // =======================================================
-
   document.addEventListener("mousedown", (e) => {
     const selectHeader = document.querySelector(
       "#market-holidays-section .admin-table th.col-select"
@@ -168,4 +171,24 @@
       });
     }
   });
+
+  // =======================================================
+  // 📜 LOCK ALL COLUMN WIDTHS FUNCTION
+  // 📍 Lock all visible columns to current widths
+  // 👥 Captain & Chatmandoo
+  // =======================================================
+  function lockAllColumnWidths(sectionKey) {
+    const table = document.getElementById(`${sectionKey}-table`);
+    if (!table) return;
+    const headers = table.querySelectorAll("thead th");
+
+    headers.forEach((th) => {
+      const width = th.offsetWidth;
+      th.style.width = `${width}px`;
+      th.style.minWidth = `${width}px`;
+      th.style.maxWidth = `${width}px`;
+    });
+  }
+
+  window.addEventListener("DOMContentLoaded", loadMarketHolidays);
 })();
