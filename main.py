@@ -28,7 +28,6 @@ from control_console.api_keys_page import router as api_keys_page_router
 from control_console.auth_login_register import router as login_register_router
 from control_console.auth_password_reset import router as password_reset_router
 from control_console.config import SESSION_SECRET
-from control_console.database import create_db_pool
 from control_console.dev_reset import router as dev_reset_router
 from control_console.holidays import router as holidays_router
 from control_console.market_holidays_page import router as market_holidays_page_router
@@ -76,13 +75,12 @@ templates = Jinja2Templates(env=env)
 
 @app.on_event("startup")
 async def startup():
-    app.state.db_pool = None  # await create_db_pool()
+    app.state.db_pool = None  # Database pool intentionally disabled for now
 
 
 @app.middleware("http")
 async def db_middleware(request: Request, call_next):
     if getattr(app.state, "db_pool", None) is None:
-        # No database pool — just continue
         response = await call_next(request)
         return response
 
@@ -99,8 +97,8 @@ async def admin_ui(request: Request):
             "SELECT COUNT(*) FROM admin_users;"
         )
         user_count = user_count if user_count is not None else 0
-    except Exception as e:  # noqa: W0718
-        logging.error("🚨 Database error in admin_ui route: %s", e)
+    except Exception:  # nosec pylint: disable=broad-exception-caught
+        logging.error("🚨 Database error in admin_ui route")
         return templates.TemplateResponse(
             "login.html", {"request": request, "error": "Database connection failed."}
         )
