@@ -1,6 +1,6 @@
 // ===============================================
 // 📁 FILE: thinkscripts-manage.js
-// 🎯 PURPOSE: Client-side table for ThinkScripts Admin Console
+// 🎯 PURPOSE: Client-side table for ThinkScripts Admin Console (RedStripe Upgrade)
 // 👥 Author: Captain & Chatman
 // ===============================================
 
@@ -23,35 +23,16 @@ async function loadThinkScripts() {
 
     if (!Array.isArray(scripts)) throw new Error("Invalid data");
 
-    let tableHtml = `
-      <table>
-        <thead>
-          <tr>
-            <th>Label</th>
-            <th>Short Description</th>
-            <th>Price</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-    `;
-
-    scripts.forEach((script) => {
-      tableHtml += `
-        <tr>
-          <td>${script.label}</td>
-          <td>${script.short_description}</td>
-          <td>$${script.price.toFixed(2)}</td>
-          <td>${script.active ? "Active" : "Inactive"}</td>
-          <td><button>Edit</button> <button>Delete</button></td>
-        </tr>
-      `;
+    RedStripe.renderTable({
+      targetId: "thinkscripts-table-container",
+      columns: ["label", "short_description", "price", "active"],
+      data: scripts.map((script) => ({
+        label: script.label,
+        short_description: script.short_description,
+        price: `$${script.price.toFixed(2)}`,
+        active: script.active ? "Active" : "Inactive",
+      })),
     });
-
-    tableHtml += "</tbody></table>";
-
-    container.innerHTML = tableHtml;
   } catch (err) {
     console.error("❌ Failed to load ThinkScripts:", err);
     container.innerHTML = "<p style='color:red;'>Error loading scripts.</p>";

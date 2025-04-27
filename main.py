@@ -76,11 +76,16 @@ templates = Jinja2Templates(env=env)
 
 @app.on_event("startup")
 async def startup():
-    # app.state.db_pool = await create_db_pool()
-    pass
+    app.state.db_pool = None  # await create_db_pool()
+
 
 @app.middleware("http")
 async def db_middleware(request: Request, call_next):
+    if getattr(app.state, "db_pool", None) is None:
+        # No database pool — just continue
+        response = await call_next(request)
+        return response
+
     async with app.state.db_pool.acquire() as connection:
         request.state.db = connection
         response = await call_next(request)
