@@ -4,7 +4,7 @@
 // 🎯 PURPOSE: Load and render API Key data into the table
 // 🧩 DEPENDENCIES: ButtonBox, ButtonBoxApiKeys
 // 👥 Author: Captain & Chatman
-// 🔖 Version: MPA Phase IV — Market Holidays Upgrade Applied
+// 🔖 Version: MPA Phase IV — Stable Column Resize + Default Width Upgrade
 // ============================================================
 
 (() => {
@@ -68,7 +68,7 @@
     const headers = table.querySelectorAll("thead th");
 
     headers.forEach((th) => {
-      if (th.classList.contains("col-select")) return;
+      if (th.classList.contains("col-select")) return; // Skip "Select" column
 
       const wasHidden = th.style.display === "none";
       if (wasHidden) th.style.display = "table-cell";
@@ -95,8 +95,10 @@
         });
 
         function onMouseMove(e) {
-          const newWidth = Math.max(40, startWidth + e.pageX - startX);
+          const newWidth = Math.max(60, startWidth + e.pageX - startX);
           th.style.width = `${newWidth}px`;
+          th.style.minWidth = `${newWidth}px`;
+          th.style.maxWidth = `${newWidth}px`;
         }
 
         function onMouseUp() {
@@ -111,6 +113,8 @@
 
       handle.addEventListener("dblclick", () => {
         th.style.width = "";
+        th.style.minWidth = "";
+        th.style.maxWidth = "";
       });
 
       if (wasHidden) th.style.display = "none";
