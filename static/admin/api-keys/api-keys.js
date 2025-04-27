@@ -4,7 +4,7 @@
 // 🎯 PURPOSE: Load and render API Key data into the table
 // 🧩 DEPENDENCIES: ButtonBox, ButtonBoxApiKeys
 // 👥 Author: Captain & Chatman
-// 🔖 Version: MPA Phase III (Fixed ID Column + Preserved Formatting)
+// 🔖 Version: MPA Phase IV — Market Holidays Upgrade Applied
 // ============================================================
 
 (() => {
@@ -24,84 +24,97 @@
       if (!tbody) throw new Error("Missing <tbody> in api-keys table");
       tbody.innerHTML = "";
 
-      keys.forEach((key) => {
+      keys.forEach((key, i) => {
+        console.log("🔧 Rendering API Key row", i + 1, ":", key);
         const row = document.createElement("tr");
         row.dataset.id = key.id;
 
-        // 🔘 Select checkbox
-        const selectTd = document.createElement("td");
-        selectTd.className = "col-select";
-        const checkbox = document.createElement("input");
-        checkbox.type = "checkbox";
-        checkbox.className = "api-select-checkbox";
-        checkbox.dataset.id = key.id;
-        selectTd.appendChild(checkbox);
-
-        // 🆔 ID column
-        const idTd = document.createElement("td");
-        idTd.className = "line-id-col hidden-col";
-        idTd.dataset.originalId = key.id;
-        idTd.textContent = key.id;
-
-        // 🧱 Data cells
-        const cells = [
-          key.key_label,
-          key.key_type,
-          key.billing_interval,
-          key.cost_per_month,
-          key.cost_per_year,
-          key.usage_limit_sec,
-          key.usage_limit_min,
-          key.usage_limit_5min,
-          key.usage_limit_hour,
-          key.priority_order,
-          key.is_active ? "Yes" : "No",
-        ];
-
-        const editableKeys = [
-          true,
-          true,
-          true,
-          true,
-          true,
-          true,
-          true,
-          true,
-          true,
-          true,
-          true, // editable until "Active"
-        ];
-
-        const tdElements = cells.map((value, i) => {
-          const td = document.createElement("td");
-          td.textContent = value;
-          td.setAttribute("contenteditable", "true");
-          return td;
-        });
-
-        // 🧩 Final assembly
-        row.appendChild(selectTd);
-        row.appendChild(idTd);
-        tdElements.forEach((td) => row.appendChild(td));
+        row.innerHTML = `
+          <td class="col-select"><input type="checkbox" class="api-select-checkbox" data-id="${
+            key.id
+          }" /></td>
+          <td class="line-id-col hidden-col" data-original-id="${
+            key.id
+          }">&nbsp;</td>
+          <td contenteditable="true">${key.key_label}</td>
+          <td contenteditable="true">${key.key_type}</td>
+          <td contenteditable="true">${key.billing_interval}</td>
+          <td contenteditable="true">${key.cost_per_month}</td>
+          <td contenteditable="true">${key.cost_per_year}</td>
+          <td contenteditable="true">${key.usage_limit_sec}</td>
+          <td contenteditable="true">${key.usage_limit_min}</td>
+          <td contenteditable="true">${key.usage_limit_5min}</td>
+          <td contenteditable="true">${key.usage_limit_hour}</td>
+          <td contenteditable="true">${key.priority_order}</td>
+          <td contenteditable="true">${key.is_active ? "Yes" : "No"}</td>
+        `;
         tbody.appendChild(row);
       });
 
-      console.log(`✅ Rendered ${keys.length} API keys`);
-
-      // 🔁 Wire ButtonBox and ID toggle logic
       if (window.ButtonBox && window.ButtonBoxApiKeys) {
         ButtonBoxApiKeys.init();
         ButtonBox.wireCheckboxes("api");
-
-        const toggle = document.getElementById("api-show-id-toggle");
-        if (toggle) {
-          ButtonBox.toggleLineIdVisibility("api", toggle.checked);
-          console.log("🔄 Re-applied ID toggle post-render");
-        }
       }
+
+      applyColumnResize("api-keys");
     } catch (err) {
       console.error("❌ loadApiKeys() error:", err);
     }
+  }
+
+  function applyColumnResize(sectionKey) {
+    const table = document.getElementById(`${sectionKey}-table`);
+    if (!table) return;
+    const headers = table.querySelectorAll("thead th");
+
+    headers.forEach((th) => {
+      if (th.classList.contains("col-select")) return;
+
+      const wasHidden = th.style.display === "none";
+      if (wasHidden) th.style.display = "table-cell";
+
+      const handle = document.createElement("div");
+      handle.className = "resize-handle";
+      handle.title = "Drag to resize • Double-click to reset";
+      th.appendChild(handle);
+
+      let startX, startWidth;
+
+      handle.addEventListener("mousedown", (e) => {
+        startX = e.pageX;
+        startWidth = th.offsetWidth;
+        document.body.style.cursor = "col-resize";
+
+        headers.forEach((otherTh) => {
+          if (otherTh !== th) {
+            const width = otherTh.offsetWidth;
+            otherTh.style.width = `${width}px`;
+            otherTh.style.minWidth = `${width}px`;
+            otherTh.style.maxWidth = `${width}px`;
+          }
+        });
+
+        function onMouseMove(e) {
+          const newWidth = Math.max(40, startWidth + e.pageX - startX);
+          th.style.width = `${newWidth}px`;
+        }
+
+        function onMouseUp() {
+          document.body.style.cursor = "";
+          document.removeEventListener("mousemove", onMouseMove);
+          document.removeEventListener("mouseup", onMouseUp);
+        }
+
+        document.addEventListener("mousemove", onMouseMove);
+        document.addEventListener("mouseup", onMouseUp);
+      });
+
+      handle.addEventListener("dblclick", () => {
+        th.style.width = "";
+      });
+
+      if (wasHidden) th.style.display = "none";
+    });
   }
 
   window.addEventListener("DOMContentLoaded", loadApiKeys);

@@ -2,8 +2,8 @@
 ✅ ChartFly Admin Panel - api-keys.html
 Standalone MPA Page for API Keys Admin Section
 Author: Captain & Chatman
-Version: MPA Phase IV — Header Inserted + Ticker Fixed
-====================================================== -->
+Version: MPA Phase IV — Holiday System Upgrade Finalized
+=================================================== -->
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -44,12 +44,15 @@ Version: MPA Phase IV — Header Inserted + Ticker Fixed
     <!-- ✅ Navbar -->
     {% include "shared/navbar/navbar.html" %}
 
-    <!-- ✅ Main Content -->
+    <!-- ✅ API Keys Section -->
     <section id="api-keys-section" class="admin-tab-section">
       <div class="section-header">Admin API Keys</div>
       {% set section = "api" %} {% include "shared/button-box.html" %} {%
       include "api-keys/api-keys-table.html" %}
     </section>
+
+    <!-- ✅ Footer Spacer Barrier (keep table scroll clean) -->
+    <div class="footer-spacer"></div>
 
     <!-- ✅ Footer -->
     <footer class="admin-footer">

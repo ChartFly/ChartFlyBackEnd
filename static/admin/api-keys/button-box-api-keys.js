@@ -4,7 +4,7 @@
 // 🎯 PURPOSE: Wire ButtonBox logic to API Keys table
 // 🧩 DEPENDENCIES: ButtonBox, ButtonBoxRows, ButtonBoxColumns
 // 👥 Author: Captain & Chatman
-// 🔖 Version: MPA Phase IV — Mode Switch Popup Injected in HTML
+// 🔖 Version: MPA Phase IV — Full Holiday System Upgrade Applied
 // =============================================================
 
 window.ButtonBoxApiKeys = (() => {
@@ -34,6 +34,7 @@ window.ButtonBoxApiKeys = (() => {
       ButtonBox.toggleLineIdVisibility("api", toggle.checked);
     });
 
+    // ✅ Apply initial toggle state immediately
     ButtonBox.toggleLineIdVisibility("api", toggle.checked);
   }
 
