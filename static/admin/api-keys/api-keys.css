@@ -38,7 +38,7 @@
 /* 📊 Admin Table */
 #api-keys-section .admin-table {
   width: 100%;
-  min-width: 1400px;
+  min-width: 1500px;
   border-collapse: collapse;
   table-layout: fixed;
   font-size: 0.95rem;
@@ -48,7 +48,7 @@
 #api-keys-section .admin-table th:not(.col-select):not(.line-id-col),
 #api-keys-section .admin-table td:not(.col-select):not(.line-id-col) {
   min-width: 20ch;
-  max-width: 50ch;
+  max-width: 30ch;
   white-space: normal;
   overflow-wrap: anywhere;
   word-break: break-word;
@@ -57,7 +57,7 @@
 /* 📐 Special: Label Column - DOUBLED */
 #api-keys-section .admin-table th:nth-child(3),
 #api-keys-section .admin-table td:nth-child(3) {
-  min-width: 60ch;
+  min-width: 90ch;
   max-width: 120ch;
 }
 

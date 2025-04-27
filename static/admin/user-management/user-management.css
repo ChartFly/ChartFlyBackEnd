@@ -19,7 +19,7 @@
 
 /* 📦 Table + ButtonBox Container */
 #user-management-section .table-container {
-  max-width: 1200px;
+  max-width: 1500px;
   margin: 0;
   padding: 6px 10px;
 }
@@ -37,7 +37,7 @@
 /* 📊 Admin Table */
 #user-management-section .admin-table {
   width: 100%;
-  min-width: 900px;
+  min-width: 1300px;
   border-collapse: collapse;
   table-layout: fixed;
   font-size: 0.95rem;
@@ -56,15 +56,15 @@
 /* 📐 Special: Username Column Double Width */
 #user-management-section .admin-table th:nth-child(3),
 #user-management-section .admin-table td:nth-child(3) {
-  min-width: 30ch;
-  max-width: 90ch;
+  min-width: 90ch;
+  max-width: 120ch;
 }
 
 /* 📐 Special: Email Column Double Width */
 #user-management-section .admin-table th:nth-child(5),
 #user-management-section .admin-table td:nth-child(5) {
-  min-width: 30ch;
-  max-width: 90ch;
+  min-width: 90ch;
+  max-width: 120ch;
 }
 
 /* 🔠 Header Styling */
