@@ -1,9 +1,9 @@
-/* ============================================================================
+/* ============================================================================ 
 📁 FILE: api-keys.css
 📍 LOCATION: static/admin/api-keys/api-keys.css
 🎯 SCOPE: Styles exclusive to #api-keys-section
 🧩 AUTHOR: Captain & Chatman
-🔖 VERSION: MPA Phase IV — Table Width Upgrade + Resize Ready
+🔖 VERSION: MPA Phase IV — Label Tripled + Wider Columns + Resize Ready
 ============================================================================ */
 
 #api-keys-section {
@@ -21,7 +21,7 @@
 
 /* 📦 Table Container */
 #api-keys-section .table-container {
-  max-width: 1200px; /* Increased for breathing room */
+  max-width: 1400px; /* Increased more */
   margin: 0;
   padding: 6px 10px;
 }
@@ -40,20 +40,27 @@
 /* 📊 Admin Table */
 #api-keys-section .admin-table {
   width: 100%;
-  min-width: 900px;
+  min-width: 1000px;
   border-collapse: collapse;
   table-layout: fixed;
   font-size: 0.95rem;
 }
 
-/* 📐 Column Layout - Widened */
+/* 📐 Default Column Layout (Wider) */
 #api-keys-section .admin-table th:not(.col-select):not(.line-id-col),
 #api-keys-section .admin-table td:not(.col-select):not(.line-id-col) {
-  min-width: 15ch;
-  max-width: 45ch;
+  min-width: 20ch;
+  max-width: 50ch;
   white-space: normal;
   overflow-wrap: anywhere;
   word-break: break-word;
+}
+
+/* 📐 Special: Label Column Triple Size */
+#api-keys-section .admin-table th:nth-child(3),
+#api-keys-section .admin-table td:nth-child(3) {
+  min-width: 30ch;
+  max-width: 90ch;
 }
 
 /* 🔠 Table Headers */
