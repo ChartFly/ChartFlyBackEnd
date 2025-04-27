@@ -1,9 +1,7 @@
 /* ============================================================================ 
 📁 FILE: api-keys.css
 📍 LOCATION: static/admin/api-keys/api-keys.css
-🎯 SCOPE: Styles exclusive to #api-keys-section
-🧩 AUTHOR: Captain & Chatman
-🔖 VERSION: MPA Phase IV — Label Tripled + Wider Columns + Resize Ready
+🎯 PURPOSE: Styles exclusive to API Keys Admin Table
 ============================================================================ */
 
 #api-keys-section {
@@ -21,7 +19,7 @@
 
 /* 📦 Table Container */
 #api-keys-section .table-container {
-  max-width: 1500px; /* Increased more */
+  max-width: 1600px; /* Made even wider */
   margin: 0;
   padding: 6px 10px;
 }
@@ -40,13 +38,13 @@
 /* 📊 Admin Table */
 #api-keys-section .admin-table {
   width: 100%;
-  min-width: 1300px;
+  min-width: 1400px;
   border-collapse: collapse;
   table-layout: fixed;
   font-size: 0.95rem;
 }
 
-/* 📐 Default Column Layout (Wider) */
+/* 📐 Default Column Layout */
 #api-keys-section .admin-table th:not(.col-select):not(.line-id-col),
 #api-keys-section .admin-table td:not(.col-select):not(.line-id-col) {
   min-width: 20ch;
@@ -56,11 +54,11 @@
   word-break: break-word;
 }
 
-/* 📐 Special: Label Column Triple Size */
+/* 📐 Special: Label Column - DOUBLED */
 #api-keys-section .admin-table th:nth-child(3),
 #api-keys-section .admin-table td:nth-child(3) {
-  min-width: 70ch;
-  max-width: 90ch;
+  min-width: 60ch;
+  max-width: 120ch;
 }
 
 /* 🔠 Table Headers */
@@ -88,11 +86,11 @@
 
 /* 🫥 Prevent Collapse on Empty Cells */
 #api-keys-section .admin-table td:empty::after {
-  content: "\00a0"; /* non-breaking space */
+  content: "\00a0";
   visibility: hidden;
 }
 
-/* ✅ Select Column - Hard Lock */
+/* ✅ Select Column - Locked */
 #api-keys-section .admin-table th.col-select,
 #api-keys-section .admin-table td.col-select {
   width: 50px;
@@ -102,21 +100,21 @@
   white-space: nowrap;
   background-color: #006373;
   color: white;
-  pointer-events: none; /* Cannot resize select column */
+  pointer-events: none;
 }
 
-/* 🔠 Line ID Column */
+/* 🔠 Line ID Column (Typo Fixed!) */
 #api-keys-section .line-id-col {
   width: 6ch;
   min-width: 6ch;
-  max-width: 6cqmax;
+  max-width: 6ch;
   text-align: center;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-/* 🦓 Zebra Striping */
+/* 🦓 Zebra Stripes */
 #api-keys-section .admin-table tbody tr:nth-child(even) {
   background-color: #f9f9f9;
 }
@@ -140,7 +138,7 @@
   background-color: #e9f7f9;
 }
 
-/* ✅ New Row / Pasted Row */
+/* ✅ New / Pasted Row */
 #api-keys-section tr[data-id^="paste-"],
 #api-keys-section tr[data-id^="new-"] {
   background-color: #f2fff4;
