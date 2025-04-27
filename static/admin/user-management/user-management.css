@@ -56,15 +56,15 @@
 /* 📐 Special: Username Column Double Width */
 #user-management-section .admin-table th:nth-child(3),
 #user-management-section .admin-table td:nth-child(3) {
-  min-width: 90ch;
-  max-width: 120ch;
+  min-width: 120ch;
+  max-width: 140ch;
 }
 
 /* 📐 Special: Email Column Double Width */
 #user-management-section .admin-table th:nth-child(5),
 #user-management-section .admin-table td:nth-child(5) {
-  min-width: 90ch;
-  max-width: 120ch;
+  min-width: 120ch;
+  max-width: 140ch;
 }
 
 /* 🔠 Header Styling */
