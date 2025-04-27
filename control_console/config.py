@@ -5,6 +5,9 @@
 # ==========================================================
 
 import os
+from fastapi.templating import (
+    Jinja2Templates,
+)  # <<=== move this UP here with the other imports
 
 # === Database (used in database.py, fallback mode) ===
 DB_USER = os.getenv("DB_USER")
@@ -45,3 +48,6 @@ DEFAULT_ADMIN_USER = os.getenv("DEFAULT_ADMIN_USER")
 DEFAULT_ADMIN_PASS = os.getenv("DEFAULT_ADMIN_PASS")
 DEFAULT_ADMIN_CODE = os.getenv("DEFAULT_ADMIN_CODE")
 DEFAULT_ADMIN_ROLE = os.getenv("DEFAULT_ADMIN_ROLE", "SuperAdmin")
+
+# === Jinja2 Templates Engine (for HTML pages) ===
+templates = Jinja2Templates(directory="templates")
