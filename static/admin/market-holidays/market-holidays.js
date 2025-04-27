@@ -4,7 +4,7 @@
 // 🎯 PURPOSE: Load and render holiday data into the holidays table
 // 🧩 DEPENDENCIES: ButtonBox, ButtonBoxMarketHolidays
 // 👥 Author: Captain & Chatman
-// 🔖 Version: MPA Phase IV — Total Column Lockdown Upgrade
+// 🔖 Version: MPA Phase IV — Total Column and Table Lockdown
 // =============================================================
 
 (() => {
@@ -55,8 +55,9 @@
 
       applyColumnResize("market-holidays");
 
-      // 🛡️ NEW: Lock all column widths after table loads
+      // 🛡️ Lock all columns and table after table loads
       lockAllColumnWidths("market-holidays");
+      lockTableWidth("market-holidays");
     } catch (err) {
       console.error("❌ loadMarketHolidays() error:", err);
     }
@@ -121,8 +122,9 @@
           document.removeEventListener("mousemove", onMouseMove);
           document.removeEventListener("mouseup", onMouseUp);
 
-          // 🛡️ NEW: Re-lock all columns after drag completes
+          // 🛡️ After drag, re-lock columns AND table width
           lockAllColumnWidths(sectionKey);
+          lockTableWidth(sectionKey);
         }
 
         document.addEventListener("mousemove", onMouseMove);
@@ -174,7 +176,7 @@
 
   // =======================================================
   // 📜 LOCK ALL COLUMN WIDTHS FUNCTION
-  // 📍 Lock all visible columns to current widths
+  // 📍 Lock all visible columns to their current widths
   // 👥 Captain & Chatmandoo
   // =======================================================
   function lockAllColumnWidths(sectionKey) {
@@ -188,6 +190,26 @@
       th.style.minWidth = `${width}px`;
       th.style.maxWidth = `${width}px`;
     });
+  }
+
+  // =======================================================
+  // 📜 LOCK FULL TABLE WIDTH FUNCTION
+  // 📍 Set table's own width based on sum of columns
+  // 👥 Captain & Chatmandoo
+  // =======================================================
+  function lockTableWidth(sectionKey) {
+    const table = document.getElementById(`${sectionKey}-table`);
+    if (!table) return;
+    const headers = table.querySelectorAll("thead th");
+
+    let totalWidth = 0;
+    headers.forEach((th) => {
+      totalWidth += th.offsetWidth;
+    });
+
+    table.style.width = `${totalWidth}px`;
+    table.style.minWidth = `${totalWidth}px`;
+    table.style.maxWidth = `${totalWidth}px`;
   }
 
   window.addEventListener("DOMContentLoaded", loadMarketHolidays);
