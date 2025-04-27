@@ -2,8 +2,6 @@
 // ✅ button-box-user-management.js
 // -----------------------------------------------------------
 // ButtonBox Integration Logic for User Management Admin Tab
-// Author: Captain & Chatman
-// Version: MPA Phase IV — Mode Switch + Column Logic Ready
 // ===========================================================
 
 window.ButtonBoxUserManagement = (() => {

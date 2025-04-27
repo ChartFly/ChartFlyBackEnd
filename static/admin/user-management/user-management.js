@@ -2,9 +2,6 @@
 // 📁 FILE: user-management.js
 // 📍 LOCATION: static/admin/user-management/user-management.js
 // 🎯 PURPOSE: Load and render Admin Users table
-// 🧩 DEPENDENCIES: ButtonBox, ButtonBoxUserManagement
-// 👥 Author: Captain & Chatman
-// 🔖 Version: MPA Phase IV — Show Line ID Fixed
 // =============================================================
 
 (() => {
@@ -45,7 +42,7 @@
 
       if (window.ButtonBox && window.ButtonBoxUserManagement) {
         ButtonBoxUserManagement.init();
-        ButtonBox.wireCheckboxes("user-management");
+        ButtonBox.wireCheckboxes("user");
       }
     } catch (err) {
       console.error("❌ loadAdminUsers() error:", err);

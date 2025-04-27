@@ -21,7 +21,7 @@
 
 /* 📦 Table Container */
 #api-keys-section .table-container {
-  max-width: 1400px; /* Increased more */
+  max-width: 1500px; /* Increased more */
   margin: 0;
   padding: 6px 10px;
 }
@@ -40,7 +40,7 @@
 /* 📊 Admin Table */
 #api-keys-section .admin-table {
   width: 100%;
-  min-width: 1000px;
+  min-width: 1300px;
   border-collapse: collapse;
   table-layout: fixed;
   font-size: 0.95rem;
@@ -59,7 +59,7 @@
 /* 📐 Special: Label Column Triple Size */
 #api-keys-section .admin-table th:nth-child(3),
 #api-keys-section .admin-table td:nth-child(3) {
-  min-width: 30ch;
+  min-width: 70ch;
   max-width: 90ch;
 }
 
@@ -107,9 +107,9 @@
 
 /* 🔠 Line ID Column */
 #api-keys-section .line-id-col {
-  width: 5ch;
-  min-width: 5ch;
-  max-width: 5ch;
+  width: 6ch;
+  min-width: 6ch;
+  max-width: 6cqmax;
   text-align: center;
   white-space: nowrap;
   overflow: hidden;

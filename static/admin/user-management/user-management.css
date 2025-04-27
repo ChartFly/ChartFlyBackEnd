@@ -1,9 +1,7 @@
 /* ============================================================================
 📁 FILE: user-management.css
 📍 LOCATION: static/admin/user-management/user-management.css
-🎯 SCOPE: Styles exclusive to #user-management-section
-🧩 AUTHOR: Captain & Chatman
-🔖 VERSION: MPA Phase III — Section Header Inserted
+🎯 PURPOSE: Styles for User Management table
 ============================================================================ */
 
 #user-management-section {
@@ -11,7 +9,6 @@
   text-align: left;
 }
 
-/* 🧾 Section Header */
 #user-management-section .section-header {
   font-size: 26pt;
   font-weight: bold;
@@ -19,42 +16,38 @@
   margin-bottom: 10px;
 }
 
-/* 🧭 Table + ButtonBox Container */
 #user-management-section .table-container {
-  max-width: 1100px;
+  max-width: 1200px;
   margin: 0;
   padding: 6px 10px;
 }
 
-/* 📦 Table Wrapper */
 #user-management-section .table-wrapper {
   display: block;
   border: 1px solid #ccc;
   border-radius: 6px;
   min-height: 200px;
-  text-align: left;
+  overflow-x: auto;
+  overflow-y: auto;
 }
 
-/* 📊 Table Styles */
 #user-management-section .admin-table {
   width: 100%;
-  min-width: 800px;
+  min-width: 900px;
   border-collapse: collapse;
   table-layout: fixed;
   font-size: 0.95rem;
 }
 
-/* 📐 Cell Layout */
-#user-management-section .admin-table th:not(.col-select),
-#user-management-section .admin-table td:not(.col-select) {
-  min-width: 8ch;
-  max-width: 44ch;
+#user-management-section .admin-table th:not(.col-select):not(.line-id-col),
+#user-management-section .admin-table td:not(.col-select):not(.line-id-col) {
+  min-width: 15ch;
+  max-width: 45ch;
   white-space: normal;
   overflow-wrap: anywhere;
   word-break: break-word;
 }
 
-/* 🔠 Header Styling */
 #user-management-section .admin-table th {
   border: 1px solid #ccc;
   padding: 6px 10px;
@@ -68,7 +61,6 @@
   z-index: 10;
 }
 
-/* 🔢 Body Cell Styling */
 #user-management-section .admin-table td {
   border: 1px solid #ccc;
   padding: 6px 10px;
@@ -77,38 +69,33 @@
   min-height: 24px;
 }
 
-/* 🫥 Prevent collapse on empty cells */
 #user-management-section .admin-table td:empty::after {
-  content: " ";
+  content: "\00a0";
   visibility: hidden;
 }
 
-/* ✅ Select Column */
 #user-management-section .admin-table th.col-select,
 #user-management-section .admin-table td.col-select {
-  width: 4ch;
-  min-width: 4ch;
-  max-width: 6ch;
+  width: 50px;
+  min-width: 50px;
+  max-width: 50px;
   text-align: center;
   white-space: nowrap;
   background-color: #006373;
   color: white;
-}
-#user-management-section .admin-table tr.selected-row td.col-select {
-  background-color: #d0f0ff;
-  color: black;
+  pointer-events: none;
 }
 
-/* 🔠 Line ID Column */
 #user-management-section .line-id-col {
-  width: 4ch;
-  min-width: 2ch;
-  max-width: 8ch;
+  width: 5ch;
+  min-width: 5ch;
+  max-width: 5ch;
   text-align: center;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-/* 🦓 Zebra Striping */
 #user-management-section .admin-table tbody tr:nth-child(even) {
   background-color: #f9f9f9;
 }
@@ -119,7 +106,6 @@
   background-color: #d0f0ff !important;
 }
 
-/* ✏️ Editable Cell Styling */
 #user-management-section .editable {
   background-color: #fff8dc;
   border: 1px dashed #ccc;
@@ -139,4 +125,21 @@
 #user-management-section .invalid {
   background-color: #ffe5e5;
   border: 1px solid #ff4d4d;
+}
+
+.resize-handle {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: 6px;
+  cursor: col-resize;
+  user-select: none;
+  z-index: 100;
+  background-color: #007a8a33;
+  border-left: 1px solid #007a8a;
+}
+
+.resize-handle:hover {
+  background-color: #007a8acc;
 }
