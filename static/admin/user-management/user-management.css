@@ -1,4 +1,4 @@
-/* ============================================================================
+/* ============================================================================ 
 📁 FILE: user-management.css
 📍 LOCATION: static/admin/user-management/user-management.css
 🎯 PURPOSE: Styles for User Management table
@@ -9,6 +9,7 @@
   text-align: left;
 }
 
+/* 🧾 Section Header */
 #user-management-section .section-header {
   font-size: 26pt;
   font-weight: bold;
@@ -16,12 +17,14 @@
   margin-bottom: 10px;
 }
 
+/* 📦 Table + ButtonBox Container */
 #user-management-section .table-container {
   max-width: 1200px;
   margin: 0;
   padding: 6px 10px;
 }
 
+/* 📜 Table Wrapper */
 #user-management-section .table-wrapper {
   display: block;
   border: 1px solid #ccc;
@@ -31,6 +34,7 @@
   overflow-y: auto;
 }
 
+/* 📊 Admin Table */
 #user-management-section .admin-table {
   width: 100%;
   min-width: 900px;
@@ -39,6 +43,7 @@
   font-size: 0.95rem;
 }
 
+/* 📐 Default Cell Layout (Widened) */
 #user-management-section .admin-table th:not(.col-select):not(.line-id-col),
 #user-management-section .admin-table td:not(.col-select):not(.line-id-col) {
   min-width: 15ch;
@@ -48,6 +53,21 @@
   word-break: break-word;
 }
 
+/* 📐 Special: Username Column Double Width */
+#user-management-section .admin-table th:nth-child(3),
+#user-management-section .admin-table td:nth-child(3) {
+  min-width: 30ch;
+  max-width: 90ch;
+}
+
+/* 📐 Special: Email Column Double Width */
+#user-management-section .admin-table th:nth-child(5),
+#user-management-section .admin-table td:nth-child(5) {
+  min-width: 30ch;
+  max-width: 90ch;
+}
+
+/* 🔠 Header Styling */
 #user-management-section .admin-table th {
   border: 1px solid #ccc;
   padding: 6px 10px;
@@ -61,6 +81,7 @@
   z-index: 10;
 }
 
+/* 🔢 Body Cell Styling */
 #user-management-section .admin-table td {
   border: 1px solid #ccc;
   padding: 6px 10px;
@@ -69,11 +90,13 @@
   min-height: 24px;
 }
 
+/* 🫥 Empty Cell Handling */
 #user-management-section .admin-table td:empty::after {
   content: "\00a0";
   visibility: hidden;
 }
 
+/* ☑️ Select Column Hard Lock */
 #user-management-section .admin-table th.col-select,
 #user-management-section .admin-table td.col-select {
   width: 50px;
@@ -86,6 +109,7 @@
   pointer-events: none;
 }
 
+/* 🔠 Line ID Column */
 #user-management-section .line-id-col {
   width: 5ch;
   min-width: 5ch;
@@ -96,6 +120,7 @@
   text-overflow: ellipsis;
 }
 
+/* 🦓 Zebra Striping */
 #user-management-section .admin-table tbody tr:nth-child(even) {
   background-color: #f9f9f9;
 }
@@ -106,27 +131,32 @@
   background-color: #d0f0ff !important;
 }
 
+/* ✏️ Editable Cells */
 #user-management-section .editable {
   background-color: #fff8dc;
   border: 1px dashed #ccc;
   outline: none;
 }
 
+/* 🔵 Active Editing Row */
 #user-management-section tr.editing {
   box-shadow: inset 0 0 0 2px #006373;
   background-color: #e9f7f9;
 }
 
+/* ✅ New Row / Pasted Row */
 #user-management-section tr[data-id^="paste-"],
 #user-management-section tr[data-id^="new-"] {
   background-color: #f2fff4;
 }
 
+/* ❌ Invalid Cell */
 #user-management-section .invalid {
   background-color: #ffe5e5;
   border: 1px solid #ff4d4d;
 }
 
+/* 🎯 Resize Handle */
 .resize-handle {
   position: absolute;
   right: 0;
