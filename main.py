@@ -76,8 +76,8 @@ templates = Jinja2Templates(env=env)
 
 @app.on_event("startup")
 async def startup():
-    app.state.db_pool = await create_db_pool()
-
+    # app.state.db_pool = await create_db_pool()
+    pass
 
 @app.middleware("http")
 async def db_middleware(request: Request, call_next):
