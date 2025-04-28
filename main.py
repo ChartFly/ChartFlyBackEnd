@@ -1,10 +1,10 @@
-# ==============================================================
+# ============================================================
 # ✅ main.py
 # 📍 Entry point for the ChartFly backend application
 # 🔧 Sets up FastAPI app, static mounting, DB middleware, routing
 # Author: Captain & Chatman
 # Version: MPA Phase II — Stores Module Enabled
-# ==============================================================
+# ============================================================
 
 import logging
 import os
@@ -13,7 +13,7 @@ import uvicorn
 from dotenv import load_dotenv
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import RedirectResponse, Response
+from fastapi.responses import RedirectResponse, Response, FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from jinja2 import Environment, FileSystemLoader, select_autoescape
@@ -41,9 +41,9 @@ from control_console.stores_thinkscripts_page import (
 from api.stores import thinkscripts
 
 load_dotenv()
-
 logging.basicConfig(level=logging.INFO)
 
+# ✅ Create FastAPI App
 app = FastAPI(
     title="ChartFly API",
     description="Backend for ChartFly Trading Tools and Storefronts",
@@ -62,7 +62,15 @@ app = FastAPI(
     ],
 )
 
+# ✅ Mount Static Files
 app.mount("/static", StaticFiles(directory="static"), name="static")
+
+
+# ✅ Serve Favicon
+@app.get("/favicon.ico", include_in_schema=False)
+async def favicon():
+    return FileResponse("static/images/ChartFly-Favicon.ico")
+
 
 # ✅ Jinja2 Template Environment
 env = Environment(
@@ -73,11 +81,13 @@ env = Environment(
 templates = Jinja2Templates(env=env)
 
 
+# ✅ Startup Events
 @app.on_event("startup")
 async def startup():
     app.state.db_pool = None  # Database pool intentionally disabled for now
 
 
+# ✅ Middleware
 @app.middleware("http")
 async def db_middleware(request: Request, call_next):
     if getattr(app.state, "db_pool", None) is None:
@@ -90,6 +100,7 @@ async def db_middleware(request: Request, call_next):
         return response
 
 
+# ✅ Routes
 @app.get("/")
 async def admin_ui(request: Request):
     try:
@@ -127,9 +138,7 @@ async def get_halted_stocks():
     return []
 
 
-# ====================
-# 📦 Include Admin Routers
-# ====================
+# ✅ Admin Console Routers
 app.include_router(password_reset_router, prefix="/auth")
 app.include_router(login_register_router, prefix="/auth")
 app.include_router(holidays_router, prefix="/api/holidays")
@@ -143,13 +152,9 @@ app.include_router(api_keys_page_router)
 app.include_router(user_management_page_router)
 app.include_router(stores_thinkscripts_page_router)
 
-# ====================
-# 🛍️ Include Stores Routers
-# ====================
+# ✅ Stores Routers
 app.include_router(thinkscripts.router)
 
-# ====================
-# 🏁 Server Launch
-# ====================
+# ✅ Server Start
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=int(os.getenv("PORT", "8000")))

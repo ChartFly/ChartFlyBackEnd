@@ -14,8 +14,17 @@ router = APIRouter(
 )
 
 
-@router.get("/manage", response_class=HTMLResponse)
+@router.get("/", response_class=HTMLResponse)
 async def get_thinkscripts_manage_page(request: Request):
     return templates.TemplateResponse(
-        "stores/thinkscripts/thinkscripts-manage.html", {"request": request}
+        "stores/thinkscripts/thinkscripts-manage.html",
+        {"request": request},
+    )
+
+
+@router.get("/manage", response_class=HTMLResponse)
+async def get_thinkscripts_manage_page_alias(request: Request):
+    return templates.TemplateResponse(
+        "stores/thinkscripts/thinkscripts-manage.html",
+        {"request": request},
     )

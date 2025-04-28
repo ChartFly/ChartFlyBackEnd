@@ -1,28 +1,23 @@
 <!-- ===============================================
 📁 FILE: thinkscripts-manage.html
 📍 LOCATION: templates/stores/thinkscripts/thinkscripts-manage.html
-🎯 PURPOSE: Admin page to manage ThinkScripts products
+🎯 PURPOSE: Admin page to manage ThinkScripts products (with RedStripe)
 👥 Author: Captain & Chatman
-🔖 Version: Phase I — Base Setup
+🔖 Version: Phase 2.5
 =============================================== -->
 
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <link
-      rel="stylesheet"
-      href="/static/shared/redstripe/redstripe.css?v=999"
-    />
-    <script
-      src="/static/shared/redstripe/redstripe.min.js?v=999"
-      type="module"
-    ></script>
-
     <meta charset="UTF-8" />
     <title>Manage ThinkScripts Store</title>
     <link
       rel="stylesheet"
       href="/static/stores/thinkscripts/thinkscripts-manage.css?v=999"
+    />
+    <link
+      rel="stylesheet"
+      href="/static/shared/redstripe/redstripe.css?v=999"
     />
   </head>
   <body>
@@ -33,8 +28,20 @@
       <div id="thinkscripts-table-container"></div>
     </section>
 
+    <!-- RedStripe Library (load as a regular script, not module) -->
+    <script src="/static/shared/redstripe/redstripe.min.js"></script>
+
+    <!-- ThinkScripts Config, API, and UI Logic -->
     <script
-      src="/static/stores/thinkscripts/thinkscripts-manage.js?v=999"
+      src="/static/stores/thinkscripts/helpers/thinkscripts-config.js"
+      type="module"
+    ></script>
+    <script
+      src="/static/stores/thinkscripts/helpers/thinkscripts-api.js"
+      type="module"
+    ></script>
+    <script
+      src="/static/stores/thinkscripts/helpers/thinkscripts-ui.js"
       type="module"
     ></script>
   </body>
