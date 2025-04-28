@@ -10,6 +10,7 @@ import logging
 import os
 
 import uvicorn
+import asyncpg
 from dotenv import load_dotenv
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
@@ -84,7 +85,11 @@ templates = Jinja2Templates(env=env)
 # ✅ Startup Events
 @app.on_event("startup")
 async def startup():
-    app.state.db_pool = None  # Database pool intentionally disabled for now
+    database_url = os.getenv("DATABASE_URL")
+    if not database_url:
+        raise ValueError("DATABASE_URL not set in environment variables.")
+
+    app.state.db_pool = await asyncpg.create_pool(dsn=database_url)
 
 
 # ✅ Middleware
