@@ -30,24 +30,24 @@ if not all([SMTP_HOST, SMTP_PORT, SMTP_USERNAME, SMTP_PASSWORD, EMAIL_FROM]):
 
 # ✅ Send Reset Email
 def send_reset_email(to_email: str, temp_password: str):
-    subject = "🔐 ChartFly Temporary Password Reset"
+    subject = "🔐 IonaBrand Temporary Password Reset"
     body = f"""
-We received a request to reset your ChartFly account password.
+We received a request to reset your IonaBrand account password.
 If you did not make this request, you can safely ignore this message.
-If you receive this request again and you do have a ChartFly account, we recommend resetting your username and password.
+If you receive this request again and you do have a IonaBrand account, we recommend resetting your username and password.
 
 🕒 Temporary Reset Code: {temp_password}
 (Expires in 15 minutes)
 
 Follow these simple steps to reset your password:
 
-1. Go to the ChartFly login page.
+1. Go to the IonaBrand login page.
 2. Enter your **username** and this **temporary code** as your password.
 3. You’ll be redirected to a secure screen to create a **new permanent password**.
 4. Once saved, you’ll return to the normal login page.
-5. Enter your **username** and **new password** to access ChartFly.
+5. Enter your **username** and **new password** to access IonaBrand.
 
-ChartFly Trading Tools. All Rights Reserved.
+IonaBrand Trading Tools. All Rights Reserved.
 """.strip()
 
     msg = MIMEMultipart()

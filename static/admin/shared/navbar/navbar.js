@@ -1,5 +1,5 @@
 // static/admin/shared/navbar/navbar.js
-// 🧠 ChartFly NavBar Script | Highlights current section
+// 🧠 IonaBrand NavBar Script | Highlights current section
 
 document.addEventListener("DOMContentLoaded", () => {
   const links = document.querySelectorAll(".nav-links a");

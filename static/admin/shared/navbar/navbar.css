@@ -1,14 +1,14 @@
 /* static/admin/shared/navbar/navbar.css */
 /* 🖤 Starship NavBar Styling */
 
-.chartfly-navbar {
+.IonaBrand-navbar {
   background-color: #003f47; /* darker than #006373 */
   padding: 10px 40px;
   font-family: "Segoe UI", sans-serif;
   border-bottom: 2px solid #00b4b4;
 }
 
-.chartfly-navbar .nav-links {
+.IonaBrand-navbar .nav-links {
   display: flex;
   gap: 30px;
   list-style: none;
@@ -16,7 +16,7 @@
   padding: 0;
 }
 
-.chartfly-navbar .nav-links a {
+.IonaBrand-navbar .nav-links a {
   color: white;
   font-weight: bold;
   text-decoration: none;
@@ -25,7 +25,7 @@
   transition: background-color 0.2s;
 }
 
-.chartfly-navbar .nav-links a:hover {
+.IonaBrand-navbar .nav-links a:hover {
   background-color: #00b4b4;
   color: #003f47;
 }

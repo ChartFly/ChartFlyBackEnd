@@ -2,7 +2,7 @@
 #
 # # Initialize Secure Database
 # def init_secure_db():
-#     connection = sqlite3.connect("chartflysecure.db")
+#     connection = sqlite3.connect("IonaBrandsecure.db")
 #     cursor = connection.cursor()
 #
 #     # Create a placeholder table for API keys

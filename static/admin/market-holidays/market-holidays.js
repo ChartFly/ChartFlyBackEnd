@@ -65,7 +65,7 @@
     const headers = table.querySelectorAll("thead th");
 
     const savedWidths = JSON.parse(
-      localStorage.getItem(`chartfly_colwidths_${sectionKey}`) || "{}"
+      localStorage.getItem(`IonaBrand_colwidths_${sectionKey}`) || "{}"
     );
 
     headers.forEach((th) => {
@@ -112,7 +112,7 @@
             th.textContent?.trim() || th.dataset.name || "Unnamed";
           savedWidths[headerText] = th.offsetWidth;
           localStorage.setItem(
-            `chartfly_colwidths_${sectionKey}`,
+            `IonaBrand_colwidths_${sectionKey}`,
             JSON.stringify(savedWidths)
           );
           document.removeEventListener("mousemove", onMouseMove);
@@ -129,7 +129,7 @@
           th.textContent?.trim() || th.dataset.name || "Unnamed";
         delete savedWidths[headerText];
         localStorage.setItem(
-          `chartfly_colwidths_${sectionKey}`,
+          `IonaBrand_colwidths_${sectionKey}`,
           JSON.stringify(savedWidths)
         );
       });

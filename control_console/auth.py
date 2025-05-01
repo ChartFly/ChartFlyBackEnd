@@ -7,7 +7,7 @@
 """
 auth.py (Placeholder Module)
 
-This file previously handled all authentication logic for ChartFly.
+This file previously handled all authentication logic for IonaBrand.
 As part of the 2025 refactor, logic has been modularized into:
 
 - auth_login_register.py   → Handles login and user registration
@@ -21,5 +21,5 @@ This placeholder is reserved for future authentication features:
 
 Keep this file in the project for future expansions of the authentication system.
 
-ChartFly Trading Tools - Auth System Core
+IonaBrand Trading Tools - Auth System Core
 """

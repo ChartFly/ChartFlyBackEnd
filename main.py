@@ -1,6 +1,6 @@
 # ============================================================
 # ✅ main.py
-# 📍 Entry point for the ChartFly backend application
+# 📍 Entry point for the IonaBrand backend application
 # 🔧 Sets up FastAPI app, static mounting, DB middleware, routing
 # Author: Captain & Chatman
 # Version: MPA Phase II — Stores Module Enabled
@@ -46,8 +46,8 @@ logging.basicConfig(level=logging.INFO)
 
 # ✅ Create FastAPI App
 app = FastAPI(
-    title="ChartFly API",
-    description="Backend for ChartFly Trading Tools and Storefronts",
+    title="IonaBrand API",
+    description="Backend for IonaBrand Trading Tools and Storefronts",
     version="1.1.0",
     docs_url="/docs",
     redoc_url="/redoc",
@@ -55,7 +55,7 @@ app = FastAPI(
         Middleware(SessionMiddleware, secret_key=SESSION_SECRET),
         Middleware(
             CORSMiddleware,
-            allow_origins=["https://chartfly-web-site.onrender.com"],
+            allow_origins=["https://IonaBrand-web-site.onrender.com"],
             allow_credentials=True,
             allow_methods=["*"],
             allow_headers=["*"],
@@ -70,7 +70,7 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 # ✅ Serve Favicon
 @app.get("/favicon.ico", include_in_schema=False)
 async def favicon():
-    return FileResponse("static/images/ChartFly-Favicon.ico")
+    return FileResponse("static/images/IonaBrand-Favicon.ico")
 
 
 # ✅ Jinja2 Template Environment

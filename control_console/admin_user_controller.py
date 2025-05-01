@@ -1,8 +1,10 @@
 # ==========================================================
 # ✅ FILE: control_console/admin_user_controller.py
-# 📌 PURPOSE: Admin user CRUD operations for ChartFly backend
+# 📌 PURPOSE: Admin user CRUD operations for IonaBrand backend
 # 🛠️ STATUS: Refactored (MPA Phase I) — Author: Captain & Chatman
 # ==========================================================
+
+"""Admin User Controller module for managing user CRUD operations in the IonaBrand backend."""
 
 import logging
 import os
@@ -23,6 +25,8 @@ DEFAULT_ADMIN_PASS = os.getenv("DEFAULT_ADMIN_PASS", "changeme123!")
 
 # ✅ Admin User Schema
 class AdminUser(BaseModel):
+    """Schema for representing an admin user object."""
+
     first_name: str
     last_name: str
     phone_number: str
